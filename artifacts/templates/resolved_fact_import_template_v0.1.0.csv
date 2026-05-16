@@ -1,0 +1,2 @@
+resolved_fact_id,case_id,subject_type,subject_key,field_name,resolved_value,resolved_value_type,units,resolution_basis,primary_source_assertion_id,source_assertion_ids_json,source_variance_flag,variance_note,confidence_score,resolved_by,resolved_at,effective_date,adoption_date,phase_in_pct,status,superseded_by_resolved_fact_id,schema_version
+RF000001,23173400,case,CASE-23173400,dopt,2024-06-30,date,,single_best_source,A000101,"[""A000101""]",N,,0.99,reviewer,2026-05-16T12:00:00Z,,,,active,,0.1.0

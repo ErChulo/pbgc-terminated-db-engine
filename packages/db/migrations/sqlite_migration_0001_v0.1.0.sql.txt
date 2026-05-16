@@ -1,0 +1,471 @@
+-- sqlite_migration_0001_v0.1.0.sql
+-- Initial browser-side SQLite migration for PBGC terminated DB casework project
+-- Version: v0.1.0
+-- Target runtime: sql.js / SQLite
+
+PRAGMA foreign_keys = ON;
+
+BEGIN TRANSACTION;
+
+-- ---------------------------------------------------------------------------
+-- Migration log
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS migration_log (
+  migration_id TEXT PRIMARY KEY,
+  migration_name TEXT NOT NULL,
+  applied_at TEXT NOT NULL,
+  schema_version_before TEXT,
+  schema_version_after TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS artifact_version (
+  artifact_name TEXT PRIMARY KEY,
+  artifact_version TEXT NOT NULL,
+  artifact_hash TEXT,
+  activated_at TEXT NOT NULL
+);
+
+-- ---------------------------------------------------------------------------
+-- Core case table
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS case_header (
+  case_id TEXT PRIMARY KEY,
+  plan_id TEXT NOT NULL,
+  plan_name TEXT,
+  plan_number TEXT,
+  plan_anniversary TEXT,
+  dopt TEXT,
+  dotr TEXT,
+  bpd TEXT,
+  nod TEXT,
+  noit TEXT,
+  dobf TEXT,
+  successor_plan_indicator TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_case_header_plan_id
+  ON case_header(plan_id);
+
+CREATE INDEX IF NOT EXISTS idx_case_header_dopt
+  ON case_header(dopt);
+
+-- ---------------------------------------------------------------------------
+-- Document intake inventory
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS document_inventory (
+  document_id TEXT PRIMARY KEY,
+  case_id TEXT NOT NULL,
+  plan_file_type TEXT NOT NULL,
+  source_system TEXT NOT NULL,
+  source_file_name TEXT,
+  normalized_file_name TEXT,
+  folder_path TEXT,
+  mime_type TEXT,
+  sha256 TEXT,
+  file_size_bytes INTEGER,
+  ocr_text_id TEXT,
+  document_date TEXT,
+  received_date TEXT,
+  imageviewer_doc_number TEXT,
+  case_processing_relevant INTEGER DEFAULT 0,
+  review_priority INTEGER,
+  notes TEXT,
+  FOREIGN KEY (case_id) REFERENCES case_header(case_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_document_inventory_case_type
+  ON document_inventory(case_id, plan_file_type);
+
+CREATE INDEX IF NOT EXISTS idx_document_inventory_case_relevant
+  ON document_inventory(case_id, case_processing_relevant);
+
+CREATE INDEX IF NOT EXISTS idx_document_inventory_sha256
+  ON document_inventory(sha256);
+
+-- ---------------------------------------------------------------------------
+-- OCR registry
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS ocr_text_registry (
+  ocr_text_id TEXT PRIMARY KEY,
+  document_id TEXT NOT NULL,
+  text_path TEXT,
+  page_count INTEGER,
+  ocr_engine TEXT,
+  ocr_engine_version TEXT,
+  language_code TEXT,
+  ocr_confidence REAL,
+  created_at TEXT NOT NULL,
+  FOREIGN KEY (document_id) REFERENCES document_inventory(document_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_ocr_text_registry_document_id
+  ON ocr_text_registry(document_id);
+
+-- ---------------------------------------------------------------------------
+-- Page anchors for citations
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS document_page_anchor (
+  page_anchor_id TEXT PRIMARY KEY,
+  document_id TEXT NOT NULL,
+  page_number INTEGER,
+  section_reference TEXT,
+  anchor_text TEXT,
+  anchor_hash TEXT,
+  FOREIGN KEY (document_id) REFERENCES document_inventory(document_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_document_page_anchor_doc_page
+  ON document_page_anchor(document_id, page_number);
+
+CREATE INDEX IF NOT EXISTS idx_document_page_anchor_doc_section
+  ON document_page_anchor(document_id, section_reference);
+
+-- ---------------------------------------------------------------------------
+-- Source assertions
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS source_assertion (
+  assertion_id TEXT PRIMARY KEY,
+  case_id TEXT NOT NULL,
+  document_id TEXT NOT NULL,
+  plan_file_type TEXT NOT NULL,
+  source_system TEXT NOT NULL,
+  source_file_name TEXT,
+  source_file_hash TEXT,
+  ocr_text_id TEXT,
+  page_number INTEGER,
+  section_reference TEXT,
+  citation_text TEXT,
+  subject_type TEXT NOT NULL,
+  subject_key TEXT NOT NULL,
+  field_name TEXT NOT NULL,
+  raw_value TEXT NOT NULL,
+  normalized_value TEXT,
+  normalized_value_type TEXT NOT NULL,
+  units TEXT,
+  effective_date TEXT,
+  adoption_date TEXT,
+  phase_in_pct REAL,
+  confidence_score REAL,
+  extraction_method TEXT NOT NULL,
+  extracted_by TEXT NOT NULL,
+  extracted_at TEXT NOT NULL,
+  review_status TEXT NOT NULL,
+  review_note TEXT,
+  reviewer_id TEXT,
+  reviewed_at TEXT,
+  superseded_by_assertion_id TEXT,
+  schema_version TEXT NOT NULL,
+  FOREIGN KEY (case_id) REFERENCES case_header(case_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+  FOREIGN KEY (document_id) REFERENCES document_inventory(document_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+  FOREIGN KEY (ocr_text_id) REFERENCES ocr_text_registry(ocr_text_id)
+    ON UPDATE CASCADE
+    ON DELETE SET NULL,
+  FOREIGN KEY (superseded_by_assertion_id) REFERENCES source_assertion(assertion_id)
+    ON UPDATE CASCADE
+    ON DELETE SET NULL,
+  CHECK (page_number IS NULL OR page_number >= 1),
+  CHECK (phase_in_pct IS NULL OR (phase_in_pct >= 0 AND phase_in_pct <= 100)),
+  CHECK (confidence_score IS NULL OR (confidence_score >= 0 AND confidence_score <= 1)),
+  CHECK (schema_version = '0.1.0')
+);
+
+CREATE INDEX IF NOT EXISTS idx_source_assertion_case_subject
+  ON source_assertion(case_id, subject_type, subject_key);
+
+CREATE INDEX IF NOT EXISTS idx_source_assertion_case_field
+  ON source_assertion(case_id, field_name);
+
+CREATE INDEX IF NOT EXISTS idx_source_assertion_case_review_status
+  ON source_assertion(case_id, review_status);
+
+CREATE INDEX IF NOT EXISTS idx_source_assertion_doc_page
+  ON source_assertion(document_id, page_number);
+
+CREATE INDEX IF NOT EXISTS idx_source_assertion_subject_field
+  ON source_assertion(subject_key, field_name);
+
+-- ---------------------------------------------------------------------------
+-- Resolved facts
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS resolved_fact (
+  resolved_fact_id TEXT PRIMARY KEY,
+  case_id TEXT NOT NULL,
+  subject_type TEXT NOT NULL,
+  subject_key TEXT NOT NULL,
+  field_name TEXT NOT NULL,
+  resolved_value TEXT NOT NULL,
+  resolved_value_type TEXT NOT NULL,
+  units TEXT,
+  resolution_basis TEXT NOT NULL,
+  primary_source_assertion_id TEXT NOT NULL,
+  source_assertion_ids_json TEXT,
+  source_variance_flag TEXT NOT NULL DEFAULT 'N',
+  variance_note TEXT,
+  confidence_score REAL,
+  resolved_by TEXT NOT NULL,
+  resolved_at TEXT NOT NULL,
+  effective_date TEXT,
+  adoption_date TEXT,
+  phase_in_pct REAL,
+  status TEXT NOT NULL DEFAULT 'active',
+  superseded_by_resolved_fact_id TEXT,
+  schema_version TEXT NOT NULL,
+  FOREIGN KEY (case_id) REFERENCES case_header(case_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+  FOREIGN KEY (primary_source_assertion_id) REFERENCES source_assertion(assertion_id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT,
+  FOREIGN KEY (superseded_by_resolved_fact_id) REFERENCES resolved_fact(resolved_fact_id)
+    ON UPDATE CASCADE
+    ON DELETE SET NULL,
+  CHECK (phase_in_pct IS NULL OR (phase_in_pct >= 0 AND phase_in_pct <= 100)),
+  CHECK (confidence_score IS NULL OR (confidence_score >= 0 AND confidence_score <= 1)),
+  CHECK (source_variance_flag IN ('Y', 'N')),
+  CHECK (status IN ('active', 'superseded', 'rejected')),
+  CHECK (schema_version = '0.1.0')
+);
+
+CREATE INDEX IF NOT EXISTS idx_resolved_fact_case_subject
+  ON resolved_fact(case_id, subject_type, subject_key);
+
+CREATE INDEX IF NOT EXISTS idx_resolved_fact_case_field
+  ON resolved_fact(case_id, field_name);
+
+CREATE INDEX IF NOT EXISTS idx_resolved_fact_status
+  ON resolved_fact(status);
+
+CREATE UNIQUE INDEX IF NOT EXISTS uq_resolved_fact_active
+  ON resolved_fact(case_id, subject_type, subject_key, field_name)
+  WHERE status = 'active';
+
+-- ---------------------------------------------------------------------------
+-- Resolved plan provisions
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS resolved_plan_provision (
+  resolved_plan_provision_id TEXT PRIMARY KEY,
+  case_id TEXT NOT NULL,
+  plan_id TEXT NOT NULL,
+  provision_code TEXT NOT NULL,
+  provision_section TEXT,
+  governing_document_id TEXT NOT NULL,
+  governing_document_type TEXT NOT NULL,
+  effective_start_date TEXT NOT NULL,
+  effective_end_date TEXT,
+  adoption_date TEXT,
+  phase_in_pct REAL,
+  resolved_value TEXT NOT NULL,
+  resolved_value_type TEXT NOT NULL,
+  resolved_text TEXT,
+  citation_text TEXT,
+  primary_source_assertion_id TEXT NOT NULL,
+  source_assertion_ids_json TEXT,
+  resolution_basis TEXT NOT NULL,
+  source_variance_flag TEXT NOT NULL DEFAULT 'N',
+  variance_note TEXT,
+  interpretation_note TEXT,
+  requires_case_memo_note_flag TEXT NOT NULL DEFAULT 'N',
+  confidence_score REAL,
+  resolved_by TEXT NOT NULL,
+  resolved_at TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'active',
+  superseded_by_resolved_plan_provision_id TEXT,
+  schema_version TEXT NOT NULL,
+  FOREIGN KEY (case_id) REFERENCES case_header(case_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+  FOREIGN KEY (governing_document_id) REFERENCES document_inventory(document_id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT,
+  FOREIGN KEY (primary_source_assertion_id) REFERENCES source_assertion(assertion_id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT,
+  FOREIGN KEY (superseded_by_resolved_plan_provision_id)
+    REFERENCES resolved_plan_provision(resolved_plan_provision_id)
+    ON UPDATE CASCADE
+    ON DELETE SET NULL,
+  CHECK (effective_end_date IS NULL OR effective_end_date >= effective_start_date),
+  CHECK (phase_in_pct IS NULL OR (phase_in_pct >= 0 AND phase_in_pct <= 100)),
+  CHECK (confidence_score IS NULL OR (confidence_score >= 0 AND confidence_score <= 1)),
+  CHECK (source_variance_flag IN ('Y', 'N')),
+  CHECK (requires_case_memo_note_flag IN ('Y', 'N')),
+  CHECK (status IN ('active', 'superseded', 'rejected')),
+  CHECK (schema_version = '0.1.0')
+);
+
+CREATE INDEX IF NOT EXISTS idx_resolved_plan_provision_case_code
+  ON resolved_plan_provision(case_id, provision_code);
+
+CREATE INDEX IF NOT EXISTS idx_resolved_plan_provision_case_dates
+  ON resolved_plan_provision(case_id, effective_start_date, effective_end_date);
+
+CREATE INDEX IF NOT EXISTS idx_resolved_plan_provision_governing_doc
+  ON resolved_plan_provision(governing_document_id);
+
+CREATE INDEX IF NOT EXISTS idx_resolved_plan_provision_status
+  ON resolved_plan_provision(status);
+
+CREATE UNIQUE INDEX IF NOT EXISTS uq_resolved_plan_provision_active
+  ON resolved_plan_provision(case_id, provision_code, effective_start_date, governing_document_id)
+  WHERE status = 'active';
+
+-- ---------------------------------------------------------------------------
+-- Engine runs
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS engine_run (
+  calculation_run_id TEXT PRIMARY KEY,
+  case_id TEXT NOT NULL,
+  input_packet_id TEXT,
+  rule_version TEXT NOT NULL,
+  deliverable_version TEXT NOT NULL,
+  run_context TEXT,
+  started_at TEXT NOT NULL,
+  completed_at TEXT,
+  run_status TEXT NOT NULL,
+  warning_count INTEGER NOT NULL DEFAULT 0,
+  error_count INTEGER NOT NULL DEFAULT 0,
+  FOREIGN KEY (case_id) REFERENCES case_header(case_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+  CHECK (run_status IN ('queued', 'running', 'completed', 'failed', 'cancelled'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_engine_run_case_status
+  ON engine_run(case_id, run_status);
+
+CREATE INDEX IF NOT EXISTS idx_engine_run_started_at
+  ON engine_run(started_at);
+
+-- ---------------------------------------------------------------------------
+-- Date resolution outputs
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS resolved_dates_output (
+  resolved_dates_output_id TEXT PRIMARY KEY,
+  calculation_run_id TEXT NOT NULL,
+  case_id TEXT NOT NULL,
+  subject_key TEXT NOT NULL,
+  nrd TEXT,
+  erd TEXT,
+  eurd TEXT,
+  eprd TEXT,
+  rbd TEXT,
+  xra REAL,
+  xrd TEXT,
+  sxra REAL,
+  term_lw_xra REAL,
+  term_lw_anb REAL,
+  FOREIGN KEY (calculation_run_id) REFERENCES engine_run(calculation_run_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+  FOREIGN KEY (case_id) REFERENCES case_header(case_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_resolved_dates_output_run_subject
+  ON resolved_dates_output(calculation_run_id, subject_key);
+
+-- ---------------------------------------------------------------------------
+-- Module trace
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS module_trace (
+  module_trace_id TEXT PRIMARY KEY,
+  calculation_run_id TEXT NOT NULL,
+  module_name TEXT NOT NULL,
+  subject_key TEXT NOT NULL,
+  field_name TEXT NOT NULL,
+  rule_applied TEXT,
+  input_fields_used_json TEXT,
+  intermediate_values_json TEXT,
+  output_value TEXT,
+  warning_note TEXT,
+  FOREIGN KEY (calculation_run_id) REFERENCES engine_run(calculation_run_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_module_trace_run_module
+  ON module_trace(calculation_run_id, module_name);
+
+CREATE INDEX IF NOT EXISTS idx_module_trace_subject_field
+  ON module_trace(subject_key, field_name);
+
+-- ---------------------------------------------------------------------------
+-- Helpful views
+-- ---------------------------------------------------------------------------
+
+CREATE VIEW IF NOT EXISTS vw_active_resolved_fact AS
+SELECT *
+FROM resolved_fact
+WHERE status = 'active';
+
+CREATE VIEW IF NOT EXISTS vw_active_resolved_plan_provision AS
+SELECT *
+FROM resolved_plan_provision
+WHERE status = 'active';
+
+CREATE VIEW IF NOT EXISTS vw_case_documents_relevant AS
+SELECT *
+FROM document_inventory
+WHERE case_processing_relevant = 1;
+
+CREATE VIEW IF NOT EXISTS vw_latest_engine_run AS
+SELECT e.*
+FROM engine_run e
+JOIN (
+  SELECT case_id, MAX(completed_at) AS max_completed_at
+  FROM engine_run
+  WHERE run_status = 'completed'
+  GROUP BY case_id
+) x
+  ON e.case_id = x.case_id
+ AND e.completed_at = x.max_completed_at;
+
+-- ---------------------------------------------------------------------------
+-- Record this migration and active artifact versions
+-- ---------------------------------------------------------------------------
+
+INSERT INTO migration_log (
+  migration_id,
+  migration_name,
+  applied_at,
+  schema_version_before,
+  schema_version_after
+) VALUES (
+  '0001',
+  'sqlite_migration_0001_v0.1.0',
+  CURRENT_TIMESTAMP,
+  NULL,
+  '0.1.0'
+);
+
+INSERT INTO artifact_version (artifact_name, artifact_version, artifact_hash, activated_at) VALUES
+  ('sqlite_schema', '0.1.0', NULL, CURRENT_TIMESTAMP),
+  ('source_assertion_schema', '0.1.0', NULL, CURRENT_TIMESTAMP),
+  ('resolved_fact_schema', '0.1.0', NULL, CURRENT_TIMESTAMP),
+  ('resolved_plan_provision_schema', '0.1.0', NULL, CURRENT_TIMESTAMP);
+
+COMMIT;

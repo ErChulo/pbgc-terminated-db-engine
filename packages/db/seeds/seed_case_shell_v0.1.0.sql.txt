@@ -1,0 +1,61 @@
+-- seed_case_shell_v0.1.0.sql
+-- Minimal case shell seed for PBGC terminated DB casework project
+-- Version: v0.1.0
+-- Delivery format: .sql.txt for email-safe transport
+
+PRAGMA foreign_keys = ON;
+BEGIN TRANSACTION;
+
+INSERT INTO case_header (
+  case_id,
+  plan_id,
+  plan_name,
+  plan_number,
+  plan_anniversary,
+  dopt,
+  dotr,
+  bpd,
+  nod,
+  noit,
+  dobf,
+  successor_plan_indicator,
+  created_at,
+  updated_at
+) VALUES (
+  'CASE-PLACEHOLDER',
+  'PLAN-PLACEHOLDER',
+  'Plan Name Placeholder',
+  '001',
+  '0101',
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  'N',
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+)
+ON CONFLICT(case_id) DO UPDATE SET
+  plan_id = excluded.plan_id,
+  plan_name = excluded.plan_name,
+  plan_number = excluded.plan_number,
+  plan_anniversary = excluded.plan_anniversary,
+  dopt = excluded.dopt,
+  dotr = excluded.dotr,
+  bpd = excluded.bpd,
+  nod = excluded.nod,
+  noit = excluded.noit,
+  dobf = excluded.dobf,
+  successor_plan_indicator = excluded.successor_plan_indicator,
+  updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO artifact_version (artifact_name, artifact_version, artifact_hash, activated_at) VALUES
+  ('case_shell_seed', '0.1.0', NULL, CURRENT_TIMESTAMP)
+ON CONFLICT(artifact_name) DO UPDATE SET
+  artifact_version = excluded.artifact_version,
+  artifact_hash = excluded.artifact_hash,
+  activated_at = excluded.activated_at;
+
+COMMIT;

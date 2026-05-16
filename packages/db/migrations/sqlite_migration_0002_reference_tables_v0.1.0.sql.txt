@@ -1,0 +1,179 @@
+-- sqlite_migration_0002_reference_tables_v0.1.0.sql
+-- Reference-table migration for PBGC terminated DB casework project
+-- Version: v0.1.0
+-- Target runtime: sql.js / SQLite
+-- Delivery format: .sql.txt for email-safe transport
+
+PRAGMA foreign_keys = ON;
+
+BEGIN TRANSACTION;
+
+-- ---------------------------------------------------------------------------
+-- Canonical ImageViewer / plan-file taxonomy
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS ref_plan_file_type (
+  plan_file_type TEXT PRIMARY KEY,
+  description TEXT NOT NULL,
+  actuarial_casework_flag INTEGER NOT NULL DEFAULT 0,
+  case_processing_relevant INTEGER NOT NULL DEFAULT 0,
+  parent_plan_file_type TEXT,
+  sort_order INTEGER,
+  is_active INTEGER NOT NULL DEFAULT 1,
+  FOREIGN KEY (parent_plan_file_type) REFERENCES ref_plan_file_type(plan_file_type)
+    ON UPDATE CASCADE
+    ON DELETE SET NULL,
+  CHECK (actuarial_casework_flag IN (0, 1)),
+  CHECK (case_processing_relevant IN (0, 1)),
+  CHECK (is_active IN (0, 1))
+);
+
+CREATE INDEX IF NOT EXISTS idx_ref_plan_file_type_parent
+  ON ref_plan_file_type(parent_plan_file_type);
+
+CREATE INDEX IF NOT EXISTS idx_ref_plan_file_type_case_relevant
+  ON ref_plan_file_type(case_processing_relevant);
+
+-- ---------------------------------------------------------------------------
+-- Canonical schema-field registry
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS ref_schema_field (
+  field_name TEXT PRIMARY KEY,
+  schema_class TEXT NOT NULL,
+  schema_group TEXT NOT NULL,
+  field_type TEXT NOT NULL,
+  is_required INTEGER NOT NULL DEFAULT 0,
+  is_conditional INTEGER NOT NULL DEFAULT 0,
+  is_derived INTEGER NOT NULL DEFAULT 0,
+  notes TEXT,
+  CHECK (is_required IN (0, 1)),
+  CHECK (is_conditional IN (0, 1)),
+  CHECK (is_derived IN (0, 1))
+);
+
+CREATE INDEX IF NOT EXISTS idx_ref_schema_field_class_group
+  ON ref_schema_field(schema_class, schema_group);
+
+-- ---------------------------------------------------------------------------
+-- Controlled provision-code registry
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS ref_provision_code (
+  provision_code TEXT PRIMARY KEY,
+  provision_section TEXT,
+  description TEXT NOT NULL,
+  output_group TEXT,
+  is_active INTEGER NOT NULL DEFAULT 1,
+  CHECK (is_active IN (0, 1))
+);
+
+CREATE INDEX IF NOT EXISTS idx_ref_provision_code_section
+  ON ref_provision_code(provision_section);
+
+-- ---------------------------------------------------------------------------
+-- Controlled rule-code registry
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS ref_rule_code (
+  rule_code TEXT PRIMARY KEY,
+  rule_family TEXT NOT NULL,
+  rule_description TEXT NOT NULL,
+  json_definition TEXT,
+  is_active INTEGER NOT NULL DEFAULT 1,
+  CHECK (is_active IN (0, 1))
+);
+
+CREATE INDEX IF NOT EXISTS idx_ref_rule_code_family
+  ON ref_rule_code(rule_family);
+
+-- ---------------------------------------------------------------------------
+-- Controlled actuarial assumption-set registry
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS ref_assumption_set (
+  assumption_set_id TEXT PRIMARY KEY,
+  label TEXT NOT NULL,
+  interest_basis_code TEXT,
+  mortality_basis_code TEXT,
+  pre_retirement_mortality_code TEXT,
+  post_retirement_mortality_code TEXT,
+  form_conversion_method TEXT,
+  lookback_period TEXT,
+  stability_period TEXT,
+  required_beginning_date_method TEXT,
+  lump_sum_basis_code TEXT,
+  annuity_basis_code TEXT,
+  effective_start_date TEXT,
+  effective_end_date TEXT,
+  CHECK (
+    effective_end_date IS NULL
+    OR effective_start_date IS NULL
+    OR effective_end_date >= effective_start_date
+  )
+);
+
+CREATE INDEX IF NOT EXISTS idx_ref_assumption_set_effective_dates
+  ON ref_assumption_set(effective_start_date, effective_end_date);
+
+-- ---------------------------------------------------------------------------
+-- Field-to-source registry
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS schema_field_source_map (
+  map_id TEXT PRIMARY KEY,
+  schema_version TEXT NOT NULL,
+  schema_class TEXT NOT NULL,
+  schema_group TEXT NOT NULL,
+  field_name TEXT NOT NULL,
+  source_subject TEXT NOT NULL,
+  preferred_plan_file_types TEXT,
+  fallback_plan_file_types TEXT,
+  preferred_pbgc_sources TEXT,
+  extraction_rule TEXT NOT NULL,
+  resolution_basis TEXT NOT NULL,
+  required_review TEXT NOT NULL,
+  notes TEXT,
+  FOREIGN KEY (field_name) REFERENCES ref_schema_field(field_name)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT,
+  CHECK (required_review IN ('Y', 'N'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_schema_field_source_map_class_group
+  ON schema_field_source_map(schema_class, schema_group);
+
+CREATE INDEX IF NOT EXISTS idx_schema_field_source_map_field_name
+  ON schema_field_source_map(field_name);
+
+-- ---------------------------------------------------------------------------
+-- Record migration and active artifact versions
+-- ---------------------------------------------------------------------------
+
+INSERT INTO migration_log (
+  migration_id,
+  migration_name,
+  applied_at,
+  schema_version_before,
+  schema_version_after
+) VALUES (
+  '0002',
+  'sqlite_migration_0002_reference_tables_v0.1.0',
+  CURRENT_TIMESTAMP,
+  '0.1.0',
+  '0.1.0'
+);
+
+INSERT INTO artifact_version (artifact_name, artifact_version, artifact_hash, activated_at) VALUES
+  ('ref_plan_file_type', '0.1.0', NULL, CURRENT_TIMESTAMP),
+  ('ref_schema_field', '0.1.0', NULL, CURRENT_TIMESTAMP),
+  ('ref_provision_code', '0.1.0', NULL, CURRENT_TIMESTAMP),
+  ('ref_rule_code', '0.1.0', NULL, CURRENT_TIMESTAMP),
+  ('ref_assumption_set', '0.1.0', NULL, CURRENT_TIMESTAMP),
+  ('schema_field_source_map', '0.1.0', NULL, CURRENT_TIMESTAMP)
+ON CONFLICT(artifact_name) DO UPDATE SET
+  artifact_version = excluded.artifact_version,
+  artifact_hash = excluded.artifact_hash,
+  activated_at = excluded.activated_at;
+
+COMMIT;

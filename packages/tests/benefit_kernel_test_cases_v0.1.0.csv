@@ -1,0 +1,4 @@
+test_case_id,description,accrued_benefit_formula,average_compensation_resolved,benefit_service_resolved,form_code_nsf,xrd,phase_in_limitation_indicator,section_436_applicable_indicator,expected_term_mb_nrd_nsf,expected_xrd_mb_term,expected_pvmb_term
+BK001,Simple deferred vested participant,1.5pct_final_avg_pay_x_service,80000,25,1,2025-05-01,true,false,2500.00,2500.00,198400.00
+BK002,Integrated formula participant,1.0pct_plus_integration,90000,30,1,2025-07-01,true,false,,,
+BK003,QPSA branch case,1.5pct_final_avg_pay_x_service,70000,20,1,2025-02-01,true,false,,,

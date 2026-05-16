@@ -1,0 +1,4 @@
+test_case_id,description,retstat,role_type,dob,dote,dod,dopt,plan_anniversary,normal_retirement_eligibility_rule,normal_retirement_start_rule,early_reduced_retirement_rule,expected_nrd,expected_erd,expected_rbd,expected_xra,expected_xrd
+DR001,Deferred vested participant age 65 NRA,2,participant,1960-04-15,2010-12-31,,2024-06-30,0101,age_65,first_of_month_on_or_after,age_55,2025-05-01,2015-05-01,2032-04-01,65,2025-05-01
+DR002,Participant already in pay,1,participant,1950-04-01,2015-06-30,,2024-06-30,0101,age_65,first_of_month_on_or_after,age_55,2015-04-01,2005-04-01,2020-11-01,65,2015-04-01
+DR003,Beneficiary non-spouse path,2,beneficiary,1949-07-01,,2015-01-01,2008-02-02,0101,age_65,first_of_month_on_or_after,age_55,,,2016-12-01,,

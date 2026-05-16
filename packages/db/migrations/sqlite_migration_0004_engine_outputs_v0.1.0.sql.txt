@@ -1,0 +1,136 @@
+-- sqlite_migration_0004_engine_outputs_v0.1.0.sql
+PRAGMA foreign_keys = ON;
+BEGIN TRANSACTION;
+
+CREATE TABLE IF NOT EXISTS resolved_service_comp_output (
+  resolved_service_comp_output_id TEXT PRIMARY KEY,
+  calculation_run_id TEXT NOT NULL,
+  case_id TEXT NOT NULL,
+  subject_key TEXT NOT NULL,
+  eligibility_service_resolved REAL,
+  vesting_service_resolved REAL,
+  benefit_service_resolved REAL,
+  accrual_service_resolved REAL,
+  compensation_resolved REAL,
+  average_compensation_resolved REAL,
+  covered_compensation_resolved REAL,
+  FOREIGN KEY (calculation_run_id) REFERENCES engine_run(calculation_run_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+  FOREIGN KEY (case_id) REFERENCES case_header(case_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_resolved_service_comp_output_run_subject
+  ON resolved_service_comp_output(calculation_run_id, subject_key);
+
+CREATE TABLE IF NOT EXISTS resolved_forms_output (
+  resolved_forms_output_id TEXT PRIMARY KEY,
+  calculation_run_id TEXT NOT NULL,
+  case_id TEXT NOT NULL,
+  subject_key TEXT NOT NULL,
+  rettyp TEXT,
+  form_code_nsf TEXT,
+  form_code_nmf TEXT,
+  form_code_ptp TEXT,
+  form_code_ptp_qpsa TEXT,
+  form_code_death TEXT,
+  annuity_status_pay TEXT,
+  lsoption TEXT,
+  bs_ind TEXT,
+  br_ind TEXT,
+  ofa_indicator TEXT,
+  FOREIGN KEY (calculation_run_id) REFERENCES engine_run(calculation_run_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+  FOREIGN KEY (case_id) REFERENCES case_header(case_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_resolved_forms_output_run_subject
+  ON resolved_forms_output(calculation_run_id, subject_key);
+
+CREATE TABLE IF NOT EXISTS benefit_kernel_output (
+  benefit_kernel_output_id TEXT PRIMARY KEY,
+  calculation_run_id TEXT NOT NULL,
+  case_id TEXT NOT NULL,
+  subject_key TEXT NOT NULL,
+  term_mb_nrd_nsf REAL,
+  term_surv_mb_nrd REAL,
+  term_surv_mb_eurd REAL,
+  term_surv_mb_erd REAL,
+  rbd_surv_mb_term REAL,
+  term_surv_mb_ard REAL,
+  xrd_mb_term REAL,
+  xrd_surv_mb_term REAL,
+  xrd_mb_qpsa_term REAL,
+  ls_term REAL,
+  ls_qpsa REAL,
+  xrd_mb_title_iv REAL,
+  nrd_mb_title_iv_nsf REAL,
+  eurd_mb_title_iv_nsf REAL,
+  erd_mb_title_iv_nsf REAL,
+  rbd_mb_title_iv REAL,
+  ard_mb_title_iv REAL,
+  pvmb_title_iv_no_q_no_l REAL,
+  pvmb_title_iv_qpsa REAL,
+  pvmb_title_iv_no_load REAL,
+  title_iv_load REAL,
+  pvmb_title_iv REAL,
+  xrd_mb_4022c REAL,
+  pvmb_4022c_no_q_no_l REAL,
+  pvmb_4022c_qpsa REAL,
+  pvmb_4022c_no_load REAL,
+  load_4022c REAL,
+  pvmb_4022c REAL,
+  pvmb_bas_ungb_no_q_no_l REAL,
+  pvmb_bas_ungb_qpsa REAL,
+  bnnfa_pvmb_no_load REAL,
+  bnnfa_load REAL,
+  bnnfa_pvmb REAL,
+  pvpbl_ann_rates_no_q_no_l REAL,
+  pvpbl_ann_rates_qpsa REAL,
+  pvpbl_ann_rates_no_load REAL,
+  pbl_load REAL,
+  pvpbl_ann_rates REAL,
+  pvf_lev_ann REAL,
+  pvf_lev_ls REAL,
+  pvf_qpsa_ls REAL,
+  pvmb_term_no_q_no_l REAL,
+  pvmb_term_qpsa REAL,
+  pvmb_term_no_load REAL,
+  term_load REAL,
+  pvmb_term REAL,
+  FOREIGN KEY (calculation_run_id) REFERENCES engine_run(calculation_run_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+  FOREIGN KEY (case_id) REFERENCES case_header(case_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_benefit_kernel_output_run_subject
+  ON benefit_kernel_output(calculation_run_id, subject_key);
+
+INSERT INTO migration_log (
+  migration_id, migration_name, applied_at, schema_version_before, schema_version_after
+) VALUES (
+  '0004',
+  'sqlite_migration_0004_engine_outputs_v0.1.0',
+  CURRENT_TIMESTAMP,
+  '0.1.0',
+  '0.1.0'
+);
+
+INSERT INTO artifact_version (artifact_name, artifact_version, artifact_hash, activated_at) VALUES
+  ('resolved_service_comp_output', '0.1.0', NULL, CURRENT_TIMESTAMP),
+  ('resolved_forms_output', '0.1.0', NULL, CURRENT_TIMESTAMP),
+  ('benefit_kernel_output', '0.1.0', NULL, CURRENT_TIMESTAMP)
+ON CONFLICT(artifact_name) DO UPDATE SET
+  artifact_version = excluded.artifact_version,
+  artifact_hash = excluded.artifact_hash,
+  activated_at = excluded.activated_at;
+
+COMMIT;

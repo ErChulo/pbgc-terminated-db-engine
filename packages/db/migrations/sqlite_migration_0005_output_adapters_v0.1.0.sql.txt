@@ -1,0 +1,86 @@
+-- sqlite_migration_0005_output_adapters_v0.1.0.sql
+PRAGMA foreign_keys = ON;
+BEGIN TRANSACTION;
+
+CREATE TABLE IF NOT EXISTS v1_ve_output_row (
+  v1_ve_output_row_id TEXT PRIMARY KEY,
+  calculation_run_id TEXT NOT NULL,
+  case_id TEXT NOT NULL,
+  plan_id TEXT NOT NULL,
+  subject_key TEXT NOT NULL,
+  row_json TEXT NOT NULL,
+  listing_sort_key TEXT,
+  adapter_version TEXT NOT NULL,
+  FOREIGN KEY (calculation_run_id) REFERENCES engine_run(calculation_run_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+  FOREIGN KEY (case_id) REFERENCES case_header(case_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_v1_ve_output_row_run_subject
+  ON v1_ve_output_row(calculation_run_id, subject_key);
+
+CREATE TABLE IF NOT EXISTS valuation_listing_output_row (
+  valuation_listing_output_row_id TEXT PRIMARY KEY,
+  calculation_run_id TEXT NOT NULL,
+  case_id TEXT NOT NULL,
+  plan_id TEXT NOT NULL,
+  subject_key TEXT NOT NULL,
+  listing_row_type TEXT NOT NULL,
+  listing_sort_key TEXT NOT NULL,
+  row_json TEXT NOT NULL,
+  adapter_version TEXT NOT NULL,
+  FOREIGN KEY (calculation_run_id) REFERENCES engine_run(calculation_run_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+  FOREIGN KEY (case_id) REFERENCES case_header(case_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_valuation_listing_output_row_run_sort
+  ON valuation_listing_output_row(calculation_run_id, listing_row_type, listing_sort_key);
+
+CREATE TABLE IF NOT EXISTS bsrs_configuration_output_row (
+  bsrs_configuration_output_row_id TEXT PRIMARY KEY,
+  calculation_run_id TEXT NOT NULL,
+  case_id TEXT NOT NULL,
+  plan_id TEXT NOT NULL,
+  subject_key TEXT NOT NULL,
+  statement_row_type TEXT NOT NULL,
+  statement_sort_key TEXT NOT NULL,
+  row_json TEXT NOT NULL,
+  adapter_version TEXT NOT NULL,
+  FOREIGN KEY (calculation_run_id) REFERENCES engine_run(calculation_run_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+  FOREIGN KEY (case_id) REFERENCES case_header(case_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_bsrs_configuration_output_row_run_sort
+  ON bsrs_configuration_output_row(calculation_run_id, statement_row_type, statement_sort_key);
+
+INSERT INTO migration_log (
+  migration_id, migration_name, applied_at, schema_version_before, schema_version_after
+) VALUES (
+  '0005',
+  'sqlite_migration_0005_output_adapters_v0.1.0',
+  CURRENT_TIMESTAMP,
+  '0.1.0',
+  '0.1.0'
+);
+
+INSERT INTO artifact_version (artifact_name, artifact_version, artifact_hash, activated_at) VALUES
+  ('v1_ve_output_row', '0.1.0', NULL, CURRENT_TIMESTAMP),
+  ('valuation_listing_output_row', '0.1.0', NULL, CURRENT_TIMESTAMP),
+  ('bsrs_configuration_output_row', '0.1.0', NULL, CURRENT_TIMESTAMP)
+ON CONFLICT(artifact_name) DO UPDATE SET
+  artifact_version = excluded.artifact_version,
+  artifact_hash = excluded.artifact_hash,
+  activated_at = excluded.activated_at;
+
+COMMIT;

@@ -1,0 +1,4 @@
+test_case_id,description,compensation_basis_code,average_compensation_rule,compensation_history_available_indicator,final_average_compensation,covered_compensation_amount,frozen_accrued_benefit_indicator,expected_compensation_resolved,expected_average_compensation_resolved,expected_covered_compensation_resolved
+CR001,Final average pay simple case,final_average_pay,highest_consecutive_5_years,true,80000,,false,80000,80000,
+CR002,Integrated formula case,final_average_pay,highest_consecutive_5_years,true,90000,12000,false,90000,90000,12000
+CR003,Frozen benefit support case,final_average_pay,highest_consecutive_5_years,false,,,true,,,

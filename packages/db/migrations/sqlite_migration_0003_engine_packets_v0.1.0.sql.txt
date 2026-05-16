@@ -1,0 +1,46 @@
+-- sqlite_migration_0003_engine_packets_v0.1.0.sql
+PRAGMA foreign_keys = ON;
+BEGIN TRANSACTION;
+
+CREATE TABLE IF NOT EXISTS engine_input_packet (
+  input_packet_id TEXT PRIMARY KEY,
+  case_id TEXT NOT NULL,
+  subject_key TEXT NOT NULL,
+  subject_type TEXT NOT NULL,
+  packet_type TEXT NOT NULL,
+  schema_version TEXT NOT NULL,
+  packet_json TEXT NOT NULL,
+  built_from_resolved_at TEXT,
+  built_by TEXT NOT NULL,
+  built_at TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'active',
+  FOREIGN KEY (case_id) REFERENCES case_header(case_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+  CHECK (status IN ('active', 'superseded', 'rejected'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_engine_input_packet_case_subject
+  ON engine_input_packet(case_id, subject_type, subject_key);
+
+CREATE INDEX IF NOT EXISTS idx_engine_input_packet_type_status
+  ON engine_input_packet(packet_type, status);
+
+INSERT INTO migration_log (
+  migration_id, migration_name, applied_at, schema_version_before, schema_version_after
+) VALUES (
+  '0003',
+  'sqlite_migration_0003_engine_packets_v0.1.0',
+  CURRENT_TIMESTAMP,
+  '0.1.0',
+  '0.1.0'
+);
+
+INSERT INTO artifact_version (artifact_name, artifact_version, artifact_hash, activated_at) VALUES
+  ('engine_input_packet', '0.1.0', NULL, CURRENT_TIMESTAMP)
+ON CONFLICT(artifact_name) DO UPDATE SET
+  artifact_version = excluded.artifact_version,
+  artifact_hash = excluded.artifact_hash,
+  activated_at = excluded.activated_at;
+
+COMMIT;

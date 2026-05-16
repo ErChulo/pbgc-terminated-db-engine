@@ -1,0 +1,4 @@
+test_case_id,description,role_type,mstat,current_pay_status,qdro_indicator,qpsa_indicator,normal_single_form_rule,normal_married_form_rule,pre_retirement_death_benefit_rule,consensual_lump_sum_rule,expected_rettyp,expected_form_code_nsf,expected_form_code_nmf,expected_form_code_death,expected_lsoption
+FR001,Single deferred vested participant,participant,S,not_in_pay,false,false,sla,qjsa_50,qpsa,not_available,deferred_vested,1,2,QPSA,N
+FR002,Married participant in pay,participant,M,in_pay,false,false,sla,qjsa_50,qpsa,not_available,in_pay,,,,N
+FR003,QDRO separate-interest path,alternate_payee,S,not_in_pay,true,false,sla,qjsa_50,qpsa,not_available,,1,2,,N

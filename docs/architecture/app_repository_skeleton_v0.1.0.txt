@@ -1,0 +1,49 @@
+pbgc-terminated-db-casework/
+├── apps/
+│   └── web/
+│       ├── src/
+│       │   ├── app/
+│       │   ├── components/
+│       │   ├── pages/
+│       │   ├── styles/
+│       │   └── main.ts
+│       ├── public/
+│       ├── dist/
+│       ├── index.html
+│       ├── package.json
+│       └── vite.config.ts
+├── packages/
+│   ├── contracts/
+│   ├── db/
+│   │   ├── migrations/
+│   │   ├── seeds/
+│   │   ├── queries/
+│   │   └── schema/
+│   ├── engine/
+│   │   ├── date-resolution/
+│   │   ├── service-resolution/
+│   │   ├── compensation-resolution/
+│   │   ├── form-resolution/
+│   │   └── benefit-kernel/
+│   ├── output-adapters/
+│   │   ├── v1-ve/
+│   │   ├── valuation-listings/
+│   │   └── bsrs/
+│   ├── importers/
+│   ├── reference-data/
+│   ├── shared/
+│   └── tests/
+├── artifacts/
+│   ├── contracts/
+│   ├── schemas/
+│   ├── templates/
+│   └── samples/
+├── docs/
+│   ├── architecture/
+│   ├── mappings/
+│   └── governance/
+├── scripts/
+├── AGENTS.md
+├── README.md
+├── package.json
+└── pnpm-workspace.yaml

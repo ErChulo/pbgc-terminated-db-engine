@@ -1,0 +1,4 @@
+test_case_id,description,doh,dop,dote,dopt,service_basis_code,service_hours_requirement,service_period_basis,plan_anniversary_service_basis,dobf,expected_eligibility_service,expected_vesting_service,expected_benefit_service,expected_accrual_service
+SR001,25 full plan years through termination,1985-07-01,1986-01-01,2010-12-31,2024-06-30,plan_year_1000_hours,1000,plan_anniversary,0101,2011-01-01,25,25,25,25
+SR002,Shorter service through early termination,1998-03-15,1999-01-01,2007-12-31,2024-06-30,plan_year_1000_hours,1000,plan_anniversary,0101,,9,9,9,9
+SR003,Active at DOPT,2015-01-01,2016-01-01,,2024-06-30,plan_year_1000_hours,1000,plan_anniversary,0101,,9,9,9,9

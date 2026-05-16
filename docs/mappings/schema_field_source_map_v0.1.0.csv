@@ -1,0 +1,251 @@
+schema_version,schema_class,schema_group,field_name,source_subject,preferred_plan_file_types,fallback_plan_file_types,preferred_pbgc_sources,extraction_rule,resolution_basis,required_review,notes
+0.1.0,required,case_plan_timeline,case_id,case_or_plan,project_registry,,project registry,system_assign,single_best_source,Y,Project-controlled identifier.
+0.1.0,required,case_plan_timeline,plan_id,case_or_plan,project_registry,,project registry,system_assign,single_best_source,Y,Project-controlled plan identifier.
+0.1.0,required,case_plan_timeline,plan_name,case_or_plan,3B|3C|5B|5A,5A1|12D1,trusteeship package / governing plan text,extract_title_or_named_plan,cross_source_reconciliation,Y,Prefer trusteeship package and governing plan text.
+0.1.0,required,case_plan_timeline,plan_number,case_or_plan,3B|10B,3A|3C,trusteeship package / Form 5500,extract_plan_number,cross_source_reconciliation,Y,Plan number often appears in trusteeship docs and Form 5500.
+0.1.0,required,case_plan_timeline,plan_anniversary,case_or_plan,5B|5A|5A1,10A|12D1,Plan Summary,extract_plan_anniversary,plan_summary_resolution,Y,Usually from governing plan text or SPD.
+0.1.0,required,case_plan_timeline,dopt,case_or_plan,3B|3C|3A,12D1|12B,Trusteeship Agreement / TWG Memo,extract_termination_date,single_best_source,Y,Plan Summary rules point here.
+0.1.0,required,case_plan_timeline,dotr,case_or_plan,3B|3C,3A|12B,Trusteeship Agreement / TWG Memo,extract_trusteeship_date,single_best_source,Y,Trusteeship date from trusteeship package.
+0.1.0,required,case_plan_timeline,bpd,case_or_plan,3C|11E3|9A,10B|12B,TWG Memo / bankruptcy docs,extract_bankruptcy_petition_date,best_available_source,Y,Only if bankruptcy relevant.
+0.1.0,required,case_plan_timeline,nod,case_or_plan,3A,3C|9A,Notice of Determination,extract_notice_date_or_id,single_best_source,Y,Use trusteeship package.
+0.1.0,required,case_plan_timeline,noit,case_or_plan,3C|9A,3A|12B,trusteeship package,extract_notice_of_intent_date_or_id,best_available_source,Y,Use case package.
+0.1.0,required,case_plan_timeline,dobf,case_or_plan,5A|5B,5A1|10A|12D1,Plan Summary,extract_benefit_freeze_date,best_available_source,Y,Prefer amendment adopting freeze.
+0.1.0,required,case_plan_timeline,successor_plan_indicator,case_or_plan,3C|9A,12B|12D1,TWG Memo / technical procedure support,extract_successor_plan_status,manual_review,Y,Often requires procedural interpretation.
+0.1.0,required,resolved_plan_logic,plan_summary_version,plan_regime,12D1,12D|12B,Plan Summary artifact,use_plan_summary_artifact_version,single_best_source,Y,Controlled project artifact.
+0.1.0,required,resolved_plan_logic,governing_document_id,plan_regime,5B|5A|5A1|5C,11B|12D1,Plan Document List / Plan Summary,select_controlling_document,plan_summary_resolution,Y,One or more by regime.
+0.1.0,required,resolved_plan_logic,governing_document_effective_date,plan_regime,5B|5A|5A1|5C,10A|12D1,Plan Summary,extract_effective_date,plan_summary_resolution,Y,Per governing regime.
+0.1.0,required,resolved_plan_logic,governing_document_adoption_date,plan_regime,5B|5A|5A1|5C,10A|12D1,Plan Summary,extract_adoption_date,plan_summary_resolution,Y,Per governing regime.
+0.1.0,required,resolved_plan_logic,phase_in_percentage,plan_regime,5A|5B|12D1,10A|12B,Plan Summary / case memo,extract_phase_in_pct,best_available_source,Y,Store regime/document phase-in percent.
+0.1.0,required,resolved_plan_logic,participation_eligibility_rule,plan_regime,5B|5A|5A1|5C,12D1|10A,Plan Summary section A,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 4.
+0.1.0,required,resolved_plan_logic,participation_date_rule,plan_regime,5B|5A|5A1,12D1|10A,Plan Summary section A,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 5.
+0.1.0,required,resolved_plan_logic,normal_retirement_eligibility_rule,plan_regime,5B|5A|5A1,12D1|10A,Plan Summary section B,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 6.
+0.1.0,required,resolved_plan_logic,normal_retirement_start_rule,plan_regime,5B|5A|5A1,12D1|10A,Plan Summary section B,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 7.
+0.1.0,required,resolved_plan_logic,early_unreduced_retirement_rule,plan_regime,5B|5A|5A1,12D1|10A,Plan Summary section B,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 8.
+0.1.0,required,resolved_plan_logic,early_reduced_retirement_rule,plan_regime,5B|5A|5A1,12D1|10A,Plan Summary section B,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 9.
+0.1.0,required,resolved_plan_logic,deferred_vested_normal_retirement_rule,plan_regime,5B|5A|5A1,12D1,Plan Summary section B,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 11.
+0.1.0,required,resolved_plan_logic,deferred_vested_early_retirement_rule,plan_regime,5B|5A|5A1,12D1,Plan Summary section B,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 12.
+0.1.0,required,resolved_plan_logic,late_retirement_rule,plan_regime,5B|5A|5A1,12D1|10A,Plan Summary sections B/H,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 13.
+0.1.0,required,resolved_plan_logic,disability_eligibility_rule,plan_regime,5B|5A|5A1,12D1|10A,Plan Summary section I,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 14.
+0.1.0,required,resolved_plan_logic,eligibility_service_rule,plan_regime,5B|5A|5A1,12D1,Plan Summary section C,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 15.
+0.1.0,required,resolved_plan_logic,vesting_service_rule,plan_regime,5B|5A|5A1,12D1,Plan Summary section C,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 16.
+0.1.0,required,resolved_plan_logic,benefit_service_rule,plan_regime,5B|5A|5A1,12D1,Plan Summary section C,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 17.
+0.1.0,required,resolved_plan_logic,accrued_benefit_formula,plan_regime,5B|5A|5A1,12D1|10A,Plan Summary section D,extract_formula_text_and_code,plan_summary_resolution,Y,Plan Summary item 19.
+0.1.0,required,resolved_plan_logic,accrual_factor_rule,plan_regime,5B|5A|5A1,12D1,Plan Summary section D,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 20.
+0.1.0,required,resolved_plan_logic,short_service_factor_rule,plan_regime,5B|5A|5A1,12D1,Plan Summary section D,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 21.
+0.1.0,required,resolved_plan_logic,compensation_definition_rule,plan_regime,5B|5A|5A1,12D1|10A,Plan Summary section D,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 22.
+0.1.0,required,resolved_plan_logic,average_compensation_rule,plan_regime,5B|5A|5A1,12D1|10A,Plan Summary section D,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 23.
+0.1.0,required,resolved_plan_logic,normal_single_form_rule,plan_regime,5B|5A|5A1,12D1,Plan Summary section F,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 35.
+0.1.0,required,resolved_plan_logic,normal_married_form_rule,plan_regime,5B|5A|5A1,12D1,Plan Summary section F,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 36.
+0.1.0,required,resolved_plan_logic,form_conversion_basis_rule,plan_regime,5B|5A|5A1|12E,12D1,Plan Summary section F / factor tables,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 37.
+0.1.0,required,resolved_plan_logic,early_retirement_adjustment_rule,plan_regime,5B|5A|5A1|12E2,12D1,Plan Summary section G / factor tables,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 38.
+0.1.0,required,resolved_plan_logic,late_retirement_adjustment_rule,plan_regime,5B|5A|5A1|12E3,12D1,Plan Summary section H / factor tables,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 39.
+0.1.0,required,resolved_plan_logic,pre_retirement_death_benefit_rule,plan_regime,5B|5A|5A1,12D1,Plan Summary section J,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 42.
+0.1.0,required,resolved_plan_logic,post_retirement_death_benefit_rule,plan_regime,5B|5A|5A1,12D1,Plan Summary section J,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 43.
+0.1.0,required,resolved_plan_logic,vesting_schedule_rule,plan_regime,5B|5A|5A1,12D1|10A,Plan Summary section K,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 44.
+0.1.0,required,resolved_plan_logic,cash_out_rule,plan_regime,5B|5A|5A1,12D1,Plan Summary section K,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 45.
+0.1.0,required,resolved_plan_logic,mandatory_employee_contribution_rule,plan_regime,5B|5A|5A1,12D1,Plan Summary section M,extract_plan_provision,plan_summary_resolution,Y,Plan Summary items 48-50.
+0.1.0,required,resolved_plan_logic,voluntary_employee_contribution_rule,plan_regime,5B|5A|5A1,12D1,Plan Summary section N,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 51.
+0.1.0,required,resolved_plan_logic,top_heavy_rule,plan_regime,10A|5B|5A,12D1,Plan Summary section O / actuarial valuation reports,extract_plan_provision,cross_source_reconciliation,Y,Often from AVR plus plan.
+0.1.0,required,resolved_plan_logic,default_actuarial_equivalence_rule,plan_regime,5B|5A|5A1|12E,12D1,Plan Summary section P / factor tables,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 58.
+0.1.0,required,resolved_plan_logic,consensual_lump_sum_rule,plan_regime,5B|5A|5A1|12E1,12D1,Plan Summary section Q / factor tables,extract_plan_provision,plan_summary_resolution,Y,Plan Summary item 59.
+0.1.0,required,resolved_plan_logic,additional_provisions_of_note,plan_regime,5B|5A|5A1|10A|5C,12D1|12B|9A,Plan Summary section R / case memo,extract_plan_provision,manual_review,Y,"May include 415, COLA, spinoff, 436, successor-plan notes."
+0.1.0,required,resolved_plan_logic,majority_owner_list,plan_regime,3C|9A|10A,12D1|12B,TWG Memo / interviews / AVR,extract_named_persons,best_available_source,Y,Plan Summary item 61.
+0.1.0,required,participant_role_population,bcv_rec_id,participant_or_related_role,8A|8B|11A4|11G3,8D|8D3,Final database / gross level data,extract_exact_field,single_best_source,Y,Canonical system row id.
+0.1.0,required,participant_role_population,custid,participant_or_related_role,8A|8B|11A4|11G3,8D|8D3,Final database,extract_exact_field,single_best_source,Y,Customer identifier.
+0.1.0,required,participant_role_population,retstat,participant_or_related_role,8A|8B|11A4|11G3,8D|8D3,Final database / PA data,extract_exact_field,cross_source_reconciliation,Y,Status as of DOPT.
+0.1.0,required,participant_role_population,id,participant_or_related_role,8A|8B|11A4|11G3,8D|8D3,Final database,extract_exact_field,single_best_source,Y,PBGC role or row code.
+0.1.0,required,participant_role_population,role_type,participant_or_related_role,8A|8B|11A4|11G3,8D|9F|17A,Final database / appeals,map_from_id_and_relationship,manual_review,Y,"Derived categorization from ID, relation, and QDRO context."
+0.1.0,required,participant_role_population,fname,participant_or_related_role,8A|8B|11A4|11G3,8D|8D5,Final database,extract_exact_field,single_best_source,Y,
+0.1.0,required,participant_role_population,lname,participant_or_related_role,8A|8B|11A4|11G3,8D|8D5,Final database,extract_exact_field,single_best_source,Y,
+0.1.0,required,participant_role_population,sfname,participant_or_related_role,8A|8B|11A4|11G3,8D|8D5,Final database,extract_exact_field,best_available_source,Y,Spouse or secondary first name.
+0.1.0,required,participant_role_population,slname,participant_or_related_role,8A|8B|11A4|11G3,8D|8D5,Final database,extract_exact_field,best_available_source,Y,
+0.1.0,required,participant_role_population,psex,participant_or_related_role,8A|8B|11A4|11G3,8D|8D5,Final database,extract_exact_field,cross_source_reconciliation,Y,
+0.1.0,required,participant_role_population,ssex,participant_or_related_role,8A|8B|11A4|11G3,8D|8D5,Final database,extract_exact_field,best_available_source,Y,
+0.1.0,required,participant_role_population,mstat,participant_or_related_role,8A|8B|11A4|11G3,8D|8D5,Final database,extract_exact_field,cross_source_reconciliation,Y,Use state as of DOPT where available.
+0.1.0,required,participant_role_population,dob,participant_or_related_role,8A|8B|11A4|11G3,8D|11A|11G,Final database / audit docs,extract_exact_field,cross_source_reconciliation,Y,
+0.1.0,required,participant_role_population,sdob,participant_or_related_role,8A|8B|11A4|11G3,8D|11A|11G,Final database / audit docs,extract_exact_field,best_available_source,Y,
+0.1.0,required,participant_role_population,dod,participant_or_related_role,8A|8B|11A4|11G3,8D|9A|17B,Final database / legal docs,extract_exact_field,best_available_source,Y,
+0.1.0,required,participant_role_population,relation,participant_or_related_role,8A|8B|11A4|11G3,8D|17B,Final database / support docs,extract_exact_field,cross_source_reconciliation,Y,
+0.1.0,required,participant_role_population,non_spouse_benf,participant_or_related_role,8A|8B|11A4|11G3,17B|9A,Final database / support docs,extract_exact_field,best_available_source,Y,
+0.1.0,required,participant_role_population,qdro_indicator,participant_or_related_role,17B|9A|8B,8A|11A,QDRO docs / PA data,extract_indicator_from_qdro_docs,manual_review,Y,Conditional branch switch.
+0.1.0,required,participant_role_population,qpsa_indicator,participant_or_related_role,8A|8B|11A|11G,9A|17B,Population + death/survivor docs,derive_from_death_and_survivor_state,manual_review,Y,Conditional branch switch.
+0.1.0,required,participant_role_population,five_percent_owner_indicator,participant_or_related_role,6|3C|10A,9A|12D1,substantial owner docs / TWG,extract_owner_indicator,best_available_source,Y,
+0.1.0,required,participant_role_population,substantial_owner_indicator,participant_or_related_role,6|3C|10A,9A|12D1,substantial owner docs / TWG,extract_owner_indicator,best_available_source,Y,
+0.1.0,required,participant_role_population,retirement_status_as_of_dopt,participant_or_related_role,8A|8B|11A4|11G3,8D3|8D2,Final database / assumption report,extract_or_normalize_status,cross_source_reconciliation,Y,
+0.1.0,required,participant_role_population,payment_status_as_of_dopt,participant_or_related_role,8D2|8D3|8D5|8B,8A|11A,Check register / plan assumption docs,extract_payment_status,cross_source_reconciliation,Y,
+0.1.0,required,service_employment_history,doh,case_or_participant_or_assumption,8A|8B|11A4|11G3,8D|10A,Final database / PA data,extract_exact_field,cross_source_reconciliation,Y,
+0.1.0,required,service_employment_history,dop,case_or_participant_or_assumption,8A|8B|11A4|11G3,11A|11G|12D1,Final database / audit / Plan Summary,extract_exact_field_or_resolve,manual_review,Y,May need reconstruction from plan rules.
+0.1.0,required,service_employment_history,dote,case_or_participant_or_assumption,8A|8B|11A4|11G3,8D|10A,Final database / PA data,extract_exact_field,cross_source_reconciliation,Y,
+0.1.0,required,service_employment_history,service_basis_code,case_or_participant_or_assumption,5B|5A|5A1,12D1|10A,Plan Summary section C,map_service_method_code,plan_summary_resolution,Y,
+0.1.0,required,service_employment_history,service_hours_requirement,case_or_participant_or_assumption,5B|5A|5A1,12D1|10A,Plan Summary section C,extract_hours_rule,plan_summary_resolution,Y,
+0.1.0,required,service_employment_history,service_period_basis,case_or_participant_or_assumption,5B|5A|5A1,12D1,Plan Summary section C,map_service_period_basis,plan_summary_resolution,Y,
+0.1.0,required,service_employment_history,plan_anniversary_service_basis,case_or_participant_or_assumption,5B|5A|5A1,12D1,Plan Summary,use_plan_anniversary,single_best_source,Y,
+0.1.0,required,service_employment_history,vesting_service_at_dopt,case_or_participant_or_assumption,8A|8B|11A4|11G3,11A|11G|calc,Final database / audit,extract_exact_field_or_recompute,cross_source_reconciliation,Y,
+0.1.0,required,service_employment_history,benefit_service_at_dopt,case_or_participant_or_assumption,8A|8B|11A4|11G3,11A|11G|calc,Final database / audit,extract_exact_field_or_recompute,cross_source_reconciliation,Y,
+0.1.0,required,service_employment_history,accrual_service_at_dopt,case_or_participant_or_assumption,8A|8B|11A4|11G3,11A|11G|calc,Final database / audit,extract_exact_field_or_recompute,cross_source_reconciliation,Y,
+0.1.0,required,compensation_accrual_inputs,compensation_basis_code,case_or_participant_or_assumption,5B|5A|5A1,12D1|10A,Plan Summary section D,map_compensation_code,plan_summary_resolution,Y,
+0.1.0,required,compensation_accrual_inputs,average_compensation_period,case_or_participant_or_assumption,5B|5A|5A1,12D1,Plan Summary section D,extract_avg_comp_period,plan_summary_resolution,Y,
+0.1.0,required,compensation_accrual_inputs,compensation_history_available_indicator,case_or_participant_or_assumption,8B|10A|11C1,8A|11A,PA data / DEL,detect_presence,single_best_source,Y,
+0.1.0,required,compensation_accrual_inputs,final_average_compensation,case_or_participant_or_assumption,8B|11A4|11G3,10A|calc,Final database / PA calc,extract_or_recompute,cross_source_reconciliation,Y,
+0.1.0,required,compensation_accrual_inputs,covered_compensation_amount,case_or_participant_or_assumption,8B|11A4|11G3,10A|calc,Final database / PA calc,extract_or_recompute,cross_source_reconciliation,Y,Only for integrated plans.
+0.1.0,required,compensation_accrual_inputs,frozen_accrued_benefit_indicator,case_or_participant_or_assumption,8B|11A|11G,10A|12B,PA data / audit,extract_indicator,best_available_source,Y,
+0.1.0,required,compensation_accrual_inputs,frozen_accrued_monthly_benefit,case_or_participant_or_assumption,8B|11A4|11G3,10A|12J,PA data / final db / calc samples,extract_exact_field_or_support,cross_source_reconciliation,Y,
+0.1.0,required,compensation_accrual_inputs,accrued_benefit_at_dopt,case_or_participant_or_assumption,11A4|11G3|8B,12F|12J,Final database / listings,extract_exact_field_or_recompute,cross_source_reconciliation,Y,
+0.1.0,required,compensation_accrual_inputs,vested_percentage_at_dopt,case_or_participant_or_assumption,11A4|11G3|8B,10A|calc,Final database / PA calc,extract_exact_field_or_recompute,cross_source_reconciliation,Y,
+0.1.0,required,benefit_administration_state,dor,case_or_participant_or_assumption,8A|8B|11A4|11G3,8D3|8D2,Final database / assumption report,extract_exact_field,cross_source_reconciliation,Y,
+0.1.0,required,benefit_administration_state,asd,case_or_participant_or_assumption,8D2|8D3|8B,8A|11A,Check register / assumption report,extract_asd,cross_source_reconciliation,Y,
+0.1.0,required,benefit_administration_state,sbcd,case_or_participant_or_assumption,8A|8B|11A4|11G3,8D5|17B,Final database / payee memo,extract_exact_field,best_available_source,Y,
+0.1.0,required,benefit_administration_state,current_form_code,case_or_participant_or_assumption,8D2|8D3|8B,12I|12J,Check register / assumption report,extract_form_code_or_description,cross_source_reconciliation,Y,
+0.1.0,required,benefit_administration_state,current_payment_amount,case_or_participant_or_assumption,8D2|8D3,8B|12I,Check register / assumption report,extract_current_payment,cross_source_reconciliation,Y,
+0.1.0,required,benefit_administration_state,payment_history_available_indicator,case_or_participant_or_assumption,8D2|8D3|8B,8A,check register / assumption docs,detect_presence,single_best_source,Y,
+0.1.0,required,benefit_administration_state,check_register_available_indicator,case_or_participant_or_assumption,8D2,8D3,check register,detect_presence,single_best_source,Y,
+0.1.0,required,benefit_administration_state,current_pay_status,case_or_participant_or_assumption,8D2|8D3|8B,8A|11A,check register / assumption report,extract_current_pay_status,cross_source_reconciliation,Y,
+0.1.0,required,benefit_administration_state,elected_form_indicator,case_or_participant_or_assumption,8B|8D3|9A,12I|12J,PA data / forms / statements,extract_indicator,best_available_source,Y,
+0.1.0,required,benefit_administration_state,spouse_beneficiary_commencement_state,case_or_participant_or_assumption,8D5|17B|8B,8A|9A,payee memo / legal docs / PA data,extract_commencement_state,manual_review,Y,
+0.1.0,required,actuarial_assumption_factor_set,assumption_set_id,case_or_participant_or_assumption,12E|12F|12C,10A|12B,Plan factors / valuation docs,assign_controlled_id,single_best_source,Y,Project-controlled assumption bundle.
+0.1.0,required,actuarial_assumption_factor_set,plan_factor_table_id,case_or_participant_or_assumption,12E|12E1|12E2|12E3,12F|12C,Plan factor tables,assign_controlled_id,single_best_source,Y,
+0.1.0,required,actuarial_assumption_factor_set,interest_basis_code,case_or_participant_or_assumption,12E|5B|5A|5A1,12D1|10A,Plan factors / plan AEQ,map_interest_basis_code,cross_source_reconciliation,Y,
+0.1.0,required,actuarial_assumption_factor_set,mortality_basis_code,case_or_participant_or_assumption,12E|5B|5A|5A1,12D1|10A,Plan factors / plan AEQ,map_mortality_basis_code,cross_source_reconciliation,Y,
+0.1.0,required,actuarial_assumption_factor_set,pre_retirement_mortality_code,case_or_participant_or_assumption,5B|5A|5A1|12E,12D1,Plan text / factors,map_pre_ret_mortality,plan_summary_resolution,Y,
+0.1.0,required,actuarial_assumption_factor_set,post_retirement_mortality_code,case_or_participant_or_assumption,5B|5A|5A1|12E,12D1,Plan text / factors,map_post_ret_mortality,plan_summary_resolution,Y,
+0.1.0,required,actuarial_assumption_factor_set,retirement_age_convention,case_or_participant_or_assumption,5B|5A|5A1,12D1|12E,Plan text / Plan Summary,map_retirement_date_convention,plan_summary_resolution,Y,
+0.1.0,required,actuarial_assumption_factor_set,form_conversion_method,case_or_participant_or_assumption,12E|5B|5A|5A1,12D1,Plan factors / plan text,map_form_conversion_method,cross_source_reconciliation,Y,
+0.1.0,required,actuarial_assumption_factor_set,lookback_period,case_or_participant_or_assumption,5B|5A|5A1|12E,12D1,Plan text / factors,extract_417e_parameter,plan_summary_resolution,Y,Only if 417(e) used.
+0.1.0,required,actuarial_assumption_factor_set,stability_period,case_or_participant_or_assumption,5B|5A|5A1|12E,12D1,Plan text / factors,extract_417e_parameter,plan_summary_resolution,Y,Only if 417(e) used.
+0.1.0,required,actuarial_assumption_factor_set,required_beginning_date_method,case_or_participant_or_assumption,PBGC_POLICY,5B|5A|12D1,ATPBGC / PBGC policy,select_rbd_method,policy_resolution,Y,Often PBGC method rather than plan provision.
+0.1.0,required,actuarial_assumption_factor_set,lump_sum_basis_code,case_or_participant_or_assumption,12E|5B|5A|5A1,12D1,Plan factors / plan text,map_lump_sum_basis,cross_source_reconciliation,Y,
+0.1.0,required,actuarial_assumption_factor_set,annuity_basis_code,case_or_participant_or_assumption,12E|5B|5A|5A1,12D1,Plan factors / plan text,map_annuity_basis,cross_source_reconciliation,Y,
+0.1.0,required,limitation_packet,calc_indicator,case_or_participant_or_assumption,engine_context,,engine invocation,set_from_run_context,single_best_source,Y,Valuation / admin / statement mode.
+0.1.0,required,limitation_packet,calculation_context,case_or_participant_or_assumption,engine_context,,engine invocation,set_from_run_context,single_best_source,Y,
+0.1.0,required,limitation_packet,section_436_applicable_indicator,case_or_participant_or_assumption,16A1|10A|10B|12B,12D1|16C,AFTAP notices / AVR / Form 5500 / memo,determine_436_applicability,manual_review,Y,
+0.1.0,required,limitation_packet,bankruptcy_plan_indicator,case_or_participant_or_assumption,11E3|3C|9A,3A|12B,Bankruptcy docs / TWG,determine_bankruptcy_status,best_available_source,Y,
+0.1.0,required,limitation_packet,bpd_limitation_indicator,case_or_participant_or_assumption,11E3|3C|9A,12B,Bankruptcy docs,determine_if_bpd_substitutes,policy_resolution,Y,
+0.1.0,required,limitation_packet,majority_owner_limitation_indicator,case_or_participant_or_assumption,6|3C|10A,12D1|12B,Substantial owner docs / AVR,determine_owner_limitation,manual_review,Y,
+0.1.0,required,limitation_packet,aggregate_limit_applicable_indicator,case_or_participant_or_assumption,12Q|12B|9A,8A|8B,4022(c)/aggregate docs,determine_aggregate_limit_applicability,manual_review,Y,
+0.1.0,required,limitation_packet,accrued_at_termination_limitation_indicator,case_or_participant_or_assumption,PBGC_POLICY,5B|5A|12B,Limitations order / policy,set_by_policy,policy_resolution,Y,
+0.1.0,required,limitation_packet,phase_in_limitation_indicator,case_or_participant_or_assumption,PBGC_POLICY|5A,12B|12D1,Limitations order / amendments,set_by_policy_and_amendment_dates,policy_resolution,Y,
+0.1.0,required,limitation_packet,vested_at_termination_limitation_indicator,case_or_participant_or_assumption,PBGC_POLICY|5B|5A,12B,Policy / plan vesting,set_by_policy_and_vesting_status,policy_resolution,Y,
+0.1.0,required,limitation_packet,annuity_starting_date_limitation_indicator,case_or_participant_or_assumption,PBGC_POLICY|8D2|8D3,12B,Policy / payment docs,determine_asd_limit_flag,policy_resolution,Y,
+0.1.0,required,limitation_packet,death_benefit_limitation_indicator,case_or_participant_or_assumption,PBGC_POLICY|5B|5A,12B|12D1,Policy / plan death benefit,set_by_policy,policy_resolution,Y,
+0.1.0,required,limitation_packet,form_of_benefit_limitation_indicator,case_or_participant_or_assumption,PBGC_POLICY|5B|5A,12B|12D1,Policy / plan forms,set_by_policy,policy_resolution,Y,
+0.1.0,required,limitation_packet,actuarial_equivalence_limitation_indicator,case_or_participant_or_assumption,PBGC_POLICY|5B|5A|12E,12D1,Policy / plan AEQ / factor tables,set_by_policy,policy_resolution,Y,
+0.1.0,required,limitation_packet,ongoing_employment_contingency_indicator,case_or_participant_or_assumption,PBGC_POLICY|5B|5A,12B|12D1,Policy / plan text,determine_contingency_flag,manual_review,Y,
+0.1.0,required,provenance_packet,source_document_id,provenance,all,,source assertion / review workflow,copy_document_id,single_best_source,Y,Copied from source-assertion and review layers.
+0.1.0,required,provenance_packet,source_document_type,provenance,all,,source assertion / review workflow,copy_plan_file_type,single_best_source,Y,Copied from source-assertion and review layers.
+0.1.0,required,provenance_packet,source_page_reference,provenance,all,,source assertion / review workflow,copy_page_reference,single_best_source,Y,Copied from source-assertion and review layers.
+0.1.0,required,provenance_packet,source_section_reference,provenance,all,,source assertion / review workflow,copy_section_reference,single_best_source,Y,Copied from source-assertion and review layers.
+0.1.0,required,provenance_packet,source_field_name,provenance,all,,source assertion / review workflow,copy_field_name,single_best_source,Y,Copied from source-assertion and review layers.
+0.1.0,required,provenance_packet,source_confidence,provenance,all,,source assertion / review workflow,copy_confidence,single_best_source,Y,Copied from source-assertion and review layers.
+0.1.0,required,provenance_packet,extraction_method,provenance,all,,source assertion / review workflow,copy_extraction_method,single_best_source,Y,Copied from source-assertion and review layers.
+0.1.0,required,provenance_packet,reviewer_id,provenance,all,,source assertion / review workflow,copy_reviewer,single_best_source,Y,Copied from source-assertion and review layers.
+0.1.0,required,provenance_packet,review_status,provenance,all,,source assertion / review workflow,copy_review_status,single_best_source,Y,Copied from source-assertion and review layers.
+0.1.0,required,provenance_packet,last_reviewed_at,provenance,all,,source assertion / review workflow,copy_reviewed_at,single_best_source,Y,Copied from source-assertion and review layers.
+0.1.0,conditional,section_436_packet,plan_year,conditional_branch,16A1|10A|10B,12B|16C,436 builder / AFTAP docs,extract_plan_year_row,cross_source_reconciliation,Y,One row per plan year.
+0.1.0,conditional,section_436_packet,aftap,conditional_branch,16A1|10A|10B,12B|16C,436 builder / AFTAP docs,extract_aftap,cross_source_reconciliation,Y,
+0.1.0,conditional,section_436_packet,certification_date,conditional_branch,16A1|10A|10B,12B|16C,436 builder / AFTAP docs,extract_certification_date,cross_source_reconciliation,Y,
+0.1.0,conditional,section_436_packet,aftap_doc_id,conditional_branch,16A1|10A|10B,12B|16C,document inventory,copy_document_id,single_best_source,Y,
+0.1.0,conditional,section_436_packet,presumed_aftap_rule,conditional_branch,PBGC_POLICY|436_builder,10A|10B,436 logic,set_from_policy_and_builder,policy_resolution,Y,
+0.1.0,conditional,section_436_packet,restriction_period_start,conditional_branch,436_builder,16A1|10A,436 logic,derive_from_aftap_timeline,derived_from_controlled_lookup,Y,
+0.1.0,conditional,section_436_packet,restriction_period_end,conditional_branch,436_builder,16A1|10A,436 logic,derive_from_aftap_timeline,derived_from_controlled_lookup,Y,
+0.1.0,conditional,aggregate_limit_packet,prior_plan_indicator,conditional_branch,12Q|9A|8A,12B,Aggregate-limit guidance / population,determine_prior_plan_membership,manual_review,Y,
+0.1.0,conditional,aggregate_limit_packet,prior_plan_id,conditional_branch,12Q|9A|8A,12B,Aggregate-limit guidance / population,extract_prior_plan_id,manual_review,Y,
+0.1.0,conditional,aggregate_limit_packet,prior_plan_dopt,conditional_branch,12Q|9A|8A,12B,Aggregate-limit guidance / population,extract_prior_plan_dopt,manual_review,Y,
+0.1.0,conditional,aggregate_limit_packet,prior_plan_dotr,conditional_branch,12Q|9A|8A,12B,Aggregate-limit guidance / population,extract_prior_plan_dotr,manual_review,Y,
+0.1.0,conditional,aggregate_limit_packet,prior_plan_termination_initiation_date,conditional_branch,12Q|9A,3A|3C,Aggregate-limit docs,extract_tid,manual_review,Y,
+0.1.0,conditional,aggregate_limit_packet,prior_plan_benefit_payable_from_pbgc_funds,conditional_branch,12Q|12F,12B,Aggregate-limit docs / listings,extract_or_compute_prior_plan_pbgc_funds,manual_review,Y,
+0.1.0,conditional,aggregate_limit_packet,current_plan_indicator,conditional_branch,engine_context,,engine invocation,set_current_plan_flag,single_best_source,Y,
+0.1.0,conditional,aggregate_limit_packet,aggregate_limit_payee_group_id,conditional_branch,12Q|8A|8B,12B,Aggregate-limit docs / population,assign_payee_group,manual_review,Y,
+0.1.0,conditional,qdro_packet,qdro_type,conditional_branch,17B|9A,8B,QDRO docs,extract_qdro_type,manual_review,Y,
+0.1.0,conditional,qdro_packet,separate_interest_indicator,conditional_branch,17B|9A,8B,QDRO docs,extract_separate_interest_flag,manual_review,Y,
+0.1.0,conditional,qdro_packet,alternate_payee_name,conditional_branch,17B|9A,8B,QDRO docs,extract_name,cross_source_reconciliation,Y,
+0.1.0,conditional,qdro_packet,alternate_payee_dob,conditional_branch,17B|9A|8B,8A,QDRO docs / PA data,extract_dob,cross_source_reconciliation,Y,
+0.1.0,conditional,qdro_packet,qdro_effective_date,conditional_branch,17B|9A,8B,QDRO docs,extract_effective_date,single_best_source,Y,
+0.1.0,conditional,qdro_packet,qdro_award_description,conditional_branch,17B|9A,8B,QDRO docs,extract_award_terms,manual_review,Y,
+0.1.0,conditional,qpsa_packet,participant_date_of_death,conditional_branch,8A|8B|9A,11A|11G,Population / legal docs,extract_dod,cross_source_reconciliation,Y,
+0.1.0,conditional,qpsa_packet,qpsa_eligibility_date,conditional_branch,5B|5A|5A1,12D1|calc,Plan text / Plan Summary,resolve_qpsa_eligibility,manual_review,Y,
+0.1.0,conditional,qpsa_packet,qpsa_commencement_date,conditional_branch,8B|8D5|17B,8A,PA data / payee memo,extract_qpsa_commencement,best_available_source,Y,
+0.1.0,conditional,qpsa_packet,qpsa_form_rule,conditional_branch,5B|5A|5A1,12D1,Plan text / Plan Summary,extract_qpsa_form,plan_summary_resolution,Y,
+0.1.0,conditional,qpsa_packet,qpsa_survivor_percentage,conditional_branch,5B|5A|5A1,12D1,Plan text / Plan Summary,extract_survivor_pct,plan_summary_resolution,Y,
+0.1.0,conditional,asset_recovery_packet,asset_value_at_dopt,conditional_branch,11D6|10B|10A,11D|11D4,Asset statements / Form 5500 / AVR,extract_asset_value_at_dopt,cross_source_reconciliation,Y,
+0.1.0,conditional,asset_recovery_packet,asset_statement_id,conditional_branch,11D6,10B,Document inventory,copy_document_id,single_best_source,Y,
+0.1.0,conditional,asset_recovery_packet,section_4044_allocation_available_indicator,conditional_branch,12F|11D4,12B,Listings / recovery valuation,detect_presence,single_best_source,Y,
+0.1.0,conditional,asset_recovery_packet,section_4022c_amount_available_indicator,conditional_branch,12Q|12F,12B,4022(c) revisions / listings,detect_presence,single_best_source,Y,
+0.1.0,conditional,asset_recovery_packet,sparr_indicator,conditional_branch,11D4|12Q,12B,Recovery valuation / 4022(c),extract_indicator,best_available_source,Y,
+0.1.0,conditional,asset_recovery_packet,sparr_ratio,conditional_branch,11D4|12Q,12B,Recovery valuation / 4022(c),extract_ratio,best_available_source,Y,
+0.1.0,conditional,asset_recovery_packet,recovery_ratio,conditional_branch,11D4|12Q,12B,Recovery valuation / 4022(c),extract_ratio,best_available_source,Y,
+0.1.0,conditional,asset_recovery_packet,duec_indicator,conditional_branch,11D3,11D|12B,DUEC docs,extract_indicator,single_best_source,Y,
+0.1.0,conditional,asset_recovery_packet,duec_amount,conditional_branch,11D3,11D|12B,DUEC docs,extract_amount,single_best_source,Y,
+0.1.0,derived,resolved_dates,nrd,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_dates,erd,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_dates,eurd,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_dates,eprd,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_dates,rbd,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_dates,xra,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_dates,xrd,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_dates,sxra,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_dates,term_lw_xra,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_dates,term_lw_anb,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_service_compensation,eligibility_service_resolved,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_service_compensation,vesting_service_resolved,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_service_compensation,benefit_service_resolved,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_service_compensation,accrual_service_resolved,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_service_compensation,compensation_resolved,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_service_compensation,average_compensation_resolved,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_service_compensation,covered_compensation_resolved,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_forms_status,rettyp,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_forms_status,form_code_nsf,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_forms_status,form_code_nmf,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_forms_status,form_code_ptp,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_forms_status,form_code_ptp_qpsa,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_forms_status,form_code_death,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_forms_status,annuity_status_pay,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_forms_status,lsoption,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_forms_status,bs_ind,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_forms_status,br_ind,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,resolved_forms_status,ofa_indicator,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,plan_benefit_results,term_mb_nrd_nsf,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,plan_benefit_results,term_surv_mb_nrd,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,plan_benefit_results,term_surv_mb_eurd,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,plan_benefit_results,term_surv_mb_erd,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,plan_benefit_results,rbd_surv_mb_term,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,plan_benefit_results,term_surv_mb_ard,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,plan_benefit_results,xrd_mb_term,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,plan_benefit_results,xrd_surv_mb_term,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,plan_benefit_results,xrd_mb_qpsa_term,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,plan_benefit_results,ls_term,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,plan_benefit_results,ls_qpsa,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,title_iv_results,xrd_mb_title_iv,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,title_iv_results,nrd_mb_title_iv_nsf,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,title_iv_results,eurd_mb_title_iv_nsf,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,title_iv_results,erd_mb_title_iv_nsf,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,title_iv_results,rbd_mb_title_iv,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,title_iv_results,ard_mb_title_iv,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,title_iv_results,pvmb_title_iv_no_q_no_l,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,title_iv_results,pvmb_title_iv_qpsa,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,title_iv_results,pvmb_title_iv_no_load,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,title_iv_results,title_iv_load,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,title_iv_results,pvmb_title_iv,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,section_4022c_results,xrd_mb_4022c,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,section_4022c_results,pvmb_4022c_no_q_no_l,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,section_4022c_results,pvmb_4022c_qpsa,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,section_4022c_results,pvmb_4022c_no_load,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,section_4022c_results,load_4022c,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,section_4022c_results,pvmb_4022c,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,present_value_results,pvf_lev_ann,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,present_value_results,pvf_lev_ls,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,present_value_results,pvf_qpsa_ls,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,present_value_results,pvmb_term_no_q_no_l,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,present_value_results,pvmb_term_qpsa,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,present_value_results,pvmb_term_no_load,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,present_value_results,term_load,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,present_value_results,pvmb_term,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,deliverable_outputs,plan_summary_output,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,deliverable_outputs,data_element_list_output,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,deliverable_outputs,plan_factor_tables_output,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,deliverable_outputs,analysis_436_output,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,deliverable_outputs,adjustment_analysis_output,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,deliverable_outputs,administration_analysis_output,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,deliverable_outputs,v1_ve_output,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,deliverable_outputs,valuation_listings_output,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,deliverable_outputs,bsrs_configuration_output,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
+0.1.0,derived,deliverable_outputs,actuarial_case_memo_output,engine,,,deterministic engine,derive_in_deterministic_engine,derived_from_controlled_lookup,Y,No direct source-document mapping; computed from reviewed inputs and rule version.
