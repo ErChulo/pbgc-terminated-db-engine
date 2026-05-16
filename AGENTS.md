@@ -53,6 +53,5 @@ Any delivered .sql, .js, .ts, or .tex artifact must be stored with appended .txt
 - Preserve traceability for every computed output
 
 <!-- SPECKIT START -->
-For additional context about technologies to be used, project structure,
-shell commands, and other important information, read the current plan
+Current feature plan: `specs/001-date-resolution-slice/plan.md`
 <!-- SPECKIT END -->
