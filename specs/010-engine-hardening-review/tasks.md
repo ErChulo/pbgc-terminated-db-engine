@@ -10,16 +10,16 @@
 
 **Purpose**: Establish the review/hardening scaffolding used across all existing slices
 
-- [ ] T001 [P] Capture the hardening regression scope and fixture inventory in `specs/010-engine-hardening-review/quickstart.md`
+- [X] T001 [P] Capture the hardening regression scope and fixture inventory in `specs/010-engine-hardening-review/quickstart.md`
 - [ ] T002 [P] Create the hardening architecture note scaffold in `docs/architecture/engine-hardening-review_v0.1.0.md`
-- [ ] T003 [P] Record the review target matrix and slice coverage in `specs/010-engine-hardening-review/research.md`
-- [ ] T004 [P] Record the hardening entity map and validation rules in `specs/010-engine-hardening-review/data-model.md`
+- [X] T003 [P] Record the review target matrix and slice coverage in `specs/010-engine-hardening-review/research.md`
+- [X] T004 [P] Record the hardening entity map and validation rules in `specs/010-engine-hardening-review/data-model.md`
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
 **Purpose**: Shared regression helpers that every hardening check depends on
 
-- [ ] T005 [P] Add repeated-run comparison helpers in `packages/tests/hardening-helpers.ts`
+- [X] T005 [P] Add repeated-run comparison helpers in `packages/tests/hardening-helpers.ts`
 - [ ] T006 [P] Add DD.csv lookup helpers in `packages/tests/hardening-dd-helpers.ts`
 - [ ] T007 [P] Add sqlite table-count helpers in `packages/tests/hardening-db-helpers.ts`
 - [ ] T008 [P] Add trace normalization helpers in `packages/tests/hardening-trace-helpers.ts`
@@ -36,17 +36,17 @@
 
 ### Tests for User Story 1
 
-- [ ] T011 [P] [US1] Add repeated-run determinism regression for `date_resolution`, `service_resolution`, `compensation_resolution`, and `form_resolution` in `packages/tests/hardening-determinism-core.test.ts`
-- [ ] T012 [P] [US1] Add repeated-run determinism regression for `benefit_kernel`, `v1_ve_output`, `valuation_listings_output`, and `bsrs_configuration_output` in `packages/tests/hardening-determinism-output.test.ts`
-- [ ] T013 [P] [US1] Add output-shape stability regression for the committed adapter contracts in `packages/tests/hardening-output-shape.test.ts`
-- [ ] T014 [P] [US1] Add reviewed-input boundary regression that blocks disallowed raw or unreviewed inputs before deterministic output or persistence work begins in `packages/tests/hardening-reviewed-input.test.ts`
-- [ ] T015 [P] [US1] Add structured warning and error payload stability regression across repeated runs in `packages/tests/hardening-warning-error-stability.test.ts`
+- [X] T011 [P] [US1] Add repeated-run determinism regression for `date_resolution`, `service_resolution`, `compensation_resolution`, and `form_resolution` in `packages/tests/hardening-determinism-core.test.ts`
+- [X] T012 [P] [US1] Add repeated-run determinism regression for `benefit_kernel`, `v1_ve_output`, `valuation_listings_output`, and `bsrs_configuration_output` in `packages/tests/hardening-determinism-output.test.ts`
+- [X] T013 [P] [US1] Add output-shape stability regression for the committed adapter contracts in `packages/tests/hardening-output-shape.test.ts`
+- [X] T014 [P] [US1] Add reviewed-input boundary regression that blocks disallowed raw or unreviewed inputs before deterministic output or persistence work begins in `packages/tests/hardening-reviewed-input.test.ts`
+- [X] T015 [P] [US1] Add structured warning and error payload stability regression across repeated runs in `packages/tests/hardening-warning-error-stability.test.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T016 [US1] Wire the repeated-run comparison helpers into `packages/tests/hardening-determinism-core.test.ts`
-- [ ] T017 [US1] Wire the repeated-run comparison helpers into `packages/tests/hardening-determinism-output.test.ts`
-- [ ] T018 [US1] Wire the output-shape assertions into `packages/tests/hardening-output-shape.test.ts`
+- [X] T016 [US1] Wire the repeated-run comparison helpers into `packages/tests/hardening-determinism-core.test.ts`
+- [X] T017 [US1] Wire the repeated-run comparison helpers into `packages/tests/hardening-determinism-output.test.ts`
+- [X] T018 [US1] Wire the output-shape assertions into `packages/tests/hardening-output-shape.test.ts`
 
 **Checkpoint**: The committed slices should now prove stable across repeated runs
 
