@@ -1,4 +1,5 @@
 import { renderDateResolutionPage } from "./DateResolutionPage";
+import { renderBenefitKernelPage } from "./BenefitKernelPage";
 import { renderCompensationResolutionPage } from "./CompensationResolutionPage";
 import { runFixtureServiceResolution } from "../app/serviceResolutionSlice";
 
@@ -11,6 +12,7 @@ export function renderServiceResolutionPage(root: HTMLElement): void {
           <p class="subtle">Reviewed fixture packets only. No server calls.</p>
         </div>
         <nav>
+          <button id="show-benefit-kernel" type="button" class="secondary">Benefit</button>
           <button id="show-date-resolution" type="button" class="secondary">Date</button>
           <button id="show-compensation-resolution" type="button" class="secondary">Compensation</button>
           <button id="run-service-resolution" type="button">Run service fixtures</button>
@@ -33,6 +35,7 @@ export function renderServiceResolutionPage(root: HTMLElement): void {
     </section>
   `;
 
+  root.querySelector<HTMLButtonElement>("#show-benefit-kernel")?.addEventListener("click", () => renderBenefitKernelPage(root));
   root.querySelector<HTMLButtonElement>("#show-date-resolution")?.addEventListener("click", () => renderDateResolutionPage(root));
   root.querySelector<HTMLButtonElement>("#show-compensation-resolution")?.addEventListener("click", () => renderCompensationResolutionPage(root));
   root.querySelector<HTMLButtonElement>("#run-service-resolution")?.addEventListener("click", async () => {

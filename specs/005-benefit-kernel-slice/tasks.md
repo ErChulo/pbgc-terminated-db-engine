@@ -12,15 +12,15 @@
 
 **Purpose**: Add the benefit-kernel package skeleton and register it with the existing browser-only Vite/sql.js workspace without implementing output-adapter modules.
 
-- [ ] T001 Create the benefit-kernel package manifest in packages/engine/benefit-kernel/package.json
-- [ ] T002 Create the benefit-kernel TypeScript config in packages/engine/benefit-kernel/tsconfig.json
-- [ ] T003 [P] Add the public benefit-kernel barrel placeholder in packages/engine/benefit-kernel/src/index.ts
-- [ ] T004 [P] Add the package source type placeholder in packages/engine/benefit-kernel/src/types.ts
-- [ ] T005 Register the benefit-kernel workspace dependency in apps/web/package.json
-- [ ] T006 Register the benefit-kernel alias in tsconfig.json
-- [ ] T007 Register the benefit-kernel test alias in vitest.config.ts
-- [ ] T008 [P] Add the benefit-kernel page placeholder module in apps/web/src/pages/BenefitKernelPage.ts
-- [ ] T009 [P] Add the browser app state placeholder in apps/web/src/app/benefitKernelSlice.ts
+- [X] T001 Create the benefit-kernel package manifest in packages/engine/benefit-kernel/package.json
+- [X] T002 Create the benefit-kernel TypeScript config in packages/engine/benefit-kernel/tsconfig.json
+- [X] T003 [P] Add the public benefit-kernel barrel placeholder in packages/engine/benefit-kernel/src/index.ts
+- [X] T004 [P] Add the package source type placeholder in packages/engine/benefit-kernel/src/types.ts
+- [X] T005 Register the benefit-kernel workspace dependency in apps/web/package.json
+- [X] T006 Register the benefit-kernel alias in tsconfig.json
+- [X] T007 Register the benefit-kernel test alias in vitest.config.ts
+- [X] T008 [P] Add the benefit-kernel page placeholder module in apps/web/src/pages/BenefitKernelPage.ts
+- [X] T009 [P] Add the browser app state placeholder in apps/web/src/app/benefitKernelSlice.ts
 
 ---
 
@@ -30,16 +30,16 @@
 
 **Critical**: No user story work can begin until this phase is complete.
 
-- [ ] T010 Add shared benefit-kernel module name support to StructuredIssue and ModuleTrace in packages/shared/src/types.ts
-- [ ] T011 Add benefit_kernel packet type support to engine input packet records in packages/db/src/repositories.ts
-- [ ] T012 Add repository helpers for inserting and listing benefit_kernel_output rows in packages/db/src/repositories.ts
-- [ ] T013 Add repository helper for fetching benefit-kernel runs with trace rows in packages/db/src/repositories.ts
-- [ ] T014 Add benefit-kernel fixture CSV parsing utilities in packages/tests/benefit-kernel-fixtures.ts
-- [ ] T015 Add reviewed benefit-kernel packet fixture builders from benefit CSV rows in packages/engine/benefit-kernel/src/fixturePacketBuilder.ts
-- [ ] T016 Add deterministic benefit-kernel rule constants, output field lists, and module version exports in packages/engine/benefit-kernel/src/types.ts
-- [ ] T017 [P] Add benefit-kernel architecture notes in docs/architecture/benefit_kernel_slice_v0.1.0.md
-- [ ] T018 [P] Add benefit-kernel trace field mapping in docs/mappings/benefit_kernel_trace_map_v0.1.0.csv
-- [ ] T019 Verify no V1/VE, valuation listing, BSRS, or other output-adapter package is created for this slice under packages/output-adapters/
+- [X] T010 Add shared benefit-kernel module name support to StructuredIssue and ModuleTrace in packages/shared/src/types.ts
+- [X] T011 Add benefit_kernel packet type support to engine input packet records in packages/db/src/repositories.ts
+- [X] T012 Add repository helpers for inserting and listing benefit_kernel_output rows in packages/db/src/repositories.ts
+- [X] T013 Add repository helper for fetching benefit-kernel runs with trace rows in packages/db/src/repositories.ts
+- [X] T014 Add benefit-kernel fixture CSV parsing utilities in packages/tests/benefit-kernel-fixtures.ts
+- [X] T015 Add reviewed benefit-kernel packet fixture builders from benefit CSV rows in packages/engine/benefit-kernel/src/fixturePacketBuilder.ts
+- [X] T016 Add deterministic benefit-kernel rule constants, output field lists, and module version exports in packages/engine/benefit-kernel/src/types.ts
+- [X] T017 [P] Add benefit-kernel architecture notes in docs/architecture/benefit_kernel_slice_v0.1.0.md
+- [X] T018 [P] Add benefit-kernel trace field mapping in docs/mappings/benefit_kernel_trace_map_v0.1.0.csv
+- [X] T019 Verify no V1/VE, valuation listing, BSRS, or other output-adapter package is created for this slice under packages/output-adapters/
 
 **Checkpoint**: Foundation ready. User story implementation can start after this phase.
 
@@ -53,26 +53,26 @@
 
 ### Tests for User Story 1
 
-- [ ] T020 [P] [US1] Add contract-shape tests for RunBenefitKernelRequest and RunBenefitKernelResult in packages/tests/benefit-kernel-contract.test.ts
-- [ ] T021 [P] [US1] Add deterministic output tests for BK001 term_mb_nrd_nsf, xrd_mb_term, and pvmb_term in packages/tests/benefit-kernel-output.test.ts
-- [ ] T022 [P] [US1] Add explicit-null and warning assertions for BK002 integrated and BK003 QPSA fixture branches in packages/tests/benefit-kernel-output.test.ts
-- [ ] T023 [P] [US1] Add sql.js persistence tests for engine_run and benefit_kernel_output rows in packages/tests/benefit-kernel-persistence.test.ts
-- [ ] T024 [P] [US1] Add assertions that kernel runs do not write V1/VE, valuation listing, BSRS, or output-adapter rows in packages/tests/benefit-kernel-persistence.test.ts
+- [X] T020 [P] [US1] Add contract-shape tests for RunBenefitKernelRequest and RunBenefitKernelResult in packages/tests/benefit-kernel-contract.test.ts
+- [X] T021 [P] [US1] Add deterministic output tests for BK001 term_mb_nrd_nsf, xrd_mb_term, and pvmb_term in packages/tests/benefit-kernel-output.test.ts
+- [X] T022 [P] [US1] Add explicit-null and warning assertions for BK002 integrated and BK003 QPSA fixture branches in packages/tests/benefit-kernel-output.test.ts
+- [X] T023 [P] [US1] Add sql.js persistence tests for engine_run and benefit_kernel_output rows in packages/tests/benefit-kernel-persistence.test.ts
+- [X] T024 [P] [US1] Add assertions that kernel runs do not write V1/VE, valuation listing, BSRS, or output-adapter rows in packages/tests/benefit-kernel-persistence.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T025 [US1] Implement benefit-kernel packet validation for required groups, upstream output groups, and fixture-supported controlled values in packages/engine/benefit-kernel/src/validatePacket.ts
-- [ ] T026 [US1] Implement deterministic final-average-pay benefit formula and present-value fixture calculations in packages/engine/benefit-kernel/src/benefitMath.ts
-- [ ] T027 [US1] Implement benefit-kernel output resolution for all contract output fields with unsupported fields as explicit nulls in packages/engine/benefit-kernel/src/resolveBenefitKernel.ts
-- [ ] T028 [US1] Implement unsupported integrated formula and QPSA branch warnings without fallback benefit values in packages/engine/benefit-kernel/src/resolveBenefitKernel.ts
-- [ ] T029 [US1] Implement benefit-kernel run orchestration with engine_run persistence in packages/engine/benefit-kernel/src/runBenefitKernel.ts
-- [ ] T030 [US1] Persist successful benefit-kernel outputs to benefit_kernel_output only in packages/engine/benefit-kernel/src/runBenefitKernel.ts
-- [ ] T031 [US1] Export benefit-kernel runtime APIs from packages/engine/benefit-kernel/src/index.ts
-- [ ] T032 [US1] Integrate benefit-kernel fixture loading and run actions into apps/web/src/app/benefitKernelSlice.ts
-- [ ] T033 [US1] Render the benefit-kernel fixture runner and resolved output table in apps/web/src/pages/BenefitKernelPage.ts
-- [ ] T034 [US1] Add benefit-kernel navigation without removing date, service, compensation, or form access in apps/web/src/main.ts
-- [ ] T035 [US1] Add benefit-kernel view styles in apps/web/src/styles.css
-- [ ] T036 [US1] Verify User Story 1 with npm test -- packages/tests/benefit-kernel-output.test.ts packages/tests/benefit-kernel-persistence.test.ts
+- [X] T025 [US1] Implement benefit-kernel packet validation for required groups, upstream output groups, and fixture-supported controlled values in packages/engine/benefit-kernel/src/validatePacket.ts
+- [X] T026 [US1] Implement deterministic final-average-pay benefit formula and present-value fixture calculations in packages/engine/benefit-kernel/src/benefitMath.ts
+- [X] T027 [US1] Implement benefit-kernel output resolution for all contract output fields with unsupported fields as explicit nulls in packages/engine/benefit-kernel/src/resolveBenefitKernel.ts
+- [X] T028 [US1] Implement unsupported integrated formula and QPSA branch warnings without fallback benefit values in packages/engine/benefit-kernel/src/resolveBenefitKernel.ts
+- [X] T029 [US1] Implement benefit-kernel run orchestration with engine_run persistence in packages/engine/benefit-kernel/src/runBenefitKernel.ts
+- [X] T030 [US1] Persist successful benefit-kernel outputs to benefit_kernel_output only in packages/engine/benefit-kernel/src/runBenefitKernel.ts
+- [X] T031 [US1] Export benefit-kernel runtime APIs from packages/engine/benefit-kernel/src/index.ts
+- [X] T032 [US1] Integrate benefit-kernel fixture loading and run actions into apps/web/src/app/benefitKernelSlice.ts
+- [X] T033 [US1] Render the benefit-kernel fixture runner and resolved output table in apps/web/src/pages/BenefitKernelPage.ts
+- [X] T034 [US1] Add benefit-kernel navigation without removing date, service, compensation, or form access in apps/web/src/main.ts
+- [X] T035 [US1] Add benefit-kernel view styles in apps/web/src/styles.css
+- [X] T036 [US1] Verify User Story 1 with npm test -- packages/tests/benefit-kernel-output.test.ts packages/tests/benefit-kernel-persistence.test.ts
 
 **Checkpoint**: User Story 1 is functional and independently testable as the MVP.
 
@@ -114,17 +114,17 @@
 
 ### Tests for User Story 3
 
-- [ ] T049 [P] [US3] Add trace completeness tests for all populated benefit-kernel output fields in packages/tests/benefit-kernel-trace.test.ts
-- [ ] T050 [P] [US3] Add repeated-run determinism tests that compare kernel values and trace decisions across five runs in packages/tests/benefit-kernel-trace.test.ts
-- [ ] T051 [P] [US3] Add unsupported integrated formula and QPSA warning trace tests for BK002 and BK003 in packages/tests/benefit-kernel-trace.test.ts
+- [X] T049 [P] [US3] Add trace completeness tests for all populated benefit-kernel output fields in packages/tests/benefit-kernel-trace.test.ts
+- [X] T050 [P] [US3] Add repeated-run determinism tests that compare kernel values and trace decisions across five runs in packages/tests/benefit-kernel-trace.test.ts
+- [X] T051 [P] [US3] Add unsupported integrated formula and QPSA warning trace tests for BK002 and BK003 in packages/tests/benefit-kernel-trace.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T052 [US3] Implement trace row construction for benefit-kernel outputs and warnings in packages/engine/benefit-kernel/src/trace.ts
-- [ ] T053 [US3] Persist module_trace rows for each populated benefit-kernel output and warning path in packages/engine/benefit-kernel/src/runBenefitKernel.ts
+- [X] T052 [US3] Implement trace row construction for benefit-kernel outputs and warnings in packages/engine/benefit-kernel/src/trace.ts
+- [X] T053 [US3] Persist module_trace rows for each populated benefit-kernel output and warning path in packages/engine/benefit-kernel/src/runBenefitKernel.ts
 - [ ] T054 [US3] Add trace and warning state selectors to apps/web/src/app/benefitKernelSlice.ts
 - [ ] T055 [US3] Render benefit-kernel trace details and warning notes in apps/web/src/pages/BenefitKernelPage.ts
-- [ ] T056 [US3] Verify User Story 3 with npm test -- packages/tests/benefit-kernel-trace.test.ts
+- [X] T056 [US3] Verify User Story 3 with npm test -- packages/tests/benefit-kernel-trace.test.ts
 
 **Checkpoint**: All benefit-kernel stories are independently functional and traceable.
 
@@ -136,13 +136,13 @@
 
 - [ ] T057 [P] Add prior-slice regression guard to the benefit-kernel validation command notes in specs/005-benefit-kernel-slice/quickstart.md
 - [ ] T058 [P] Update implementation completion notes in docs/architecture/benefit_kernel_slice_v0.1.0.md
-- [ ] T059 Run all deterministic tests with npm test and fix issues in packages/tests/
-- [ ] T060 Run lint/type checks with npm run lint and fix issues in packages/engine/benefit-kernel/src/
-- [ ] T061 Run the static browser build with npm run build and update committed assets under apps/web/dist/
+- [X] T059 Run all deterministic tests with npm test and fix issues in packages/tests/
+- [X] T060 Run lint/type checks with npm run lint and fix issues in packages/engine/benefit-kernel/src/
+- [X] T061 Run the static browser build with npm run build and update committed assets under apps/web/dist/
 - [ ] T062 Start the Vite app and validate the quickstart flow in apps/web/src/pages/BenefitKernelPage.ts
-- [ ] T063 Confirm browser-only/no-network execution by inspecting benefit-kernel imports in packages/engine/benefit-kernel/src/
-- [ ] T064 Confirm V1/VE, valuation listing, BSRS, and other output-adapter implementations remain out of scope in packages/output-adapters/
-- [ ] T065 Update task completion checkboxes in specs/005-benefit-kernel-slice/tasks.md after implementation verification
+- [X] T063 Confirm browser-only/no-network execution by inspecting benefit-kernel imports in packages/engine/benefit-kernel/src/
+- [X] T064 Confirm V1/VE, valuation listing, BSRS, and other output-adapter implementations remain out of scope in packages/output-adapters/
+- [X] T065 Update task completion checkboxes in specs/005-benefit-kernel-slice/tasks.md after implementation verification
 
 ---
 

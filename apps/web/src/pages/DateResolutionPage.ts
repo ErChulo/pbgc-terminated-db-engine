@@ -1,4 +1,5 @@
 import { runFixtureDateResolution } from "../app/dateResolutionSlice";
+import { renderBenefitKernelPage } from "./BenefitKernelPage";
 import { renderCompensationResolutionPage } from "./CompensationResolutionPage";
 import { renderServiceResolutionPage } from "./ServiceResolutionPage";
 
@@ -8,6 +9,7 @@ export function renderDateResolutionPage(root: HTMLElement): void {
       <header>
         <h1>PBGC Date Resolution</h1>
         <nav>
+          <button id="show-benefit-kernel" type="button" class="secondary">Benefit</button>
           <button id="show-service-resolution" type="button" class="secondary">Service</button>
           <button id="show-compensation-resolution" type="button" class="secondary">Compensation</button>
           <button id="run-date-resolution" type="button">Run fixtures</button>
@@ -30,6 +32,7 @@ export function renderDateResolutionPage(root: HTMLElement): void {
     </section>
   `;
 
+  root.querySelector<HTMLButtonElement>("#show-benefit-kernel")?.addEventListener("click", () => renderBenefitKernelPage(root));
   root.querySelector<HTMLButtonElement>("#show-service-resolution")?.addEventListener("click", () => renderServiceResolutionPage(root));
   root.querySelector<HTMLButtonElement>("#show-compensation-resolution")?.addEventListener("click", () => renderCompensationResolutionPage(root));
   root.querySelector<HTMLButtonElement>("#run-date-resolution")?.addEventListener("click", async () => {
