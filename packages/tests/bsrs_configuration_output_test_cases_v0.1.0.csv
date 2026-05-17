@@ -1,0 +1,3 @@
+test_case_id,description,valuation_listings_fixture_index,statement_row_type
+BSRS001,Deferred vested BSRS configuration packet,0,participant
+BSRS002,In-pay survivor BSRS configuration packet,1,survivor
