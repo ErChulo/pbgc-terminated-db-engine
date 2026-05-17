@@ -18,16 +18,16 @@
 
 **Purpose**: Create the Vite/sql.js browser project and local package layout required by all stories.
 
-- [ ] T001 Create root workspace manifest in package.json with scripts for dev, build, test, and lint
-- [ ] T002 Create pnpm workspace definition in pnpm-workspace.yaml for apps/web and packages/*
-- [ ] T003 Create TypeScript project references in tsconfig.json
-- [ ] T004 Create Vite app package manifest in apps/web/package.json with Vite, TypeScript, sql.js, and test dependencies
-- [ ] T005 Create Vite configuration in apps/web/vite.config.ts
-- [ ] T006 Create browser entry HTML in apps/web/index.html
-- [ ] T007 [P] Create application source directories with placeholder module exports in apps/web/src/main.ts
-- [ ] T008 [P] Create shared package manifest and TypeScript config in packages/shared/package.json
-- [ ] T009 [P] Create database package manifest and TypeScript config in packages/db/package.json
-- [ ] T010 [P] Create date-resolution package manifest and TypeScript config in packages/engine/date-resolution/package.json
+- [X] T001 Create root workspace manifest in package.json with scripts for dev, build, test, and lint
+- [X] T002 Create pnpm workspace definition in pnpm-workspace.yaml for apps/web and packages/*
+- [X] T003 Create TypeScript project references in tsconfig.json
+- [X] T004 Create Vite app package manifest in apps/web/package.json with Vite, TypeScript, sql.js, and test dependencies
+- [X] T005 Create Vite configuration in apps/web/vite.config.ts
+- [X] T006 Create browser entry HTML in apps/web/index.html
+- [X] T007 [P] Create application source directories with placeholder module exports in apps/web/src/main.ts
+- [X] T008 [P] Create shared package manifest and TypeScript config in packages/shared/package.json
+- [X] T009 [P] Create database package manifest and TypeScript config in packages/db/package.json
+- [X] T010 [P] Create date-resolution package manifest and TypeScript config in packages/engine/date-resolution/package.json
 
 ---
 
@@ -37,16 +37,16 @@
 
 **CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T011 Define shared result, warning, error, trace, and run-status types in packages/shared/src/types.ts
-- [ ] T012 Define date-resolution packet and output types from the v0.1.0 contract in packages/engine/date-resolution/src/types.ts
-- [ ] T013 Implement deterministic ID and timestamp helpers for testable runs in packages/shared/src/determinism.ts
-- [ ] T014 Implement sql.js context initialization and database export helpers in packages/db/src/sqljs.ts using docs/architecture/vite_sqljs_bootstrap_v0.1.0.ts.txt as the source pattern
-- [ ] T015 Implement migration and seed text loading registry for committed .sql.txt artifacts in packages/db/src/artifacts.ts
-- [ ] T016 Implement migration/seed execution helpers in packages/db/src/migrate.ts
-- [ ] T017 Implement typed query helpers for engine_run, engine_input_packet, resolved_dates_output, and module_trace in packages/db/src/repositories.ts
-- [ ] T018 Implement CSV fixture parsing for packages/tests/date_resolution_test_cases_v0.1.0.csv in packages/tests/date-resolution-fixtures.ts
-- [ ] T019 [P] Create Vitest configuration in vitest.config.ts
-- [ ] T020 [P] Add sql.js static asset packaging notes and copy target placeholder in apps/web/public/sqljs/README.md
+- [X] T011 Define shared result, warning, error, trace, and run-status types in packages/shared/src/types.ts
+- [X] T012 Define date-resolution packet and output types from the v0.1.0 contract in packages/engine/date-resolution/src/types.ts
+- [X] T013 Implement deterministic ID and timestamp helpers for testable runs in packages/shared/src/determinism.ts
+- [X] T014 Implement sql.js context initialization and database export helpers in packages/db/src/sqljs.ts using docs/architecture/vite_sqljs_bootstrap_v0.1.0.ts.txt as the source pattern
+- [X] T015 Implement migration and seed text loading registry for committed .sql.txt artifacts in packages/db/src/artifacts.ts
+- [X] T016 Implement migration/seed execution helpers in packages/db/src/migrate.ts
+- [X] T017 Implement typed query helpers for engine_run, engine_input_packet, resolved_dates_output, and module_trace in packages/db/src/repositories.ts
+- [X] T018 Implement CSV fixture parsing for packages/tests/date_resolution_test_cases_v0.1.0.csv in packages/tests/date-resolution-fixtures.ts
+- [X] T019 [P] Create Vitest configuration in vitest.config.ts
+- [X] T020 [P] Add sql.js static asset packaging notes and copy target placeholder in apps/web/public/sqljs/README.md
 
 **Checkpoint**: Foundation ready. Story implementation can now begin in priority order.
 
@@ -60,21 +60,21 @@
 
 ### Tests for User Story 1
 
-- [ ] T021 [P] [US1] Add contract validation tests for valid date-resolution fixture packets in packages/tests/date-resolution-contract.test.ts
-- [ ] T022 [P] [US1] Add deterministic output tests for DR001, DR002, and DR003 in packages/tests/date-resolution-output.test.ts
-- [ ] T023 [P] [US1] Add sql.js persistence tests for engine_run and resolved_dates_output in packages/tests/date-resolution-persistence.test.ts
+- [X] T021 [P] [US1] Add contract validation tests for valid date-resolution fixture packets in packages/tests/date-resolution-contract.test.ts
+- [X] T022 [P] [US1] Add deterministic output tests for DR001, DR002, and DR003 in packages/tests/date-resolution-output.test.ts
+- [X] T023 [P] [US1] Add sql.js persistence tests for engine_run and resolved_dates_output in packages/tests/date-resolution-persistence.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T024 [US1] Implement fixture-to-reviewed-packet builder in packages/engine/date-resolution/src/fixturePacketBuilder.ts
-- [ ] T025 [US1] Implement required input-group and field validation in packages/engine/date-resolution/src/validatePacket.ts
-- [ ] T026 [US1] Implement date utility functions for age, first-of-month, anniversary, and null handling in packages/engine/date-resolution/src/dateMath.ts
-- [ ] T027 [US1] Implement deterministic rule resolution for NRD, ERD, RBD, XRA, and XRD in packages/engine/date-resolution/src/resolveDates.ts
-- [ ] T028 [US1] Implement run orchestration that writes engine_run and resolved_dates_output in packages/engine/date-resolution/src/runDateResolution.ts
-- [ ] T029 [US1] Export date-resolution public API from packages/engine/date-resolution/src/index.ts
-- [ ] T030 [US1] Implement browser app initialization and fixture-run action in apps/web/src/app/dateResolutionSlice.ts
-- [ ] T031 [US1] Render reviewed fixture selection and resolved output table in apps/web/src/pages/DateResolutionPage.ts
-- [ ] T032 [US1] Wire the Date Resolution page into the browser entrypoint in apps/web/src/main.ts
+- [X] T024 [US1] Implement fixture-to-reviewed-packet builder in packages/engine/date-resolution/src/fixturePacketBuilder.ts
+- [X] T025 [US1] Implement required input-group and field validation in packages/engine/date-resolution/src/validatePacket.ts
+- [X] T026 [US1] Implement date utility functions for age, first-of-month, anniversary, and null handling in packages/engine/date-resolution/src/dateMath.ts
+- [X] T027 [US1] Implement deterministic rule resolution for NRD, ERD, RBD, XRA, and XRD in packages/engine/date-resolution/src/resolveDates.ts
+- [X] T028 [US1] Implement run orchestration that writes engine_run and resolved_dates_output in packages/engine/date-resolution/src/runDateResolution.ts
+- [X] T029 [US1] Export date-resolution public API from packages/engine/date-resolution/src/index.ts
+- [X] T030 [US1] Implement browser app initialization and fixture-run action in apps/web/src/app/dateResolutionSlice.ts
+- [X] T031 [US1] Render reviewed fixture selection and resolved output table in apps/web/src/pages/DateResolutionPage.ts
+- [X] T032 [US1] Wire the Date Resolution page into the browser entrypoint in apps/web/src/main.ts
 
 **Checkpoint**: User Story 1 is independently functional when fixture rows produce the expected resolved-date values and persisted output rows.
 

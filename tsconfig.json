@@ -1,0 +1,20 @@
+{
+  "include": ["apps/web/src", "packages/**/*.ts", "types/**/*.d.ts", "vitest.config.ts"],
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@pbgc/shared": ["packages/shared/src/index.ts"],
+      "@pbgc/db": ["packages/db/src/index.ts"],
+      "@pbgc/date-resolution": ["packages/engine/date-resolution/src/index.ts"]
+    },
+    "types": ["vitest/globals", "node"]
+  }
+}

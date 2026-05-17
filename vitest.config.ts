@@ -1,0 +1,16 @@
+import { resolve } from "node:path";
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+  resolve: {
+    alias: {
+      "@pbgc/shared": resolve(__dirname, "packages/shared/src/index.ts"),
+      "@pbgc/db": resolve(__dirname, "packages/db/src/index.ts"),
+      "@pbgc/date-resolution": resolve(__dirname, "packages/engine/date-resolution/src/index.ts"),
+    },
+  },
+  test: {
+    environment: "node",
+    include: ["packages/tests/**/*.test.ts"],
+  },
+});
