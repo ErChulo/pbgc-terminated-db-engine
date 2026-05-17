@@ -1,4 +1,5 @@
 import { runFixtureFormResolution } from "../app/formResolutionSlice";
+import { renderBenefitKernelPage } from "./BenefitKernelPage";
 import { renderCompensationResolutionPage } from "./CompensationResolutionPage";
 import { renderDateResolutionPage } from "./DateResolutionPage";
 import { renderServiceResolutionPage } from "./ServiceResolutionPage";
@@ -12,6 +13,7 @@ export function renderFormResolutionPage(root: HTMLElement): void {
           <p class="subtle">Reviewed fixture packets only. No server calls.</p>
         </div>
         <nav>
+          <button id="show-benefit-kernel" type="button" class="secondary">Benefit</button>
           <button id="show-date-resolution" type="button" class="secondary">Date</button>
           <button id="show-service-resolution" type="button" class="secondary">Service</button>
           <button id="show-compensation-resolution" type="button" class="secondary">Compensation</button>
@@ -36,6 +38,7 @@ export function renderFormResolutionPage(root: HTMLElement): void {
     </section>
   `;
 
+  root.querySelector<HTMLButtonElement>("#show-benefit-kernel")?.addEventListener("click", () => renderBenefitKernelPage(root));
   root.querySelector<HTMLButtonElement>("#show-date-resolution")?.addEventListener("click", () => renderDateResolutionPage(root));
   root.querySelector<HTMLButtonElement>("#show-service-resolution")?.addEventListener("click", () => renderServiceResolutionPage(root));
   root.querySelector<HTMLButtonElement>("#show-compensation-resolution")?.addEventListener("click", () => renderCompensationResolutionPage(root));

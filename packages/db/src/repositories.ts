@@ -1,6 +1,7 @@
 import type { Database } from "sql.js";
 import type { EngineRunRecord, ModuleTrace } from "@pbgc/shared";
 import type { DateResolutionOutput, DateResolutionPacket } from "@pbgc/date-resolution";
+import type { BenefitKernelOutput, BenefitKernelPacket } from "@pbgc/benefit-kernel";
 import type { ServiceResolutionOutput, ServiceResolutionPacket } from "@pbgc/service-resolution";
 import type { CompensationResolutionOutput, CompensationResolutionPacket } from "@pbgc/compensation-resolution";
 import type { FormResolutionOutput, FormResolutionPacket } from "@pbgc/form-resolution";
@@ -11,7 +12,7 @@ export type EngineInputPacketRecord = {
   case_id: string;
   subject_key: string;
   subject_type: string;
-  packet_type: "date_resolution" | "service_resolution" | "compensation_resolution" | "form_resolution";
+  packet_type: "date_resolution" | "service_resolution" | "compensation_resolution" | "form_resolution" | "benefit_kernel";
   schema_version: string;
   packet_json: string;
   built_from_resolved_at: string | null;
@@ -201,6 +202,94 @@ export function listFormRunsWithTrace(db: Database): Array<FormResolutionOutput 
   ) as Array<FormResolutionOutput & { trace_count: number }>;
 }
 
+export function insertResolvedBenefitKernelOutput(db: Database, output: BenefitKernelOutput): void {
+  db.run(
+    `INSERT INTO benefit_kernel_output (
+      benefit_kernel_output_id, calculation_run_id, case_id, subject_key,
+      term_mb_nrd_nsf, term_surv_mb_nrd, term_surv_mb_eurd, term_surv_mb_erd,
+      rbd_surv_mb_term, term_surv_mb_ard, xrd_mb_term, xrd_surv_mb_term,
+      xrd_mb_qpsa_term, ls_term, ls_qpsa, xrd_mb_title_iv, nrd_mb_title_iv_nsf,
+      eurd_mb_title_iv_nsf, erd_mb_title_iv_nsf, rbd_mb_title_iv, ard_mb_title_iv,
+      pvmb_title_iv_no_q_no_l, pvmb_title_iv_qpsa, pvmb_title_iv_no_load, title_iv_load,
+      pvmb_title_iv, xrd_mb_4022c, pvmb_4022c_no_q_no_l, pvmb_4022c_qpsa,
+      pvmb_4022c_no_load, load_4022c, pvmb_4022c, pvmb_bas_ungb_no_q_no_l,
+      pvmb_bas_ungb_qpsa, bnnfa_pvmb_no_load, bnnfa_load, bnnfa_pvmb,
+      pvpbl_ann_rates_no_q_no_l, pvpbl_ann_rates_qpsa, pvpbl_ann_rates_no_load,
+      pbl_load, pvpbl_ann_rates, pvf_lev_ann, pvf_lev_ls, pvf_qpsa_ls,
+      pvmb_term_no_q_no_l, pvmb_term_qpsa, pvmb_term_no_load, term_load, pvmb_term
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      output.benefit_kernel_output_id,
+      output.calculation_run_id,
+      output.case_id,
+      output.subject_key,
+      output.term_mb_nrd_nsf,
+      output.term_surv_mb_nrd,
+      output.term_surv_mb_eurd,
+      output.term_surv_mb_erd,
+      output.rbd_surv_mb_term,
+      output.term_surv_mb_ard,
+      output.xrd_mb_term,
+      output.xrd_surv_mb_term,
+      output.xrd_mb_qpsa_term,
+      output.ls_term,
+      output.ls_qpsa,
+      output.xrd_mb_title_iv,
+      output.nrd_mb_title_iv_nsf,
+      output.eurd_mb_title_iv_nsf,
+      output.erd_mb_title_iv_nsf,
+      output.rbd_mb_title_iv,
+      output.ard_mb_title_iv,
+      output.pvmb_title_iv_no_q_no_l,
+      output.pvmb_title_iv_qpsa,
+      output.pvmb_title_iv_no_load,
+      output.title_iv_load,
+      output.pvmb_title_iv,
+      output.xrd_mb_4022c,
+      output.pvmb_4022c_no_q_no_l,
+      output.pvmb_4022c_qpsa,
+      output.pvmb_4022c_no_load,
+      output.load_4022c,
+      output.pvmb_4022c,
+      output.pvmb_bas_ungb_no_q_no_l,
+      output.pvmb_bas_ungb_qpsa,
+      output.bnnfa_pvmb_no_load,
+      output.bnnfa_load,
+      output.bnnfa_pvmb,
+      output.pvpbl_ann_rates_no_q_no_l,
+      output.pvpbl_ann_rates_qpsa,
+      output.pvpbl_ann_rates_no_load,
+      output.pbl_load,
+      output.pvpbl_ann_rates,
+      output.pvf_lev_ann,
+      output.pvf_lev_ls,
+      output.pvf_qpsa_ls,
+      output.pvmb_term_no_q_no_l,
+      output.pvmb_term_qpsa,
+      output.pvmb_term_no_load,
+      output.term_load,
+      output.pvmb_term,
+    ],
+  );
+}
+
+export function listResolvedBenefitKernelOutputs(db: Database): BenefitKernelOutput[] {
+  return queryAll(db, "SELECT * FROM benefit_kernel_output ORDER BY benefit_kernel_output_id") as BenefitKernelOutput[];
+}
+
+export function listBenefitKernelRunsWithTrace(db: Database): Array<BenefitKernelOutput & { trace_count: number }> {
+  return queryAll(
+    db,
+    `SELECT bko.*, COUNT(mt.module_trace_id) AS trace_count
+     FROM benefit_kernel_output bko
+     LEFT JOIN module_trace mt
+       ON mt.calculation_run_id = bko.calculation_run_id
+      AND mt.module_name = 'benefit_kernel'
+     GROUP BY bko.benefit_kernel_output_id
+     ORDER BY bko.benefit_kernel_output_id`,
+  ) as Array<BenefitKernelOutput & { trace_count: number }>;
+}
+
 export function insertModuleTrace(db: Database, trace: ModuleTrace): void {
   db.run(
     `INSERT INTO module_trace (
@@ -231,11 +320,12 @@ export function listModuleTraces(db: Database, calculationRunId: string, moduleN
 }
 
 export function parsePacketJson<
-  TPacket extends DateResolutionPacket | ServiceResolutionPacket | CompensationResolutionPacket | FormResolutionPacket =
+  TPacket extends DateResolutionPacket | ServiceResolutionPacket | CompensationResolutionPacket | FormResolutionPacket | BenefitKernelPacket =
     | DateResolutionPacket
     | ServiceResolutionPacket
     | CompensationResolutionPacket
-    | FormResolutionPacket,
+    | FormResolutionPacket
+    | BenefitKernelPacket,
 >(
   record: EngineInputPacketRecord,
 ): TPacket {
