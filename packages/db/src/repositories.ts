@@ -1,6 +1,7 @@
 import type { Database } from "sql.js";
 import type { EngineRunRecord, ModuleTrace } from "@pbgc/shared";
 import type { DateResolutionOutput, DateResolutionPacket } from "@pbgc/date-resolution";
+import type { ServiceResolutionOutput, ServiceResolutionPacket } from "@pbgc/service-resolution";
 import { queryAll, queryOne } from "./sqljs";
 
 export type EngineInputPacketRecord = {
@@ -8,7 +9,7 @@ export type EngineInputPacketRecord = {
   case_id: string;
   subject_key: string;
   subject_type: string;
-  packet_type: "date_resolution";
+  packet_type: "date_resolution" | "service_resolution";
   schema_version: string;
   packet_json: string;
   built_from_resolved_at: string | null;
@@ -94,6 +95,33 @@ export function listResolvedDatesOutputs(db: Database): DateResolutionOutput[] {
   return queryAll(db, "SELECT * FROM resolved_dates_output ORDER BY resolved_dates_output_id") as DateResolutionOutput[];
 }
 
+export function insertResolvedServiceOutput(db: Database, output: ServiceResolutionOutput): void {
+  db.run(
+    `INSERT INTO resolved_service_comp_output (
+      resolved_service_comp_output_id, calculation_run_id, case_id, subject_key,
+      eligibility_service_resolved, vesting_service_resolved, benefit_service_resolved, accrual_service_resolved,
+      compensation_resolved, average_compensation_resolved, covered_compensation_resolved
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      output.resolved_service_comp_output_id,
+      output.calculation_run_id,
+      output.case_id,
+      output.subject_key,
+      output.eligibility_service_resolved,
+      output.vesting_service_resolved,
+      output.benefit_service_resolved,
+      output.accrual_service_resolved,
+      output.compensation_resolved,
+      output.average_compensation_resolved,
+      output.covered_compensation_resolved,
+    ],
+  );
+}
+
+export function listResolvedServiceOutputs(db: Database): ServiceResolutionOutput[] {
+  return queryAll(db, "SELECT * FROM resolved_service_comp_output ORDER BY resolved_service_comp_output_id") as ServiceResolutionOutput[];
+}
+
 export function insertModuleTrace(db: Database, trace: ModuleTrace): void {
   db.run(
     `INSERT INTO module_trace (
@@ -115,6 +143,16 @@ export function insertModuleTrace(db: Database, trace: ModuleTrace): void {
   );
 }
 
-export function parsePacketJson(record: EngineInputPacketRecord): DateResolutionPacket {
-  return JSON.parse(record.packet_json) as DateResolutionPacket;
+export function listModuleTraces(db: Database, calculationRunId: string, moduleName: ModuleTrace["module_name"]): ModuleTrace[] {
+  return queryAll(
+    db,
+    "SELECT * FROM module_trace WHERE calculation_run_id = ? AND module_name = ? ORDER BY module_trace_id",
+    [calculationRunId, moduleName],
+  ) as ModuleTrace[];
+}
+
+export function parsePacketJson<TPacket extends DateResolutionPacket | ServiceResolutionPacket = DateResolutionPacket | ServiceResolutionPacket>(
+  record: EngineInputPacketRecord,
+): TPacket {
+  return JSON.parse(record.packet_json) as TPacket;
 }
