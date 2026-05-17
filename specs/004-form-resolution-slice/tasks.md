@@ -12,15 +12,15 @@
 
 **Purpose**: Add the form-resolution package skeleton and register it with the existing browser-only Vite/sql.js workspace without implementing benefit-kernel or output-adapter modules.
 
-- [ ] T001 Create the form-resolution package manifest in packages/engine/form-resolution/package.json
-- [ ] T002 Create the form-resolution TypeScript config in packages/engine/form-resolution/tsconfig.json
-- [ ] T003 [P] Add the public form-resolution barrel placeholder in packages/engine/form-resolution/src/index.ts
-- [ ] T004 [P] Add the package source type placeholder in packages/engine/form-resolution/src/types.ts
-- [ ] T005 Register the form-resolution workspace dependency in apps/web/package.json
-- [ ] T006 Register the form-resolution alias in tsconfig.json
-- [ ] T007 Register the form-resolution test alias in vitest.config.ts
-- [ ] T008 [P] Add the form page placeholder module in apps/web/src/pages/FormResolutionPage.ts
-- [ ] T009 [P] Add the browser app state placeholder in apps/web/src/app/formResolutionSlice.ts
+- [X] T001 Create the form-resolution package manifest in packages/engine/form-resolution/package.json
+- [X] T002 Create the form-resolution TypeScript config in packages/engine/form-resolution/tsconfig.json
+- [X] T003 [P] Add the public form-resolution barrel placeholder in packages/engine/form-resolution/src/index.ts
+- [X] T004 [P] Add the package source type placeholder in packages/engine/form-resolution/src/types.ts
+- [X] T005 Register the form-resolution workspace dependency in apps/web/package.json
+- [X] T006 Register the form-resolution alias in tsconfig.json
+- [X] T007 Register the form-resolution test alias in vitest.config.ts
+- [X] T008 [P] Add the form page placeholder module in apps/web/src/pages/FormResolutionPage.ts
+- [X] T009 [P] Add the browser app state placeholder in apps/web/src/app/formResolutionSlice.ts
 
 ---
 
@@ -30,16 +30,16 @@
 
 **Critical**: No user story work can begin until this phase is complete.
 
-- [ ] T010 Add shared form-resolution module name support to StructuredIssue and ModuleTrace in packages/shared/src/types.ts
-- [ ] T011 Add form_resolution packet type support to engine input packet records in packages/db/src/repositories.ts
-- [ ] T012 Add repository helpers for inserting and listing resolved_forms_output rows in packages/db/src/repositories.ts
-- [ ] T013 Add repository helper for fetching form-resolution runs with trace rows in packages/db/src/repositories.ts
-- [ ] T014 Add form-resolution fixture CSV parsing utilities in packages/tests/form-resolution-fixtures.ts
-- [ ] T015 Add reviewed form packet fixture builders from form CSV rows in packages/engine/form-resolution/src/fixturePacketBuilder.ts
-- [ ] T016 Add deterministic form rule constants and module version exports in packages/engine/form-resolution/src/types.ts
-- [ ] T017 [P] Add form-resolution architecture notes in docs/architecture/form_resolution_slice_v0.1.0.md
-- [ ] T018 [P] Add form trace field mapping in docs/mappings/form_resolution_trace_map_v0.1.0.csv
-- [ ] T019 Verify no benefit-kernel or output-adapter package is created for this slice under packages/engine/ and packages/output-adapters/
+- [X] T010 Add shared form-resolution module name support to StructuredIssue and ModuleTrace in packages/shared/src/types.ts
+- [X] T011 Add form_resolution packet type support to engine input packet records in packages/db/src/repositories.ts
+- [X] T012 Add repository helpers for inserting and listing resolved_forms_output rows in packages/db/src/repositories.ts
+- [X] T013 Add repository helper for fetching form-resolution runs with trace rows in packages/db/src/repositories.ts
+- [X] T014 Add form-resolution fixture CSV parsing utilities in packages/tests/form-resolution-fixtures.ts
+- [X] T015 Add reviewed form packet fixture builders from form CSV rows in packages/engine/form-resolution/src/fixturePacketBuilder.ts
+- [X] T016 Add deterministic form rule constants and module version exports in packages/engine/form-resolution/src/types.ts
+- [X] T017 [P] Add form-resolution architecture notes in docs/architecture/form_resolution_slice_v0.1.0.md
+- [X] T018 [P] Add form trace field mapping in docs/mappings/form_resolution_trace_map_v0.1.0.csv
+- [X] T019 Verify no benefit-kernel or output-adapter package is created for this slice under packages/engine/ and packages/output-adapters/
 
 **Checkpoint**: Foundation ready. User story implementation can start after this phase.
 
@@ -53,26 +53,26 @@
 
 ### Tests for User Story 1
 
-- [ ] T020 [P] [US1] Add contract-shape tests for RunFormResolutionRequest and RunFormResolutionResult in packages/tests/form-resolution-contract.test.ts
-- [ ] T021 [P] [US1] Add deterministic output tests for FR001-FR003 form fields in packages/tests/form-resolution-output.test.ts
-- [ ] T022 [P] [US1] Add in-pay, QDRO, explicit-null, and no-benefit-amount assertions in packages/tests/form-resolution-output.test.ts
-- [ ] T023 [P] [US1] Add sql.js persistence tests for engine_run and resolved_forms_output rows in packages/tests/form-resolution-persistence.test.ts
-- [ ] T024 [P] [US1] Add assertions that form runs do not write benefit-kernel or output-adapter rows in packages/tests/form-resolution-persistence.test.ts
+- [X] T020 [P] [US1] Add contract-shape tests for RunFormResolutionRequest and RunFormResolutionResult in packages/tests/form-resolution-contract.test.ts
+- [X] T021 [P] [US1] Add deterministic output tests for FR001-FR003 form fields in packages/tests/form-resolution-output.test.ts
+- [X] T022 [P] [US1] Add in-pay, QDRO, explicit-null, and no-benefit-amount assertions in packages/tests/form-resolution-output.test.ts
+- [X] T023 [P] [US1] Add sql.js persistence tests for engine_run and resolved_forms_output rows in packages/tests/form-resolution-persistence.test.ts
+- [X] T024 [P] [US1] Add assertions that form runs do not write benefit-kernel or output-adapter rows in packages/tests/form-resolution-persistence.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T025 [US1] Implement form packet validation for required groups and fixture-supported controlled values in packages/engine/form-resolution/src/validatePacket.ts
-- [ ] T026 [US1] Implement deterministic normal-form, in-pay, QDRO, death-form, lump-sum, and indicator rules in packages/engine/form-resolution/src/formRules.ts
-- [ ] T027 [US1] Implement form output resolution for all contract output fields in packages/engine/form-resolution/src/resolveForms.ts
-- [ ] T028 [US1] Implement review-relevant warning generation for valid in-pay, QDRO, QPSA, death, contribution, and lump-sum branches in packages/engine/form-resolution/src/resolveForms.ts
-- [ ] T029 [US1] Implement form run orchestration with engine_run persistence in packages/engine/form-resolution/src/runFormResolution.ts
-- [ ] T030 [US1] Persist successful form outputs to resolved_forms_output only in packages/engine/form-resolution/src/runFormResolution.ts
-- [ ] T031 [US1] Export form-resolution runtime APIs from packages/engine/form-resolution/src/index.ts
-- [ ] T032 [US1] Integrate form fixture loading and run actions into apps/web/src/app/formResolutionSlice.ts
-- [ ] T033 [US1] Render the form-resolution fixture runner and resolved output table in apps/web/src/pages/FormResolutionPage.ts
-- [ ] T034 [US1] Add form-resolution navigation without removing date, service, or compensation access in apps/web/src/main.ts
-- [ ] T035 [US1] Add form-resolution view styles in apps/web/src/styles.css
-- [ ] T036 [US1] Verify User Story 1 with npm test -- packages/tests/form-resolution-output.test.ts packages/tests/form-resolution-persistence.test.ts
+- [X] T025 [US1] Implement form packet validation for required groups and fixture-supported controlled values in packages/engine/form-resolution/src/validatePacket.ts
+- [X] T026 [US1] Implement deterministic normal-form, in-pay, QDRO, death-form, lump-sum, and indicator rules in packages/engine/form-resolution/src/formRules.ts
+- [X] T027 [US1] Implement form output resolution for all contract output fields in packages/engine/form-resolution/src/resolveForms.ts
+- [X] T028 [US1] Implement review-relevant warning generation for valid in-pay, QDRO, QPSA, death, contribution, and lump-sum branches in packages/engine/form-resolution/src/resolveForms.ts
+- [X] T029 [US1] Implement form run orchestration with engine_run persistence in packages/engine/form-resolution/src/runFormResolution.ts
+- [X] T030 [US1] Persist successful form outputs to resolved_forms_output only in packages/engine/form-resolution/src/runFormResolution.ts
+- [X] T031 [US1] Export form-resolution runtime APIs from packages/engine/form-resolution/src/index.ts
+- [X] T032 [US1] Integrate form fixture loading and run actions into apps/web/src/app/formResolutionSlice.ts
+- [X] T033 [US1] Render the form-resolution fixture runner and resolved output table in apps/web/src/pages/FormResolutionPage.ts
+- [X] T034 [US1] Add form-resolution navigation without removing date, service, or compensation access in apps/web/src/main.ts
+- [X] T035 [US1] Add form-resolution view styles in apps/web/src/styles.css
+- [X] T036 [US1] Verify User Story 1 with npm test -- packages/tests/form-resolution-output.test.ts packages/tests/form-resolution-persistence.test.ts
 
 **Checkpoint**: User Story 1 is functional and independently testable as the MVP.
 
@@ -136,12 +136,12 @@
 
 - [ ] T057 [P] Add prior-slice regression guard to the form validation command notes in specs/004-form-resolution-slice/quickstart.md
 - [ ] T058 [P] Update implementation completion notes in docs/architecture/form_resolution_slice_v0.1.0.md
-- [ ] T059 Run all deterministic tests with npm test and fix issues in packages/tests/
-- [ ] T060 Run lint/type checks with npm run lint and fix issues in packages/engine/form-resolution/src/
-- [ ] T061 Run the static browser build with npm run build and update committed assets under apps/web/dist/
+- [X] T059 Run all deterministic tests with npm test and fix issues in packages/tests/
+- [X] T060 Run lint/type checks with npm run lint and fix issues in packages/engine/form-resolution/src/
+- [X] T061 Run the static browser build with npm run build and update committed assets under apps/web/dist/
 - [ ] T062 Start the Vite app and validate the quickstart flow in apps/web/src/pages/FormResolutionPage.ts
-- [ ] T063 Confirm browser-only/no-network execution by inspecting form-resolution imports in packages/engine/form-resolution/src/
-- [ ] T064 Confirm benefit kernel, V1/VE, valuation listing, and BSRS implementations remain out of scope in packages/engine/ and packages/output-adapters/
+- [X] T063 Confirm browser-only/no-network execution by inspecting form-resolution imports in packages/engine/form-resolution/src/
+- [X] T064 Confirm benefit kernel, V1/VE, valuation listing, and BSRS implementations remain out of scope in packages/engine/ and packages/output-adapters/
 - [ ] T065 Update task completion checkboxes in specs/004-form-resolution-slice/tasks.md after implementation verification
 
 ---
