@@ -1,4 +1,5 @@
 import { renderDateResolutionPage } from "./DateResolutionPage";
+import { renderCompensationResolutionPage } from "./CompensationResolutionPage";
 import { runFixtureServiceResolution } from "../app/serviceResolutionSlice";
 
 export function renderServiceResolutionPage(root: HTMLElement): void {
@@ -11,6 +12,7 @@ export function renderServiceResolutionPage(root: HTMLElement): void {
         </div>
         <nav>
           <button id="show-date-resolution" type="button" class="secondary">Date</button>
+          <button id="show-compensation-resolution" type="button" class="secondary">Compensation</button>
           <button id="run-service-resolution" type="button">Run service fixtures</button>
         </nav>
       </header>
@@ -32,6 +34,7 @@ export function renderServiceResolutionPage(root: HTMLElement): void {
   `;
 
   root.querySelector<HTMLButtonElement>("#show-date-resolution")?.addEventListener("click", () => renderDateResolutionPage(root));
+  root.querySelector<HTMLButtonElement>("#show-compensation-resolution")?.addEventListener("click", () => renderCompensationResolutionPage(root));
   root.querySelector<HTMLButtonElement>("#run-service-resolution")?.addEventListener("click", async () => {
     const tbody = root.querySelector<HTMLTableSectionElement>("#service-resolution-results");
     if (!tbody) return;

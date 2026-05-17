@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@pbgc/db": "0.1.0",
+    "@pbgc/compensation-resolution": "0.1.0",
     "@pbgc/date-resolution": "0.1.0",
     "@pbgc/service-resolution": "0.1.0",
     "@pbgc/shared": "0.1.0",
