@@ -134,6 +134,8 @@
 - [ ] T055 [US3] Wire canonical DD names into BSRS trace generation in `packages/engine/bsrs-configuration-output/src/trace.ts`
 - [ ] T056 [P] [US3] Document BSRS DD-first mapping rules and exceptions in `docs/architecture/bsrs-configuration-output-slice_v0.1.0.md`
 - [ ] T057 [US3] Add BSRS DD mapping reference notes in `specs/008-bsrs-configuration-output/contracts/bsrs-configuration-output.md`
+- [ ] T058 [P] [US3] Add regression test proving BSRS generation does not write to unrelated output-adapter tables, including `v1_ve_output` and `valuation_listings_output`, in `packages/tests/bsrs-configuration-output-output.test.ts`
+- [ ] T059 [P] [US3] Add regression test proving approved contract-name fallback still works when a BSRS field has no matching `DD.csv` entry in `packages/tests/bsrs-configuration-output-mapping.test.ts`
 
 **Checkpoint**: At this point, all user stories should now be independently functional
 
@@ -143,14 +145,14 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T058 [P] Update committed BSRS browser dist output in `apps/web/dist/`
-- [ ] T059 [P] Create email-safe `.txt` copies for delivered `.sql`, `.js`, `.ts`, or `.tex` BSRS artifacts in `packages/db/migrations/` and `packages/engine/bsrs-configuration-output/`
-- [ ] T060 [P] Run the BSRS regression suite in `packages/tests/bsrs-configuration-output-*.test.ts`
-- [ ] T061 [P] Verify browser-only runtime and no server-call regressions in `apps/web/src/` and `packages/engine/bsrs-configuration-output/`
-- [ ] T062 [P] Validate BSRS output ordering and trace completeness against fixture cases in `packages/tests/bsrs-configuration-output-*.test.ts`
-- [ ] T063 [P] Refresh BSRS quickstart and architecture notes in `specs/008-bsrs-configuration-output/quickstart.md` and `docs/architecture/bsrs-configuration-output-slice_v0.1.0.md`
-- [ ] T064 [P] Run lint and typecheck for BSRS-related packages in `packages/engine/bsrs-configuration-output/` and `apps/web/`
-- [ ] T065 [P] Confirm `specs/008-bsrs-configuration-output/tasks.md` checklist completeness and dependency ordering
+- [ ] T060 [P] Update committed BSRS browser dist output in `apps/web/dist/`
+- [ ] T061 [P] Create email-safe `.txt` copies for delivered `.sql`, `.js`, `.ts`, or `.tex` BSRS artifacts in `packages/db/migrations/` and `packages/engine/bsrs-configuration-output/`
+- [ ] T062 [P] Run the BSRS regression suite in `packages/tests/bsrs-configuration-output-*.test.ts`
+- [ ] T063 [P] Verify browser-only runtime and no server-call regressions in `apps/web/src/` and `packages/engine/bsrs-configuration-output/`
+- [ ] T064 [P] Validate BSRS output ordering and trace completeness against fixture cases in `packages/tests/bsrs-configuration-output-*.test.ts`
+- [ ] T065 [P] Refresh BSRS quickstart and architecture notes in `specs/008-bsrs-configuration-output/quickstart.md` and `docs/architecture/bsrs-configuration-output-slice_v0.1.0.md`
+- [ ] T066 [P] Run lint and typecheck for BSRS-related packages in `packages/engine/bsrs-configuration-output/` and `apps/web/`
+- [ ] T067 [P] Confirm `specs/008-bsrs-configuration-output/tasks.md` checklist completeness and dependency ordering
 
 ---
 
@@ -236,4 +238,3 @@ With multiple developers:
    - Developer B: User Story 2
    - Developer C: User Story 3
 3. Stories complete and integrate independently
-

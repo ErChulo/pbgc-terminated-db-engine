@@ -1,6 +1,6 @@
 # Feature Specification: BSRS Configuration Output
 
-**Feature Branch**: `[009-bsrs-configuration-output-slice]`
+**Feature Branch**: `[008-bsrs-configuration-output-slice]`
 
 **Created**: 2026-05-17
 
