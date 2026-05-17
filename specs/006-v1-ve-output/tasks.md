@@ -39,7 +39,7 @@
 - [X] T016 Add deterministic V1/VE field lists, row-family exports, and module version exports in packages/engine/v1-ve-output/src/types.ts
 - [X] T017 [P] Add V1/VE architecture notes in docs/architecture/v1_ve_output_slice_v0.1.0.md
 - [X] T018 [P] Add V1/VE trace field mapping in docs/mappings/v1_ve_output_trace_map_v0.1.0.csv
-- [ ] T019a [P] Add the DD.csv canonical naming helper and lookup table for V1 field semantics in packages/engine/v1-ve-output/src/ddMapping.ts
+- [X] T019a [P] Add the DD.csv canonical naming helper and lookup table for V1 field semantics in packages/engine/v1-ve-output/src/ddMapping.ts
 - [X] T019 Verify no valuation-listings, BSRS configuration, or other output-adapter package is created for this slice under packages/output-adapters/
 
 **Checkpoint**: Foundation ready. User story implementation can start after this phase.
@@ -56,7 +56,7 @@
 
 - [X] T020 [P] [US1] Add contract-shape tests for V1VeOutputRequest and V1VeOutputResult in packages/tests/v1-ve-output-contract.test.ts
 - [X] T021 [P] [US1] Add deterministic output tests for committed V1/VE identity, date, form, and benefit fields in packages/tests/v1-ve-output-output.test.ts
-- [ ] T022a [P] [US1] Add a DD-first mapping test that fails when an emitted V1/VE field lacks a required DD mapping in packages/tests/v1-ve-output-output.test.ts
+- [X] T022a [P] [US1] Add a DD-first mapping test that fails when an emitted V1/VE field lacks a required DD mapping in packages/tests/v1-ve-output-output.test.ts
 - [X] T022 [P] [US1] Add explicit-null and warning assertions for conditional V1/VE branches in packages/tests/v1-ve-output-output.test.ts
 - [X] T023 [P] [US1] Add sql.js persistence tests for engine_run and v1_ve_output_row rows in packages/tests/v1-ve-output-persistence.test.ts
 - [X] T024 [P] [US1] Add assertions that V1/VE runs do not write valuation-listings, BSRS, or output-adapter rows in packages/tests/v1-ve-output-persistence.test.ts

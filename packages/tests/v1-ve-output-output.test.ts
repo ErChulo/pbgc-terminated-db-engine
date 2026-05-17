@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import initSqlJs from "sql.js";
 import { describe, expect, it } from "vitest";
 import {
@@ -7,7 +9,7 @@ import {
   listResolvedV1VeOutputs,
   listV1VeRunsWithTrace,
 } from "@pbgc/db";
-import { buildV1VePacketFromFixture, runV1VeOutput } from "@pbgc/v1-ve-output";
+import { buildV1VePacketFromFixture, canonicalDdFieldName, hasDdMapping, runV1VeOutput, V1_VE_OUTPUT_FIELDS } from "@pbgc/v1-ve-output";
 import { currentTimestamp, resetDeterminismForTests } from "@pbgc/shared";
 import { parseV1VeOutputFixtures } from "./v1-ve-output-fixtures";
 
@@ -30,6 +32,23 @@ function seedPacket(db: ReturnType<typeof createSqlJsContextFromStatic>["db"], f
 }
 
 describe("v1_ve_output deterministic outputs", () => {
+  it("keeps emitted V1/VE fields covered by DD.csv canonical names", () => {
+    const ddCsv = readFileSync(resolve(process.cwd(), "artifacts/mappings/DD.csv"), "utf8");
+    const ddFields = new Set(
+      ddCsv
+        .split(/\r?\n/)
+        .slice(1)
+        .map((line) => line.split(",")[0]?.replace(/^"/, "").replace(/"$/, "").trim())
+        .filter((field): field is string => Boolean(field)),
+    );
+
+    for (const field of V1_VE_OUTPUT_FIELDS) {
+      if (!hasDdMapping(field)) continue;
+      const ddFieldName = canonicalDdFieldName(field);
+      expect(ddFields.has(ddFieldName)).toBe(true);
+    }
+  });
+
   it("matches committed expected outputs for the deferred vested path", async () => {
     resetDeterminismForTests();
     const SQL = await initSqlJs();

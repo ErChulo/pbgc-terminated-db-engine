@@ -1,11 +1,11 @@
-import { BENEFIT_KERNEL_OUTPUT_FIELDS } from "@pbgc/benefit-kernel";
 import type { StructuredIssue } from "@pbgc/shared";
+import { canonicalDdFieldName, V1_VE_OUTPUT_FIELDS } from "./ddMapping";
 import type { V1VeOutputPacket, V1VeOutputRow } from "./types";
 
 const WARNING_ON_NULL_FIELDS = new Set([
-  "term_mb_nrd_nsf",
-  "xrd_mb_term",
-  "pvmb_term",
+  "TERM_MB_NRD_NSF",
+  "XRD_MB_TERM",
+  "PVMB_TERM",
 ]);
 
 export function projectV1VeRow(packet: V1VeOutputPacket): { row: V1VeOutputRow; warnings: StructuredIssue[] } {
@@ -62,7 +62,7 @@ export function projectV1VeRow(packet: V1VeOutputPacket): { row: V1VeOutputRow; 
   };
 
   const warnings = Object.entries(row)
-    .filter(([field, value]) => value === null && WARNING_ON_NULL_FIELDS.has(field))
+    .filter(([field, value]) => value === null && WARNING_ON_NULL_FIELDS.has(canonicalDdFieldName(field)))
     .map(([field]) => ({
       code: "NULL_OUTPUT_FIELD",
       message: `Projected explicit null for ${field} because the reviewed branch is not populated`,
@@ -77,55 +77,5 @@ export function projectV1VeRow(packet: V1VeOutputPacket): { row: V1VeOutputRow; 
 }
 
 export function outputFieldNames(): string[] {
-  return [
-    "bcv_rec_id",
-    "custid",
-    "retstat",
-    "id",
-    "fname",
-    "lname",
-    "sfname",
-    "slname",
-    "psex",
-    "ssex",
-    "mstat",
-    "dob",
-    "sdob",
-    "dod",
-    "relation",
-    "non_spouse_benf",
-    "qdro_indicator",
-    "qpsa_indicator",
-    "calc_indicator",
-    "calculation_context",
-    "nrd",
-    "erd",
-    "eurd",
-    "eprd",
-    "rbd",
-    "xra",
-    "xrd",
-    "sxra",
-    "term_lw_xra",
-    "term_lw_anb",
-    "rettyp",
-    "form_code_nsf",
-    "form_code_nmf",
-    "form_code_ptp",
-    "form_code_ptp_qpsa",
-    "form_code_death",
-    "annuity_status_pay",
-    "lsoption",
-    "bs_ind",
-    "br_ind",
-    "ofa_indicator",
-    "eligibility_service_resolved",
-    "vesting_service_resolved",
-    "benefit_service_resolved",
-    "accrual_service_resolved",
-    "compensation_resolved",
-    "average_compensation_resolved",
-    "covered_compensation_resolved",
-    ...BENEFIT_KERNEL_OUTPUT_FIELDS,
-  ];
+  return [...V1_VE_OUTPUT_FIELDS];
 }
