@@ -12,15 +12,15 @@
 
 **Purpose**: Add the compensation-resolution package skeleton and register it with the existing browser-only Vite/sql.js workspace without implementing downstream modules.
 
-- [ ] T001 Create the compensation-resolution package manifest in packages/engine/compensation-resolution/package.json
-- [ ] T002 Create the compensation-resolution TypeScript config in packages/engine/compensation-resolution/tsconfig.json
-- [ ] T003 [P] Add the public compensation-resolution barrel placeholder in packages/engine/compensation-resolution/src/index.ts
-- [ ] T004 [P] Add the package source type placeholder in packages/engine/compensation-resolution/src/types.ts
-- [ ] T005 Register the compensation-resolution workspace dependency in apps/web/package.json
-- [ ] T006 Register the compensation-resolution alias in tsconfig.json
-- [ ] T007 Register the compensation-resolution test alias in vitest.config.ts
-- [ ] T008 [P] Add the compensation page placeholder module in apps/web/src/pages/CompensationResolutionPage.ts
-- [ ] T009 [P] Add the browser app state placeholder in apps/web/src/app/compensationResolutionSlice.ts
+- [X] T001 Create the compensation-resolution package manifest in packages/engine/compensation-resolution/package.json
+- [X] T002 Create the compensation-resolution TypeScript config in packages/engine/compensation-resolution/tsconfig.json
+- [X] T003 [P] Add the public compensation-resolution barrel placeholder in packages/engine/compensation-resolution/src/index.ts
+- [X] T004 [P] Add the package source type placeholder in packages/engine/compensation-resolution/src/types.ts
+- [X] T005 Register the compensation-resolution workspace dependency in apps/web/package.json
+- [X] T006 Register the compensation-resolution alias in tsconfig.json
+- [X] T007 Register the compensation-resolution test alias in vitest.config.ts
+- [X] T008 [P] Add the compensation page placeholder module in apps/web/src/pages/CompensationResolutionPage.ts
+- [X] T009 [P] Add the browser app state placeholder in apps/web/src/app/compensationResolutionSlice.ts
 
 ---
 
@@ -30,16 +30,16 @@
 
 **Critical**: No user story work can begin until this phase is complete.
 
-- [ ] T010 Add shared compensation-resolution module name support to StructuredIssue and ModuleTrace in packages/shared/src/types.ts
-- [ ] T011 Add compensation packet type support to engine input packet records in packages/db/src/repositories.ts
-- [ ] T012 Add repository helpers for inserting and listing compensation-bearing resolved_service_comp_output rows in packages/db/src/repositories.ts
-- [ ] T013 Add repository helper for preserving service columns while updating compensation columns in packages/db/src/repositories.ts
-- [ ] T014 Add compensation-resolution fixture CSV parsing utilities in packages/tests/compensation-resolution-fixtures.ts
-- [ ] T015 Add reviewed compensation packet fixture builders from compensation CSV rows in packages/engine/compensation-resolution/src/fixturePacketBuilder.ts
-- [ ] T016 Add deterministic compensation rule constants and module version exports in packages/engine/compensation-resolution/src/types.ts
-- [ ] T017 [P] Add compensation-resolution architecture notes in docs/architecture/compensation_resolution_slice_v0.1.0.md
-- [ ] T018 [P] Add compensation trace field mapping in docs/mappings/compensation_resolution_trace_map_v0.1.0.csv
-- [ ] T019 Verify no form-resolution, benefit-kernel, or output-adapter package is created for this slice under packages/engine/ and packages/output-adapters/
+- [X] T010 Add shared compensation-resolution module name support to StructuredIssue and ModuleTrace in packages/shared/src/types.ts
+- [X] T011 Add compensation packet type support to engine input packet records in packages/db/src/repositories.ts
+- [X] T012 Add repository helpers for inserting and listing compensation-bearing resolved_service_comp_output rows in packages/db/src/repositories.ts
+- [X] T013 Add repository helper for preserving service columns while updating compensation columns in packages/db/src/repositories.ts
+- [X] T014 Add compensation-resolution fixture CSV parsing utilities in packages/tests/compensation-resolution-fixtures.ts
+- [X] T015 Add reviewed compensation packet fixture builders from compensation CSV rows in packages/engine/compensation-resolution/src/fixturePacketBuilder.ts
+- [X] T016 Add deterministic compensation rule constants and module version exports in packages/engine/compensation-resolution/src/types.ts
+- [X] T017 [P] Add compensation-resolution architecture notes in docs/architecture/compensation_resolution_slice_v0.1.0.md
+- [X] T018 [P] Add compensation trace field mapping in docs/mappings/compensation_resolution_trace_map_v0.1.0.csv
+- [X] T019 Verify no form-resolution, benefit-kernel, or output-adapter package is created for this slice under packages/engine/ and packages/output-adapters/
 
 **Checkpoint**: Foundation ready. User story implementation can start after this phase.
 
@@ -53,27 +53,27 @@
 
 ### Tests for User Story 1
 
-- [ ] T020 [P] [US1] Add contract-shape tests for RunCompensationResolutionRequest and RunCompensationResolutionResult in packages/tests/compensation-resolution-contract.test.ts
-- [ ] T021 [P] [US1] Add deterministic output tests for CR001-CR003 compensation quantities in packages/tests/compensation-resolution-output.test.ts
-- [ ] T022 [P] [US1] Add frozen-benefit support warning and explicit-null output assertions in packages/tests/compensation-resolution-output.test.ts
-- [ ] T023 [P] [US1] Add sql.js persistence tests for engine_run and resolved_service_comp_output compensation columns in packages/tests/compensation-resolution-persistence.test.ts
-- [ ] T024 [P] [US1] Add service-column preservation assertions for resolved_service_comp_output in packages/tests/compensation-resolution-persistence.test.ts
+- [X] T020 [P] [US1] Add contract-shape tests for RunCompensationResolutionRequest and RunCompensationResolutionResult in packages/tests/compensation-resolution-contract.test.ts
+- [X] T021 [P] [US1] Add deterministic output tests for CR001-CR003 compensation quantities in packages/tests/compensation-resolution-output.test.ts
+- [X] T022 [P] [US1] Add frozen-benefit support warning and explicit-null output assertions in packages/tests/compensation-resolution-output.test.ts
+- [X] T023 [P] [US1] Add sql.js persistence tests for engine_run and resolved_service_comp_output compensation columns in packages/tests/compensation-resolution-persistence.test.ts
+- [X] T024 [P] [US1] Add service-column preservation assertions for resolved_service_comp_output in packages/tests/compensation-resolution-persistence.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T025 [US1] Implement compensation packet validation for required groups and fixture-supported controlled values in packages/engine/compensation-resolution/src/validatePacket.ts
-- [ ] T026 [US1] Implement final-average-pay and covered-compensation fixture rule calculations in packages/engine/compensation-resolution/src/compensationMath.ts
-- [ ] T027 [US1] Implement compensation output resolution for compensation, average compensation, and covered compensation in packages/engine/compensation-resolution/src/resolveCompensation.ts
-- [ ] T028 [US1] Implement frozen-benefit support warning generation without fallback compensation values in packages/engine/compensation-resolution/src/resolveCompensation.ts
-- [ ] T029 [US1] Implement compensation run orchestration with engine_run persistence in packages/engine/compensation-resolution/src/runCompensationResolution.ts
-- [ ] T030 [US1] Persist successful compensation outputs to resolved_service_comp_output compensation columns only in packages/engine/compensation-resolution/src/runCompensationResolution.ts
-- [ ] T031 [US1] Preserve existing service fields when writing compensation outputs in packages/engine/compensation-resolution/src/runCompensationResolution.ts
-- [ ] T032 [US1] Export compensation-resolution runtime APIs from packages/engine/compensation-resolution/src/index.ts
-- [ ] T033 [US1] Integrate compensation fixture loading and run actions into apps/web/src/app/compensationResolutionSlice.ts
-- [ ] T034 [US1] Render the compensation-resolution fixture runner and resolved output table in apps/web/src/pages/CompensationResolutionPage.ts
-- [ ] T035 [US1] Add compensation-resolution navigation without removing date or service access in apps/web/src/main.ts
-- [ ] T036 [US1] Add compensation-resolution view styles in apps/web/src/styles.css
-- [ ] T037 [US1] Verify User Story 1 with npm test -- packages/tests/compensation-resolution-output.test.ts packages/tests/compensation-resolution-persistence.test.ts
+- [X] T025 [US1] Implement compensation packet validation for required groups and fixture-supported controlled values in packages/engine/compensation-resolution/src/validatePacket.ts
+- [X] T026 [US1] Implement final-average-pay and covered-compensation fixture rule calculations in packages/engine/compensation-resolution/src/compensationMath.ts
+- [X] T027 [US1] Implement compensation output resolution for compensation, average compensation, and covered compensation in packages/engine/compensation-resolution/src/resolveCompensation.ts
+- [X] T028 [US1] Implement frozen-benefit support warning generation without fallback compensation values in packages/engine/compensation-resolution/src/resolveCompensation.ts
+- [X] T029 [US1] Implement compensation run orchestration with engine_run persistence in packages/engine/compensation-resolution/src/runCompensationResolution.ts
+- [X] T030 [US1] Persist successful compensation outputs to resolved_service_comp_output compensation columns only in packages/engine/compensation-resolution/src/runCompensationResolution.ts
+- [X] T031 [US1] Preserve existing service fields when writing compensation outputs in packages/engine/compensation-resolution/src/runCompensationResolution.ts
+- [X] T032 [US1] Export compensation-resolution runtime APIs from packages/engine/compensation-resolution/src/index.ts
+- [X] T033 [US1] Integrate compensation fixture loading and run actions into apps/web/src/app/compensationResolutionSlice.ts
+- [X] T034 [US1] Render the compensation-resolution fixture runner and resolved output table in apps/web/src/pages/CompensationResolutionPage.ts
+- [X] T035 [US1] Add compensation-resolution navigation without removing date or service access in apps/web/src/main.ts
+- [X] T036 [US1] Add compensation-resolution view styles in apps/web/src/styles.css
+- [X] T037 [US1] Verify User Story 1 with npm test -- packages/tests/compensation-resolution-output.test.ts packages/tests/compensation-resolution-persistence.test.ts
 
 **Checkpoint**: User Story 1 is functional and independently testable as the MVP.
 
@@ -135,14 +135,14 @@
 **Purpose**: Complete regression, static-browser verification, docs alignment, and committed build output.
 
 - [ ] T057 [P] Add prior-slice regression guard to the compensation validation command notes in specs/003-compensation-resolution-slice/quickstart.md
-- [ ] T058 [P] Update implementation completion notes in docs/architecture/compensation_resolution_slice_v0.1.0.md
-- [ ] T059 Run all deterministic tests with npm test and fix issues in packages/tests/
-- [ ] T060 Run lint/type checks with npm run lint and fix issues in packages/engine/compensation-resolution/src/
-- [ ] T061 Run the static browser build with npm run build and update committed assets under apps/web/dist/
-- [ ] T062 Start the Vite app and validate the quickstart flow in apps/web/src/pages/CompensationResolutionPage.ts
-- [ ] T063 Confirm browser-only/no-network execution by inspecting compensation-resolution imports in packages/engine/compensation-resolution/src/
-- [ ] T064 Confirm form resolution, benefit kernel, V1/VE, valuation listing, and BSRS implementations remain out of scope in packages/engine/ and packages/output-adapters/
-- [ ] T065 Update task completion checkboxes in specs/003-compensation-resolution-slice/tasks.md after implementation verification
+- [X] T058 [P] Update implementation completion notes in docs/architecture/compensation_resolution_slice_v0.1.0.md
+- [X] T059 Run all deterministic tests with npm test and fix issues in packages/tests/
+- [X] T060 Run lint/type checks with npm run lint and fix issues in packages/engine/compensation-resolution/src/
+- [X] T061 Run the static browser build with npm run build and update committed assets under apps/web/dist/
+- [X] T062 Start the Vite app and validate the quickstart flow in apps/web/src/pages/CompensationResolutionPage.ts
+- [X] T063 Confirm browser-only/no-network execution by inspecting compensation-resolution imports in packages/engine/compensation-resolution/src/
+- [X] T064 Confirm form resolution, benefit kernel, V1/VE, valuation listing, and BSRS implementations remain out of scope in packages/engine/ and packages/output-adapters/
+- [X] T065 Update task completion checkboxes in specs/003-compensation-resolution-slice/tasks.md after implementation verification
 
 ---
 

@@ -14,7 +14,8 @@
       "@pbgc/shared": ["packages/shared/src/index.ts"],
       "@pbgc/db": ["packages/db/src/index.ts"],
       "@pbgc/date-resolution": ["packages/engine/date-resolution/src/index.ts"],
-      "@pbgc/service-resolution": ["packages/engine/service-resolution/src/index.ts"]
+      "@pbgc/service-resolution": ["packages/engine/service-resolution/src/index.ts"],
+      "@pbgc/compensation-resolution": ["packages/engine/compensation-resolution/src/index.ts"]
     },
     "types": ["vitest/globals", "node"]
   }
