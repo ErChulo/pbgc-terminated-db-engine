@@ -1,0 +1,12 @@
+output_field,input_groups,rule_branch,trace_notes
+rettyp,participant_role_population|benefit_administration_state,fixture_deferred_or_in_pay,Retirement type from reviewed payment and retirement status
+form_code_nsf,resolved_plan_logic,fixture_form_rules,Normal single form code from reviewed normal_single_form_rule
+form_code_nmf,resolved_plan_logic,fixture_form_rules,Normal married form code from reviewed normal_married_form_rule
+form_code_ptp,benefit_administration_state|in_pay_packet,fixture_in_pay,Preserved in-pay form code without benefit calculation
+form_code_ptp_qpsa,participant_role_population|qpsa_packet,fixture_qpsa,Reviewed QPSA form treatment
+form_code_death,resolved_plan_logic|death_benefit_packet,fixture_deferred,Pre-retirement death form from reviewed rule
+annuity_status_pay,benefit_administration_state|in_pay_packet,fixture_in_pay,Reviewed current-pay status
+lsoption,resolved_plan_logic|limitation_packet,fixture_form_rules,Lump-sum option resolved from reviewed lump-sum rule
+bs_ind,participant_role_population|qdro_packet,fixture_qdro,QDRO-aware beneficiary status indicator
+br_ind,participant_role_population,fixture_form_rules,Beneficiary role indicator
+ofa_indicator,benefit_administration_state,fixture_in_pay,Other form/admin indicator for reviewed in-pay state

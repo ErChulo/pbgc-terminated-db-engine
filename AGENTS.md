@@ -53,5 +53,5 @@ Any delivered .sql, .js, .ts, or .tex artifact must be stored with appended .txt
 - Preserve traceability for every computed output
 
 <!-- SPECKIT START -->
-Current feature plan: `specs/003-compensation-resolution-slice/plan.md`
+Current feature plan: `specs/004-form-resolution-slice/plan.md`
 <!-- SPECKIT END -->

@@ -3,6 +3,7 @@ import type { EngineRunRecord, ModuleTrace } from "@pbgc/shared";
 import type { DateResolutionOutput, DateResolutionPacket } from "@pbgc/date-resolution";
 import type { ServiceResolutionOutput, ServiceResolutionPacket } from "@pbgc/service-resolution";
 import type { CompensationResolutionOutput, CompensationResolutionPacket } from "@pbgc/compensation-resolution";
+import type { FormResolutionOutput, FormResolutionPacket } from "@pbgc/form-resolution";
 import { queryAll, queryOne } from "./sqljs";
 
 export type EngineInputPacketRecord = {
@@ -10,7 +11,7 @@ export type EngineInputPacketRecord = {
   case_id: string;
   subject_key: string;
   subject_type: string;
-  packet_type: "date_resolution" | "service_resolution" | "compensation_resolution";
+  packet_type: "date_resolution" | "service_resolution" | "compensation_resolution" | "form_resolution";
   schema_version: string;
   packet_json: string;
   built_from_resolved_at: string | null;
@@ -156,6 +157,50 @@ export function listResolvedCompensationOutputs(db: Database): CompensationResol
   return queryAll(db, "SELECT * FROM resolved_service_comp_output ORDER BY resolved_service_comp_output_id") as CompensationResolutionOutput[];
 }
 
+export function insertResolvedFormsOutput(db: Database, output: FormResolutionOutput): void {
+  db.run(
+    `INSERT INTO resolved_forms_output (
+      resolved_forms_output_id, calculation_run_id, case_id, subject_key,
+      rettyp, form_code_nsf, form_code_nmf, form_code_ptp, form_code_ptp_qpsa,
+      form_code_death, annuity_status_pay, lsoption, bs_ind, br_ind, ofa_indicator
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      output.resolved_forms_output_id,
+      output.calculation_run_id,
+      output.case_id,
+      output.subject_key,
+      output.rettyp,
+      output.form_code_nsf,
+      output.form_code_nmf,
+      output.form_code_ptp,
+      output.form_code_ptp_qpsa,
+      output.form_code_death,
+      output.annuity_status_pay,
+      output.lsoption,
+      output.bs_ind,
+      output.br_ind,
+      output.ofa_indicator,
+    ],
+  );
+}
+
+export function listResolvedFormsOutputs(db: Database): FormResolutionOutput[] {
+  return queryAll(db, "SELECT * FROM resolved_forms_output ORDER BY resolved_forms_output_id") as FormResolutionOutput[];
+}
+
+export function listFormRunsWithTrace(db: Database): Array<FormResolutionOutput & { trace_count: number }> {
+  return queryAll(
+    db,
+    `SELECT rfo.*, COUNT(mt.module_trace_id) AS trace_count
+     FROM resolved_forms_output rfo
+     LEFT JOIN module_trace mt
+       ON mt.calculation_run_id = rfo.calculation_run_id
+      AND mt.module_name = 'form_resolution'
+     GROUP BY rfo.resolved_forms_output_id
+     ORDER BY rfo.resolved_forms_output_id`,
+  ) as Array<FormResolutionOutput & { trace_count: number }>;
+}
+
 export function insertModuleTrace(db: Database, trace: ModuleTrace): void {
   db.run(
     `INSERT INTO module_trace (
@@ -186,10 +231,11 @@ export function listModuleTraces(db: Database, calculationRunId: string, moduleN
 }
 
 export function parsePacketJson<
-  TPacket extends DateResolutionPacket | ServiceResolutionPacket | CompensationResolutionPacket =
+  TPacket extends DateResolutionPacket | ServiceResolutionPacket | CompensationResolutionPacket | FormResolutionPacket =
     | DateResolutionPacket
     | ServiceResolutionPacket
-    | CompensationResolutionPacket,
+    | CompensationResolutionPacket
+    | FormResolutionPacket,
 >(
   record: EngineInputPacketRecord,
 ): TPacket {
