@@ -39,12 +39,14 @@
 - [ ] T011 [P] [US1] Add repeated-run determinism regression for `date_resolution`, `service_resolution`, `compensation_resolution`, and `form_resolution` in `packages/tests/hardening-determinism-core.test.ts`
 - [ ] T012 [P] [US1] Add repeated-run determinism regression for `benefit_kernel`, `v1_ve_output`, `valuation_listings_output`, and `bsrs_configuration_output` in `packages/tests/hardening-determinism-output.test.ts`
 - [ ] T013 [P] [US1] Add output-shape stability regression for the committed adapter contracts in `packages/tests/hardening-output-shape.test.ts`
+- [ ] T014 [P] [US1] Add reviewed-input boundary regression that blocks disallowed raw or unreviewed inputs before deterministic output or persistence work begins in `packages/tests/hardening-reviewed-input.test.ts`
+- [ ] T015 [P] [US1] Add structured warning and error payload stability regression across repeated runs in `packages/tests/hardening-warning-error-stability.test.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T014 [US1] Wire the repeated-run comparison helpers into `packages/tests/hardening-determinism-core.test.ts`
-- [ ] T015 [US1] Wire the repeated-run comparison helpers into `packages/tests/hardening-determinism-output.test.ts`
-- [ ] T016 [US1] Wire the output-shape assertions into `packages/tests/hardening-output-shape.test.ts`
+- [ ] T016 [US1] Wire the repeated-run comparison helpers into `packages/tests/hardening-determinism-core.test.ts`
+- [ ] T017 [US1] Wire the repeated-run comparison helpers into `packages/tests/hardening-determinism-output.test.ts`
+- [ ] T018 [US1] Wire the output-shape assertions into `packages/tests/hardening-output-shape.test.ts`
 
 **Checkpoint**: The committed slices should now prove stable across repeated runs
 
@@ -56,14 +58,14 @@
 
 ### Tests for User Story 2
 
-- [ ] T017 [P] [US2] Add DD.csv canonical-name regression for `v1_ve_output` and `valuation_listings_output` fields in `packages/tests/hardening-dd-output.test.ts`
-- [ ] T018 [P] [US2] Add DD.csv canonical-name regression and approved fallback coverage for `bsrs_configuration_output` fields in `packages/tests/hardening-dd-bsrs.test.ts`
-- [ ] T019 [P] [US2] Add adapter-exclusion regression across the existing output adapters in `packages/tests/hardening-adapter-boundaries.test.ts`
+- [ ] T019 [P] [US2] Add DD.csv canonical-name regression for `v1_ve_output` and `valuation_listings_output` fields in `packages/tests/hardening-dd-output.test.ts`
+- [ ] T020 [P] [US2] Add DD.csv canonical-name regression and approved fallback coverage for `bsrs_configuration_output` fields in `packages/tests/hardening-dd-bsrs.test.ts`
+- [ ] T021 [P] [US2] Add adapter-exclusion regression across the existing output adapters in `packages/tests/hardening-adapter-boundaries.test.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T020 [US2] Wire the canonical DD lookup assertions into `packages/tests/hardening-dd-helpers.ts`
-- [ ] T021 [US2] Wire the unrelated-table absence assertions into `packages/tests/hardening-adapter-boundaries.test.ts`
+- [ ] T022 [US2] Wire the canonical DD lookup assertions into `packages/tests/hardening-dd-helpers.ts`
+- [ ] T023 [US2] Wire the unrelated-table absence assertions into `packages/tests/hardening-adapter-boundaries.test.ts`
 
 **Checkpoint**: DD-first naming and adapter isolation should be protected by regression checks
 
@@ -75,16 +77,16 @@
 
 ### Tests for User Story 3
 
-- [ ] T022 [P] [US3] Add persistence-boundary regression for `engine_run` and committed output rows in `packages/tests/hardening-persistence.test.ts`
-- [ ] T023 [P] [US3] Add traceability regression for module traces and rule versions in `packages/tests/hardening-trace.test.ts`
-- [ ] T024 [P] [US3] Add browser-only runtime boundary regression in `packages/tests/hardening-browser-boundary.test.ts`
-- [ ] T025 [P] [US3] Add BSRS template and guidance alignment regression in `packages/tests/hardening-bsrs-template.test.ts`
+- [ ] T024 [P] [US3] Add persistence-boundary regression for `engine_run` and committed output rows in `packages/tests/hardening-persistence.test.ts`
+- [ ] T025 [P] [US3] Add traceability regression for module traces and rule versions in `packages/tests/hardening-trace.test.ts`
+- [ ] T026 [P] [US3] Add browser-only runtime boundary regression in `packages/tests/hardening-browser-boundary.test.ts`
+- [ ] T027 [P] [US3] Add BSRS template and guidance alignment regression in `packages/tests/hardening-bsrs-template.test.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T026 [P] [US3] Wire sqlite table-count helpers into `packages/tests/hardening-db-helpers.ts`
-- [ ] T027 [P] [US3] Wire trace comparison helpers into `packages/tests/hardening-trace-helpers.ts`
-- [ ] T028 [US3] Wire template-alignment assertions into `packages/tests/hardening-bsrs-template.test.ts`
+- [ ] T028 [P] [US3] Wire sqlite table-count helpers into `packages/tests/hardening-db-helpers.ts`
+- [ ] T029 [P] [US3] Wire trace comparison helpers into `packages/tests/hardening-trace-helpers.ts`
+- [ ] T030 [US3] Wire template-alignment assertions into `packages/tests/hardening-bsrs-template.test.ts`
 
 **Checkpoint**: Browser-only persistence, traceability, and template alignment should now be covered
 
@@ -92,11 +94,11 @@
 
 **Purpose**: Validate the hardening review slice as a whole and refresh the committed artifacts if runtime output changes
 
-- [ ] T029 [P] Update hardening quickstart validation notes in `specs/010-engine-hardening-review/quickstart.md`
-- [ ] T030 [P] Update the hardening architecture note with regression invariants in `docs/architecture/engine-hardening-review_v0.1.0.md`
-- [ ] T031 [P] Run lint and full test suite validation for the hardening regressions in `packages/tests/` and `apps/web/`
-- [ ] T032 [P] Refresh the committed browser build only if hardening checks change runtime output in `apps/web/dist/`
-- [ ] T033 [P] Verify checklist completeness in `specs/010-engine-hardening-review/checklists/requirements.md`
+- [ ] T031 [P] Update hardening quickstart validation notes in `specs/010-engine-hardening-review/quickstart.md`
+- [ ] T032 [P] Update the hardening architecture note with regression invariants in `docs/architecture/engine-hardening-review_v0.1.0.md`
+- [ ] T033 [P] Run lint and full test suite validation for the hardening regressions in `packages/tests/` and `apps/web/`
+- [ ] T034 [P] Refresh the committed browser build only if hardening checks change runtime output in `apps/web/dist/`
+- [ ] T035 [P] Verify checklist completeness in `specs/010-engine-hardening-review/checklists/requirements.md`
 
 ---
 
@@ -129,7 +131,7 @@
 - User Story 1 test tasks `T011` to `T013` can run in parallel
 - User Story 2 test tasks `T017` to `T019` can run in parallel
 - User Story 3 test tasks `T022` to `T025` can run in parallel
-- Polish tasks `T029` to `T033` can run in parallel where file paths do not overlap
+- Polish tasks `T031` to `T035` can run in parallel where file paths do not overlap
 
 ---
 
@@ -148,4 +150,3 @@
 2. Add DD.csv and adapter-boundary protection next
 3. Add persistence, traceability, and template-alignment protection last
 4. Refresh committed browser output only if the hardening checks prove the runtime output changed
-
