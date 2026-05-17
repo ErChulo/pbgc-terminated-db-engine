@@ -51,3 +51,7 @@ Any delivered .sql, .js, .ts, or .tex artifact must be stored with appended .txt
 - No silent fallbacks
 - Emit structured warnings and errors
 - Preserve traceability for every computed output
+
+<!-- SPECKIT START -->
+Current feature plan: `specs/001-date-resolution-slice/plan.md`
+<!-- SPECKIT END -->
