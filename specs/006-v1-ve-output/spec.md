@@ -1,6 +1,6 @@
 # Feature Specification: V1/VE Output
 
-**Feature Branch**: `[007-v1-ve-output]`
+**Feature Branch**: `[006-v1-ve-output-slice]`
 
 **Created**: 2026-05-17
 
