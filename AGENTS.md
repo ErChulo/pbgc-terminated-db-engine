@@ -53,5 +53,10 @@ Any delivered .sql, .js, .ts, or .tex artifact must be stored with appended .txt
 - Preserve traceability for every computed output
 
 <!-- SPECKIT START -->
-Current feature plan: `specs/005-benefit-kernel-slice/plan.md`
+Current feature plan: `specs/006-v1-ve-output/plan.md`
 <!-- SPECKIT END -->
+
+## V1 data dictionary invariant
+- DD.csv is the canonical naming layer for V1 field semantics.
+- Every V1/VE field must first map to DD.csv when a matching DD field exists.
+- Do not invent alternate semantic names for V1 fields when a DD.csv field is available.

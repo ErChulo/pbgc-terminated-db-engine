@@ -6,7 +6,7 @@ export type StructuredIssue = {
   field_name?: string;
   input_group?: string;
   input_packet_id?: string;
-  module_name: "date_resolution" | "service_resolution" | "compensation_resolution" | "form_resolution" | "benefit_kernel";
+  module_name: "date_resolution" | "service_resolution" | "compensation_resolution" | "form_resolution" | "benefit_kernel" | "v1_ve_output";
   rule_version: string;
 };
 
@@ -19,7 +19,7 @@ export type TraceInputField = {
 export type ModuleTrace = {
   module_trace_id: string;
   calculation_run_id: string;
-  module_name: "date_resolution" | "service_resolution" | "compensation_resolution" | "form_resolution" | "benefit_kernel";
+  module_name: "date_resolution" | "service_resolution" | "compensation_resolution" | "form_resolution" | "benefit_kernel" | "v1_ve_output";
   subject_key: string;
   field_name: string;
   rule_applied: string;

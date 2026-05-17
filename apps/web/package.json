@@ -14,6 +14,7 @@
     "@pbgc/date-resolution": "0.1.0",
     "@pbgc/benefit-kernel": "0.1.0",
     "@pbgc/form-resolution": "0.1.0",
+    "@pbgc/v1-ve-output": "0.1.0",
     "@pbgc/service-resolution": "0.1.0",
     "@pbgc/shared": "0.1.0",
     "sql.js": "^1.12.0"

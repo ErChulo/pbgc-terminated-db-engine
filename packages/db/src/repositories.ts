@@ -5,6 +5,7 @@ import type { BenefitKernelOutput, BenefitKernelPacket } from "@pbgc/benefit-ker
 import type { ServiceResolutionOutput, ServiceResolutionPacket } from "@pbgc/service-resolution";
 import type { CompensationResolutionOutput, CompensationResolutionPacket } from "@pbgc/compensation-resolution";
 import type { FormResolutionOutput, FormResolutionPacket } from "@pbgc/form-resolution";
+import type { V1VeOutputPacket, V1VeOutputRowRecord } from "@pbgc/v1-ve-output";
 import { queryAll, queryOne } from "./sqljs";
 
 export type EngineInputPacketRecord = {
@@ -12,7 +13,7 @@ export type EngineInputPacketRecord = {
   case_id: string;
   subject_key: string;
   subject_type: string;
-  packet_type: "date_resolution" | "service_resolution" | "compensation_resolution" | "form_resolution" | "benefit_kernel";
+  packet_type: "date_resolution" | "service_resolution" | "compensation_resolution" | "form_resolution" | "benefit_kernel" | "v1_ve_output";
   schema_version: string;
   packet_json: string;
   built_from_resolved_at: string | null;
@@ -290,6 +291,54 @@ export function listBenefitKernelRunsWithTrace(db: Database): Array<BenefitKerne
   ) as Array<BenefitKernelOutput & { trace_count: number }>;
 }
 
+export function insertResolvedV1VeOutput(
+  db: Database,
+  output: {
+    v1_ve_output_row_id: string;
+    calculation_run_id: string;
+    case_id: string;
+    plan_id: string;
+    subject_key: string;
+    row_json: string;
+    listing_sort_key: string | null;
+    adapter_version: string;
+  },
+): void {
+  db.run(
+    `INSERT INTO v1_ve_output_row (
+      v1_ve_output_row_id, calculation_run_id, case_id, plan_id, subject_key,
+      row_json, listing_sort_key, adapter_version
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      output.v1_ve_output_row_id,
+      output.calculation_run_id,
+      output.case_id,
+      output.plan_id,
+      output.subject_key,
+      output.row_json,
+      output.listing_sort_key,
+      output.adapter_version,
+    ],
+  );
+}
+
+export function listResolvedV1VeOutputs(db: Database): V1VeOutputRowRecord[] {
+  return queryAll(db, "SELECT * FROM v1_ve_output_row ORDER BY v1_ve_output_row_id") as V1VeOutputRowRecord[];
+}
+
+export function listV1VeRunsWithTrace(db: Database): Array<V1VeOutputRowRecord & { trace_count: number }> {
+  return queryAll(
+    db,
+    `SELECT v1.*, COUNT(mt.module_trace_id) AS trace_count
+     FROM v1_ve_output_row v1
+     LEFT JOIN module_trace mt
+       ON mt.calculation_run_id = v1.calculation_run_id
+      AND mt.module_name = 'v1_ve_output'
+     GROUP BY v1.v1_ve_output_row_id
+     ORDER BY v1.v1_ve_output_row_id`,
+  ) as Array<V1VeOutputRowRecord & { trace_count: number }>;
+}
+
 export function insertModuleTrace(db: Database, trace: ModuleTrace): void {
   db.run(
     `INSERT INTO module_trace (
@@ -320,12 +369,13 @@ export function listModuleTraces(db: Database, calculationRunId: string, moduleN
 }
 
 export function parsePacketJson<
-  TPacket extends DateResolutionPacket | ServiceResolutionPacket | CompensationResolutionPacket | FormResolutionPacket | BenefitKernelPacket =
+  TPacket extends DateResolutionPacket | ServiceResolutionPacket | CompensationResolutionPacket | FormResolutionPacket | BenefitKernelPacket | V1VeOutputPacket =
     | DateResolutionPacket
     | ServiceResolutionPacket
     | CompensationResolutionPacket
     | FormResolutionPacket
-    | BenefitKernelPacket,
+    | BenefitKernelPacket
+    | V1VeOutputPacket,
 >(
   record: EngineInputPacketRecord,
 ): TPacket {
