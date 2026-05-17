@@ -74,6 +74,7 @@ As a case reviewer, I want every V1/VE field to remain traceable to reviewed inp
 - **FR-007**: System MUST persist successful V1/VE outputs as deterministic engine outputs and MUST NOT write valuation-listings, BSRS configuration, or other downstream adapter outputs in this slice.
 - **FR-008**: System MUST produce identical V1/VE outputs for the same reviewed input packet, output version, and rule version.
 - **FR-009**: System MUST support the output families defined by the committed V1/VE contract, including identity, date, form-state, Title IV, Section 4022(c), termination-benefit, nonguaranteed, present-value factor, and trace fields.
+- **FR-010**: System MUST map each V1/VE field through `artifacts/mappings/DD.csv` first when a matching DD field exists, and MUST preserve the DD canonical name in the mapping helper and trace metadata.
 
 ### Deterministic Boundary *(mandatory)*
 
@@ -104,5 +105,12 @@ As a case reviewer, I want every V1/VE field to remain traceable to reviewed inp
 
 - Reviewed upstream outputs from date, service, compensation, form, and benefit-kernel slices already exist before V1/VE generation begins.
 - The V1/VE contract is the authoritative field list for this slice; valuation listings and BSRS configuration remain downstream references only.
+- `artifacts/mappings/DD.csv` is the canonical naming layer for V1 field semantics and is the first mapping source for any V1/VE field that has a matching DD entry.
 - Missing optional branch data is represented as explicit nulls rather than inferred fallback values.
 - The feature is delivered through the project's existing reviewed-casework workflow and release process.
+
+## V1 Data Dictionary Invariant
+
+`artifacts/mappings/DD.csv` is the canonical naming layer for V1 field semantics.
+
+Every V1/VE field must first map to `artifacts/mappings/DD.csv` when a matching DD field exists.

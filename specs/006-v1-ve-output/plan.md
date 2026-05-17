@@ -11,11 +11,12 @@ Deliver the sixth executable PBGC terminated defined-benefit engine slice:
 the implemented `date_resolution`, `service_resolution`,
 `compensation_resolution`, `form_resolution`, and `benefit_kernel` slices. The
 slice reuses the committed v0.1.0 contracts, schemas, migrations, seeds,
-templates, and related output fields to transform reviewed inputs and upstream
-deterministic outputs into the structured V1/VE-ready output packet and
-persisted adapter row required for downstream spreadsheet population. Valuation
-listings, BSRS configuration, and other output adapters remain outside
-implementation scope except as referenced contracts.
+templates, related output fields, and `artifacts/mappings/DD.csv` to transform
+reviewed inputs and upstream deterministic outputs into the structured V1/VE-
+ready output packet and persisted adapter row required for downstream
+spreadsheet population. Valuation listings, BSRS configuration, and other
+output adapters remain outside implementation scope except as referenced
+contracts.
 
 ## Technical Context
 
@@ -73,6 +74,8 @@ adapters are dependency references only.
 - Traceability: PASS. Outputs require `engine_run`, `v1_ve_output_row`, and
   trace records that preserve packet, upstream output, module, rule branch, and
   output-field context.
+- DD naming: PASS. V1/VE field semantics are resolved through
+  `artifacts/mappings/DD.csv` first when a matching DD entry exists.
 - Modular contracts: PASS. The executable scope is limited to
   `v1_ve_output_contract_v0.1.0.md`; valuation listings, BSRS, and other
   adapter contracts are dependency references only.
@@ -172,3 +175,11 @@ See [data-model.md](./data-model.md),
   `v1_ve_output` contract without changing downstream adapter contracts.
 - Versioned deliverables: PASS. Plan references existing v0.1.0 artifacts and
   requires committed `dist` updates when implementation changes runtime output.
+
+## V1 Data Dictionary Invariant
+
+Implementation must treat `artifacts/mappings/DD.csv` as the canonical naming
+layer for V1 field semantics.
+
+Every V1/VE field must first map to `artifacts/mappings/DD.csv` when a matching
+DD field exists.
