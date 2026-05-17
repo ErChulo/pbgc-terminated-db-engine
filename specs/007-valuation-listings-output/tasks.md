@@ -12,15 +12,15 @@
 
 **Purpose**: Add the valuation-listings package skeleton and register it with the existing browser-only Vite/sql.js workspace without implementing BSRS modules.
 
-- [ ] T001 Create the valuation-listings package manifest in packages/engine/valuation-listings-output/package.json
-- [ ] T002 Create the valuation-listings TypeScript config in packages/engine/valuation-listings-output/tsconfig.json
-- [ ] T003 [P] Add the public valuation-listings barrel placeholder in packages/engine/valuation-listings-output/src/index.ts
-- [ ] T004 [P] Add the package source type placeholder in packages/engine/valuation-listings-output/src/types.ts
-- [ ] T005 Register the valuation-listings workspace dependency in apps/web/package.json
-- [ ] T006 Register the valuation-listings alias in tsconfig.json
-- [ ] T007 Register the valuation-listings test alias in vitest.config.ts
-- [ ] T008 [P] Add the valuation-listings page placeholder module in apps/web/src/pages/ValuationListingsOutputPage.ts
-- [ ] T009 [P] Add the browser app state placeholder in apps/web/src/app/valuationListingsOutputSlice.ts
+- [X] T001 Create the valuation-listings package manifest in packages/engine/valuation-listings-output/package.json
+- [X] T002 Create the valuation-listings TypeScript config in packages/engine/valuation-listings-output/tsconfig.json
+- [X] T003 [P] Add the public valuation-listings barrel placeholder in packages/engine/valuation-listings-output/src/index.ts
+- [X] T004 [P] Add the package source type placeholder in packages/engine/valuation-listings-output/src/types.ts
+- [X] T005 Register the valuation-listings workspace dependency in apps/web/package.json
+- [X] T006 Register the valuation-listings alias in tsconfig.json
+- [X] T007 Register the valuation-listings test alias in vitest.config.ts
+- [X] T008 [P] Add the valuation-listings page placeholder module in apps/web/src/pages/ValuationListingsOutputPage.ts
+- [X] T009 [P] Add the browser app state placeholder in apps/web/src/app/valuationListingsOutputSlice.ts
 
 ---
 
@@ -30,17 +30,17 @@
 
 **Critical**: No user story work can begin until this phase is complete.
 
-- [ ] T010 Add shared valuation-listings module name support to StructuredIssue and ModuleTrace in packages/shared/src/types.ts
-- [ ] T011 Add valuation_listings_output packet type support to engine input packet records in packages/db/src/repositories.ts
-- [ ] T012 Add repository helpers for inserting and listing valuation_listings_output_row rows in packages/db/src/repositories.ts
-- [ ] T013 Add repository helper for fetching valuation-listing runs with trace rows in packages/db/src/repositories.ts
-- [ ] T014 Add valuation-listings fixture packet parsing utilities in packages/tests/valuation-listings-output-fixtures.ts
-- [ ] T015 Add reviewed valuation-listings packet fixture builders from committed contract rows in packages/engine/valuation-listings-output/src/fixturePacketBuilder.ts
-- [ ] T016 Add deterministic valuation-listings field lists, row-family exports, and module version exports in packages/engine/valuation-listings-output/src/types.ts
+- [X] T010 Add shared valuation-listings module name support to StructuredIssue and ModuleTrace in packages/shared/src/types.ts
+- [X] T011 Add valuation_listings_output packet type support to engine input packet records in packages/db/src/repositories.ts
+- [X] T012 Add repository helpers for inserting and listing valuation_listings_output_row rows in packages/db/src/repositories.ts
+- [X] T013 Add repository helper for fetching valuation-listing runs with trace rows in packages/db/src/repositories.ts
+- [X] T014 Add valuation-listings fixture packet parsing utilities in packages/tests/valuation-listings-output-fixtures.ts
+- [X] T015 Add reviewed valuation-listings packet fixture builders from committed contract rows in packages/engine/valuation-listings-output/src/fixturePacketBuilder.ts
+- [X] T016 Add deterministic valuation-listings field lists, row-family exports, and module version exports in packages/engine/valuation-listings-output/src/types.ts
 - [ ] T017 [P] Add valuation-listings architecture notes in docs/architecture/valuation_listings_output_slice_v0.1.0.md
 - [ ] T018 [P] Add valuation-listings trace field mapping in docs/mappings/valuation_listings_output_trace_map_v0.1.0.csv
-- [ ] T019 [P] Add the DD.csv canonical naming helper and lookup table for valuation-listings field semantics in packages/engine/valuation-listings-output/src/ddMapping.ts
-- [ ] T020 Verify no BSRS configuration or other output-adapter package is created for this slice under packages/output-adapters/
+- [X] T019 [P] Add the DD.csv canonical naming helper and lookup table for valuation-listings field semantics in packages/engine/valuation-listings-output/src/ddMapping.ts
+- [X] T020 Verify no BSRS configuration or other output-adapter package is created for this slice under packages/output-adapters/
 
 **Checkpoint**: Foundation ready. User story implementation can start after this phase.
 
@@ -54,27 +54,27 @@
 
 ### Tests for User Story 1
 
-- [ ] T021 [P] [US1] Add contract-shape tests for ValuationListingsOutputRequest and ValuationListingsOutputResult in packages/tests/valuation-listings-output-contract.test.ts
-- [ ] T022 [P] [US1] Add deterministic output tests for committed valuation-listings identity, date, service, form, benefit, ordering, and template fields in packages/tests/valuation-listings-output-output.test.ts
-- [ ] T023 [P] [US1] Add explicit-null and warning assertions for conditional valuation-listings branches in packages/tests/valuation-listings-output-output.test.ts
-- [ ] T024 [P] [US1] Add sql.js persistence tests for engine_run and valuation_listings_output_row rows in packages/tests/valuation-listings-output-persistence.test.ts
-- [ ] T025 [P] [US1] Add assertions that valuation-listing runs do not write BSRS configuration or other output-adapter rows in packages/tests/valuation-listings-output-persistence.test.ts
-- [ ] T025a [P] [US1] Add a DD-backed mapping regression test that fails when any valuation-listings field requiring DD.csv coverage is missing its canonical mapping in packages/tests/valuation-listings-output-output.test.ts
+- [X] T021 [P] [US1] Add contract-shape tests for ValuationListingsOutputRequest and ValuationListingsOutputResult in packages/tests/valuation-listings-output-contract.test.ts
+- [X] T022 [P] [US1] Add deterministic output tests for committed valuation-listings identity, date, service, form, benefit, ordering, and template fields in packages/tests/valuation-listings-output-output.test.ts
+- [X] T023 [P] [US1] Add explicit-null and warning assertions for conditional valuation-listings branches in packages/tests/valuation-listings-output-output.test.ts
+- [X] T024 [P] [US1] Add sql.js persistence tests for engine_run and valuation_listings_output_row rows in packages/tests/valuation-listings-output-persistence.test.ts
+- [X] T025 [P] [US1] Add assertions that valuation-listing runs do not write BSRS configuration or other output-adapter rows in packages/tests/valuation-listings-output-persistence.test.ts
+- [X] T025a [P] [US1] Add a DD-backed mapping regression test that fails when any valuation-listings field requiring DD.csv coverage is missing its canonical mapping in packages/tests/valuation-listings-output-output.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T026 [US1] Implement valuation-listings packet validation for required groups, upstream output groups, and contract-supported controlled values in packages/engine/valuation-listings-output/src/validatePacket.ts
-- [ ] T027 [US1] Implement deterministic valuation-listings projection rules for identity, demographic, date, service, form-state, benefit, ordering, and official PBGC template families in packages/engine/valuation-listings-output/src/valuationListingsMath.ts
-- [ ] T028 [US1] Implement valuation-listings output resolution for all contract output fields with unsupported fields as explicit nulls in packages/engine/valuation-listings-output/src/resolveValuationListingsOutput.ts
-- [ ] T029 [US1] Implement unsupported conditional-branch warnings and override warnings without fallback output values in packages/engine/valuation-listings-output/src/resolveValuationListingsOutput.ts
-- [ ] T030 [US1] Implement valuation-listings run orchestration with engine_run persistence in packages/engine/valuation-listings-output/src/runValuationListingsOutput.ts
-- [ ] T031 [US1] Persist successful valuation-listings outputs to valuation_listings_output_row only in packages/engine/valuation-listings-output/src/runValuationListingsOutput.ts
-- [ ] T032 [US1] Export valuation-listings runtime APIs from packages/engine/valuation-listings-output/src/index.ts
-- [ ] T033 [US1] Integrate valuation-listings fixture loading and run actions into apps/web/src/app/valuationListingsOutputSlice.ts
-- [ ] T034 [US1] Render the valuation-listings fixture runner and resolved output table in apps/web/src/pages/ValuationListingsOutputPage.ts
-- [ ] T035 [US1] Add valuation-listings navigation without removing date, service, compensation, form, benefit, or V1/VE access in apps/web/src/main.ts
-- [ ] T036 [US1] Add valuation-listings view styles in apps/web/src/styles.css
-- [ ] T037 [US1] Verify User Story 1 with npm test -- packages/tests/valuation-listings-output-output.test.ts packages/tests/valuation-listings-output-persistence.test.ts
+- [X] T026 [US1] Implement valuation-listings packet validation for required groups, upstream output groups, and contract-supported controlled values in packages/engine/valuation-listings-output/src/validatePacket.ts
+- [X] T027 [US1] Implement deterministic valuation-listings projection rules for identity, demographic, date, service, form-state, benefit, ordering, and official PBGC template families in packages/engine/valuation-listings-output/src/valuationListingsMath.ts
+- [X] T028 [US1] Implement valuation-listings output resolution for all contract output fields with unsupported fields as explicit nulls in packages/engine/valuation-listings-output/src/resolveValuationListingsOutput.ts
+- [X] T029 [US1] Implement unsupported conditional-branch warnings and override warnings without fallback output values in packages/engine/valuation-listings-output/src/resolveValuationListingsOutput.ts
+- [X] T030 [US1] Implement valuation-listings run orchestration with engine_run persistence in packages/engine/valuation-listings-output/src/runValuationListingsOutput.ts
+- [X] T031 [US1] Persist successful valuation-listings outputs to valuation_listings_output_row only in packages/engine/valuation-listings-output/src/runValuationListingsOutput.ts
+- [X] T032 [US1] Export valuation-listings runtime APIs from packages/engine/valuation-listings-output/src/index.ts
+- [X] T033 [US1] Integrate valuation-listings fixture loading and run actions into apps/web/src/app/valuationListingsOutputSlice.ts
+- [X] T034 [US1] Render the valuation-listings fixture runner and resolved output table in apps/web/src/pages/ValuationListingsOutputPage.ts
+- [X] T035 [US1] Add valuation-listings navigation without removing date, service, compensation, form, benefit, or V1/VE access in apps/web/src/main.ts
+- [X] T036 [US1] Add valuation-listings view styles in apps/web/src/styles.css
+- [X] T037 [US1] Verify User Story 1 with npm test -- packages/tests/valuation-listings-output-output.test.ts packages/tests/valuation-listings-output-persistence.test.ts
 
 **Checkpoint**: User Story 1 is functional and independently testable as the MVP.
 

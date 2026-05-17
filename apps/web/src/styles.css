@@ -65,6 +65,10 @@ table {
   table-layout: fixed;
 }
 
+.valuation-listings-output-page table {
+  table-layout: fixed;
+}
+
 th,
 td {
   border-bottom: 1px solid #d9e2ec;

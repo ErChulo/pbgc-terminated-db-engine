@@ -12,6 +12,7 @@ export default defineConfig({
       "@pbgc/compensation-resolution": resolve(__dirname, "packages/engine/compensation-resolution/src/index.ts"),
       "@pbgc/form-resolution": resolve(__dirname, "packages/engine/form-resolution/src/index.ts"),
       "@pbgc/v1-ve-output": resolve(__dirname, "packages/engine/v1-ve-output/src/index.ts"),
+      "@pbgc/valuation-listings-output": resolve(__dirname, "packages/engine/valuation-listings-output/src/index.ts"),
     },
   },
   test: {
