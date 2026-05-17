@@ -7,7 +7,7 @@ export type SqlJsContext = {
 
 export async function createSqlJsContext(existingBytes?: Uint8Array): Promise<SqlJsContext> {
   const SQL = await initSqlJs({
-    locateFile: (file) => `/sqljs/${file}`,
+    locateFile: (file) => `/sqljs/${file === "sql-wasm-browser.wasm" ? "sql-wasm.wasm" : file}`,
   });
   const db = existingBytes ? new SQL.Database(existingBytes) : new SQL.Database();
   db.exec("PRAGMA foreign_keys = ON;");
