@@ -12,15 +12,15 @@
 
 **Purpose**: Add the V1/VE package skeleton and register it with the existing browser-only Vite/sql.js workspace without implementing valuation-listings or BSRS modules.
 
-- [ ] T001 Create the V1/VE package manifest in packages/engine/v1-ve-output/package.json
-- [ ] T002 Create the V1/VE TypeScript config in packages/engine/v1-ve-output/tsconfig.json
-- [ ] T003 [P] Add the public V1/VE barrel placeholder in packages/engine/v1-ve-output/src/index.ts
-- [ ] T004 [P] Add the package source type placeholder in packages/engine/v1-ve-output/src/types.ts
-- [ ] T005 Register the V1/VE workspace dependency in apps/web/package.json
-- [ ] T006 Register the V1/VE alias in tsconfig.json
-- [ ] T007 Register the V1/VE test alias in vitest.config.ts
-- [ ] T008 [P] Add the V1/VE page placeholder module in apps/web/src/pages/V1VeOutputPage.ts
-- [ ] T009 [P] Add the browser app state placeholder in apps/web/src/app/v1VeOutputSlice.ts
+- [X] T001 Create the V1/VE package manifest in packages/engine/v1-ve-output/package.json
+- [X] T002 Create the V1/VE TypeScript config in packages/engine/v1-ve-output/tsconfig.json
+- [X] T003 [P] Add the public V1/VE barrel placeholder in packages/engine/v1-ve-output/src/index.ts
+- [X] T004 [P] Add the package source type placeholder in packages/engine/v1-ve-output/src/types.ts
+- [X] T005 Register the V1/VE workspace dependency in apps/web/package.json
+- [X] T006 Register the V1/VE alias in tsconfig.json
+- [X] T007 Register the V1/VE test alias in vitest.config.ts
+- [X] T008 [P] Add the V1/VE page placeholder module in apps/web/src/pages/V1VeOutputPage.ts
+- [X] T009 [P] Add the browser app state placeholder in apps/web/src/app/v1VeOutputSlice.ts
 
 ---
 
@@ -30,16 +30,16 @@
 
 **Critical**: No user story work can begin until this phase is complete.
 
-- [ ] T010 Add shared V1/VE module name support to StructuredIssue and ModuleTrace in packages/shared/src/types.ts
-- [ ] T011 Add v1_ve_output packet type support to engine input packet records in packages/db/src/repositories.ts
-- [ ] T012 Add repository helpers for inserting and listing v1_ve_output_row rows in packages/db/src/repositories.ts
-- [ ] T013 Add repository helper for fetching V1/VE runs with trace rows in packages/db/src/repositories.ts
-- [ ] T014 Add V1/VE fixture packet parsing utilities in packages/tests/v1-ve-output-fixtures.ts
-- [ ] T015 Add reviewed V1/VE packet fixture builders from committed contract rows in packages/engine/v1-ve-output/src/fixturePacketBuilder.ts
-- [ ] T016 Add deterministic V1/VE field lists, row-family exports, and module version exports in packages/engine/v1-ve-output/src/types.ts
-- [ ] T017 [P] Add V1/VE architecture notes in docs/architecture/v1_ve_output_slice_v0.1.0.md
-- [ ] T018 [P] Add V1/VE trace field mapping in docs/mappings/v1_ve_output_trace_map_v0.1.0.csv
-- [ ] T019 Verify no valuation-listings, BSRS configuration, or other output-adapter package is created for this slice under packages/output-adapters/
+- [X] T010 Add shared V1/VE module name support to StructuredIssue and ModuleTrace in packages/shared/src/types.ts
+- [X] T011 Add v1_ve_output packet type support to engine input packet records in packages/db/src/repositories.ts
+- [X] T012 Add repository helpers for inserting and listing v1_ve_output_row rows in packages/db/src/repositories.ts
+- [X] T013 Add repository helper for fetching V1/VE runs with trace rows in packages/db/src/repositories.ts
+- [X] T014 Add V1/VE fixture packet parsing utilities in packages/tests/v1-ve-output-fixtures.ts
+- [X] T015 Add reviewed V1/VE packet fixture builders from committed contract rows in packages/engine/v1-ve-output/src/fixturePacketBuilder.ts
+- [X] T016 Add deterministic V1/VE field lists, row-family exports, and module version exports in packages/engine/v1-ve-output/src/types.ts
+- [X] T017 [P] Add V1/VE architecture notes in docs/architecture/v1_ve_output_slice_v0.1.0.md
+- [X] T018 [P] Add V1/VE trace field mapping in docs/mappings/v1_ve_output_trace_map_v0.1.0.csv
+- [X] T019 Verify no valuation-listings, BSRS configuration, or other output-adapter package is created for this slice under packages/output-adapters/
 
 **Checkpoint**: Foundation ready. User story implementation can start after this phase.
 
@@ -53,26 +53,26 @@
 
 ### Tests for User Story 1
 
-- [ ] T020 [P] [US1] Add contract-shape tests for V1VeOutputRequest and V1VeOutputResult in packages/tests/v1-ve-output-contract.test.ts
-- [ ] T021 [P] [US1] Add deterministic output tests for committed V1/VE identity, date, form, and benefit fields in packages/tests/v1-ve-output-output.test.ts
-- [ ] T022 [P] [US1] Add explicit-null and warning assertions for conditional V1/VE branches in packages/tests/v1-ve-output-output.test.ts
-- [ ] T023 [P] [US1] Add sql.js persistence tests for engine_run and v1_ve_output_row rows in packages/tests/v1-ve-output-persistence.test.ts
-- [ ] T024 [P] [US1] Add assertions that V1/VE runs do not write valuation-listings, BSRS, or output-adapter rows in packages/tests/v1-ve-output-persistence.test.ts
+- [X] T020 [P] [US1] Add contract-shape tests for V1VeOutputRequest and V1VeOutputResult in packages/tests/v1-ve-output-contract.test.ts
+- [X] T021 [P] [US1] Add deterministic output tests for committed V1/VE identity, date, form, and benefit fields in packages/tests/v1-ve-output-output.test.ts
+- [X] T022 [P] [US1] Add explicit-null and warning assertions for conditional V1/VE branches in packages/tests/v1-ve-output-output.test.ts
+- [X] T023 [P] [US1] Add sql.js persistence tests for engine_run and v1_ve_output_row rows in packages/tests/v1-ve-output-persistence.test.ts
+- [X] T024 [P] [US1] Add assertions that V1/VE runs do not write valuation-listings, BSRS, or output-adapter rows in packages/tests/v1-ve-output-persistence.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T025 [US1] Implement V1/VE packet validation for required groups, upstream output groups, and contract-supported controlled values in packages/engine/v1-ve-output/src/validatePacket.ts
-- [ ] T026 [US1] Implement deterministic V1/VE projection rules for identity, date, form-state, Title IV, Section 4022(c), termination-benefit, nonguaranteed, and present-value families in packages/engine/v1-ve-output/src/v1VeMath.ts
-- [ ] T027 [US1] Implement V1/VE output resolution for all contract output fields with unsupported fields as explicit nulls in packages/engine/v1-ve-output/src/resolveV1VeOutput.ts
-- [ ] T028 [US1] Implement unsupported conditional-branch warnings and override warnings without fallback output values in packages/engine/v1-ve-output/src/resolveV1VeOutput.ts
-- [ ] T029 [US1] Implement V1/VE run orchestration with engine_run persistence in packages/engine/v1-ve-output/src/runV1VeOutput.ts
-- [ ] T030 [US1] Persist successful V1/VE outputs to v1_ve_output_row only in packages/engine/v1-ve-output/src/runV1VeOutput.ts
-- [ ] T031 [US1] Export V1/VE runtime APIs from packages/engine/v1-ve-output/src/index.ts
-- [ ] T032 [US1] Integrate V1/VE fixture loading and run actions into apps/web/src/app/v1VeOutputSlice.ts
-- [ ] T033 [US1] Render the V1/VE fixture runner and resolved output table in apps/web/src/pages/V1VeOutputPage.ts
-- [ ] T034 [US1] Add V1/VE navigation without removing date, service, compensation, form, or benefit access in apps/web/src/main.ts
-- [ ] T035 [US1] Add V1/VE view styles in apps/web/src/styles.css
-- [ ] T036 [US1] Verify User Story 1 with npm test -- packages/tests/v1-ve-output-output.test.ts packages/tests/v1-ve-output-persistence.test.ts
+- [X] T025 [US1] Implement V1/VE packet validation for required groups, upstream output groups, and contract-supported controlled values in packages/engine/v1-ve-output/src/validatePacket.ts
+- [X] T026 [US1] Implement deterministic V1/VE projection rules for identity, date, form-state, Title IV, Section 4022(c), termination-benefit, nonguaranteed, and present-value families in packages/engine/v1-ve-output/src/v1VeMath.ts
+- [X] T027 [US1] Implement V1/VE output resolution for all contract output fields with unsupported fields as explicit nulls in packages/engine/v1-ve-output/src/resolveV1VeOutput.ts
+- [X] T028 [US1] Implement unsupported conditional-branch warnings and override warnings without fallback output values in packages/engine/v1-ve-output/src/resolveV1VeOutput.ts
+- [X] T029 [US1] Implement V1/VE run orchestration with engine_run persistence in packages/engine/v1-ve-output/src/runV1VeOutput.ts
+- [X] T030 [US1] Persist successful V1/VE outputs to v1_ve_output_row only in packages/engine/v1-ve-output/src/runV1VeOutput.ts
+- [X] T031 [US1] Export V1/VE runtime APIs from packages/engine/v1-ve-output/src/index.ts
+- [X] T032 [US1] Integrate V1/VE fixture loading and run actions into apps/web/src/app/v1VeOutputSlice.ts
+- [X] T033 [US1] Render the V1/VE fixture runner and resolved output table in apps/web/src/pages/V1VeOutputPage.ts
+- [X] T034 [US1] Add V1/VE navigation without removing date, service, compensation, form, or benefit access in apps/web/src/main.ts
+- [X] T035 [US1] Add V1/VE view styles in apps/web/src/styles.css
+- [X] T036 [US1] Verify User Story 1 with npm test -- packages/tests/v1-ve-output-output.test.ts packages/tests/v1-ve-output-persistence.test.ts
 
 **Checkpoint**: User Story 1 is functional and independently testable as the MVP.
 
@@ -134,15 +134,15 @@
 
 **Purpose**: Complete regression, static-browser verification, docs alignment, and committed build output.
 
-- [ ] T057 [P] Add prior-slice regression guard to the V1/VE validation command notes in specs/006-v1-ve-output/quickstart.md
-- [ ] T058 [P] Update implementation completion notes in docs/architecture/v1_ve_output_slice_v0.1.0.md
-- [ ] T059 Run all deterministic tests with npm test and fix issues in packages/tests/
-- [ ] T060 Run lint/type checks with npm run lint and fix issues in packages/engine/v1-ve-output/src/
-- [ ] T061 Run the static browser build with npm run build and update committed assets under apps/web/dist/
-- [ ] T062 Start the Vite app and validate the quickstart flow in apps/web/src/pages/V1VeOutputPage.ts
-- [ ] T063 Confirm browser-only/no-network execution by inspecting V1/VE imports in packages/engine/v1-ve-output/src/
-- [ ] T064 Confirm valuation-listings, BSRS, and other output-adapter implementations remain out of scope in packages/output-adapters/
-- [ ] T065 Update task completion checkboxes in specs/006-v1-ve-output/tasks.md after implementation verification
+- [X] T057 [P] Add prior-slice regression guard to the V1/VE validation command notes in specs/006-v1-ve-output/quickstart.md
+- [X] T058 [P] Update implementation completion notes in docs/architecture/v1_ve_output_slice_v0.1.0.md
+- [X] T059 Run all deterministic tests with npm test and fix issues in packages/tests/
+- [X] T060 Run lint/type checks with npm run lint and fix issues in packages/engine/v1-ve-output/src/
+- [X] T061 Run the static browser build with npm run build and update committed assets under apps/web/dist/
+- [X] T062 Start the Vite app and validate the quickstart flow in apps/web/src/pages/V1VeOutputPage.ts
+- [X] T063 Confirm browser-only/no-network execution by inspecting V1/VE imports in packages/engine/v1-ve-output/src/
+- [X] T064 Confirm valuation-listings, BSRS, and other output-adapter implementations remain out of scope in packages/output-adapters/
+- [X] T065 Update task completion checkboxes in specs/006-v1-ve-output/tasks.md after implementation verification
 
 ---
 

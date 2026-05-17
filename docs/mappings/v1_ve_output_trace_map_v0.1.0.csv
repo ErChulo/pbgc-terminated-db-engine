@@ -1,0 +1,5 @@
+output_field,input_groups,rule_branch,trace_notes
+bcv_rec_id,case_plan_timeline|participant_role_population|benefit_administration_state|limitation_packet,deferred_vested,Row identity used for spreadsheet population
+term_mb_nrd_nsf,resolved_dates|resolved_service_compensation|benefit_kernel_output,deferred_vested_or_in_pay,Projected from deterministic benefit kernel output
+xrd_mb_term,resolved_dates|resolved_service_compensation|benefit_kernel_output,deferred_vested_or_in_pay,Deferred or in-pay XRD output mirrors the benefit kernel value
+pvmb_term,resolved_dates|resolved_service_compensation|benefit_kernel_output,deferred_vested_or_in_pay,Present value uses the reviewed benefit-kernel result

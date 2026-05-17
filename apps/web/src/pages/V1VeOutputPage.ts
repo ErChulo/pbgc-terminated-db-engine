@@ -1,16 +1,16 @@
-import { runFixtureBenefitKernelResolution } from "../app/benefitKernelSlice";
+import { renderBenefitKernelPage } from "./BenefitKernelPage";
 import { renderCompensationResolutionPage } from "./CompensationResolutionPage";
 import { renderDateResolutionPage } from "./DateResolutionPage";
 import { renderFormResolutionPage } from "./FormResolutionPage";
 import { renderServiceResolutionPage } from "./ServiceResolutionPage";
-import { renderV1VeOutputPage } from "./V1VeOutputPage";
+import { runFixtureV1VeOutputResolution } from "../app/v1VeOutputSlice";
 
-export function renderBenefitKernelPage(root: HTMLElement): void {
+export function renderV1VeOutputPage(root: HTMLElement): void {
   root.innerHTML = `
-    <section class="page-shell">
+    <section class="page-shell v1-ve-output-page">
       <header>
         <div>
-          <h1>PBGC Benefit Kernel</h1>
+          <h1>PBGC V1/VE Output</h1>
           <p class="subtle">Reviewed fixture packets only. No server calls.</p>
         </div>
         <nav>
@@ -18,8 +18,8 @@ export function renderBenefitKernelPage(root: HTMLElement): void {
           <button id="show-service-resolution" type="button" class="secondary">Service</button>
           <button id="show-compensation-resolution" type="button" class="secondary">Compensation</button>
           <button id="show-form-resolution" type="button" class="secondary">Form</button>
-          <button id="show-v1-ve-output" type="button" class="secondary">V1/VE</button>
-          <button id="run-benefit-kernel" type="button">Run benefit fixtures</button>
+          <button id="show-benefit-kernel" type="button" class="secondary">Benefit</button>
+          <button id="run-v1-ve-output" type="button">Run V1/VE fixtures</button>
         </nav>
       </header>
       <table>
@@ -33,7 +33,7 @@ export function renderBenefitKernelPage(root: HTMLElement): void {
             <th>Warnings</th>
           </tr>
         </thead>
-        <tbody id="benefit-kernel-results"></tbody>
+        <tbody id="v1-ve-output-results"></tbody>
       </table>
     </section>
   `;
@@ -42,19 +42,19 @@ export function renderBenefitKernelPage(root: HTMLElement): void {
   root.querySelector<HTMLButtonElement>("#show-service-resolution")?.addEventListener("click", () => renderServiceResolutionPage(root));
   root.querySelector<HTMLButtonElement>("#show-compensation-resolution")?.addEventListener("click", () => renderCompensationResolutionPage(root));
   root.querySelector<HTMLButtonElement>("#show-form-resolution")?.addEventListener("click", () => renderFormResolutionPage(root));
-  root.querySelector<HTMLButtonElement>("#show-v1-ve-output")?.addEventListener("click", () => renderV1VeOutputPage(root));
-  root.querySelector<HTMLButtonElement>("#run-benefit-kernel")?.addEventListener("click", async () => {
-    const tbody = root.querySelector<HTMLTableSectionElement>("#benefit-kernel-results");
+  root.querySelector<HTMLButtonElement>("#show-benefit-kernel")?.addEventListener("click", () => renderBenefitKernelPage(root));
+  root.querySelector<HTMLButtonElement>("#run-v1-ve-output")?.addEventListener("click", async () => {
+    const tbody = root.querySelector<HTMLTableSectionElement>("#v1-ve-output-results");
     if (!tbody) return;
     tbody.innerHTML = `<tr><td colspan="6">Running</td></tr>`;
-    const state = await runFixtureBenefitKernelResolution();
+    const state = await runFixtureV1VeOutputResolution();
     tbody.innerHTML = state.results.map((result) => `
       <tr>
         <td>${result.calculation_run_id}</td>
         <td>${result.run_status}</td>
-        <td>${result.output?.term_mb_nrd_nsf ?? ""}</td>
-        <td>${result.output?.xrd_mb_term ?? ""}</td>
-        <td>${result.output?.pvmb_term ?? ""}</td>
+        <td>${result.output?.row.term_mb_nrd_nsf ?? ""}</td>
+        <td>${result.output?.row.xrd_mb_term ?? ""}</td>
+        <td>${result.output?.row.pvmb_term ?? ""}</td>
         <td>${result.warning_count}</td>
       </tr>
     `).join("");

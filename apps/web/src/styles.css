@@ -61,6 +61,10 @@ table {
   width: 100%;
 }
 
+.v1-ve-output-page table {
+  table-layout: fixed;
+}
+
 th,
 td {
   border-bottom: 1px solid #d9e2ec;

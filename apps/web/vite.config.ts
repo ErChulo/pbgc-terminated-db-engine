@@ -9,6 +9,7 @@ export default defineConfig({
       "@pbgc/db": resolve(__dirname, "../../packages/db/src/index.ts"),
       "@pbgc/benefit-kernel": resolve(__dirname, "../../packages/engine/benefit-kernel/src/index.ts"),
       "@pbgc/date-resolution": resolve(__dirname, "../../packages/engine/date-resolution/src/index.ts"),
+      "@pbgc/v1-ve-output": resolve(__dirname, "../../packages/engine/v1-ve-output/src/index.ts"),
     },
   },
   build: {

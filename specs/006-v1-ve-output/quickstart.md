@@ -38,6 +38,8 @@ date, service, compensation, form, and benefit-kernel slices.
 9. Run date-resolution, service-resolution, compensation-resolution,
    form-resolution, and benefit-kernel regression tests to confirm prior slices
    still pass.
+10. Keep the prior-slice regression guard in place whenever V1/VE validation or
+    packet-shape rules change.
 
 ## Out of Scope Checks
 

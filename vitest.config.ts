@@ -11,6 +11,7 @@ export default defineConfig({
       "@pbgc/service-resolution": resolve(__dirname, "packages/engine/service-resolution/src/index.ts"),
       "@pbgc/compensation-resolution": resolve(__dirname, "packages/engine/compensation-resolution/src/index.ts"),
       "@pbgc/form-resolution": resolve(__dirname, "packages/engine/form-resolution/src/index.ts"),
+      "@pbgc/v1-ve-output": resolve(__dirname, "packages/engine/v1-ve-output/src/index.ts"),
     },
   },
   test: {
