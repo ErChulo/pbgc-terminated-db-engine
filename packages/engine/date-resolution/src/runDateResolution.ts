@@ -9,7 +9,13 @@ import {
 } from "@pbgc/db";
 import { resolveDates } from "./resolveDates";
 import { validateDateResolutionPacket } from "./validatePacket";
-import { DATE_RESOLUTION_MODULE_NAME, DATE_RESOLUTION_MODULE_VERSION, type RunDateResolutionRequest, type RunDateResolutionResult } from "./types";
+import {
+  DATE_RESOLUTION_MODULE_NAME,
+  DATE_RESOLUTION_MODULE_VERSION,
+  type DateResolutionPacket,
+  type RunDateResolutionRequest,
+  type RunDateResolutionResult,
+} from "./types";
 
 export function runDateResolution(db: Database, request: RunDateResolutionRequest): RunDateResolutionResult {
   const record = getEngineInputPacket(db, request.input_packet_id);
@@ -36,7 +42,7 @@ export function runDateResolution(db: Database, request: RunDateResolutionReques
     };
   }
 
-  const packet = parsePacketJson(record);
+  const packet = parsePacketJson<DateResolutionPacket>(record);
   const errors = validateDateResolutionPacket(packet, request.input_packet_id, request.rule_version);
   if (errors.length > 0) {
     insertEngineRun(db, makeRun(request, calculation_run_id, started_at, "failed", errors.length));

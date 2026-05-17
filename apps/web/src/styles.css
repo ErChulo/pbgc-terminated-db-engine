@@ -19,6 +19,7 @@ header {
   display: flex;
   justify-content: space-between;
   margin-bottom: 24px;
+  gap: 16px;
 }
 
 h1 {
@@ -35,6 +36,20 @@ button {
   cursor: pointer;
   font: inherit;
   padding: 10px 14px;
+}
+
+button.secondary {
+  background: #52606d;
+}
+
+nav {
+  display: flex;
+  gap: 8px;
+}
+
+.subtle {
+  color: #52606d;
+  margin: 6px 0 0;
 }
 
 table {

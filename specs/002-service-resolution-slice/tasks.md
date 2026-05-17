@@ -12,14 +12,14 @@
 
 **Purpose**: Add the service-resolution package skeleton and register it with the existing browser-only Vite/sql.js workspace without implementing downstream modules.
 
-- [ ] T001 Create the service-resolution package manifest in packages/engine/service-resolution/package.json
-- [ ] T002 Create the service-resolution TypeScript config in packages/engine/service-resolution/tsconfig.json
-- [ ] T003 [P] Add the public service-resolution barrel placeholder in packages/engine/service-resolution/src/index.ts
-- [ ] T004 [P] Add the package source type placeholder in packages/engine/service-resolution/src/types.ts
-- [ ] T005 Register the service-resolution workspace dependency in apps/web/package.json
-- [ ] T006 Register service-resolution build/test coverage in package.json
-- [ ] T007 [P] Add the service page placeholder module in apps/web/src/pages/ServiceResolutionPage.ts
-- [ ] T008 [P] Add the browser app state placeholder in apps/web/src/app/serviceResolutionSlice.ts
+- [X] T001 Create the service-resolution package manifest in packages/engine/service-resolution/package.json
+- [X] T002 Create the service-resolution TypeScript config in packages/engine/service-resolution/tsconfig.json
+- [X] T003 [P] Add the public service-resolution barrel placeholder in packages/engine/service-resolution/src/index.ts
+- [X] T004 [P] Add the package source type placeholder in packages/engine/service-resolution/src/types.ts
+- [X] T005 Register the service-resolution workspace dependency in apps/web/package.json
+- [X] T006 Register service-resolution build/test coverage in package.json
+- [X] T007 [P] Add the service page placeholder module in apps/web/src/pages/ServiceResolutionPage.ts
+- [X] T008 [P] Add the browser app state placeholder in apps/web/src/app/serviceResolutionSlice.ts
 
 ---
 
@@ -29,16 +29,16 @@
 
 **Critical**: No user story work can begin until this phase is complete.
 
-- [ ] T009 Add shared service-resolution request/result, warning, error, and trace types in packages/shared/src/types.ts
-- [ ] T010 Export shared service-resolution types from packages/shared/src/index.ts
-- [ ] T011 Add resolved service output insert/list helpers for service columns only in packages/db/src/repositories.ts
-- [ ] T012 Add module trace list helpers scoped by calculation run and module name in packages/db/src/repositories.ts
-- [ ] T013 Add service-resolution fixture CSV parsing utilities in packages/tests/service-resolution-fixtures.ts
-- [ ] T014 Add reviewed service packet fixture builders from service CSV rows in packages/engine/service-resolution/src/fixturePacketBuilder.ts
-- [ ] T015 Add deterministic service rule constants and module version exports in packages/engine/service-resolution/src/types.ts
-- [ ] T016 [P] Add service-resolution architecture notes in docs/architecture/service_resolution_slice_v0.1.0.md
-- [ ] T017 [P] Add service trace field mapping in docs/mappings/service_resolution_trace_map_v0.1.0.csv
-- [ ] T018 Verify no compensation, form, benefit-kernel, or output-adapter package is created for this slice under packages/engine/ and packages/output-adapters/
+- [X] T009 Add shared service-resolution request/result, warning, error, and trace types in packages/shared/src/types.ts
+- [X] T010 Export shared service-resolution types from packages/shared/src/index.ts
+- [X] T011 Add resolved service output insert/list helpers for service columns only in packages/db/src/repositories.ts
+- [X] T012 Add module trace list helpers scoped by calculation run and module name in packages/db/src/repositories.ts
+- [X] T013 Add service-resolution fixture CSV parsing utilities in packages/tests/service-resolution-fixtures.ts
+- [X] T014 Add reviewed service packet fixture builders from service CSV rows in packages/engine/service-resolution/src/fixturePacketBuilder.ts
+- [X] T015 Add deterministic service rule constants and module version exports in packages/engine/service-resolution/src/types.ts
+- [X] T016 [P] Add service-resolution architecture notes in docs/architecture/service_resolution_slice_v0.1.0.md
+- [X] T017 [P] Add service trace field mapping in docs/mappings/service_resolution_trace_map_v0.1.0.csv
+- [X] T018 Verify no compensation, form, benefit-kernel, or output-adapter package is created for this slice under packages/engine/ and packages/output-adapters/
 
 **Checkpoint**: Foundation ready. User story implementation can start after this phase.
 
@@ -52,24 +52,24 @@
 
 ### Tests for User Story 1
 
-- [ ] T019 [P] [US1] Add contract-shape tests for RunServiceResolutionRequest and RunServiceResolutionResult in packages/tests/service-resolution-contract.test.ts
-- [ ] T020 [P] [US1] Add deterministic output tests for SR001-SR003 service quantities in packages/tests/service-resolution-output.test.ts
-- [ ] T021 [P] [US1] Add sql.js persistence tests for engine_run and resolved_service_comp_output service columns in packages/tests/service-resolution-persistence.test.ts
-- [ ] T022 [P] [US1] Add compensation-null assertions for resolved_service_comp_output in packages/tests/service-resolution-persistence.test.ts
+- [X] T019 [P] [US1] Add contract-shape tests for RunServiceResolutionRequest and RunServiceResolutionResult in packages/tests/service-resolution-contract.test.ts
+- [X] T020 [P] [US1] Add deterministic output tests for SR001-SR003 service quantities in packages/tests/service-resolution-output.test.ts
+- [X] T021 [P] [US1] Add sql.js persistence tests for engine_run and resolved_service_comp_output service columns in packages/tests/service-resolution-persistence.test.ts
+- [X] T022 [P] [US1] Add compensation-null assertions for resolved_service_comp_output in packages/tests/service-resolution-persistence.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T023 [US1] Implement service packet validation for required groups and fixture-supported controlled values in packages/engine/service-resolution/src/validatePacket.ts
-- [ ] T024 [US1] Implement plan-year service period calculation for the fixture-supported basis in packages/engine/service-resolution/src/serviceMath.ts
-- [ ] T025 [US1] Implement service output resolution for eligibility, vesting, benefit, and accrual service in packages/engine/service-resolution/src/resolveService.ts
-- [ ] T026 [US1] Implement service run orchestration with engine_run persistence in packages/engine/service-resolution/src/runServiceResolution.ts
-- [ ] T027 [US1] Persist successful service outputs to resolved_service_comp_output service columns only in packages/engine/service-resolution/src/runServiceResolution.ts
-- [ ] T028 [US1] Export service-resolution runtime APIs from packages/engine/service-resolution/src/index.ts
-- [ ] T029 [US1] Integrate service fixture loading and run actions into apps/web/src/app/serviceResolutionSlice.ts
-- [ ] T030 [US1] Render the service-resolution fixture runner and resolved output table in apps/web/src/pages/ServiceResolutionPage.ts
-- [ ] T031 [US1] Add service-resolution navigation without removing date-resolution access in apps/web/src/main.ts
-- [ ] T032 [US1] Add service-resolution view styles in apps/web/src/styles.css
-- [ ] T033 [US1] Verify User Story 1 with npm test -- packages/tests/service-resolution-output.test.ts packages/tests/service-resolution-persistence.test.ts
+- [X] T023 [US1] Implement service packet validation for required groups and fixture-supported controlled values in packages/engine/service-resolution/src/validatePacket.ts
+- [X] T024 [US1] Implement plan-year service period calculation for the fixture-supported basis in packages/engine/service-resolution/src/serviceMath.ts
+- [X] T025 [US1] Implement service output resolution for eligibility, vesting, benefit, and accrual service in packages/engine/service-resolution/src/resolveService.ts
+- [X] T026 [US1] Implement service run orchestration with engine_run persistence in packages/engine/service-resolution/src/runServiceResolution.ts
+- [X] T027 [US1] Persist successful service outputs to resolved_service_comp_output service columns only in packages/engine/service-resolution/src/runServiceResolution.ts
+- [X] T028 [US1] Export service-resolution runtime APIs from packages/engine/service-resolution/src/index.ts
+- [X] T029 [US1] Integrate service fixture loading and run actions into apps/web/src/app/serviceResolutionSlice.ts
+- [X] T030 [US1] Render the service-resolution fixture runner and resolved output table in apps/web/src/pages/ServiceResolutionPage.ts
+- [X] T031 [US1] Add service-resolution navigation without removing date-resolution access in apps/web/src/main.ts
+- [X] T032 [US1] Add service-resolution view styles in apps/web/src/styles.css
+- [X] T033 [US1] Verify User Story 1 with npm test -- packages/tests/service-resolution-output.test.ts packages/tests/service-resolution-persistence.test.ts
 
 **Checkpoint**: User Story 1 is functional and independently testable as the MVP.
 
@@ -130,13 +130,13 @@
 
 - [ ] T051 [P] Add date-resolution regression guard to the service validation command notes in specs/002-service-resolution-slice/quickstart.md
 - [ ] T052 [P] Update implementation completion notes in docs/architecture/service_resolution_slice_v0.1.0.md
-- [ ] T053 Run all deterministic tests with npm test and fix issues in packages/tests/
-- [ ] T054 Run lint/type checks with npm run lint and fix issues in packages/engine/service-resolution/src/
-- [ ] T055 Run the static browser build with npm run build and update committed assets under apps/web/dist/
+- [X] T053 Run all deterministic tests with npm test and fix issues in packages/tests/
+- [X] T054 Run lint/type checks with npm run lint and fix issues in packages/engine/service-resolution/src/
+- [X] T055 Run the static browser build with npm run build and update committed assets under apps/web/dist/
 - [ ] T056 Start the Vite app and validate the quickstart flow in apps/web/src/pages/ServiceResolutionPage.ts
 - [ ] T057 Confirm browser-only/no-network execution by inspecting service-resolution imports in packages/engine/service-resolution/src/
-- [ ] T058 Confirm compensation, form, benefit-kernel, V1/VE, valuation listing, and BSRS implementations remain out of scope in packages/engine/ and packages/output-adapters/
-- [ ] T059 Update task completion checkboxes in specs/002-service-resolution-slice/tasks.md after implementation verification
+- [X] T058 Confirm compensation, form, benefit-kernel, V1/VE, valuation listing, and BSRS implementations remain out of scope in packages/engine/ and packages/output-adapters/
+- [X] T059 Update task completion checkboxes in specs/002-service-resolution-slice/tasks.md after implementation verification
 
 ---
 
