@@ -11,6 +11,7 @@ export default defineConfig({
       "@pbgc/date-resolution": resolve(__dirname, "../../packages/engine/date-resolution/src/index.ts"),
       "@pbgc/v1-ve-output": resolve(__dirname, "../../packages/engine/v1-ve-output/src/index.ts"),
       "@pbgc/valuation-listings-output": resolve(__dirname, "../../packages/engine/valuation-listings-output/src/index.ts"),
+      "@pbgc/bsrs-configuration-output": resolve(__dirname, "../../packages/engine/bsrs-configuration-output/src/index.ts"),
     },
   },
   build: {

@@ -7,6 +7,7 @@ import type { CompensationResolutionOutput, CompensationResolutionPacket } from 
 import type { FormResolutionOutput, FormResolutionPacket } from "@pbgc/form-resolution";
 import type { V1VeOutputPacket, V1VeOutputRowRecord } from "@pbgc/v1-ve-output";
 import type { ValuationListingsOutputPacket, ValuationListingOutputRowRecord } from "@pbgc/valuation-listings-output";
+import type { BsrsConfigurationOutputPacket, BsrsConfigurationOutputRecord } from "@pbgc/bsrs-configuration-output";
 import { queryAll, queryOne } from "./sqljs";
 
 export type EngineInputPacketRecord = {
@@ -14,7 +15,7 @@ export type EngineInputPacketRecord = {
   case_id: string;
   subject_key: string;
   subject_type: string;
-  packet_type: "date_resolution" | "service_resolution" | "compensation_resolution" | "form_resolution" | "benefit_kernel" | "v1_ve_output" | "valuation_listings_output";
+  packet_type: "date_resolution" | "service_resolution" | "compensation_resolution" | "form_resolution" | "benefit_kernel" | "v1_ve_output" | "valuation_listings_output" | "bsrs_configuration_output";
   schema_version: string;
   packet_json: string;
   built_from_resolved_at: string | null;
@@ -390,6 +391,56 @@ export function listValuationListingRunsWithTrace(db: Database): Array<Valuation
   ) as Array<ValuationListingOutputRowRecord & { trace_count: number }>;
 }
 
+export function insertResolvedBsrsConfigurationOutput(
+  db: Database,
+  output: {
+    bsrs_configuration_output_row_id: string;
+    calculation_run_id: string;
+    case_id: string;
+    plan_id: string;
+    subject_key: string;
+    statement_row_type: string;
+    statement_sort_key: string;
+    row_json: string;
+    adapter_version: string;
+  },
+): void {
+  db.run(
+    `INSERT INTO bsrs_configuration_output_row (
+      bsrs_configuration_output_row_id, calculation_run_id, case_id, plan_id, subject_key,
+      statement_row_type, statement_sort_key, row_json, adapter_version
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      output.bsrs_configuration_output_row_id,
+      output.calculation_run_id,
+      output.case_id,
+      output.plan_id,
+      output.subject_key,
+      output.statement_row_type,
+      output.statement_sort_key,
+      output.row_json,
+      output.adapter_version,
+    ],
+  );
+}
+
+export function listResolvedBsrsConfigurationOutputs(db: Database): BsrsConfigurationOutputRecord[] {
+  return queryAll(db, "SELECT * FROM bsrs_configuration_output_row ORDER BY bsrs_configuration_output_row_id") as BsrsConfigurationOutputRecord[];
+}
+
+export function listBsrsConfigurationRunsWithTrace(db: Database): Array<BsrsConfigurationOutputRecord & { trace_count: number }> {
+  return queryAll(
+    db,
+    `SELECT bsr.*, COUNT(mt.module_trace_id) AS trace_count
+     FROM bsrs_configuration_output_row bsr
+     LEFT JOIN module_trace mt
+       ON mt.calculation_run_id = bsr.calculation_run_id
+      AND mt.module_name = 'bsrs_configuration_output'
+     GROUP BY bsr.bsrs_configuration_output_row_id
+     ORDER BY bsr.bsrs_configuration_output_row_id`,
+  ) as Array<BsrsConfigurationOutputRecord & { trace_count: number }>;
+}
+
 export function insertModuleTrace(db: Database, trace: ModuleTrace): void {
   db.run(
     `INSERT INTO module_trace (
@@ -420,14 +471,15 @@ export function listModuleTraces(db: Database, calculationRunId: string, moduleN
 }
 
 export function parsePacketJson<
-  TPacket extends DateResolutionPacket | ServiceResolutionPacket | CompensationResolutionPacket | FormResolutionPacket | BenefitKernelPacket | V1VeOutputPacket | ValuationListingsOutputPacket =
+  TPacket extends DateResolutionPacket | ServiceResolutionPacket | CompensationResolutionPacket | FormResolutionPacket | BenefitKernelPacket | V1VeOutputPacket | ValuationListingsOutputPacket | BsrsConfigurationOutputPacket =
     | DateResolutionPacket
     | ServiceResolutionPacket
     | CompensationResolutionPacket
     | FormResolutionPacket
     | BenefitKernelPacket
     | V1VeOutputPacket
-    | ValuationListingsOutputPacket,
+    | ValuationListingsOutputPacket
+    | BsrsConfigurationOutputPacket,
 >(
   record: EngineInputPacketRecord,
 ): TPacket {

@@ -16,6 +16,7 @@
     "@pbgc/form-resolution": "0.1.0",
     "@pbgc/v1-ve-output": "0.1.0",
     "@pbgc/valuation-listings-output": "0.1.0",
+    "@pbgc/bsrs-configuration-output": "0.1.0",
     "@pbgc/service-resolution": "0.1.0",
     "@pbgc/shared": "0.1.0",
     "sql.js": "^1.12.0"

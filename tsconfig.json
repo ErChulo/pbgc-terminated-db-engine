@@ -19,7 +19,8 @@
       "@pbgc/compensation-resolution": ["packages/engine/compensation-resolution/src/index.ts"],
       "@pbgc/form-resolution": ["packages/engine/form-resolution/src/index.ts"],
       "@pbgc/v1-ve-output": ["packages/engine/v1-ve-output/src/index.ts"],
-      "@pbgc/valuation-listings-output": ["packages/engine/valuation-listings-output/src/index.ts"]
+      "@pbgc/valuation-listings-output": ["packages/engine/valuation-listings-output/src/index.ts"],
+      "@pbgc/bsrs-configuration-output": ["packages/engine/bsrs-configuration-output/src/index.ts"]
     },
     "types": ["vitest/globals", "node"]
   }
