@@ -1,6 +1,6 @@
 # Feature Specification: Valuation Listings Output
 
-**Feature Branch**: `[008-valuation-listings-output]`
+**Feature Branch**: `[007-valuation-listings-output-slice]`
 
 **Created**: 2026-05-17
 
