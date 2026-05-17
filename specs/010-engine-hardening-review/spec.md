@@ -1,6 +1,6 @@
 # Feature Specification: engine-hardening-review
 
-**Feature Branch**: `[010-engine-hardening-review]`
+**Feature Branch**: `[009-hardening-review]`
 
 **Created**: 2026-05-17
 
