@@ -1,0 +1,3 @@
+test_case_id,description,v1_ve_fixture_index,listing_row_type
+VL001,Deferred vested valuation listing,0,participant
+VL002,In-pay valuation listing,1,participant
