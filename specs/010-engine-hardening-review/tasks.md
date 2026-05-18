@@ -6,6 +6,8 @@
 
 **Organization**: Tasks are grouped by user story so the hardening slice can be verified independently.
 
+**Artifact Scope**: New or changed `.ts` hardening test/helper files are internal regression artifacts, not delivered artifacts, so the email-safe `.txt` delivery-copy requirement does not apply to them.
+
 ## Phase 1: Setup (Shared Infrastructure)
 
 **Purpose**: Establish the review/hardening scaffolding used across all existing slices
@@ -129,8 +131,8 @@
 - Setup tasks `T001` to `T004` can run in parallel
 - Foundational tasks `T005` to `T010` can run in parallel
 - User Story 1 test tasks `T011` to `T013` can run in parallel
-- User Story 2 test tasks `T017` to `T019` can run in parallel
-- User Story 3 test tasks `T022` to `T025` can run in parallel
+- User Story 2 test tasks `T019` to `T021` can run in parallel
+- User Story 3 test tasks `T024` to `T027` can run in parallel
 - Polish tasks `T031` to `T035` can run in parallel where file paths do not overlap
 
 ---

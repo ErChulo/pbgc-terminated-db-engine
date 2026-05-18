@@ -1,6 +1,6 @@
 # Feature Specification: engine-hardening-review
 
-**Feature Branch**: `[009-hardening-review]`
+**Feature Branch**: `[010-engine-hardening-review]`
 
 **Created**: 2026-05-17
 
@@ -80,7 +80,7 @@ As a reviewer, I want the engine to keep its browser-only persistence and tracea
 - **Reviewed Inputs**: Reviewed fixture packets, committed contract artifacts, committed templates, committed mappings, and existing deterministic output packets.
 - **Disallowed Inputs**: Raw OCR, raw source documents, emails, images, PDFs, and unreviewed extraction output MUST NOT be read by deterministic engine modules.
 - **Source Layer Reads**: source assertions, resolved facts, resolved plan provisions, engine input packets, deterministic outputs, approved templates, BSRS guidance artifacts, and `artifacts/mappings/DD.csv`.
-- **Source Layer Writes**: source assertions, resolved facts, resolved plan provisions, engine input packets, deterministic outputs, and output-adapter rows already defined by the existing contracts.
+- **Source Layer Writes**: regression evidence, validation records, traces, deterministic outputs, and existing persistence rows only where current contracts already require them; the hardening slice MUST NOT introduce new lower source-layer writes.
 - **Traceability Required**: Input references, rule versions, module names, warnings, errors, DD-backed field names, and output fields that require trace links.
 
 ### Key Entities *(include if feature involves data)*
