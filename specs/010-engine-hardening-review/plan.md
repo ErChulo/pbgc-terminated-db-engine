@@ -1,6 +1,6 @@
 # Implementation Plan: engine-hardening-review
 
-**Branch**: `[009-hardening-review]` | **Date**: 2026-05-17 | **Spec**: [spec.md](./spec.md)
+**Branch**: `[010-engine-hardening-review]` | **Date**: 2026-05-17 | **Spec**: [spec.md](./spec.md)
 
 **Input**: Feature specification from `/specs/010-engine-hardening-review/spec.md`
 
@@ -10,13 +10,13 @@ Harden the existing browser-only PBGC engine by adding regression protection aro
 
 ## Technical Context
 
-**Language/Version**: TypeScript in a browser runtime, with committed static build artifacts and email-safe `.txt` delivery copies where required
+**Language/Version**: TypeScript in a browser runtime, with committed static build artifacts and email-safe `.txt` delivery copies where required; new or changed `.ts` hardening test/helper files are internal regression artifacts, not delivered artifacts
 
-**Primary Dependencies**: Vite, sql.js, the existing `@pbgc/*` engine packages, local regression fixtures, committed PBGC templates, BSRS guidance artifacts, and `artifacts/mappings/DD.csv`
+**Primary Dependencies**: Vite, sql.js, the existing `@pbgc/*` engine packages, local regression fixtures, committed PBGC templates, BSRS guidance artifacts including `artifacts/guidance/bsrs/statement-authoring/BSRS functions.txt`, approved backend validation samples in `artifacts/reference/approved-samples/bsrs-config/` and `artifacts/reference/approved-samples/v1-workbooks/`, and `artifacts/mappings/DD.csv`
 
 **Storage**: Browser SQLite via sql.js, committed migrations and seeds, and committed output rows/traces for regression verification
 
-**Testing**: Regression-oriented Vitest coverage for deterministic behavior, DD.csv invariants, adapter-exclusion invariants, persistence boundaries, traceability, and output-shape stability
+**Testing**: Regression-oriented Vitest coverage for deterministic behavior, DD.csv invariants, adapter-exclusion invariants, persistence boundaries, traceability, output-shape stability, BSRS Statement Authoring function validation, approved-sample BSRS configuration shape checks, and approved-sample V1 workbook structural/reference checks
 
 **Target Platform**: Static browser application; no server runtime
 
@@ -27,6 +27,8 @@ Harden the existing browser-only PBGC engine by adding regression protection aro
 **Constraints**: No server calls; reviewed structured inputs only; no raw OCR/source document reads in deterministic modules; committed dist/bundles; structured warnings/errors; traceability for every computed output; DD.csv canonical naming where matching DD fields exist; preserve adapter boundaries
 
 **Scale/Scope**: Existing PBGC terminated defined-benefit review fixtures and committed output adapters only; no new business domains unless needed to fix a proven defect
+
+**Write Scope**: Hardening may write regression evidence, validation records, traces, deterministic outputs, and existing persistence rows only where current contracts already require them; it does not add lower source-layer writes.
 
 ## Constitution Check
 
@@ -103,6 +105,7 @@ docs/
    - output-shape regressions
    - browser/runtime boundary regressions
    - template or BSRS guidance misalignment
+   - backend validation drift from approved BSRS configuration and V1 workbook samples
 2. Consolidate the findings in `research.md` with explicit decisions for:
    - what to regression-test
    - what not to change unless a defect is proven
@@ -123,6 +126,7 @@ docs/
    - DD-first canonical naming invariants
    - adapter exclusion guarantees
    - browser-only persistence guarantees
+   - BSRS function-set and approved-sample validation sources
 3. Update `AGENTS.md` to point at this plan file during planning workflow.
 4. Re-check the constitution after the design artifacts are written.
 
