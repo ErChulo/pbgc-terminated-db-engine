@@ -126,7 +126,7 @@
 - [ ] T036 [P] Update semantic hardening quickstart validation notes in `specs/012-bsrs-semantic-hardening/quickstart.md`
 - [ ] T037 [P] Update BSRS semantic hardening architecture notes in `docs/architecture/bsrs-semantic-hardening_v0.1.0.md`
 - [ ] T038 [P] Verify no new output adapter, migration, or persistence table was added in `packages/engine/bsrs-configuration-output/` and `packages/db/`
-- [ ] T039 [P] Run focused semantic hardening tests in `packages/tests/hardening-bsrs-semantic-*.test.ts`, `packages/tests/hardening-bsrs-printcriteria.test.ts`, `packages/tests/hardening-bsrs-field-references.test.ts`, and `packages/tests/hardening-bsrs-block-patterns.test.ts`
+- [ ] T039 [P] Run focused semantic hardening tests in `packages/tests/hardening-bsrs-semantic-*.test.ts`, `packages/tests/hardening-bsrs-printcriteria.test.ts`, `packages/tests/hardening-bsrs-field-references.test.ts`, `packages/tests/hardening-bsrs-block-patterns.test.ts`, and `packages/tests/hardening-bsrs-optional-form-patterns.test.ts`
 - [ ] T040 [P] Run full regression suite for existing BSRS behavior in `packages/tests/bsrs-configuration-output-*.test.ts`
 - [ ] T041 [P] Run lint and full test suite validation in `package.json`
 - [ ] T042 [P] Confirm no committed browser `apps/web/dist/` refresh is needed because runtime output behavior is unchanged

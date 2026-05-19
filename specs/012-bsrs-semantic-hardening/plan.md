@@ -109,7 +109,11 @@ packages/
 │   ├── hardening-bsrs-function-set.test.ts
 │   ├── hardening-bsrs-approved-samples.test.ts
 │   ├── hardening-bsrs-semantic-validation.test.ts
-│   └── hardening-bsrs-block-patterns.test.ts
+│   ├── hardening-bsrs-printcriteria.test.ts
+│   ├── hardening-bsrs-field-references.test.ts
+│   ├── hardening-bsrs-block-patterns.test.ts
+│   ├── hardening-bsrs-optional-form-patterns.test.ts
+│   └── hardening-bsrs-semantic-behavior.test.ts
 
 artifacts/
 ├── guidance/
