@@ -1,6 +1,6 @@
 # Feature Specification: BSRS Semantic Hardening
 
-**Feature Branch**: `[012-bsrs-semantic-hardening]`
+**Feature Branch**: `[011-bsrs-semantic-hardening]`
 
 **Created**: 2026-05-19
 
