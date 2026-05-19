@@ -101,9 +101,9 @@
 - [ ] T033 [P] Run lint and full test suite validation for the hardening regressions in `packages/tests/` and `apps/web/`
 - [ ] T034 [P] Refresh the committed browser build only if hardening checks change runtime output in `apps/web/dist/`
 - [ ] T035 [P] Verify checklist completeness in `specs/010-engine-hardening-review/checklists/requirements.md`
-- [ ] T036 [P] Add BSRS configuration syntax/function validation coverage against `artifacts/guidance/bsrs/statement-authoring/BSRS functions.txt` in `packages/tests/hardening-bsrs-function-set.test.ts`
-- [ ] T037 [P] Add approved-sample BSRS configuration shape regression checks using `artifacts/reference/approved-samples/bsrs-config/` in `packages/tests/hardening-bsrs-approved-samples.test.ts`
-- [ ] T038 [P] Add approved-sample V1 workbook structural/reference backend validation checks using `artifacts/reference/approved-samples/v1-workbooks/` in `packages/tests/hardening-v1-workbook-approved-samples.test.ts`
+- [X] T036 [P] Add BSRS configuration syntax/function validation coverage against `artifacts/guidance/bsrs/statement-authoring/BSRS functions.txt` in `packages/tests/hardening-bsrs-function-set.test.ts`
+- [X] T037 [P] Add approved-sample BSRS configuration shape regression checks using `artifacts/reference/approved-samples/bsrs-config/` in `packages/tests/hardening-bsrs-approved-samples.test.ts`
+- [X] T038 [P] Add approved-sample V1 workbook structural/reference backend validation checks using `artifacts/reference/approved-samples/v1-workbooks/` in `packages/tests/hardening-v1-workbook-approved-samples.test.ts`
 
 ---
 
