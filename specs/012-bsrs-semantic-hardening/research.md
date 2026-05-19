@@ -56,3 +56,10 @@
   reviewable path back to approved artifacts.
 - Alternatives considered: Free-form assertion messages only; rejected because
   they are harder to compare across repeated runs and weaker for trace review.
+
+## US1 MVP Source Inventory
+
+- Statement Authoring function set:
+  `artifacts/guidance/bsrs/statement-authoring/BSRS functions.txt`
+- Approved BSRS configuration samples:
+  `artifacts/reference/approved-samples/bsrs-config/**`

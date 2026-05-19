@@ -14,6 +14,9 @@ configuration patterns.
 - `artifacts/reference/approved-samples/bsrs-config/recalculations/`
 - `artifacts/reference/approved-samples/bsrs-config/optional-forms/`
 
+The US1 MVP reads these committed artifacts in tests and passes their reviewed
+contents into pure `bsrs_configuration_output` semantic-validation helpers.
+
 ## Checks
 
 1. Validate every approved sample function reference against the approved
@@ -32,6 +35,7 @@ configuration patterns.
 ## Expected Outcomes
 
 - Unsupported functions are reported as structured errors.
+- Malformed PrintCriteria quote structure is reported as a structured error.
 - Unknown field-like tokens are reported as structured errors unless approved by
   the sample semantics or existing field vocabulary.
 - Approved statement, recalculation, and optional-form block patterns remain

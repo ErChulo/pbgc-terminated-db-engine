@@ -55,6 +55,9 @@
 - **Relationships**: Links back to validation source, sample row, function
   reference, field reference, or block pattern.
 
+US1 findings currently link to Statement Authoring function references and
+PrintCriteria sample-row checks.
+
 ## Validation Rules
 
 - Function references must resolve to the approved Statement Authoring function

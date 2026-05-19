@@ -20,10 +20,10 @@
 
 **Purpose**: Establish BSRS semantic-hardening scaffolding and documentation references
 
-- [ ] T001 Add BSRS semantic hardening architecture note scaffold in `docs/architecture/bsrs-semantic-hardening_v0.1.0.md`
-- [ ] T002 [P] Record approved BSRS sample inventory and Statement Authoring source paths in `specs/012-bsrs-semantic-hardening/quickstart.md`
-- [ ] T003 [P] Add semantic validation source inventory notes in `specs/012-bsrs-semantic-hardening/research.md`
-- [ ] T004 [P] Add semantic validation entity trace notes in `specs/012-bsrs-semantic-hardening/data-model.md`
+- [X] T001 Add BSRS semantic hardening architecture note scaffold in `docs/architecture/bsrs-semantic-hardening_v0.1.0.md`
+- [X] T002 [P] Record approved BSRS sample inventory and Statement Authoring source paths in `specs/012-bsrs-semantic-hardening/quickstart.md`
+- [X] T003 [P] Add semantic validation source inventory notes in `specs/012-bsrs-semantic-hardening/research.md`
+- [X] T004 [P] Add semantic validation entity trace notes in `specs/012-bsrs-semantic-hardening/data-model.md`
 
 ---
 
@@ -33,12 +33,12 @@
 
 **CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T005 [P] Define semantic validation finding types and stable code constants in `packages/engine/bsrs-configuration-output/src/semanticValidationTypes.ts`
-- [ ] T006 [P] Add approved BSRS sample file loader in `packages/engine/bsrs-configuration-output/src/bsrsSampleLoader.ts`
-- [ ] T007 [P] Add Statement Authoring function-list loader in `packages/engine/bsrs-configuration-output/src/statementAuthoringFunctions.ts`
-- [ ] T008 [P] Add tab-delimited BSRS sample row parser in `packages/engine/bsrs-configuration-output/src/bsrsSampleParser.ts`
-- [ ] T009 [P] Add deterministic finding sorter and serializer in `packages/engine/bsrs-configuration-output/src/semanticValidationTrace.ts`
-- [ ] T010 Export semantic validation helpers from `packages/engine/bsrs-configuration-output/src/index.ts`
+- [X] T005 [P] Define semantic validation finding types and stable code constants in `packages/engine/bsrs-configuration-output/src/semanticValidationTypes.ts`
+- [X] T006 [P] Add approved BSRS sample file loader in `packages/engine/bsrs-configuration-output/src/bsrsSampleLoader.ts`
+- [X] T007 [P] Add Statement Authoring function-list loader in `packages/engine/bsrs-configuration-output/src/statementAuthoringFunctions.ts`
+- [X] T008 [P] Add tab-delimited BSRS sample row parser in `packages/engine/bsrs-configuration-output/src/bsrsSampleParser.ts`
+- [X] T009 [P] Add deterministic finding sorter and serializer in `packages/engine/bsrs-configuration-output/src/semanticValidationTrace.ts`
+- [X] T010 Export semantic validation helpers from `packages/engine/bsrs-configuration-output/src/index.ts`
 
 **Checkpoint**: Semantic validation foundation ready - user story work can begin
 
@@ -54,17 +54,17 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T011 [P] [US1] Add Statement Authoring function reference contract test in `packages/tests/hardening-bsrs-semantic-functions.test.ts`
-- [ ] T012 [P] [US1] Add PrintCriteria syntax and balanced-quote regression test in `packages/tests/hardening-bsrs-printcriteria.test.ts`
-- [ ] T013 [P] [US1] Add unsupported-function structured-error regression test in `packages/tests/hardening-bsrs-printcriteria.test.ts`
-- [ ] T014 [P] [US1] Add repeated-run finding stability test for function and PrintCriteria validation in `packages/tests/hardening-bsrs-semantic-functions.test.ts`
+- [X] T011 [P] [US1] Add Statement Authoring function reference contract test in `packages/tests/hardening-bsrs-semantic-functions.test.ts`
+- [X] T012 [P] [US1] Add PrintCriteria syntax and balanced-quote regression test in `packages/tests/hardening-bsrs-printcriteria.test.ts`
+- [X] T013 [P] [US1] Add unsupported-function structured-error regression test in `packages/tests/hardening-bsrs-printcriteria.test.ts`
+- [X] T014 [P] [US1] Add repeated-run finding stability test for function and PrintCriteria validation in `packages/tests/hardening-bsrs-semantic-functions.test.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T015 [P] [US1] Implement function-reference extraction in `packages/engine/bsrs-configuration-output/src/statementAuthoringFunctions.ts`
-- [ ] T016 [P] [US1] Implement PrintCriteria lexical validation in `packages/engine/bsrs-configuration-output/src/printCriteriaValidation.ts`
-- [ ] T017 [US1] Implement Statement Authoring semantic validation orchestration in `packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts`
-- [ ] T018 [US1] Wire structured finding construction and deterministic ordering for US1 in `packages/engine/bsrs-configuration-output/src/semanticValidationTrace.ts`
+- [X] T015 [P] [US1] Implement function-reference extraction in `packages/engine/bsrs-configuration-output/src/statementAuthoringFunctions.ts`
+- [X] T016 [P] [US1] Implement PrintCriteria lexical validation in `packages/engine/bsrs-configuration-output/src/printCriteriaValidation.ts`
+- [X] T017 [US1] Implement Statement Authoring semantic validation orchestration in `packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts`
+- [X] T018 [US1] Wire structured finding construction and deterministic ordering for US1 in `packages/engine/bsrs-configuration-output/src/semanticValidationTrace.ts`
 
 **Checkpoint**: Function-set and PrintCriteria semantic validation should be independently testable
 
