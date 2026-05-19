@@ -106,9 +106,9 @@ packages/
 │   └── bsrs-configuration-output/
 │       └── src/
 ├── tests/
-│   ├── hardening-bsrs-function-set.test.ts
-│   ├── hardening-bsrs-approved-samples.test.ts
-│   ├── hardening-bsrs-semantic-validation.test.ts
+│   ├── hardening-bsrs-function-set.test.ts (pre-existing validation source)
+│   ├── hardening-bsrs-approved-samples.test.ts (pre-existing validation source)
+│   ├── hardening-bsrs-semantic-functions.test.ts
 │   ├── hardening-bsrs-printcriteria.test.ts
 │   ├── hardening-bsrs-field-references.test.ts
 │   ├── hardening-bsrs-block-patterns.test.ts
