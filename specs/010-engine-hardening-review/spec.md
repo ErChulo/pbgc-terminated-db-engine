@@ -74,12 +74,15 @@ As a reviewer, I want the engine to keep its browser-only persistence and tracea
 - **FR-008**: The system MUST preserve browser-only sqlite persistence boundaries and MUST NOT introduce server calls or external persistence requirements.
 - **FR-009**: The system MUST keep output shapes stable for the committed adapter contracts unless a defect fix requires a targeted correction.
 - **FR-010**: The system MUST remain aligned with the official PBGC deliverable templates and BSRS guidance already committed in the repository.
+- **FR-011**: The system MUST validate BSRS configuration syntax and function references against `artifacts/guidance/bsrs/statement-authoring/BSRS functions.txt`.
+- **FR-012**: The system MUST validate BSRS configuration output shape against approved samples in `artifacts/reference/approved-samples/bsrs-config/`.
+- **FR-013**: The system MUST validate V1 workbook structure and references against approved samples in `artifacts/reference/approved-samples/v1-workbooks/` for backend validation.
 
 ### Deterministic Boundary *(mandatory)*
 
 - **Reviewed Inputs**: Reviewed fixture packets, committed contract artifacts, committed templates, committed mappings, and existing deterministic output packets.
 - **Disallowed Inputs**: Raw OCR, raw source documents, emails, images, PDFs, and unreviewed extraction output MUST NOT be read by deterministic engine modules.
-- **Source Layer Reads**: source assertions, resolved facts, resolved plan provisions, engine input packets, deterministic outputs, approved templates, BSRS guidance artifacts, and `artifacts/mappings/DD.csv`.
+- **Source Layer Reads**: source assertions, resolved facts, resolved plan provisions, engine input packets, deterministic outputs, approved templates, BSRS guidance artifacts including `artifacts/guidance/bsrs/statement-authoring/BSRS functions.txt`, approved samples in `artifacts/reference/approved-samples/bsrs-config/` and `artifacts/reference/approved-samples/v1-workbooks/`, and `artifacts/mappings/DD.csv`.
 - **Source Layer Writes**: regression evidence, validation records, traces, deterministic outputs, and existing persistence rows only where current contracts already require them; the hardening slice MUST NOT introduce new lower source-layer writes.
 - **Traceability Required**: Input references, rule versions, module names, warnings, errors, DD-backed field names, and output fields that require trace links.
 
@@ -99,6 +102,9 @@ As a reviewer, I want the engine to keep its browser-only persistence and tracea
 - **SC-003**: 100% of regression checks for excluded adapters confirm that unrelated output-adapter tables remain unchanged after a slice run.
 - **SC-004**: All existing slice regressions complete without introducing browser-external persistence or server-dependent behavior.
 - **SC-005**: Output-shape stability checks pass for all committed adapter contracts in the hardening review suite.
+- **SC-006**: BSRS configuration validation rejects any function reference outside the allowed Statement Authoring function set.
+- **SC-007**: Approved-sample BSRS configuration shape checks pass for committed backend validation fixtures.
+- **SC-008**: Approved-sample V1 workbook structural and reference checks pass for committed backend validation fixtures.
 
 ## Assumptions
 

@@ -12,11 +12,11 @@ Harden the existing browser-only PBGC engine by adding regression protection aro
 
 **Language/Version**: TypeScript in a browser runtime, with committed static build artifacts and email-safe `.txt` delivery copies where required; new or changed `.ts` hardening test/helper files are internal regression artifacts, not delivered artifacts
 
-**Primary Dependencies**: Vite, sql.js, the existing `@pbgc/*` engine packages, local regression fixtures, committed PBGC templates, BSRS guidance artifacts, and `artifacts/mappings/DD.csv`
+**Primary Dependencies**: Vite, sql.js, the existing `@pbgc/*` engine packages, local regression fixtures, committed PBGC templates, BSRS guidance artifacts including `artifacts/guidance/bsrs/statement-authoring/BSRS functions.txt`, approved backend validation samples in `artifacts/reference/approved-samples/bsrs-config/` and `artifacts/reference/approved-samples/v1-workbooks/`, and `artifacts/mappings/DD.csv`
 
 **Storage**: Browser SQLite via sql.js, committed migrations and seeds, and committed output rows/traces for regression verification
 
-**Testing**: Regression-oriented Vitest coverage for deterministic behavior, DD.csv invariants, adapter-exclusion invariants, persistence boundaries, traceability, and output-shape stability
+**Testing**: Regression-oriented Vitest coverage for deterministic behavior, DD.csv invariants, adapter-exclusion invariants, persistence boundaries, traceability, output-shape stability, BSRS Statement Authoring function validation, approved-sample BSRS configuration shape checks, and approved-sample V1 workbook structural/reference checks
 
 **Target Platform**: Static browser application; no server runtime
 
@@ -105,6 +105,7 @@ docs/
    - output-shape regressions
    - browser/runtime boundary regressions
    - template or BSRS guidance misalignment
+   - backend validation drift from approved BSRS configuration and V1 workbook samples
 2. Consolidate the findings in `research.md` with explicit decisions for:
    - what to regression-test
    - what not to change unless a defect is proven
@@ -125,6 +126,7 @@ docs/
    - DD-first canonical naming invariants
    - adapter exclusion guarantees
    - browser-only persistence guarantees
+   - BSRS function-set and approved-sample validation sources
 3. Update `AGENTS.md` to point at this plan file during planning workflow.
 4. Re-check the constitution after the design artifacts are written.
 
