@@ -1,6 +1,6 @@
 # Feature Specification: BSRS Field Reference Hardening
 
-**Feature Branch**: `[013-bsrs-field-reference-hardening]`
+**Feature Branch**: `[012-bsrs-field-reference-hardening]`
 
 **Created**: 2026-05-20
 
