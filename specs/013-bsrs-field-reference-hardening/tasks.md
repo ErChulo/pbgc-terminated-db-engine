@@ -20,10 +20,10 @@
 
 **Purpose**: Establish field-reference hardening documentation and source inventories
 
-- [ ] T001 Add BSRS field-reference hardening architecture note scaffold in `docs/architecture/bsrs_field_reference_hardening_v0.1.0.md`
-- [ ] T002 [P] Record approved BSRS sample, DD.csv, and current field-name validation sources in `specs/013-bsrs-field-reference-hardening/quickstart.md`
-- [ ] T003 [P] Add field vocabulary source inventory notes in `specs/013-bsrs-field-reference-hardening/research.md`
-- [ ] T004 [P] Add field-reference resolution trace notes in `specs/013-bsrs-field-reference-hardening/data-model.md`
+- [X] T001 Add BSRS field-reference hardening architecture note scaffold in `docs/architecture/bsrs_field_reference_hardening_v0.1.0.md`
+- [X] T002 [P] Record approved BSRS sample, DD.csv, and current field-name validation sources in `specs/013-bsrs-field-reference-hardening/quickstart.md`
+- [X] T003 [P] Add field vocabulary source inventory notes in `specs/013-bsrs-field-reference-hardening/research.md`
+- [X] T004 [P] Add field-reference resolution trace notes in `specs/013-bsrs-field-reference-hardening/data-model.md`
 
 ---
 
@@ -33,12 +33,12 @@
 
 **CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T005 [P] Define field-reference vocabulary and resolution types in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
-- [ ] T006 [P] Add DD.csv field-name parser helper in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
-- [ ] T007 [P] Add current committed BSRS/V1/output field vocabulary builder in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
-- [ ] T008 [P] Add approved sample fallback vocabulary builder in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
-- [ ] T009 [P] Add documented control-token and formatting-marker classifier in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
-- [ ] T010 Export field-reference validation helpers from `packages/engine/bsrs-configuration-output/src/index.ts`
+- [X] T005 [P] Define field-reference vocabulary and resolution types in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
+- [X] T006 [P] Add DD.csv field-name parser helper in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
+- [X] T007 [P] Add current committed BSRS/V1/output field vocabulary builder in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
+- [X] T008 [P] Add approved sample fallback vocabulary builder in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
+- [X] T009 [P] Add documented control-token and formatting-marker classifier in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
+- [X] T010 Export field-reference validation helpers from `packages/engine/bsrs-configuration-output/src/index.ts`
 
 **Checkpoint**: Field-reference validation foundation ready - user story work can begin
 
@@ -54,17 +54,17 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T011 [P] [US1] Add approved sample field-reference validation test in `packages/tests/hardening-bsrs-field-references.test.ts`
-- [ ] T012 [P] [US1] Add DD-backed field resolution regression test in `packages/tests/hardening-bsrs-field-references.test.ts`
-- [ ] T013 [P] [US1] Add approved no-DD fallback field regression test in `packages/tests/hardening-bsrs-field-references.test.ts`
-- [ ] T014 [P] [US1] Add current committed field vocabulary regression test in `packages/tests/hardening-bsrs-field-references.test.ts`
+- [X] T011 [P] [US1] Add approved sample field-reference validation test in `packages/tests/hardening-bsrs-field-references.test.ts`
+- [X] T012 [P] [US1] Add DD-backed field resolution regression test in `packages/tests/hardening-bsrs-field-references.test.ts`
+- [X] T013 [P] [US1] Add approved no-DD fallback field regression test in `packages/tests/hardening-bsrs-field-references.test.ts`
+- [X] T014 [P] [US1] Add current committed field vocabulary regression test in `packages/tests/hardening-bsrs-field-references.test.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T015 [P] [US1] Implement field-like token extraction outside quoted narrative text in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
-- [ ] T016 [P] [US1] Implement DD-first field resolution in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
-- [ ] T017 [P] [US1] Implement approved no-DD fallback resolution in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
-- [ ] T018 [US1] Wire field-reference resolution into semantic validation orchestration in `packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts`
+- [X] T015 [P] [US1] Implement field-like token extraction outside quoted narrative text in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
+- [X] T016 [P] [US1] Implement DD-first field resolution in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
+- [X] T017 [P] [US1] Implement approved no-DD fallback resolution in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
+- [X] T018 [US1] Wire field-reference resolution into semantic validation orchestration in `packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts`
 
 **Checkpoint**: Referenced-field validation should be independently testable
 

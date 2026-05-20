@@ -1,5 +1,6 @@
 import { parseBsrsSample } from "./bsrsSampleParser";
 import { normalizeBsrsSemanticSources } from "./bsrsSampleLoader";
+import { validateBsrsFieldReferencesFromSources } from "./bsrsFieldReferenceValidation";
 import { validatePrintCriteria } from "./printCriteriaValidation";
 import { type BsrsSemanticValidationFinding, type BsrsSemanticValidationSource } from "./semanticValidationTypes";
 import { parseAllowedStatementAuthoringFunctions, validateStatementAuthoringFunctions } from "./statementAuthoringFunctions";
@@ -17,4 +18,11 @@ export function validateBsrsSemanticUs1(input: {
     ...validateStatementAuthoringFunctions({ allowedFunctions, sources }),
     ...validatePrintCriteria({ allowedFunctions, samples }),
   ]);
+}
+
+export function validateBsrsSemanticFieldReferences(input: {
+  ddCsvText: string;
+  sources: readonly BsrsSemanticValidationSource[];
+}): BsrsSemanticValidationFinding[] {
+  return sortSemanticValidationFindings(validateBsrsFieldReferencesFromSources(input));
 }

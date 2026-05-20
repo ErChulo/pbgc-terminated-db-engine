@@ -45,6 +45,10 @@
 - **Relationships**: Links back to a BSRS Field Reference and the vocabulary
   resolution path used to classify it.
 
+US1 findings currently link to extracted field-like references and the
+DD-backed, current committed field, or approved fallback vocabulary path used to
+classify them.
+
 ## Validation Rules
 
 - Field-like tokens must be extracted from approved BSRS sample expressions and

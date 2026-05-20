@@ -1,3 +1,4 @@
+export * from "./bsrsFieldReferenceValidation";
 export * from "./bsrsSampleLoader";
 export * from "./bsrsSampleParser";
 export * from "./bsrsSemanticValidation";

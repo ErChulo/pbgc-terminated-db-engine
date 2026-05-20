@@ -55,3 +55,11 @@
 - Alternatives considered: Rework BSRS generation to consume field-reference
   validation results at runtime; rejected as unnecessary scope expansion for
   this increment.
+
+## US1 MVP Source Inventory
+
+- Approved BSRS configuration samples:
+  `artifacts/reference/approved-samples/bsrs-config/**`
+- Data Dictionary canonical field names: `artifacts/mappings/DD.csv`
+- Current committed field vocabulary: existing engine/output field constants and
+  BSRS/DD mapping helpers
