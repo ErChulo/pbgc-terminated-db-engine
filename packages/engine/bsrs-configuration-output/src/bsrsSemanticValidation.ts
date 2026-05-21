@@ -1,6 +1,6 @@
 import { parseBsrsSample } from "./bsrsSampleParser";
 import { normalizeBsrsSemanticSources } from "./bsrsSampleLoader";
-import { validateStatementBlockPatterns } from "./bsrsBlockPatternValidation";
+import { validateRecalculationBlockPatterns, validateStatementBlockPatterns } from "./bsrsBlockPatternValidation";
 import { validateBsrsFieldReferencesFromSources } from "./bsrsFieldReferenceValidation";
 import { validatePrintCriteria } from "./printCriteriaValidation";
 import { type BsrsSemanticValidationFinding, type BsrsSemanticValidationSource } from "./semanticValidationTypes";
@@ -34,5 +34,8 @@ export function validateBsrsSemanticBlockPatterns(input: {
   const sources = normalizeBsrsSemanticSources(input.sources);
   const samples = sources.map(parseBsrsSample);
 
-  return sortSemanticValidationFindings(validateStatementBlockPatterns(samples).findings);
+  return sortSemanticValidationFindings([
+    ...validateStatementBlockPatterns(samples).findings,
+    ...validateRecalculationBlockPatterns(samples).findings,
+  ]);
 }

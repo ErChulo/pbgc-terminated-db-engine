@@ -15,11 +15,11 @@
 
 **Purpose**: Confirm existing recalculation sample inputs and BSRS validation surfaces before story work begins.
 
-- [ ] T001 Inspect existing block-pattern validation helper in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T002 Inspect existing semantic validation wrapper in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
-- [ ] T003 [P] Inspect approved recalculation sample artifact in artifacts/reference/approved-samples/bsrs-config/recalculations/sample-bsrs-recalculation-config.txt
-- [ ] T004 [P] Inspect existing block-pattern test coverage in packages/tests/hardening-bsrs-block-patterns.test.ts
-- [ ] T005 [P] Inspect existing BSRS behavior-preservation tests in packages/tests/bsrs-configuration-output-contract.test.ts, packages/tests/bsrs-configuration-output-output.test.ts, packages/tests/bsrs-configuration-output-persistence.test.ts, and packages/tests/bsrs-configuration-output-trace.test.ts
+- [X] T001 Inspect existing block-pattern validation helper in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T002 Inspect existing semantic validation wrapper in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
+- [X] T003 [P] Inspect approved recalculation sample artifact in artifacts/reference/approved-samples/bsrs-config/recalculations/sample-bsrs-recalculation-config.txt
+- [X] T004 [P] Inspect existing block-pattern test coverage in packages/tests/hardening-bsrs-block-patterns.test.ts
+- [X] T005 [P] Inspect existing BSRS behavior-preservation tests in packages/tests/bsrs-configuration-output-contract.test.ts, packages/tests/bsrs-configuration-output-output.test.ts, packages/tests/bsrs-configuration-output-persistence.test.ts, and packages/tests/bsrs-configuration-output-trace.test.ts
 
 ---
 
@@ -29,11 +29,11 @@
 
 **CRITICAL**: No user story implementation should begin until this phase is complete.
 
-- [ ] T006 Extend block-family and section-context types for recalculation validation in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T007 Extend accepted classification shape for recalculation section context, line cluster, and recalculation row role metadata in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T008 Extend deterministic classification and finding sorting to include recalculation evidence without changing statement ordering in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T009 Add recalculation validation export surface without changing existing statement exports in packages/engine/bsrs-configuration-output/src/index.ts
-- [ ] T010 Wire recalculation-pattern validation into the existing BSRS semantic validation boundary without changing statement, function-set, PrintCriteria, or field-reference behavior in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
+- [X] T006 Extend block-family and section-context types for recalculation validation in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T007 Extend accepted classification shape for recalculation section context, line cluster, and recalculation row role metadata in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T008 Extend deterministic classification and finding sorting to include recalculation evidence without changing statement ordering in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T009 Add recalculation validation export surface without changing existing statement exports in packages/engine/bsrs-configuration-output/src/index.ts
+- [X] T010 Wire recalculation-pattern validation into the existing BSRS semantic validation boundary without changing statement, function-set, PrintCriteria, or field-reference behavior in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
 
 **Checkpoint**: Foundation ready - user story implementation can now begin.
 
@@ -47,17 +47,17 @@
 
 ### Tests for User Story 1
 
-- [ ] T011 [P] [US1] Add approved recalculation block-pattern acceptance test in packages/tests/hardening-bsrs-block-patterns.test.ts
-- [ ] T012 [P] [US1] Add malformed recalculation missing-section, duplicated-section, and out-of-order-section finding tests in packages/tests/hardening-bsrs-block-patterns.test.ts
-- [ ] T013 [P] [US1] Add recalculation finding trace-shape assertion for source path, row index, block family, section context, line cluster, rule version, producing module, severity, and finding code in packages/tests/hardening-bsrs-block-patterns.test.ts
+- [X] T011 [P] [US1] Add approved recalculation block-pattern acceptance test in packages/tests/hardening-bsrs-block-patterns.test.ts
+- [X] T012 [P] [US1] Add malformed recalculation missing-section, duplicated-section, and out-of-order-section finding tests in packages/tests/hardening-bsrs-block-patterns.test.ts
+- [X] T013 [P] [US1] Add recalculation finding trace-shape assertion for source path, row index, block family, section context, line cluster, rule version, producing module, severity, and finding code in packages/tests/hardening-bsrs-block-patterns.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T014 [US1] Implement recalculation block-family detection from approved recalculation samples in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T015 [US1] Implement expected recalculation section-sequence validation in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T016 [US1] Implement recalculation line-cluster recognition and support-cluster attachment checks in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T014 [US1] Implement recalculation block-family detection from approved recalculation samples in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T015 [US1] Implement expected recalculation section-sequence validation in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T016 [US1] Implement recalculation line-cluster recognition and support-cluster attachment checks in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
 - [ ] T017 [US1] Implement structured recalculation missing, duplicated, out-of-order, suspicious, and orphan section findings in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T018 [US1] Export recalculation-pattern validation through the existing BSRS semantic validation module in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
+- [X] T018 [US1] Export recalculation-pattern validation through the existing BSRS semantic validation module in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
 
 **Checkpoint**: User Story 1 is fully functional and testable independently.
 
@@ -93,14 +93,14 @@
 
 ### Tests for User Story 3
 
-- [ ] T025 [P] [US3] Add repeated-run recalculation accepted-classification and finding payload stability test in packages/tests/hardening-bsrs-block-patterns.test.ts
+- [X] T025 [P] [US3] Add repeated-run recalculation accepted-classification and finding payload stability test in packages/tests/hardening-bsrs-block-patterns.test.ts
 - [ ] T026 [P] [US3] Add recalculation adapter-exclusion regression test proving validation does not write unrelated output adapters in packages/tests/hardening-bsrs-semantic-behavior.test.ts
 - [ ] T027 [P] [US3] Add existing statement block-pattern regression assertion to prove recalculation changes do not alter statement validation in packages/tests/hardening-bsrs-block-patterns.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T028 [US3] Ensure recalculation classifications and findings use deterministic source-path, row-index, section-context, line-cluster, code, and token ordering in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T029 [US3] Ensure recalculation semantic validation wrapper preserves existing statement, function-set, PrintCriteria, and field-reference behavior in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
+- [X] T028 [US3] Ensure recalculation classifications and findings use deterministic source-path, row-index, section-context, line-cluster, code, and token ordering in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T029 [US3] Ensure recalculation semantic validation wrapper preserves existing statement, function-set, PrintCriteria, and field-reference behavior in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
 
 **Checkpoint**: All user stories are independently functional.
 
@@ -112,12 +112,12 @@
 
 - [ ] T030 [P] Add architecture note for BSRS recalculation-pattern hardening scope and validation sources in docs/architecture/bsrs_recalculation_pattern_hardening_v0.1.0.md
 - [ ] T031 Verify focused quickstart command passes for recalculation-pattern hardening tests from specs/015-bsrs-recalculation-pattern-hardening/quickstart.md
-- [ ] T032 Verify existing BSRS output contract, output, persistence, and trace tests still pass with recalculation-pattern validation in packages/tests/bsrs-configuration-output-contract.test.ts, packages/tests/bsrs-configuration-output-output.test.ts, packages/tests/bsrs-configuration-output-persistence.test.ts, and packages/tests/bsrs-configuration-output-trace.test.ts
-- [ ] T033 Run full project regression with npm test
-- [ ] T034 Run lint verification with npm run lint
-- [ ] T035 Run static build verification with npm run build and keep committed apps/web/dist/ output current if runtime bundles change
-- [ ] T036 Confirm no new migrations, seeds, output adapters, server calls, raw source reads, or lower source-layer writes were introduced in packages/db/ and packages/output-adapters/
-- [ ] T037 Mark completed tasks in specs/015-bsrs-recalculation-pattern-hardening/tasks.md
+- [X] T032 Verify existing BSRS output contract, output, persistence, and trace tests still pass with recalculation-pattern validation in packages/tests/bsrs-configuration-output-contract.test.ts, packages/tests/bsrs-configuration-output-output.test.ts, packages/tests/bsrs-configuration-output-persistence.test.ts, and packages/tests/bsrs-configuration-output-trace.test.ts
+- [X] T033 Run full project regression with npm test
+- [X] T034 Run lint verification with npm run lint
+- [X] T035 Run static build verification with npm run build and keep committed apps/web/dist/ output current if runtime bundles change
+- [X] T036 Confirm no new migrations, seeds, output adapters, server calls, raw source reads, or lower source-layer writes were introduced in packages/db/ and packages/output-adapters/
+- [X] T037 Mark completed tasks in specs/015-bsrs-recalculation-pattern-hardening/tasks.md
 
 ---
 

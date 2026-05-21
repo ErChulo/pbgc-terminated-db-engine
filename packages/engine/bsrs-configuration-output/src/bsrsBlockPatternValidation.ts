@@ -5,9 +5,9 @@ import {
 } from "./semanticValidationTypes";
 import { sortSemanticValidationFindings } from "./semanticValidationTrace";
 
-export type BsrsBlockFamily = "statement";
+export type BsrsBlockFamily = "statement" | "recalculation";
 
-export type BsrsBlockSemanticRole = "marker" | "detail" | "narrative" | "formatting" | "spacer";
+export type BsrsBlockSemanticRole = "marker" | "support" | "detail" | "subtotal" | "narrative" | "formatting" | "spacer";
 
 export type BsrsStatementSectionContext =
   | "benefit_summary"
@@ -15,24 +15,47 @@ export type BsrsStatementSectionContext =
   | "summary_of_benefits"
   | "benefit_calculation";
 
+export type BsrsRecalculationSectionContext = "participant_data";
+
+export type BsrsRecalculationLineCluster =
+  | "participant_data"
+  | "name"
+  | "social_security_number"
+  | "sex"
+  | "date_of_birth"
+  | "date_of_termination"
+  | "retirement_date"
+  | "normal_retirement_date"
+  | "earliest_unreduced_retirement_date"
+  | "earliest_retirement_date"
+  | "credited_service";
+
+export type BsrsBlockSectionContext = BsrsStatementSectionContext | BsrsRecalculationSectionContext;
+export type BsrsBlockLineCluster = BsrsStatementSectionContext | BsrsRecalculationLineCluster;
+
 export type BsrsBlockPatternClassification = {
   block_family: BsrsBlockFamily;
   source_path: string;
   row_index: number;
   column_name: string;
   token: string;
-  section_context: BsrsStatementSectionContext;
-  line_cluster: BsrsStatementSectionContext;
+  section_context: BsrsBlockSectionContext;
+  line_cluster: BsrsBlockLineCluster;
   semantic_role: BsrsBlockSemanticRole;
 };
 
 export type BsrsBlockPatternFinding = BsrsSemanticValidationFinding & {
   block_family: BsrsBlockFamily;
-  section_context: BsrsStatementSectionContext;
-  line_cluster: BsrsStatementSectionContext;
+  section_context: BsrsBlockSectionContext;
+  line_cluster: BsrsBlockLineCluster;
 };
 
 export type BsrsStatementBlockPatternResult = {
+  accepted: BsrsBlockPatternClassification[];
+  findings: BsrsBlockPatternFinding[];
+};
+
+export type BsrsRecalculationBlockPatternResult = {
   accepted: BsrsBlockPatternClassification[];
   findings: BsrsBlockPatternFinding[];
 };
@@ -66,9 +89,95 @@ const STATEMENT_SECTION_DEFINITIONS: readonly StatementSectionDefinition[] = [
   },
 ];
 
+type RecalculationClusterDefinition = {
+  cluster: BsrsRecalculationLineCluster;
+  token: string;
+  role: BsrsBlockSemanticRole;
+  matches: (row: BsrsSampleRow) => boolean;
+};
+
+const RECALCULATION_CLUSTER_DEFINITIONS: readonly RecalculationClusterDefinition[] = [
+  {
+    cluster: "participant_data",
+    token: "Participant Data",
+    role: "marker",
+    matches: (row) => normalizedDescription(row).includes("Participant Data"),
+  },
+  {
+    cluster: "name",
+    token: "Name:",
+    role: "detail",
+    matches: (row) => normalizedDescription(row).includes("Name:"),
+  },
+  {
+    cluster: "social_security_number",
+    token: "Social Security Number:",
+    role: "detail",
+    matches: (row) => normalizedDescription(row).includes("Social Security Number:"),
+  },
+  {
+    cluster: "sex",
+    token: "Sex:",
+    role: "detail",
+    matches: (row) => normalizedDescription(row).includes("Sex:"),
+  },
+  {
+    cluster: "date_of_birth",
+    token: "Date of Birth:",
+    role: "detail",
+    matches: (row) => normalizedDescription(row).includes("Date of Birth:"),
+  },
+  {
+    cluster: "date_of_termination",
+    token: "Date of Termination of Employment:",
+    role: "detail",
+    matches: (row) => normalizedDescription(row).includes("Date of Termination of Employment:"),
+  },
+  {
+    cluster: "retirement_date",
+    token: "Actual Retirement Date:",
+    role: "detail",
+    matches: (row) => normalizedDescription(row).includes("Actual Retirement Date:") || normalizedDescription(row).includes("Benefit Commencement Date:"),
+  },
+  {
+    cluster: "normal_retirement_date",
+    token: "Normal Retirement Date:",
+    role: "support",
+    matches: (row) => normalizedDescription(row).includes("Normal Retirement Date:"),
+  },
+  {
+    cluster: "earliest_unreduced_retirement_date",
+    token: "Earliest Unreduced Retirement Date:",
+    role: "support",
+    matches: (row) => normalizedDescription(row).includes("Earliest Unreduced Retirement Date:"),
+  },
+  {
+    cluster: "earliest_retirement_date",
+    token: "Earliest Retirement Date:",
+    role: "support",
+    matches: (row) => normalizedDescription(row).includes("Earliest Retirement Date:"),
+  },
+  {
+    cluster: "credited_service",
+    token: "Credited Service (CS)",
+    role: "support",
+    matches: (row) => normalizedDescription(row).includes("Credited Service (CS)"),
+  },
+];
+
 export function validateStatementBlockPatterns(samples: readonly BsrsParsedSample[]): BsrsStatementBlockPatternResult {
   const accepted = samples.flatMap(classifyStatementRows);
   const findings = samples.flatMap(validateStatementSectionSequence);
+
+  return {
+    accepted: sortBlockPatternClassifications(accepted),
+    findings: sortSemanticValidationFindings(findings) as BsrsBlockPatternFinding[],
+  };
+}
+
+export function validateRecalculationBlockPatterns(samples: readonly BsrsParsedSample[]): BsrsRecalculationBlockPatternResult {
+  const accepted = samples.flatMap(classifyRecalculationRows);
+  const findings = samples.flatMap(validateRecalculationClusterSequence);
 
   return {
     accepted: sortBlockPatternClassifications(accepted),
@@ -145,6 +254,7 @@ function validateStatementSectionSequence(sample: BsrsParsedSample): BsrsBlockPa
   for (const locatedSection of locatedSections.filter((section) => section.row).sort((left, right) => left.row!.row_index - right.row!.row_index)) {
     if (!reportedOutOfOrder && (locatedSection.expectedIndex < lastExpectedIndex || locatedSection.expectedIndex !== lastExpectedIndex + 1)) {
       findings.push(makeBlockPatternFinding({
+        block_family: "statement",
         code: "BSRS_STATEMENT_SECTION_OUT_OF_ORDER",
         severity: "error",
         source_path: sample.source_path,
@@ -163,6 +273,7 @@ function validateStatementSectionSequence(sample: BsrsParsedSample): BsrsBlockPa
   for (const locatedSection of locatedSections) {
     if (!locatedSection.row) {
       findings.push(makeBlockPatternFinding({
+        block_family: "statement",
         code: "BSRS_STATEMENT_SECTION_MISSING",
         severity: "error",
         source_path: sample.source_path,
@@ -178,14 +289,110 @@ function validateStatementSectionSequence(sample: BsrsParsedSample): BsrsBlockPa
   return findings;
 }
 
+function classifyRecalculationRows(sample: BsrsParsedSample): BsrsBlockPatternClassification[] {
+  if (!isRecalculationSample(sample)) {
+    return [];
+  }
+
+  const classifications: BsrsBlockPatternClassification[] = [];
+
+  for (const row of sample.rows) {
+    const cluster = matchingRecalculationCluster(row);
+    if (!cluster) {
+      continue;
+    }
+
+    classifications.push({
+      block_family: "recalculation",
+      source_path: sample.source_path,
+      row_index: row.row_index,
+      column_name: "Description",
+      token: cluster.token,
+      section_context: "participant_data",
+      line_cluster: cluster.cluster,
+      semantic_role: cluster.role,
+    });
+  }
+
+  return classifications;
+}
+
+function validateRecalculationClusterSequence(sample: BsrsParsedSample): BsrsBlockPatternFinding[] {
+  if (!isRecalculationSample(sample)) {
+    return [];
+  }
+
+  const locatedClusters = RECALCULATION_CLUSTER_DEFINITIONS.map((definition, expectedIndex) => ({
+    definition,
+    expectedIndex,
+    rows: sample.rows.filter((row) => definition.matches(row)),
+  }));
+
+  const findings: BsrsBlockPatternFinding[] = [];
+  let lastExpectedIndex = -1;
+  let reportedOutOfOrder = false;
+
+  for (const locatedCluster of locatedClusters.flatMap((cluster) => cluster.rows.map((row) => ({ ...cluster, row }))).sort((left, right) => left.row.row_index - right.row.row_index)) {
+    if (!reportedOutOfOrder && locatedCluster.expectedIndex < lastExpectedIndex) {
+      findings.push(makeBlockPatternFinding({
+        block_family: "recalculation",
+        code: "BSRS_RECALCULATION_CLUSTER_OUT_OF_ORDER",
+        severity: "error",
+        source_path: sample.source_path,
+        row_index: locatedCluster.row.row_index,
+        token: locatedCluster.definition.token,
+        section_context: "participant_data",
+        line_cluster: locatedCluster.definition.cluster,
+        message: `Recalculation line cluster ${locatedCluster.definition.cluster} is not in the approved sequence.`,
+      }));
+      reportedOutOfOrder = true;
+    }
+    lastExpectedIndex = Math.max(lastExpectedIndex, locatedCluster.expectedIndex);
+  }
+
+  const lastRowIndex = sample.rows.at(-1)?.row_index ?? 1;
+  for (const locatedCluster of locatedClusters) {
+    if (locatedCluster.rows.length === 0) {
+      findings.push(makeBlockPatternFinding({
+        block_family: "recalculation",
+        code: "BSRS_RECALCULATION_CLUSTER_MISSING",
+        severity: "error",
+        source_path: sample.source_path,
+        row_index: lastRowIndex + locatedCluster.expectedIndex + 1,
+        token: locatedCluster.definition.token,
+        section_context: "participant_data",
+        line_cluster: locatedCluster.definition.cluster,
+        message: `Recalculation line cluster ${locatedCluster.definition.cluster} is missing from approved section evidence.`,
+      }));
+    }
+
+    for (const duplicateRow of locatedCluster.rows.slice(1)) {
+      findings.push(makeBlockPatternFinding({
+        block_family: "recalculation",
+        code: "BSRS_RECALCULATION_CLUSTER_DUPLICATED",
+        severity: "error",
+        source_path: sample.source_path,
+        row_index: duplicateRow.row_index,
+        token: locatedCluster.definition.token,
+        section_context: "participant_data",
+        line_cluster: locatedCluster.definition.cluster,
+        message: `Recalculation line cluster ${locatedCluster.definition.cluster} appears more than once.`,
+      }));
+    }
+  }
+
+  return findings;
+}
+
 function makeBlockPatternFinding(input: {
+  block_family: BsrsBlockFamily;
   code: string;
   severity: "warning" | "error";
   source_path: string;
   row_index: number;
   token: string;
-  section_context: BsrsStatementSectionContext;
-  line_cluster: BsrsStatementSectionContext;
+  section_context: BsrsBlockSectionContext;
+  line_cluster: BsrsBlockLineCluster;
   message: string;
 }): BsrsBlockPatternFinding {
   return {
@@ -199,7 +406,7 @@ function makeBlockPatternFinding(input: {
       source_path: input.source_path,
       token: input.token,
     }),
-    block_family: "statement",
+    block_family: input.block_family,
     section_context: input.section_context,
     line_cluster: input.line_cluster,
   };
@@ -209,13 +416,17 @@ function matchingStatementSection(row: BsrsSampleRow): StatementSectionDefinitio
   return STATEMENT_SECTION_DEFINITIONS.find((definition) => definition.matches(row));
 }
 
+function matchingRecalculationCluster(row: BsrsSampleRow): RecalculationClusterDefinition | undefined {
+  return RECALCULATION_CLUSTER_DEFINITIONS.find((definition) => definition.matches(row));
+}
+
 function nearestPriorSection(
   classifications: readonly BsrsBlockPatternClassification[],
   rowIndex: number,
 ): BsrsStatementSectionContext | undefined {
   return classifications
     .filter((classification) => classification.semantic_role === "marker" && classification.row_index <= rowIndex)
-    .sort((left, right) => right.row_index - left.row_index)[0]?.section_context;
+    .sort((left, right) => right.row_index - left.row_index)[0]?.section_context as BsrsStatementSectionContext | undefined;
 }
 
 function classifySemanticRole(row: BsrsSampleRow): BsrsBlockSemanticRole {
@@ -241,6 +452,10 @@ function classifySemanticRole(row: BsrsSampleRow): BsrsBlockSemanticRole {
 
 function isStatementSample(sample: BsrsParsedSample): boolean {
   return sample.source_path.includes("/statements/") || sample.source_path.includes("statement");
+}
+
+function isRecalculationSample(sample: BsrsParsedSample): boolean {
+  return sample.source_path.includes("/recalculations/") || sample.source_path.includes("recalculation");
 }
 
 function normalizedDescription(row: BsrsSampleRow): string {
