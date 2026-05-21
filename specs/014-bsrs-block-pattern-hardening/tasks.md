@@ -15,11 +15,11 @@
 
 **Purpose**: Confirm existing BSRS hardening surfaces and sample artifacts before story work begins.
 
-- [ ] T001 Inspect existing BSRS semantic validation exports in packages/engine/bsrs-configuration-output/src/index.ts
-- [ ] T002 Inspect existing semantic finding shape in packages/engine/bsrs-configuration-output/src/semanticValidationTypes.ts
-- [ ] T003 [P] Inspect approved statement sample artifact in artifacts/reference/approved-samples/bsrs-config/statements/sample-bsrs-statement-config.txt
-- [ ] T004 [P] Inspect approved recalculation sample artifact in artifacts/reference/approved-samples/bsrs-config/recalculations/sample-bsrs-recalculation-config.txt
-- [ ] T005 [P] Inspect approved optional-form sample artifacts under artifacts/reference/approved-samples/bsrs-config/optional-forms/
+- [X] T001 Inspect existing BSRS semantic validation exports in packages/engine/bsrs-configuration-output/src/index.ts
+- [X] T002 Inspect existing semantic finding shape in packages/engine/bsrs-configuration-output/src/semanticValidationTypes.ts
+- [X] T003 [P] Inspect approved statement sample artifact in artifacts/reference/approved-samples/bsrs-config/statements/sample-bsrs-statement-config.txt
+- [X] T004 [P] Inspect approved recalculation sample artifact in artifacts/reference/approved-samples/bsrs-config/recalculations/sample-bsrs-recalculation-config.txt
+- [X] T005 [P] Inspect approved optional-form sample artifacts under artifacts/reference/approved-samples/bsrs-config/optional-forms/
 
 ---
 
@@ -29,11 +29,11 @@
 
 **CRITICAL**: No user story implementation should begin until this phase is complete.
 
-- [ ] T006 Add block-pattern validation types for block family, section context, line cluster, accepted classification, and finding metadata in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T007 Implement deterministic sample row access helpers for block-pattern validation using existing parsed sample rows in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T008 Implement deterministic sorting for accepted block classifications and block-pattern findings in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T009 Extend semantic validation exports for block-pattern validation without changing existing exports in packages/engine/bsrs-configuration-output/src/index.ts
-- [ ] T010 Wire block-pattern validation into the existing semantic validation boundary without changing existing US1 or field-reference behavior in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
+- [X] T006 Add block-pattern validation types for block family, section context, line cluster, accepted classification, and finding metadata in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T007 Implement deterministic sample row access helpers for block-pattern validation using existing parsed sample rows in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T008 Implement deterministic sorting for accepted block classifications and block-pattern findings in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T009 Extend semantic validation exports for block-pattern validation without changing existing exports in packages/engine/bsrs-configuration-output/src/index.ts
+- [X] T010 Wire block-pattern validation into the existing semantic validation boundary without changing existing US1 or field-reference behavior in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
 
 **Checkpoint**: Foundation ready - user story implementation can now begin.
 
@@ -47,17 +47,17 @@
 
 ### Tests for User Story 1
 
-- [ ] T011 [P] [US1] Add approved statement block-pattern acceptance test in packages/tests/hardening-bsrs-block-patterns.test.ts
-- [ ] T012 [P] [US1] Add malformed statement missing-section and out-of-order-section finding tests in packages/tests/hardening-bsrs-block-patterns.test.ts
-- [ ] T013 [P] [US1] Add repeated-run deterministic statement finding payload test in packages/tests/hardening-bsrs-block-patterns.test.ts
+- [X] T011 [P] [US1] Add approved statement block-pattern acceptance test in packages/tests/hardening-bsrs-block-patterns.test.ts
+- [X] T012 [P] [US1] Add malformed statement missing-section and out-of-order-section finding tests in packages/tests/hardening-bsrs-block-patterns.test.ts
+- [X] T013 [P] [US1] Add repeated-run deterministic statement finding payload test in packages/tests/hardening-bsrs-block-patterns.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T014 [US1] Implement statement block-family detection from approved statement samples in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T015 [US1] Implement statement section-sequence validation in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T016 [US1] Implement statement line-cluster classification that distinguishes semantic evidence from formatting, spacer, narrative, subtotal, and detail rows in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T017 [US1] Implement structured statement block-pattern findings with source path, row index, block family, section context, line cluster, rule version, producing module, severity, and finding code in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T018 [US1] Export statement block-pattern validation through the existing BSRS semantic validation module in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
+- [X] T014 [US1] Implement statement block-family detection from approved statement samples in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T015 [US1] Implement statement section-sequence validation in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T016 [US1] Implement statement line-cluster classification that distinguishes semantic evidence from formatting, spacer, narrative, subtotal, and detail rows in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T017 [US1] Implement structured statement block-pattern findings with source path, row index, block family, section context, line cluster, rule version, producing module, severity, and finding code in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T018 [US1] Export statement block-pattern validation through the existing BSRS semantic validation module in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
 
 **Checkpoint**: User Story 1 is fully functional and testable independently.
 
@@ -114,13 +114,13 @@
 **Purpose**: Verify behavior preservation, documentation, and repository delivery rules.
 
 - [ ] T033 [P] Add architecture note for BSRS block-pattern hardening scope and validation sources in docs/architecture/bsrs_block_pattern_hardening_v0.1.0.md
-- [ ] T034 Verify existing BSRS output contract, output, persistence, and trace tests still pass with block-pattern validation in packages/tests/bsrs-configuration-output-contract.test.ts, packages/tests/bsrs-configuration-output-output.test.ts, packages/tests/bsrs-configuration-output-persistence.test.ts, and packages/tests/bsrs-configuration-output-trace.test.ts
+- [X] T034 Verify existing BSRS output contract, output, persistence, and trace tests still pass with block-pattern validation in packages/tests/bsrs-configuration-output-contract.test.ts, packages/tests/bsrs-configuration-output-output.test.ts, packages/tests/bsrs-configuration-output-persistence.test.ts, and packages/tests/bsrs-configuration-output-trace.test.ts
 - [ ] T035 Verify focused quickstart command passes for block-pattern hardening tests from specs/014-bsrs-block-pattern-hardening/quickstart.md
-- [ ] T036 Run full project regression with npm test
-- [ ] T037 Run lint verification with npm run lint
-- [ ] T038 Run static build verification with npm run build and keep committed apps/web/dist/ output current if runtime bundles change
-- [ ] T039 Confirm no new migrations, seeds, output adapters, server calls, raw source reads, or lower source-layer writes were introduced in packages/db/ and packages/output-adapters/
-- [ ] T040 Mark completed tasks in specs/014-bsrs-block-pattern-hardening/tasks.md
+- [X] T036 Run full project regression with npm test
+- [X] T037 Run lint verification with npm run lint
+- [X] T038 Run static build verification with npm run build and keep committed apps/web/dist/ output current if runtime bundles change
+- [X] T039 Confirm no new migrations, seeds, output adapters, server calls, raw source reads, or lower source-layer writes were introduced in packages/db/ and packages/output-adapters/
+- [X] T040 Mark completed tasks in specs/014-bsrs-block-pattern-hardening/tasks.md
 
 ---
 
