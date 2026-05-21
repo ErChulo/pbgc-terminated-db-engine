@@ -114,7 +114,7 @@
 **Purpose**: Verify behavior preservation, documentation, and repository delivery rules.
 
 - [ ] T033 [P] Add architecture note for BSRS block-pattern hardening scope and validation sources in docs/architecture/bsrs_block_pattern_hardening_v0.1.0.md
-- [ ] T034 Verify existing BSRS output contract, output, persistence, and trace tests still pass with block-pattern validation in packages/tests/bsrs-configuration-output-contract.test.ts
+- [ ] T034 Verify existing BSRS output contract, output, persistence, and trace tests still pass with block-pattern validation in packages/tests/bsrs-configuration-output-contract.test.ts, packages/tests/bsrs-configuration-output-output.test.ts, packages/tests/bsrs-configuration-output-persistence.test.ts, and packages/tests/bsrs-configuration-output-trace.test.ts
 - [ ] T035 Verify focused quickstart command passes for block-pattern hardening tests from specs/014-bsrs-block-pattern-hardening/quickstart.md
 - [ ] T036 Run full project regression with npm test
 - [ ] T037 Run lint verification with npm run lint
