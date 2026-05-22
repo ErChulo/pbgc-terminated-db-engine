@@ -53,7 +53,7 @@ Any delivered .sql, .js, .ts, or .tex artifact must be stored with appended .txt
 - Preserve traceability for every computed output
 
 <!-- SPECKIT START -->
-Current feature plan: `specs/014-bsrs-block-pattern-hardening/plan.md`
+Current feature plan: `specs/015-bsrs-recalculation-pattern-hardening/plan.md`
 <!-- SPECKIT END -->
 
 ## V1 data dictionary invariant
