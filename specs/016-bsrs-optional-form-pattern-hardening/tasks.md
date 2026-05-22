@@ -15,11 +15,11 @@
 
 **Purpose**: Confirm existing optional-form sample inputs and BSRS validation surfaces before story work begins.
 
-- [ ] T001 Inspect existing block-pattern validation helper in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T002 Inspect existing semantic validation wrapper in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
-- [ ] T003 [P] Inspect approved optional-form sample artifacts in artifacts/reference/approved-samples/bsrs-config/optional-forms/
-- [ ] T004 [P] Inspect existing block-pattern test coverage in packages/tests/hardening-bsrs-block-patterns.test.ts
-- [ ] T005 [P] Inspect existing BSRS behavior-preservation tests in packages/tests/bsrs-configuration-output-contract.test.ts, packages/tests/bsrs-configuration-output-output.test.ts, packages/tests/bsrs-configuration-output-persistence.test.ts, and packages/tests/bsrs-configuration-output-trace.test.ts
+- [X] T001 Inspect existing block-pattern validation helper in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T002 Inspect existing semantic validation wrapper in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
+- [X] T003 [P] Inspect approved optional-form sample artifacts in artifacts/reference/approved-samples/bsrs-config/optional-forms/
+- [X] T004 [P] Inspect existing block-pattern test coverage in packages/tests/hardening-bsrs-block-patterns.test.ts
+- [X] T005 [P] Inspect existing BSRS behavior-preservation tests in packages/tests/bsrs-configuration-output-contract.test.ts, packages/tests/bsrs-configuration-output-output.test.ts, packages/tests/bsrs-configuration-output-persistence.test.ts, and packages/tests/bsrs-configuration-output-trace.test.ts
 
 ---
 
@@ -29,11 +29,11 @@
 
 **CRITICAL**: No user story implementation should begin until this phase is complete.
 
-- [ ] T006 Extend block-family, form-family, section-context, and line-cluster types for optional-form validation in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T007 Extend accepted classification shape for optional-form form family, section context, line cluster, and row role metadata in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T008 Extend deterministic classification and finding sorting to include optional-form evidence without changing statement or recalculation ordering in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T009 Add optional-form validation export surface without changing existing statement or recalculation exports in packages/engine/bsrs-configuration-output/src/index.ts
-- [ ] T010 Wire optional-form-pattern validation into the existing BSRS semantic validation boundary without changing statement, recalculation, function-set, PrintCriteria, or field-reference behavior in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
+- [X] T006 Extend block-family, form-family, section-context, and line-cluster types for optional-form validation in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T007 Extend accepted classification shape for optional-form form family, section context, line cluster, and row role metadata in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T008 Extend deterministic classification and finding sorting to include optional-form evidence without changing statement or recalculation ordering in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T009 Add optional-form validation export surface without changing existing statement or recalculation exports in packages/engine/bsrs-configuration-output/src/index.ts
+- [X] T010 Wire optional-form-pattern validation into the existing BSRS semantic validation boundary without changing statement, recalculation, function-set, PrintCriteria, or field-reference behavior in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
 
 **Checkpoint**: Foundation ready - user story implementation can now begin.
 
@@ -47,17 +47,17 @@
 
 ### Tests for User Story 1
 
-- [ ] T011 [P] [US1] Add approved optional-form block-pattern acceptance test for single-life, single-and-joint, and QPSA/QDRO samples in packages/tests/hardening-bsrs-block-patterns.test.ts
-- [ ] T012 [P] [US1] Add malformed optional-form missing-section, duplicated-section, suspicious-label, orphan-section, and out-of-order-section finding tests in packages/tests/hardening-bsrs-block-patterns.test.ts
-- [ ] T013 [P] [US1] Add optional-form finding trace-shape assertion for source path, row index, block family, form family, section context, line cluster, rule version, producing module, severity, and finding code in packages/tests/hardening-bsrs-block-patterns.test.ts
+- [X] T011 [P] [US1] Add approved optional-form block-pattern acceptance test for single-life, single-and-joint, and QPSA/QDRO samples in packages/tests/hardening-bsrs-block-patterns.test.ts
+- [X] T012 [P] [US1] Add malformed optional-form missing-section, duplicated-section, suspicious-label, orphan-section, and out-of-order-section finding tests in packages/tests/hardening-bsrs-block-patterns.test.ts
+- [X] T013 [P] [US1] Add optional-form finding trace-shape assertion for source path, row index, block family, form family, section context, line cluster, rule version, producing module, severity, and finding code in packages/tests/hardening-bsrs-block-patterns.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T014 [US1] Implement optional-form block-family and form-family detection from approved optional-form samples in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T015 [US1] Implement expected optional-form section-sequence validation in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T016 [US1] Implement optional-form line-cluster recognition and approved family-label checks in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T017 [US1] Implement structured optional-form missing, duplicated, out-of-order, suspicious, and orphan section findings in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T018 [US1] Export optional-form-pattern validation through the existing BSRS semantic validation module in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
+- [X] T014 [US1] Implement optional-form block-family and form-family detection from approved optional-form samples in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T015 [US1] Implement expected optional-form section-sequence validation in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T016 [US1] Implement optional-form line-cluster recognition and approved family-label checks in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T017 [US1] Implement structured optional-form missing, duplicated, out-of-order, suspicious, and orphan section findings in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T018 [US1] Export optional-form-pattern validation through the existing BSRS semantic validation module in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
 
 **Checkpoint**: User Story 1 is fully functional and testable independently.
 
@@ -93,14 +93,14 @@
 
 ### Tests for User Story 3
 
-- [ ] T025 [P] [US3] Add repeated-run optional-form accepted-classification and finding payload stability test in packages/tests/hardening-bsrs-block-patterns.test.ts
-- [ ] T026 [P] [US3] Add existing statement and recalculation block-pattern regression assertions to prove optional-form changes do not alter prior validation in packages/tests/hardening-bsrs-block-patterns.test.ts
-- [ ] T027 [P] [US3] Add behavior-preservation regression command coverage for BSRS contract, output, persistence, and trace tests in specs/016-bsrs-optional-form-pattern-hardening/quickstart.md
+- [X] T025 [P] [US3] Add repeated-run optional-form accepted-classification and finding payload stability test in packages/tests/hardening-bsrs-block-patterns.test.ts
+- [X] T026 [P] [US3] Add existing statement and recalculation block-pattern regression assertions to prove optional-form changes do not alter prior validation in packages/tests/hardening-bsrs-block-patterns.test.ts
+- [X] T027 [P] [US3] Add behavior-preservation regression command coverage for BSRS contract, output, persistence, and trace tests in specs/016-bsrs-optional-form-pattern-hardening/quickstart.md
 
 ### Implementation for User Story 3
 
-- [ ] T028 [US3] Ensure optional-form classifications and findings use deterministic source-path, row-index, form-family, section-context, line-cluster, code, and token ordering in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T029 [US3] Ensure optional-form semantic validation wrapper preserves existing statement, recalculation, function-set, PrintCriteria, and field-reference behavior in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
+- [X] T028 [US3] Ensure optional-form classifications and findings use deterministic source-path, row-index, form-family, section-context, line-cluster, code, and token ordering in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T029 [US3] Ensure optional-form semantic validation wrapper preserves existing statement, recalculation, function-set, PrintCriteria, and field-reference behavior in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
 
 **Checkpoint**: All user stories are independently functional.
 
@@ -111,13 +111,13 @@
 **Purpose**: Verify behavior preservation, documentation, and repository delivery rules.
 
 - [ ] T030 [P] Add architecture note for BSRS optional-form-pattern hardening scope and validation sources in docs/architecture/bsrs_optional_form_pattern_hardening_v0.1.0.md
-- [ ] T031 Verify focused quickstart command passes for optional-form-pattern hardening tests from specs/016-bsrs-optional-form-pattern-hardening/quickstart.md
-- [ ] T032 Verify existing BSRS output contract, output, persistence, and trace tests still pass with optional-form-pattern validation in packages/tests/bsrs-configuration-output-contract.test.ts, packages/tests/bsrs-configuration-output-output.test.ts, packages/tests/bsrs-configuration-output-persistence.test.ts, and packages/tests/bsrs-configuration-output-trace.test.ts
-- [ ] T033 Run full project regression with npm test
-- [ ] T034 Run lint verification with npm run lint
-- [ ] T035 Run static build verification with npm run build and keep committed apps/web/dist/ output current if runtime bundles change
-- [ ] T036 Confirm no new migrations, seeds, output adapters, server calls, raw source reads, or lower source-layer writes were introduced in packages/db/ and packages/output-adapters/
-- [ ] T037 Mark completed tasks in specs/016-bsrs-optional-form-pattern-hardening/tasks.md
+- [X] T031 Verify focused quickstart command passes for optional-form-pattern hardening tests from specs/016-bsrs-optional-form-pattern-hardening/quickstart.md
+- [X] T032 Verify existing BSRS output contract, output, persistence, and trace tests still pass with optional-form-pattern validation in packages/tests/bsrs-configuration-output-contract.test.ts, packages/tests/bsrs-configuration-output-output.test.ts, packages/tests/bsrs-configuration-output-persistence.test.ts, and packages/tests/bsrs-configuration-output-trace.test.ts
+- [X] T033 Run full project regression with npm test
+- [X] T034 Run lint verification with npm run lint
+- [X] T035 Run static build verification with npm run build and keep committed apps/web/dist/ output current if runtime bundles change
+- [X] T036 Confirm no new migrations, seeds, output adapters, server calls, raw source reads, or lower source-layer writes were introduced in packages/db/ and packages/output-adapters/
+- [X] T037 Mark completed tasks in specs/016-bsrs-optional-form-pattern-hardening/tasks.md
 
 ---
 

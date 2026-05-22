@@ -5,7 +5,7 @@ import {
 } from "./semanticValidationTypes";
 import { sortSemanticValidationFindings } from "./semanticValidationTrace";
 
-export type BsrsBlockFamily = "statement" | "recalculation";
+export type BsrsBlockFamily = "statement" | "recalculation" | "optional_form";
 
 export type BsrsBlockSemanticRole = "marker" | "support" | "detail" | "subtotal" | "narrative" | "formatting" | "spacer";
 
@@ -16,6 +16,8 @@ export type BsrsStatementSectionContext =
   | "benefit_calculation";
 
 export type BsrsRecalculationSectionContext = "participant_data";
+
+export type BsrsOptionalFormFamily = "single_life" | "single_and_joint" | "qpsa_qdro";
 
 export type BsrsRecalculationLineCluster =
   | "participant_data"
@@ -30,8 +32,23 @@ export type BsrsRecalculationLineCluster =
   | "earliest_retirement_date"
   | "credited_service";
 
-export type BsrsBlockSectionContext = BsrsStatementSectionContext | BsrsRecalculationSectionContext;
-export type BsrsBlockLineCluster = BsrsStatementSectionContext | BsrsRecalculationLineCluster;
+export type BsrsOptionalFormSectionContext =
+  | "automatic_unmarried"
+  | "automatic_married"
+  | "straight_life"
+  | "joint_50_survivor"
+  | "joint_75_survivor"
+  | "joint_100_survivor"
+  | "joint_50_popup"
+  | "five_year_cc"
+  | "ten_year_cc"
+  | "fifteen_year_cc"
+  | "unknown_optional_form";
+
+export type BsrsOptionalFormLineCluster = BsrsOptionalFormSectionContext;
+
+export type BsrsBlockSectionContext = BsrsStatementSectionContext | BsrsRecalculationSectionContext | BsrsOptionalFormSectionContext;
+export type BsrsBlockLineCluster = BsrsStatementSectionContext | BsrsRecalculationLineCluster | BsrsOptionalFormLineCluster;
 
 export type BsrsBlockPatternClassification = {
   block_family: BsrsBlockFamily;
@@ -39,6 +56,7 @@ export type BsrsBlockPatternClassification = {
   row_index: number;
   column_name: string;
   token: string;
+  form_family?: BsrsOptionalFormFamily;
   section_context: BsrsBlockSectionContext;
   line_cluster: BsrsBlockLineCluster;
   semantic_role: BsrsBlockSemanticRole;
@@ -46,6 +64,7 @@ export type BsrsBlockPatternClassification = {
 
 export type BsrsBlockPatternFinding = BsrsSemanticValidationFinding & {
   block_family: BsrsBlockFamily;
+  form_family?: BsrsOptionalFormFamily;
   section_context: BsrsBlockSectionContext;
   line_cluster: BsrsBlockLineCluster;
 };
@@ -56,6 +75,11 @@ export type BsrsStatementBlockPatternResult = {
 };
 
 export type BsrsRecalculationBlockPatternResult = {
+  accepted: BsrsBlockPatternClassification[];
+  findings: BsrsBlockPatternFinding[];
+};
+
+export type BsrsOptionalFormBlockPatternResult = {
   accepted: BsrsBlockPatternClassification[];
   findings: BsrsBlockPatternFinding[];
 };
@@ -165,6 +189,48 @@ const RECALCULATION_CLUSTER_DEFINITIONS: readonly RecalculationClusterDefinition
   },
 ];
 
+type OptionalFormSectionDefinition = {
+  context: BsrsOptionalFormSectionContext;
+  token: string;
+  role: BsrsBlockSemanticRole;
+  allowsAlternativeRows: boolean;
+  matches: (row: BsrsSampleRow) => boolean;
+};
+
+const OPTIONAL_FORM_SECTION_DEFINITIONS: Record<BsrsOptionalFormFamily, readonly OptionalFormSectionDefinition[]> = {
+  single_life: [
+    optionalFormSection("automatic_unmarried", "A:", "Plan's Automatic Form for Unmarried Participant:", false),
+    optionalFormSection("automatic_married", "B:", "Plan's Automatic Form for Married Participant:", false),
+    optionalFormSection("straight_life", "C:", "Straight Life Annuity", false),
+    optionalFormSection("joint_50_survivor", "D:", "Joint-and-50% Survivor Annuity", false),
+    optionalFormSection("joint_75_survivor", "E:", "Joint-and-75% Survivor Annuity", false),
+    optionalFormSection("joint_100_survivor", "F:", "Joint-and-100% Survivor Annuity", false),
+    optionalFormSection("joint_50_popup", "G:", "Joint-and-50% Survivor 'Pop-up' Annuity", false),
+    optionalFormSection("five_year_cc", "H:", "5-year Certain-and-Continuous Annuity", true),
+    optionalFormSection("ten_year_cc", "I:", "10-year Certain-and-Continuous Annuity", true),
+    optionalFormSection("fifteen_year_cc", "J:", "15-year Certain-and-Continuous Annuity", true),
+  ],
+  single_and_joint: [
+    optionalFormSection("automatic_unmarried", "A:", "Plan's Automatic Form for Unmarried Participant:", false),
+    optionalFormSection("automatic_married", "B:", "Plan's Automatic Form for Married Participant:", false),
+    optionalFormSection("straight_life", "C:", "Straight Life Annuity", false),
+    optionalFormSection("joint_50_survivor", "D:", "Joint-and-50% Survivor Annuity", true),
+    optionalFormSection("joint_75_survivor", "E:", "Joint-and-75% Survivor Annuity", true),
+    optionalFormSection("joint_100_survivor", "F:", "Joint-and-100% Survivor Annuity", true),
+    optionalFormSection("joint_50_popup", "G:", "Joint-and-50% Survivor 'Pop-up' Annuity", true),
+    optionalFormSection("five_year_cc", "H:", "5-year Certain-and-Continuous Annuity", true),
+    optionalFormSection("ten_year_cc", "I:", "10-year Certain-and-Continuous Annuity", true),
+    optionalFormSection("fifteen_year_cc", "J:", "15-year Certain-and-Continuous Annuity", true),
+  ],
+  qpsa_qdro: [
+    optionalFormSection("automatic_unmarried", "A:", "Annuity", false),
+    optionalFormSection("five_year_cc", "B:", "5-year Certain-and-Continuous Annuity", true),
+    optionalFormSection("ten_year_cc", "C:", "10-year Certain-and-Continuous Annuity", true),
+    optionalFormSection("fifteen_year_cc", "D:", "15-year Certain-and-Continuous Annuity", true),
+    optionalFormSection("straight_life", "E:", "Straight Life Annuity", false),
+  ],
+};
+
 export function validateStatementBlockPatterns(samples: readonly BsrsParsedSample[]): BsrsStatementBlockPatternResult {
   const accepted = samples.flatMap(classifyStatementRows);
   const findings = samples.flatMap(validateStatementSectionSequence);
@@ -178,6 +244,16 @@ export function validateStatementBlockPatterns(samples: readonly BsrsParsedSampl
 export function validateRecalculationBlockPatterns(samples: readonly BsrsParsedSample[]): BsrsRecalculationBlockPatternResult {
   const accepted = samples.flatMap(classifyRecalculationRows);
   const findings = samples.flatMap(validateRecalculationClusterSequence);
+
+  return {
+    accepted: sortBlockPatternClassifications(accepted),
+    findings: sortSemanticValidationFindings(findings) as BsrsBlockPatternFinding[],
+  };
+}
+
+export function validateOptionalFormBlockPatterns(samples: readonly BsrsParsedSample[]): BsrsOptionalFormBlockPatternResult {
+  const accepted = samples.flatMap(classifyOptionalFormRows);
+  const findings = samples.flatMap(validateOptionalFormSectionSequence);
 
   return {
     accepted: sortBlockPatternClassifications(accepted),
@@ -384,8 +460,132 @@ function validateRecalculationClusterSequence(sample: BsrsParsedSample): BsrsBlo
   return findings;
 }
 
+function classifyOptionalFormRows(sample: BsrsParsedSample): BsrsBlockPatternClassification[] {
+  const family = optionalFormFamily(sample);
+  if (!family) {
+    return [];
+  }
+
+  const classifications: BsrsBlockPatternClassification[] = [];
+  for (const row of sample.rows) {
+    const section = matchingOptionalFormSection(row, family);
+    if (!section) {
+      continue;
+    }
+
+    classifications.push({
+      block_family: "optional_form",
+      form_family: family,
+      source_path: sample.source_path,
+      row_index: row.row_index,
+      column_name: "Description",
+      token: section.token,
+      section_context: section.context,
+      line_cluster: section.context,
+      semantic_role: section.role,
+    });
+  }
+
+  return classifications;
+}
+
+function validateOptionalFormSectionSequence(sample: BsrsParsedSample): BsrsBlockPatternFinding[] {
+  const family = optionalFormFamily(sample);
+  if (!family) {
+    return [];
+  }
+
+  const definitions = OPTIONAL_FORM_SECTION_DEFINITIONS[family];
+  const locatedSections = definitions.map((definition, expectedIndex) => ({
+    definition,
+    expectedIndex,
+    rows: sample.rows.filter((row) => definition.matches(row)),
+  }));
+
+  const findings: BsrsBlockPatternFinding[] = [];
+  let lastExpectedIndex = -1;
+  let reportedOutOfOrder = false;
+
+  for (const locatedSection of locatedSections.flatMap((section) => section.rows.map((row) => ({ ...section, row }))).sort((left, right) => left.row.row_index - right.row.row_index)) {
+    if (!reportedOutOfOrder && locatedSection.expectedIndex < lastExpectedIndex) {
+      findings.push(makeBlockPatternFinding({
+        block_family: "optional_form",
+        form_family: family,
+        code: "BSRS_OPTIONAL_FORM_SECTION_OUT_OF_ORDER",
+        severity: "error",
+        source_path: sample.source_path,
+        row_index: locatedSection.row.row_index,
+        token: locatedSection.definition.token,
+        section_context: locatedSection.definition.context,
+        line_cluster: locatedSection.definition.context,
+        message: `Optional-form section ${locatedSection.definition.context} is not in the approved sequence for ${family}.`,
+      }));
+      reportedOutOfOrder = true;
+    }
+    lastExpectedIndex = Math.max(lastExpectedIndex, locatedSection.expectedIndex);
+  }
+
+  const lastRowIndex = sample.rows.at(-1)?.row_index ?? 1;
+  for (const locatedSection of locatedSections) {
+    if (locatedSection.rows.length === 0) {
+      findings.push(makeBlockPatternFinding({
+        block_family: "optional_form",
+        form_family: family,
+        code: "BSRS_OPTIONAL_FORM_SECTION_MISSING",
+        severity: "error",
+        source_path: sample.source_path,
+        row_index: lastRowIndex + locatedSection.expectedIndex + 1,
+        token: locatedSection.definition.token,
+        section_context: locatedSection.definition.context,
+        line_cluster: locatedSection.definition.context,
+        message: `Optional-form section ${locatedSection.definition.context} is missing from approved section evidence for ${family}.`,
+      }));
+    }
+
+    if (!locatedSection.definition.allowsAlternativeRows) {
+      for (const duplicateRow of locatedSection.rows.slice(1)) {
+        findings.push(makeBlockPatternFinding({
+          block_family: "optional_form",
+          form_family: family,
+          code: "BSRS_OPTIONAL_FORM_SECTION_DUPLICATED",
+          severity: "error",
+          source_path: sample.source_path,
+          row_index: duplicateRow.row_index,
+          token: locatedSection.definition.token,
+          section_context: locatedSection.definition.context,
+          line_cluster: locatedSection.definition.context,
+          message: `Optional-form section ${locatedSection.definition.context} appears more than once for ${family}.`,
+        }));
+      }
+    }
+  }
+
+  for (const row of sample.rows) {
+    const label = optionalFormLabel(row);
+    if (!label || matchingOptionalFormSection(row, family)) {
+      continue;
+    }
+
+    findings.push(makeBlockPatternFinding({
+      block_family: "optional_form",
+      form_family: family,
+      code: "BSRS_OPTIONAL_FORM_SECTION_SUSPICIOUS",
+      severity: "warning",
+      source_path: sample.source_path,
+      row_index: row.row_index,
+      token: label,
+      section_context: "unknown_optional_form",
+      line_cluster: "unknown_optional_form",
+      message: `Optional-form label ${label} is not part of the approved section sequence for ${family}.`,
+    }));
+  }
+
+  return findings;
+}
+
 function makeBlockPatternFinding(input: {
   block_family: BsrsBlockFamily;
+  form_family?: BsrsOptionalFormFamily;
   code: string;
   severity: "warning" | "error";
   source_path: string;
@@ -407,6 +607,7 @@ function makeBlockPatternFinding(input: {
       token: input.token,
     }),
     block_family: input.block_family,
+    form_family: input.form_family,
     section_context: input.section_context,
     line_cluster: input.line_cluster,
   };
@@ -418,6 +619,10 @@ function matchingStatementSection(row: BsrsSampleRow): StatementSectionDefinitio
 
 function matchingRecalculationCluster(row: BsrsSampleRow): RecalculationClusterDefinition | undefined {
   return RECALCULATION_CLUSTER_DEFINITIONS.find((definition) => definition.matches(row));
+}
+
+function matchingOptionalFormSection(row: BsrsSampleRow, family: BsrsOptionalFormFamily): OptionalFormSectionDefinition | undefined {
+  return OPTIONAL_FORM_SECTION_DEFINITIONS[family].find((definition) => definition.matches(row));
 }
 
 function nearestPriorSection(
@@ -456,6 +661,47 @@ function isStatementSample(sample: BsrsParsedSample): boolean {
 
 function isRecalculationSample(sample: BsrsParsedSample): boolean {
   return sample.source_path.includes("/recalculations/") || sample.source_path.includes("recalculation");
+}
+
+function optionalFormFamily(sample: BsrsParsedSample): BsrsOptionalFormFamily | undefined {
+  if (!isOptionalFormSample(sample)) {
+    return undefined;
+  }
+  if (sample.source_path.includes("single-and-joint") || sample.source_path.includes("SingleAndJoint")) {
+    return "single_and_joint";
+  }
+  if (sample.source_path.includes("qpsa-qdro") || sample.source_path.includes("QPSA-QDRO")) {
+    return "qpsa_qdro";
+  }
+  return "single_life";
+}
+
+function isOptionalFormSample(sample: BsrsParsedSample): boolean {
+  return sample.source_path.includes("/optional-forms/") || sample.source_path.includes("optional-form");
+}
+
+function optionalFormSection(
+  context: BsrsOptionalFormSectionContext,
+  label: string,
+  text: string,
+  allowsAlternativeRows: boolean,
+): OptionalFormSectionDefinition {
+  return {
+    context,
+    token: `${label} ${text}`,
+    role: "marker",
+    allowsAlternativeRows,
+    matches: (row) => {
+      const description = normalizedDescription(row);
+      return description.includes(label) && description.includes(text);
+    },
+  };
+}
+
+function optionalFormLabel(row: BsrsSampleRow): string | undefined {
+  const description = normalizedDescription(row);
+  const match = description.match(/([A-Z]:)/);
+  return match?.[1];
 }
 
 function normalizedDescription(row: BsrsSampleRow): string {
