@@ -122,6 +122,9 @@ packages/
 │   │   └── src/
 │   └── valuation-listings-output/
 │       └── src/
+├── shared/
+│   └── src/
+│       └── crossSliceReconciliation.ts
 ├── tests/
 │   ├── hardening-cross-slice-reconciliation.test.ts
 │   ├── hardening-output-shape.test.ts
@@ -145,10 +148,10 @@ docs/
 
 **Structure Decision**: Keep cross-slice reconciliation hardening in the
 existing output-slice validation/test boundary. Add a small internal
-reconciliation helper and focused repository tests only as needed to compare
-current output evidence. Do not create `packages/output-adapters/*`, new
-database migrations, new UI pages, new runtime subsystems, or new source-layer
-storage.
+reconciliation helper at `packages/shared/src/crossSliceReconciliation.ts` and
+focused repository tests only as needed to compare current output evidence. Do
+not create `packages/output-adapters/*`, new database migrations, new UI pages,
+new runtime subsystems, or new source-layer storage.
 
 ## Complexity Tracking
 

@@ -29,7 +29,8 @@
 - [ ] T006 Export the reconciliation types from `packages/shared/src/index.ts`
 - [ ] T007 Implement deterministic comparison and finding sorting helpers in `packages/shared/src/crossSliceReconciliation.ts`
 - [ ] T008 Implement reviewed-evidence normalization helpers for identifiers, form labels, explicit nulls, unsupported branches, absent optional evidence, and formatting-only values in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T009 Add shared test fixture builders for accepted comparisons and drift scenarios in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [ ] T009 Define the selected shared-fact inventory and comparison matrix for reconciled identifiers, forms, DD-backed fields, and approved fallbacks in `packages/shared/src/crossSliceReconciliation.ts`
+- [ ] T010 Add shared test fixture builders for accepted comparisons and drift scenarios in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin.
 
@@ -43,18 +44,18 @@
 
 ### Tests for User Story 1
 
-- [ ] T010 [US1] Add accepted shared identifier and form reconciliation tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
-- [ ] T011 [US1] Add participant identifier drift finding tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
-- [ ] T012 [US1] Add form reference drift finding tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
-- [ ] T013 [US1] Add finding trace-shape tests for compared slices, fields, source paths, reviewed fact context, rule version, producing module, severity, and code in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [ ] T011 [US1] Add accepted shared identifier and form reconciliation tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [ ] T012 [US1] Add participant identifier drift finding tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [ ] T013 [US1] Add form reference drift finding tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [ ] T014 [US1] Add finding trace-shape tests for compared slices, fields, source paths, reviewed fact context, rule version, producing module, severity, and code in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T014 [US1] Implement shared fact comparison records for BSRS, V1/VE, and valuation-listing evidence in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T015 [US1] Implement drift finding creation with deterministic warning/error payloads in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T016 [US1] Implement accepted non-drift statuses for explicit nulls, unsupported branches, absent optional evidence, and formatting-only differences in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T017 [US1] Wire current fixture evidence into reconciliation tests without changing output adapters in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
-- [ ] T018 [US1] Run `npm test -- packages/tests/hardening-cross-slice-reconciliation.test.ts` and fix only US1 failures in `packages/shared/src/crossSliceReconciliation.ts`
+- [ ] T015 [US1] Implement shared fact comparison records for BSRS, V1/VE, and valuation-listing evidence in `packages/shared/src/crossSliceReconciliation.ts`
+- [ ] T016 [US1] Implement drift finding creation with deterministic warning/error payloads in `packages/shared/src/crossSliceReconciliation.ts`
+- [ ] T017 [US1] Implement accepted non-drift statuses for explicit nulls, unsupported branches, absent optional evidence, and formatting-only differences in `packages/shared/src/crossSliceReconciliation.ts`
+- [ ] T018 [US1] Wire current fixture evidence into reconciliation tests without changing output adapters in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [ ] T019 [US1] Run `npm test -- packages/tests/hardening-cross-slice-reconciliation.test.ts` and fix only US1 failures in `packages/shared/src/crossSliceReconciliation.ts`
 
 **Checkpoint**: US1 should be independently testable as the MVP.
 
@@ -68,18 +69,18 @@
 
 ### Tests for User Story 2
 
-- [ ] T019 [US2] Add DD-first V1/VE semantic comparison tests using `artifacts/mappings/DD.csv` in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
-- [ ] T020 [US2] Add missing required DD mapping failure tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
-- [ ] T021 [US2] Add approved no-DD contract-name fallback tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
-- [ ] T022 [US2] Add tests proving fallback basis is present in every fallback comparison and finding in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [ ] T020 [US2] Add DD-first V1/VE semantic comparison tests using `artifacts/mappings/DD.csv` in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [ ] T021 [US2] Add missing required DD mapping failure tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [ ] T022 [US2] Add approved no-DD contract-name fallback tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [ ] T023 [US2] Add tests proving fallback basis is present in every fallback comparison and finding in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T023 [US2] Implement DD-first semantic resolution for reconciled V1/VE fields in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T024 [US2] Implement required DD mapping validation for DD-backed reconciled fields in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T025 [US2] Implement approved fallback mapping records for no-DD fields in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T026 [US2] Preserve existing DD helper behavior without renaming fields in `packages/engine/v1-ve-output/src/ddMapping.ts`, `packages/engine/valuation-listings-output/src/ddMapping.ts`, and `packages/engine/bsrs-configuration-output/src/ddMapping.ts`
-- [ ] T027 [US2] Run `npm test -- packages/tests/hardening-cross-slice-reconciliation.test.ts` and fix only US2 failures in `packages/shared/src/crossSliceReconciliation.ts`
+- [ ] T024 [US2] Implement DD-first semantic resolution for reconciled V1/VE fields in `packages/shared/src/crossSliceReconciliation.ts`
+- [ ] T025 [US2] Implement required DD mapping validation for DD-backed reconciled fields in `packages/shared/src/crossSliceReconciliation.ts`
+- [ ] T026 [US2] Implement approved fallback mapping records for no-DD fields in `packages/shared/src/crossSliceReconciliation.ts`
+- [ ] T027 [US2] Preserve existing DD helper behavior without renaming fields in `packages/engine/v1-ve-output/src/ddMapping.ts`, `packages/engine/valuation-listings-output/src/ddMapping.ts`, and `packages/engine/bsrs-configuration-output/src/ddMapping.ts`
+- [ ] T028 [US2] Run `npm test -- packages/tests/hardening-cross-slice-reconciliation.test.ts` and fix only US2 failures in `packages/shared/src/crossSliceReconciliation.ts`
 
 **Checkpoint**: US1 and US2 should both work independently.
 
@@ -93,19 +94,19 @@
 
 ### Tests for User Story 3
 
-- [ ] T028 [US3] Add repeated-run comparison and finding stability tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
-- [ ] T029 [P] [US3] Add output-shape stability coverage for reconciliation payload keys in `packages/tests/hardening-output-shape.test.ts`
-- [ ] T030 [P] [US3] Add structured warning/error payload stability coverage for reconciliation findings in `packages/tests/hardening-warning-error-stability.test.ts`
-- [ ] T031 [US3] Add adapter-exclusion regression coverage proving reconciliation writes no unrelated output-adapter rows in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [ ] T029 [US3] Add repeated-run comparison and finding stability tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [ ] T030 [P] [US3] Add output-shape stability coverage for reconciliation payload keys in `packages/tests/hardening-output-shape.test.ts`
+- [ ] T031 [P] [US3] Add structured warning/error payload stability coverage for reconciliation findings in `packages/tests/hardening-warning-error-stability.test.ts`
+- [ ] T032 [US3] Add adapter-exclusion regression coverage proving reconciliation writes no unrelated output-adapter rows in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T032 [US3] Ensure reconciliation output ordering is byte-stable across repeated runs in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T033 [US3] Ensure reconciliation helper has no sql.js writes, server calls, raw source reads, or output-adapter side effects in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T034 [P] [US3] Run focused existing BSRS regression tests listed in quickstart in `packages/tests/bsrs-configuration-output-contract.test.ts`, `packages/tests/bsrs-configuration-output-output.test.ts`, `packages/tests/bsrs-configuration-output-persistence.test.ts`, and `packages/tests/bsrs-configuration-output-trace.test.ts`
-- [ ] T035 [P] [US3] Run focused existing V1/VE regression tests listed in quickstart in `packages/tests/v1-ve-output-contract.test.ts`, `packages/tests/v1-ve-output-output.test.ts`, `packages/tests/v1-ve-output-persistence.test.ts`, and `packages/tests/v1-ve-output-trace.test.ts`
-- [ ] T036 [P] [US3] Run focused existing valuation-listings regression tests listed in quickstart in `packages/tests/valuation-listings-output-contract.test.ts`, `packages/tests/valuation-listings-output-output.test.ts`, `packages/tests/valuation-listings-output-persistence.test.ts`, and `packages/tests/valuation-listings-output-trace.test.ts`
-- [ ] T037 [US3] Run `npm test -- packages/tests/hardening-cross-slice-reconciliation.test.ts packages/tests/hardening-output-shape.test.ts packages/tests/hardening-warning-error-stability.test.ts` and fix only US3 failures in `packages/shared/src/crossSliceReconciliation.ts`, `packages/tests/hardening-output-shape.test.ts`, and `packages/tests/hardening-warning-error-stability.test.ts`
+- [ ] T033 [US3] Ensure reconciliation output ordering is byte-stable across repeated runs in `packages/shared/src/crossSliceReconciliation.ts`
+- [ ] T034 [US3] Ensure reconciliation helper has no sql.js writes, server calls, raw source reads, or output-adapter side effects in `packages/shared/src/crossSliceReconciliation.ts`
+- [ ] T035 [P] [US3] Run focused existing BSRS regression tests listed in quickstart in `packages/tests/bsrs-configuration-output-contract.test.ts`, `packages/tests/bsrs-configuration-output-output.test.ts`, `packages/tests/bsrs-configuration-output-persistence.test.ts`, and `packages/tests/bsrs-configuration-output-trace.test.ts`
+- [ ] T036 [P] [US3] Run focused existing V1/VE regression tests listed in quickstart in `packages/tests/v1-ve-output-contract.test.ts`, `packages/tests/v1-ve-output-output.test.ts`, `packages/tests/v1-ve-output-persistence.test.ts`, and `packages/tests/v1-ve-output-trace.test.ts`
+- [ ] T037 [P] [US3] Run focused existing valuation-listings regression tests listed in quickstart in `packages/tests/valuation-listings-output-contract.test.ts`, `packages/tests/valuation-listings-output-output.test.ts`, `packages/tests/valuation-listings-output-persistence.test.ts`, and `packages/tests/valuation-listings-output-trace.test.ts`
+- [ ] T038 [US3] Run `npm test -- packages/tests/hardening-cross-slice-reconciliation.test.ts packages/tests/hardening-output-shape.test.ts packages/tests/hardening-warning-error-stability.test.ts` and fix only US3 failures in `packages/shared/src/crossSliceReconciliation.ts`, `packages/tests/hardening-output-shape.test.ts`, and `packages/tests/hardening-warning-error-stability.test.ts`
 
 **Checkpoint**: All user stories should be independently functional and existing slice behavior should be preserved.
 
@@ -115,13 +116,13 @@
 
 **Purpose**: Documentation, verification, and repository hygiene after story completion.
 
-- [ ] T038 [P] Update architecture notes for cross-slice reconciliation hardening in `docs/architecture/cross_slice_reconciliation_hardening_v0.1.0.md`
-- [ ] T039 [P] Update mapping notes for reconciled DD-backed and approved fallback fields in `docs/mappings/v1_ve_output_trace_map_v0.1.0.csv`
-- [ ] T040 Verify no new migrations, seeds, persistence tables, output adapters, raw-source readers, or network calls were added under `packages/db/`, `packages/engine/`, and `apps/web/src/`
-- [ ] T041 Run full regression suite configured in `package.json` with `npm test`
-- [ ] T042 Run type checking configured in `package.json` with `npm run lint`
-- [ ] T043 Run static browser build configured in `package.json` with `npm run build` and preserve committed `apps/web/dist/` output if it changes
-- [ ] T044 Confirm no delivered `.sql`, `.js`, `.ts`, or `.tex` artifacts were added without required email-safe `.txt` delivery copies in `artifacts/`, `docs/`, and `specs/017-cross-slice-reconciliation-hardening/`
+- [ ] T039 [P] Update architecture notes for cross-slice reconciliation hardening in `docs/architecture/cross_slice_reconciliation_hardening_v0.1.0.md`
+- [ ] T040 [P] Update mapping notes for reconciled DD-backed and approved fallback fields in `docs/mappings/v1_ve_output_trace_map_v0.1.0.csv`
+- [ ] T041 Verify no new migrations, seeds, persistence tables, output adapters, raw-source readers, or network calls were added under `packages/db/`, `packages/engine/`, and `apps/web/src/`
+- [ ] T042 Run full regression suite configured in `package.json` with `npm test`
+- [ ] T043 Run type checking configured in `package.json` with `npm run lint`
+- [ ] T044 Run static browser build configured in `package.json` with `npm run build` and preserve committed `apps/web/dist/` output if it changes
+- [ ] T045 Confirm no delivered `.sql`, `.js`, `.ts`, or `.tex` artifacts were added without required email-safe `.txt` delivery copies in `artifacts/`, `docs/`, and `specs/017-cross-slice-reconciliation-hardening/`
 
 ---
 
@@ -144,7 +145,7 @@
 
 ### Within Each User Story
 
-- Tests T010-T013, T019-T022, and T028-T031 should be written first and fail before implementation.
+- Tests T011-T014, T020-T023, and T029-T032 should be written first and fail before implementation.
 - Implement shared types and sorting before comparison logic.
 - Implement DD-first resolution before approved fallback handling.
 - Run focused tests before broader regression suites.
@@ -155,11 +156,11 @@
 ## Parallel Opportunities
 
 - T003 and T004 can run in parallel during setup.
-- T010-T013 should be sequenced because they edit the same US1 test file in `packages/tests/hardening-cross-slice-reconciliation.test.ts`.
-- T019-T022 should be sequenced because they edit the same US2 test file in `packages/tests/hardening-cross-slice-reconciliation.test.ts`.
-- T029 and T030 can run in parallel after Phase 2 because they update distinct stability files.
-- T034-T036 can run in parallel because they run existing BSRS, V1/VE, and valuation-listing regression files independently.
-- T038 and T039 can run in parallel during polish because they update distinct documentation artifacts.
+- T011-T014 should be sequenced because they edit the same US1 test file in `packages/tests/hardening-cross-slice-reconciliation.test.ts`.
+- T020-T023 should be sequenced because they edit the same US2 test file in `packages/tests/hardening-cross-slice-reconciliation.test.ts`.
+- T030 and T031 can run in parallel after Phase 2 because they update distinct stability files.
+- T035-T037 can run in parallel because they run existing BSRS, V1/VE, and valuation-listing regression files independently.
+- T039 and T040 can run in parallel during polish because they update distinct documentation artifacts.
 
 ---
 
@@ -167,28 +168,28 @@
 
 ```bash
 # Sequence US1 test work in the shared test file:
-Task: "T010 [US1] Add accepted shared identifier and form reconciliation tests in packages/tests/hardening-cross-slice-reconciliation.test.ts"
-Task: "T011 [US1] Add participant identifier drift finding tests in packages/tests/hardening-cross-slice-reconciliation.test.ts"
-Task: "T012 [US1] Add form reference drift finding tests in packages/tests/hardening-cross-slice-reconciliation.test.ts"
-Task: "T013 [US1] Add finding trace-shape tests in packages/tests/hardening-cross-slice-reconciliation.test.ts"
+Task: "T011 [US1] Add accepted shared identifier and form reconciliation tests in packages/tests/hardening-cross-slice-reconciliation.test.ts"
+Task: "T012 [US1] Add participant identifier drift finding tests in packages/tests/hardening-cross-slice-reconciliation.test.ts"
+Task: "T013 [US1] Add form reference drift finding tests in packages/tests/hardening-cross-slice-reconciliation.test.ts"
+Task: "T014 [US1] Add finding trace-shape tests in packages/tests/hardening-cross-slice-reconciliation.test.ts"
 ```
 
 ## Parallel Example: User Story 2
 
 ```bash
 # Sequence US2 mapping tests in the shared test file:
-Task: "T019 [US2] Add DD-first V1/VE semantic comparison tests using artifacts/mappings/DD.csv in packages/tests/hardening-cross-slice-reconciliation.test.ts"
-Task: "T020 [US2] Add missing required DD mapping failure tests in packages/tests/hardening-cross-slice-reconciliation.test.ts"
-Task: "T021 [US2] Add approved no-DD contract-name fallback tests in packages/tests/hardening-cross-slice-reconciliation.test.ts"
-Task: "T022 [US2] Add fallback basis tests in packages/tests/hardening-cross-slice-reconciliation.test.ts"
+Task: "T020 [US2] Add DD-first V1/VE semantic comparison tests using artifacts/mappings/DD.csv in packages/tests/hardening-cross-slice-reconciliation.test.ts"
+Task: "T021 [US2] Add missing required DD mapping failure tests in packages/tests/hardening-cross-slice-reconciliation.test.ts"
+Task: "T022 [US2] Add approved no-DD contract-name fallback tests in packages/tests/hardening-cross-slice-reconciliation.test.ts"
+Task: "T023 [US2] Add fallback basis tests in packages/tests/hardening-cross-slice-reconciliation.test.ts"
 ```
 
 ## Parallel Example: User Story 3
 
 ```bash
 # Launch US3 preservation checks that touch distinct files together:
-Task: "T029 [US3] Add output-shape stability coverage in packages/tests/hardening-output-shape.test.ts"
-Task: "T030 [US3] Add warning/error payload stability coverage in packages/tests/hardening-warning-error-stability.test.ts"
+Task: "T030 [US3] Add output-shape stability coverage in packages/tests/hardening-output-shape.test.ts"
+Task: "T031 [US3] Add warning/error payload stability coverage in packages/tests/hardening-warning-error-stability.test.ts"
 ```
 
 ---
