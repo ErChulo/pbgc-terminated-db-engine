@@ -81,3 +81,93 @@ th {
   font-size: 13px;
   text-transform: uppercase;
 }
+
+.reconciliation-workbench-page {
+  max-width: 1280px;
+}
+
+.workbench-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(0, 1.1fr) minmax(360px, 0.9fr);
+}
+
+.output-panels {
+  display: grid;
+  gap: 14px;
+}
+
+.slice-panel,
+.workbench-panel {
+  min-width: 0;
+}
+
+.slice-panel {
+  background: white;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.slice-panel h2,
+.reconciliation-panel h2 {
+  font-size: 18px;
+  margin: 0 0 8px;
+}
+
+.slice-panel dl {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 14px 0 0;
+}
+
+.slice-panel dl div {
+  min-width: 0;
+}
+
+.slice-panel dt {
+  color: #52606d;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.slice-panel dd {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.slice-panel dd.is-null {
+  color: #7b8794;
+  font-style: italic;
+}
+
+.reconciliation-panel table {
+  table-layout: fixed;
+}
+
+.reconciliation-row td {
+  overflow-wrap: anywhere;
+}
+
+.status-agreement td {
+  border-left: 4px solid #2f855a;
+}
+
+.status-drift td,
+.status-warning td {
+  border-left: 4px solid #c2410c;
+}
+
+.status-nullable td,
+.status-formatting-only td,
+.status-unsupported td {
+  border-left: 4px solid #64748b;
+}
+
+@media (max-width: 820px) {
+  .workbench-grid,
+  .slice-panel dl {
+    grid-template-columns: 1fr;
+  }
+}
