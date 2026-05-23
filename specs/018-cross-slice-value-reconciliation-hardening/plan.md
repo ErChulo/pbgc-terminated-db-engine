@@ -65,9 +65,11 @@ required for mismatch findings.
 **Scale/Scope**: Backend value-level validation for committed evidence covering
 `bsrs_configuration_output`, `v1_ve_output`, `valuation_listings_output`, and
 existing DD-backed mappings for selected participants, forms, identifiers,
-required/nullable facts, categorical values, and numeric values. The increment
-is validation vocabulary over current outputs, not a new calculation slice or
-output adapter.
+required/nullable facts, categorical values, and numeric values. The initial
+MVP rule inventory must include at least one participant identifier value, one
+form value, one nullable-versus-required value, one numeric value, and one
+categorical value. The increment is validation vocabulary over current outputs,
+not a new calculation slice or output adapter.
 
 **Write Scope**: Hardening may write regression evidence, validation records,
 traces, deterministic outputs, warnings, errors, and existing persistence rows

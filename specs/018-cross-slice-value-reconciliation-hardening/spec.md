@@ -69,7 +69,7 @@ A reviewer needs value-reconciliation hardening to produce stable evidence acros
 ### Functional Requirements
 
 - **FR-001**: System MUST validate selected shared output values across existing `bsrs_configuration_output`, `v1_ve_output`, and `valuation_listings_output` evidence already committed in the repository.
-- **FR-002**: System MUST compare selected participant, form, identifier, nullable-versus-required, categorical, and numeric facts only where current contracts or approved samples establish shared reviewed meaning.
+- **FR-002**: System MUST compare selected participant, form, identifier, nullable-versus-required, categorical, and numeric facts only where current contracts or approved samples establish shared reviewed meaning. The initial MVP inventory MUST include at least one participant identifier value, one form value, one nullable-versus-required value, one numeric value, and one categorical value.
 - **FR-003**: System MUST use `artifacts/mappings/DD.csv` as the canonical naming layer wherever a matching Data Dictionary field exists.
 - **FR-004**: System MUST preserve approved contract-name fallback behavior when a reconciled field has no matching DD.csv entry.
 - **FR-005**: System MUST classify value mismatches by severity, including at least blocking mismatch, non-blocking warning, accepted optional or nullable difference, unsupported branch, and formatting-only categories.

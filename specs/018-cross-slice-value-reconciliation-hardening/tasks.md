@@ -35,7 +35,7 @@
 - [ ] T006 Define `ValueReconciliationRule`, `ValueComparisonRecord`, `SeverityClassification`, `BasisMetadata`, and `ValueReconciliationFinding` types in `packages/shared/src/crossSliceReconciliation.ts`
 - [ ] T007 Export the new value-reconciliation types and helpers from `packages/shared/src/index.ts`
 - [ ] T008 Implement deterministic numeric, categorical, identifier, form-code, boolean, and nullable normalization helpers in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T009 Define the selected shared-fact value rule inventory and comparison matrix in `packages/shared/src/crossSliceReconciliation.ts`
+- [ ] T009 Define the selected shared-fact value rule inventory and comparison matrix in `packages/shared/src/crossSliceReconciliation.ts`, including at least one participant identifier value, one form value, one nullable-versus-required value, one numeric value, and one categorical value
 - [ ] T010 Implement DD-backed canonical semantic resolution plus approved fallback metadata for value rules in `packages/shared/src/crossSliceReconciliation.ts`
 - [ ] T011 Implement comparison-record construction that preserves raw values, normalized values, source paths, reviewed fact context, rule version, and producing module in `packages/shared/src/crossSliceReconciliation.ts`
 - [ ] T012 Implement deterministic sorting for value comparison records and value reconciliation findings in `packages/shared/src/crossSliceReconciliation.ts`
@@ -54,8 +54,8 @@
 
 ### Tests for User Story 1
 
-- [ ] T015 [US1] Add a failing test for accepted selected participant, identifier, and form values across current BSRS, V1/VE, and valuation-listing evidence in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
-- [ ] T016 [US1] Add a failing test for accepted selected numeric and categorical values after approved normalization in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
+- [ ] T015 [US1] Add a failing test for accepted selected participant identifier and form values across current BSRS, V1/VE, and valuation-listing evidence in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
+- [ ] T016 [US1] Add a failing test for accepted selected nullable-versus-required, numeric, and categorical values after approved normalization in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
 - [ ] T017 [US1] Add a failing test for numeric and categorical mismatch findings with compared slices, fields, raw values, normalized values, severity, and source paths in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
 - [ ] T018 [US1] Add a failing test that DD-backed V1/VE and valuation fields use `artifacts/mappings/DD.csv` canonical semantics before comparison in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
 - [ ] T019 [US1] Add a failing test that approved no-DD fallback comparisons record explicit fallback basis instead of inventing alternate semantic names in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
