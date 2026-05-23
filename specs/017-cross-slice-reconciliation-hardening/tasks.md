@@ -12,10 +12,10 @@
 
 **Purpose**: Confirm existing source boundaries and create the internal validation surface without adding new adapters or persistence.
 
-- [ ] T001 Inspect current BSRS, V1/VE, and valuation-listings fixture builders in `packages/tests/bsrs-configuration-output-fixtures.ts`, `packages/tests/v1-ve-output-fixtures.ts`, and `packages/tests/valuation-listings-output-fixtures.ts`
-- [ ] T002 Inspect current DD mapping helpers in `packages/engine/v1-ve-output/src/ddMapping.ts`, `packages/engine/valuation-listings-output/src/ddMapping.ts`, and `packages/engine/bsrs-configuration-output/src/ddMapping.ts`
-- [ ] T003 [P] Inspect existing hardening helper patterns in `packages/tests/hardening-helpers.ts`
-- [ ] T004 [P] Inspect approved sample artifact paths in `artifacts/reference/approved-samples/bsrs-config/`, `artifacts/reference/approved-samples/v1-workbooks/`, and `artifacts/mappings/DD.csv`
+- [X] T001 Inspect current BSRS, V1/VE, and valuation-listings fixture builders in `packages/tests/bsrs-configuration-output-fixtures.ts`, `packages/tests/v1-ve-output-fixtures.ts`, and `packages/tests/valuation-listings-output-fixtures.ts`
+- [X] T002 Inspect current DD mapping helpers in `packages/engine/v1-ve-output/src/ddMapping.ts`, `packages/engine/valuation-listings-output/src/ddMapping.ts`, and `packages/engine/bsrs-configuration-output/src/ddMapping.ts`
+- [X] T003 [P] Inspect existing hardening helper patterns in `packages/tests/hardening-helpers.ts`
+- [X] T004 [P] Inspect approved sample artifact paths in `artifacts/reference/approved-samples/bsrs-config/`, `artifacts/reference/approved-samples/v1-workbooks/`, and `artifacts/mappings/DD.csv`
 
 ---
 
@@ -25,12 +25,12 @@
 
 **CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T005 Define internal reconciliation comparison and finding types in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T006 Export the reconciliation types from `packages/shared/src/index.ts`
-- [ ] T007 Implement deterministic comparison and finding sorting helpers in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T008 Implement reviewed-evidence normalization helpers for identifiers, form labels, explicit nulls, unsupported branches, absent optional evidence, and formatting-only values in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T009 Define the selected shared-fact inventory and comparison matrix for reconciled identifiers, forms, DD-backed fields, and approved fallbacks in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T010 Add shared test fixture builders for accepted comparisons and drift scenarios in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [X] T005 Define internal reconciliation comparison and finding types in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T006 Export the reconciliation types from `packages/shared/src/index.ts`
+- [X] T007 Implement deterministic comparison and finding sorting helpers in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T008 Implement reviewed-evidence normalization helpers for identifiers, form labels, explicit nulls, unsupported branches, absent optional evidence, and formatting-only values in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T009 Define the selected shared-fact inventory and comparison matrix for reconciled identifiers, forms, DD-backed fields, and approved fallbacks in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T010 Add shared test fixture builders for accepted comparisons and drift scenarios in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin.
 
@@ -44,18 +44,18 @@
 
 ### Tests for User Story 1
 
-- [ ] T011 [US1] Add accepted shared identifier and form reconciliation tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
-- [ ] T012 [US1] Add participant identifier drift finding tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
-- [ ] T013 [US1] Add form reference drift finding tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
-- [ ] T014 [US1] Add finding trace-shape tests for compared slices, fields, source paths, reviewed fact context, rule version, producing module, severity, and code in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [X] T011 [US1] Add accepted shared identifier and form reconciliation tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [X] T012 [US1] Add participant identifier drift finding tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [X] T013 [US1] Add form reference drift finding tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [X] T014 [US1] Add finding trace-shape tests for compared slices, fields, source paths, reviewed fact context, rule version, producing module, severity, and code in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T015 [US1] Implement shared fact comparison records for BSRS, V1/VE, and valuation-listing evidence in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T016 [US1] Implement drift finding creation with deterministic warning/error payloads in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T017 [US1] Implement accepted non-drift statuses for explicit nulls, unsupported branches, absent optional evidence, and formatting-only differences in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T018 [US1] Wire current fixture evidence into reconciliation tests without changing output adapters in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
-- [ ] T019 [US1] Run `npm test -- packages/tests/hardening-cross-slice-reconciliation.test.ts` and fix only US1 failures in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T015 [US1] Implement shared fact comparison records for BSRS, V1/VE, and valuation-listing evidence in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T016 [US1] Implement drift finding creation with deterministic warning/error payloads in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T017 [US1] Implement accepted non-drift statuses for explicit nulls, unsupported branches, absent optional evidence, and formatting-only differences in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T018 [US1] Wire current fixture evidence into reconciliation tests without changing output adapters in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [X] T019 [US1] Run `npm test -- packages/tests/hardening-cross-slice-reconciliation.test.ts` and fix only US1 failures in `packages/shared/src/crossSliceReconciliation.ts`
 
 **Checkpoint**: US1 should be independently testable as the MVP.
 
