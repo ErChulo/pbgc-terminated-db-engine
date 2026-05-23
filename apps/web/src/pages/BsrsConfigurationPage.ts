@@ -5,6 +5,7 @@ import { renderFormResolutionPage } from "./FormResolutionPage";
 import { renderServiceResolutionPage } from "./ServiceResolutionPage";
 import { renderV1VeOutputPage } from "./V1VeOutputPage";
 import { renderValuationListingsOutputPage } from "./ValuationListingsOutputPage";
+import { renderReconciliationWorkbenchPage } from "./ReconciliationWorkbenchPage";
 import { runFixtureBsrsConfigurationOutputResolution } from "../app/bsrsConfigurationOutputSlice";
 
 export function renderBsrsConfigurationPage(root: HTMLElement): void {
@@ -23,6 +24,7 @@ export function renderBsrsConfigurationPage(root: HTMLElement): void {
           <button id="show-benefit-kernel" type="button" class="secondary">Benefit</button>
           <button id="show-v1-ve-output" type="button" class="secondary">V1/VE</button>
           <button id="show-valuation-listings-output" type="button" class="secondary">Listings</button>
+          <button id="show-reconciliation-workbench" type="button" class="secondary">Workbench</button>
           <button id="run-bsrs-configuration-output" type="button">Run BSRS fixtures</button>
         </nav>
       </header>
@@ -49,6 +51,7 @@ export function renderBsrsConfigurationPage(root: HTMLElement): void {
   root.querySelector<HTMLButtonElement>("#show-benefit-kernel")?.addEventListener("click", () => renderBenefitKernelPage(root));
   root.querySelector<HTMLButtonElement>("#show-v1-ve-output")?.addEventListener("click", () => renderV1VeOutputPage(root));
   root.querySelector<HTMLButtonElement>("#show-valuation-listings-output")?.addEventListener("click", () => renderValuationListingsOutputPage(root));
+  root.querySelector<HTMLButtonElement>("#show-reconciliation-workbench")?.addEventListener("click", () => renderReconciliationWorkbenchPage(root));
   root.querySelector<HTMLButtonElement>("#run-bsrs-configuration-output")?.addEventListener("click", async () => {
     const tbody = root.querySelector<HTMLTableSectionElement>("#bsrs-configuration-output-results");
     if (!tbody) return;

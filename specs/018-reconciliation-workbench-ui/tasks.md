@@ -18,11 +18,11 @@
 
 **Purpose**: Confirm existing web rendering, approved sample sources, and reconciliation helpers before adding the workbench page.
 
-- [ ] T001 Inspect current web entry and navigation patterns in `apps/web/src/main.ts` and `apps/web/src/pages/BsrsConfigurationPage.ts`
-- [ ] T002 Inspect current app slice patterns in `apps/web/src/app/bsrsConfigurationOutputSlice.ts`, `apps/web/src/app/v1VeOutputSlice.ts`, and `apps/web/src/app/valuationListingsOutputSlice.ts`
-- [ ] T003 [P] Inspect existing style constraints in `apps/web/src/styles.css`
-- [ ] T004 [P] Inspect existing cross-slice value reconciliation helpers in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T005 [P] Inspect approved sample fixture builders in `packages/tests/bsrs-configuration-output-fixtures.ts`, `packages/tests/v1-ve-output-fixtures.ts`, and `packages/tests/valuation-listings-output-fixtures.ts`
+- [X] T001 Inspect current web entry and navigation patterns in `apps/web/src/main.ts` and `apps/web/src/pages/BsrsConfigurationPage.ts`
+- [X] T002 Inspect current app slice patterns in `apps/web/src/app/bsrsConfigurationOutputSlice.ts`, `apps/web/src/app/v1VeOutputSlice.ts`, and `apps/web/src/app/valuationListingsOutputSlice.ts`
+- [X] T003 [P] Inspect existing style constraints in `apps/web/src/styles.css`
+- [X] T004 [P] Inspect existing cross-slice value reconciliation helpers in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T005 [P] Inspect approved sample fixture builders in `packages/tests/bsrs-configuration-output-fixtures.ts`, `packages/tests/v1-ve-output-fixtures.ts`, and `packages/tests/valuation-listings-output-fixtures.ts`
 
 ---
 
@@ -32,10 +32,10 @@
 
 **CRITICAL**: No user story work should begin until this phase is complete.
 
-- [ ] T006 Define workbench display data types for approved sample, output panels, display fields, reconciliation rows, and trace details in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T007 Define the approved sample data builder signature and display-only contract in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T008 Create the focused workbench test file with shared fixture helpers in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T009 Verify no new migrations, seeds, schemas, output adapter directories, server endpoints, or raw/unreviewed input reads are needed for this feature in `specs/018-reconciliation-workbench-ui/tasks.md`
+- [X] T006 Define workbench display data types for approved sample, output panels, display fields, reconciliation rows, and trace details in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [X] T007 Define the approved sample data builder signature and display-only contract in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [X] T008 Create the focused workbench test file with shared fixture helpers in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T009 Verify no new migrations, seeds, schemas, output adapter directories, server endpoints, or raw/unreviewed input reads are needed for this feature in `specs/018-reconciliation-workbench-ui/tasks.md`
 
 **Checkpoint**: The workbench data boundary is ready for user story implementation.
 
@@ -49,19 +49,19 @@
 
 ### Tests for User Story 1
 
-- [ ] T010 [US1] Add a failing test that builds one approved sample workbench with sample identity and exactly three output slice panels in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T011 [US1] Add a failing test that the workbench data includes reconciliation rows with agreement-versus-drift status labels in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T012 [US1] Add a failing test that the rendered workbench markup includes BSRS configuration, V1/VE, valuation listings, and reconciliation sections in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T010 [US1] Add a failing test that builds one approved sample workbench with sample identity and exactly three output slice panels in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T011 [US1] Add a failing test that the workbench data includes reconciliation rows with agreement-versus-drift status labels in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T012 [US1] Add a failing test that the rendered workbench markup includes BSRS configuration, V1/VE, valuation listings, and reconciliation sections in `packages/tests/reconciliation-workbench-ui.test.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T013 [US1] Implement approved sample workbench data generation in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T014 [US1] Implement output slice panel field selection for BSRS configuration, V1/VE, and valuation listings in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T015 [US1] Create the visible workbench page renderer in `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
-- [ ] T016 [US1] Update app startup to show or navigate to the workbench page in `apps/web/src/main.ts`
-- [ ] T017 [US1] Add workbench navigation entry from existing output pages in `apps/web/src/pages/BsrsConfigurationPage.ts`, `apps/web/src/pages/V1VeOutputPage.ts`, and `apps/web/src/pages/ValuationListingsOutputPage.ts`
-- [ ] T018 [US1] Add readable side-by-side workbench layout styles in `apps/web/src/styles.css`
-- [ ] T019 [US1] Run `npm test -- packages/tests/reconciliation-workbench-ui.test.ts` and resolve US1 failures without changing output adapters or deterministic slice behavior
+- [X] T013 [US1] Implement approved sample workbench data generation in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [X] T014 [US1] Implement output slice panel field selection for BSRS configuration, V1/VE, and valuation listings in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [X] T015 [US1] Create the visible workbench page renderer in `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
+- [X] T016 [US1] Update app startup to show or navigate to the workbench page in `apps/web/src/main.ts`
+- [X] T017 [US1] Add workbench navigation entry from existing output pages in `apps/web/src/pages/BsrsConfigurationPage.ts`, `apps/web/src/pages/V1VeOutputPage.ts`, and `apps/web/src/pages/ValuationListingsOutputPage.ts`
+- [X] T018 [US1] Add readable side-by-side workbench layout styles in `apps/web/src/styles.css`
+- [X] T019 [US1] Run `npm test -- packages/tests/reconciliation-workbench-ui.test.ts` and resolve US1 failures without changing output adapters or deterministic slice behavior
 
 **Checkpoint**: User Story 1 is independently testable as the MVP.
 
@@ -98,17 +98,17 @@
 
 ### Tests for User Story 3
 
-- [ ] T027 [US3] Add a repeated-run stability test for workbench display data ordering, statuses, trace details, and deterministic `generated_at` metadata in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T028 [US3] Add a repeated-render markup stability test for the same approved sample, including stable `generated_at` output when displayed, in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T027 [US3] Add a repeated-run stability test for workbench display data ordering, statuses, trace details, and deterministic `generated_at` metadata in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T028 [US3] Add a repeated-render markup stability test for the same approved sample, including stable `generated_at` output when displayed, in `packages/tests/reconciliation-workbench-ui.test.ts`
 - [ ] T029 [US3] Add a regression assertion that the workbench data builder does not expose mutation or persistence write outputs in `packages/tests/reconciliation-workbench-ui.test.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T030 [US3] Stabilize deterministic sorting and value formatting for output panels and reconciliation rows in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [X] T030 [US3] Stabilize deterministic sorting and value formatting for output panels and reconciliation rows in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
 - [ ] T031 [US3] Verify 1440x900 desktop and 390x844 mobile layout constraints for long values and trace details with a focused render/layout assertion or documented manual verification in `apps/web/src/styles.css`
-- [ ] T032 [P] [US3] Run existing reconciliation hardening checks: `npm test -- packages/tests/hardening-cross-slice-value-reconciliation.test.ts packages/tests/hardening-cross-slice-reconciliation.test.ts`
-- [ ] T033 [P] [US3] Run existing output preservation checks: `npm test -- packages/tests/bsrs-configuration-output-contract.test.ts packages/tests/bsrs-configuration-output-output.test.ts packages/tests/v1-ve-output-contract.test.ts packages/tests/v1-ve-output-output.test.ts packages/tests/valuation-listings-output-contract.test.ts packages/tests/valuation-listings-output-output.test.ts`
-- [ ] T034 [US3] Run `npm test -- packages/tests/reconciliation-workbench-ui.test.ts` and resolve US3 failures without adding persistence or output-adapter behavior
+- [X] T032 [P] [US3] Run existing reconciliation hardening checks: `npm test -- packages/tests/hardening-cross-slice-value-reconciliation.test.ts packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [X] T033 [P] [US3] Run existing output preservation checks: `npm test -- packages/tests/bsrs-configuration-output-contract.test.ts packages/tests/bsrs-configuration-output-output.test.ts packages/tests/v1-ve-output-contract.test.ts packages/tests/v1-ve-output-output.test.ts packages/tests/valuation-listings-output-contract.test.ts packages/tests/valuation-listings-output-output.test.ts`
+- [X] T034 [US3] Run `npm test -- packages/tests/reconciliation-workbench-ui.test.ts` and resolve US3 failures without adding persistence or output-adapter behavior
 
 **Checkpoint**: The workbench remains deterministic and behavior-preserving.
 
@@ -121,10 +121,10 @@
 - [ ] T035 [P] Document the workbench display-only boundary in `docs/architecture/reconciliation_workbench_ui.md`
 - [ ] T036 [P] Document the displayed reconciliation field and trace mapping in `docs/mappings/reconciliation_workbench_ui_map_v0.1.0.csv`
 - [ ] T037 Verify no delivered `.sql`, `.js`, `.ts`, or `.tex` artifact was added without the required appended `.txt` transport copy in `specs/018-reconciliation-workbench-ui/tasks.md`
-- [ ] T038 Run full test suite with `npm test`
-- [ ] T039 Run lint verification with `npm run lint`
-- [ ] T040 Run production build verification with `npm run build`
-- [ ] T041 Update committed static output under `apps/web/dist/` if `npm run build` changes bundle artifacts
+- [X] T038 Run full test suite with `npm test`
+- [X] T039 Run lint verification with `npm run lint`
+- [X] T040 Run production build verification with `npm run build`
+- [X] T041 Update committed static output under `apps/web/dist/` if `npm run build` changes bundle artifacts
 - [ ] T042 Start the local web app with `npm --workspace @pbgc/web run dev` and verify the workbench screen manually against `specs/018-reconciliation-workbench-ui/quickstart.md`
 
 ---

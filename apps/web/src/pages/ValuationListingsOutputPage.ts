@@ -4,6 +4,7 @@ import { renderDateResolutionPage } from "./DateResolutionPage";
 import { renderFormResolutionPage } from "./FormResolutionPage";
 import { renderServiceResolutionPage } from "./ServiceResolutionPage";
 import { renderV1VeOutputPage } from "./V1VeOutputPage";
+import { renderReconciliationWorkbenchPage } from "./ReconciliationWorkbenchPage";
 import { runFixtureValuationListingsOutputResolution } from "../app/valuationListingsOutputSlice";
 
 export function renderValuationListingsOutputPage(root: HTMLElement): void {
@@ -21,6 +22,7 @@ export function renderValuationListingsOutputPage(root: HTMLElement): void {
           <button id="show-form-resolution" type="button" class="secondary">Form</button>
           <button id="show-benefit-kernel" type="button" class="secondary">Benefit</button>
           <button id="show-v1-ve-output" type="button" class="secondary">V1/VE</button>
+          <button id="show-reconciliation-workbench" type="button" class="secondary">Workbench</button>
           <button id="run-valuation-listings-output" type="button">Run valuation fixtures</button>
         </nav>
       </header>
@@ -47,6 +49,7 @@ export function renderValuationListingsOutputPage(root: HTMLElement): void {
   root.querySelector<HTMLButtonElement>("#show-form-resolution")?.addEventListener("click", () => renderFormResolutionPage(root));
   root.querySelector<HTMLButtonElement>("#show-benefit-kernel")?.addEventListener("click", () => renderBenefitKernelPage(root));
   root.querySelector<HTMLButtonElement>("#show-v1-ve-output")?.addEventListener("click", () => renderV1VeOutputPage(root));
+  root.querySelector<HTMLButtonElement>("#show-reconciliation-workbench")?.addEventListener("click", () => renderReconciliationWorkbenchPage(root));
   root.querySelector<HTMLButtonElement>("#run-valuation-listings-output")?.addEventListener("click", async () => {
     const tbody = root.querySelector<HTMLTableSectionElement>("#valuation-listings-output-results");
     if (!tbody) return;
