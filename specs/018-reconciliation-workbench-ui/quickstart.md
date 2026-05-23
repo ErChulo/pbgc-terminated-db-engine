@@ -49,4 +49,4 @@ Expected outcome:
 - reconciliation rows show agreement-versus-drift status
 - trace details expose compared slices, fields, values, source artifact, rule
   version, and producing module
-- desktop and mobile widths do not overlap text or controls
+- 1440x900 desktop and 390x844 mobile widths do not overlap text or controls

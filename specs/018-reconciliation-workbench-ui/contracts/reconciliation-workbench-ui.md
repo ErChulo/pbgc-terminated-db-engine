@@ -34,6 +34,9 @@ The page must show, in one screen:
 - finding severity where findings exist
 - trace details for visible comparisons/findings
 
+If the page shows `generated_at`, it must be derived from stable existing
+deterministic evidence rather than wall-clock time.
+
 ## Reconciliation Status Contract
 
 Displayed rows must use a stable label for each underlying status:
@@ -74,7 +77,7 @@ The workbench must not:
 
 ## Layout Contract
 
-Desktop and mobile viewport checks must confirm:
+Desktop and mobile viewport checks at 1440x900 and 390x844 must confirm:
 
 - the three output panels and reconciliation section remain readable
 - long field names, values, statuses, and trace details do not overlap adjacent

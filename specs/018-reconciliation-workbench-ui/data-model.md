@@ -10,7 +10,7 @@ The complete display state for the one approved sample shown in the workbench.
 - `sample_label`
 - `case_id`
 - `plan_id`
-- `generated_at`
+- `generated_at`: stable timestamp metadata derived from existing deterministic evidence
 - `output_panels`
 - `reconciliation_rows`
 - `findings`
@@ -20,7 +20,8 @@ The complete display state for the one approved sample shown in the workbench.
 
 - Must derive only from approved committed sample artifacts and already
   implemented deterministic outputs.
-- Must be deterministic across repeated loads of the same approved sample.
+- Must be deterministic across repeated loads of the same approved sample, including `generated_at`.
+- `generated_at` must not use wall-clock time or runtime load time.
 - Must not include raw OCR, raw documents, external workbooks, or unreviewed
   extraction data.
 
@@ -43,7 +44,8 @@ Visible grouping for one output slice in the workbench.
 
 - Must present existing deterministic row values without mutating them.
 - Must identify the output slice clearly.
-- Must keep long field names and values readable on desktop and mobile.
+- Must keep long field names and values readable on 1440x900 desktop and
+  390x844 mobile viewports.
 
 ## Display Field
 

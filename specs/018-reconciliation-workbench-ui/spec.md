@@ -74,10 +74,10 @@ A reviewer needs the workbench to remain a display layer over existing approved 
 - **FR-005**: System MUST display severity for reconciliation warnings or drift findings.
 - **FR-006**: System MUST display traceability details for each shown comparison or finding, including compared slices, fields, values, basis, source artifact, rule version, and producing module.
 - **FR-007**: System MUST distinguish DD-backed field basis from approved no-DD fallback basis where shown.
-- **FR-008**: System MUST preserve deterministic ordering and identical displayed content across repeated loads of the same approved sample.
+- **FR-008**: System MUST preserve deterministic ordering and identical displayed content across repeated loads of the same approved sample, including any displayed timestamp metadata.
 - **FR-009**: System MUST NOT add new business domains, new output adapters, new deterministic calculation rules, server calls, hosted services, raw source-document reads, raw OCR reads, or unreviewed-input reads.
 - **FR-010**: System MUST preserve existing BSRS configuration, V1/VE, valuation listings, cross-slice reconciliation, browser-only persistence, and slice contract behavior.
-- **FR-011**: System MUST provide readable side-by-side presentation on typical desktop and mobile browser viewports without overlapping values, labels, or trace details.
+- **FR-011**: System MUST provide readable side-by-side presentation on a 1440x900 desktop viewport and a 390x844 mobile viewport without overlapping values, labels, or trace details.
 
 ### Deterministic Boundary *(mandatory)*
 
@@ -86,6 +86,7 @@ A reviewer needs the workbench to remain a display layer over existing approved 
 - **Source Layer Reads**: Deterministic engine outputs, output adapter rows, approved sample artifacts, cross-slice reconciliation records, mappings, and trace metadata already available within the committed application package.
 - **Source Layer Writes**: The workbench is display-only and MUST NOT write source assertions, resolved facts, resolved provisions, engine input packets, deterministic outputs, output adapter rows, or new persistence tables.
 - **Traceability Required**: Every visible comparison or finding must identify compared slices, fields, displayed values, classification status, mapping or fallback basis, source artifact, rule version, and producing module when that information exists in the underlying deterministic evidence.
+- **Stable Timestamp Metadata**: Any workbench `generated_at` value must be derived from stable existing deterministic evidence rather than wall-clock time so repeated loads remain identical.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -103,7 +104,7 @@ A reviewer needs the workbench to remain a display layer over existing approved 
 - **SC-003**: 100% of displayed warning or drift findings show compared slices, compared fields, compared values, severity, source artifact, rule version, and producing module.
 - **SC-004**: Repeated loads of the same approved sample display rows, statuses, and trace details in identical order with identical values.
 - **SC-005**: Existing deterministic output and reconciliation regression behavior remains unchanged after adding the workbench.
-- **SC-006**: On desktop and mobile viewports, no displayed output value, status label, or trace detail overlaps another visible element.
+- **SC-006**: On 1440x900 desktop and 390x844 mobile viewports, no displayed output value, status label, or trace detail overlaps another visible element.
 
 ## Assumptions
 

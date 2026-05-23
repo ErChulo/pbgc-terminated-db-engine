@@ -98,14 +98,14 @@
 
 ### Tests for User Story 3
 
-- [ ] T027 [US3] Add a repeated-run stability test for workbench display data ordering, statuses, and trace details in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T028 [US3] Add a repeated-render markup stability test for the same approved sample in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [ ] T027 [US3] Add a repeated-run stability test for workbench display data ordering, statuses, trace details, and deterministic `generated_at` metadata in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [ ] T028 [US3] Add a repeated-render markup stability test for the same approved sample, including stable `generated_at` output when displayed, in `packages/tests/reconciliation-workbench-ui.test.ts`
 - [ ] T029 [US3] Add a regression assertion that the workbench data builder does not expose mutation or persistence write outputs in `packages/tests/reconciliation-workbench-ui.test.ts`
 
 ### Implementation for User Story 3
 
 - [ ] T030 [US3] Stabilize deterministic sorting and value formatting for output panels and reconciliation rows in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T031 [US3] Verify desktop and mobile layout constraints for long values and trace details in `apps/web/src/styles.css`
+- [ ] T031 [US3] Verify 1440x900 desktop and 390x844 mobile layout constraints for long values and trace details with a focused render/layout assertion or documented manual verification in `apps/web/src/styles.css`
 - [ ] T032 [P] [US3] Run existing reconciliation hardening checks: `npm test -- packages/tests/hardening-cross-slice-value-reconciliation.test.ts packages/tests/hardening-cross-slice-reconciliation.test.ts`
 - [ ] T033 [P] [US3] Run existing output preservation checks: `npm test -- packages/tests/bsrs-configuration-output-contract.test.ts packages/tests/bsrs-configuration-output-output.test.ts packages/tests/v1-ve-output-contract.test.ts packages/tests/v1-ve-output-output.test.ts packages/tests/valuation-listings-output-contract.test.ts packages/tests/valuation-listings-output-output.test.ts`
 - [ ] T034 [US3] Run `npm test -- packages/tests/reconciliation-workbench-ui.test.ts` and resolve US3 failures without adding persistence or output-adapter behavior
