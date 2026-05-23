@@ -18,11 +18,11 @@
 
 **Purpose**: Confirm the existing helper, evidence, mappings, and regression boundaries before changing validation behavior.
 
-- [ ] T001 Inspect the existing reconciliation helper and exports in `packages/shared/src/crossSliceReconciliation.ts` and `packages/shared/src/index.ts`
-- [ ] T002 Inspect DD-first mapping behavior in `packages/engine/v1-ve-output/src/ddMapping.ts`, `packages/engine/valuation-listings-output/src/ddMapping.ts`, `packages/engine/bsrs-configuration-output/src/ddMapping.ts`, and `artifacts/mappings/DD.csv`
-- [ ] T003 [P] Inspect current output fixtures in `packages/tests/v1-ve-output-fixtures.ts`, `packages/tests/valuation-listings-output-fixtures.ts`, and `packages/tests/bsrs-configuration-output-fixtures.ts`
-- [ ] T004 [P] Inspect existing cross-slice and stability coverage in `packages/tests/hardening-cross-slice-reconciliation.test.ts`, `packages/tests/hardening-output-shape.test.ts`, and `packages/tests/hardening-warning-error-stability.test.ts`
-- [ ] T005 [P] Inspect approved sample evidence in `artifacts/reference/approved-samples/bsrs-config/` and `artifacts/reference/approved-samples/v1-workbooks/`
+- [X] T001 Inspect the existing reconciliation helper and exports in `packages/shared/src/crossSliceReconciliation.ts` and `packages/shared/src/index.ts`
+- [X] T002 Inspect DD-first mapping behavior in `packages/engine/v1-ve-output/src/ddMapping.ts`, `packages/engine/valuation-listings-output/src/ddMapping.ts`, `packages/engine/bsrs-configuration-output/src/ddMapping.ts`, and `artifacts/mappings/DD.csv`
+- [X] T003 [P] Inspect current output fixtures in `packages/tests/v1-ve-output-fixtures.ts`, `packages/tests/valuation-listings-output-fixtures.ts`, and `packages/tests/bsrs-configuration-output-fixtures.ts`
+- [X] T004 [P] Inspect existing cross-slice and stability coverage in `packages/tests/hardening-cross-slice-reconciliation.test.ts`, `packages/tests/hardening-output-shape.test.ts`, and `packages/tests/hardening-warning-error-stability.test.ts`
+- [X] T005 [P] Inspect approved sample evidence in `artifacts/reference/approved-samples/bsrs-config/` and `artifacts/reference/approved-samples/v1-workbooks/`
 
 ---
 
@@ -32,15 +32,15 @@
 
 **CRITICAL**: No user story implementation should begin until this phase is complete.
 
-- [ ] T006 Define `ValueReconciliationRule`, `ValueComparisonRecord`, `SeverityClassification`, `BasisMetadata`, and `ValueReconciliationFinding` types in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T007 Export the new value-reconciliation types and helpers from `packages/shared/src/index.ts`
-- [ ] T008 Implement deterministic numeric, categorical, identifier, form-code, boolean, and nullable normalization helpers in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T009 Define the selected shared-fact value rule inventory and comparison matrix in `packages/shared/src/crossSliceReconciliation.ts`, including at least one participant identifier value, one form value, one nullable-versus-required value, one numeric value, and one categorical value
-- [ ] T010 Implement DD-backed canonical semantic resolution plus approved fallback metadata for value rules in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T011 Implement comparison-record construction that preserves raw values, normalized values, source paths, reviewed fact context, rule version, and producing module in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T012 Implement deterministic sorting for value comparison records and value reconciliation findings in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T013 Create focused current-output evidence builders for value reconciliation in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
-- [ ] T014 Add shared assertion helpers for value comparison shape, basis metadata, and finding stability in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
+- [X] T006 Define `ValueReconciliationRule`, `ValueComparisonRecord`, `SeverityClassification`, `BasisMetadata`, and `ValueReconciliationFinding` types in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T007 Export the new value-reconciliation types and helpers from `packages/shared/src/index.ts`
+- [X] T008 Implement deterministic numeric, categorical, identifier, form-code, boolean, and nullable normalization helpers in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T009 Define the selected shared-fact value rule inventory and comparison matrix in `packages/shared/src/crossSliceReconciliation.ts`, including at least one participant identifier value, one form value, one nullable-versus-required value, one numeric value, and one categorical value
+- [X] T010 Implement DD-backed canonical semantic resolution plus approved fallback metadata for value rules in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T011 Implement comparison-record construction that preserves raw values, normalized values, source paths, reviewed fact context, rule version, and producing module in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T012 Implement deterministic sorting for value comparison records and value reconciliation findings in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T013 Create focused current-output evidence builders for value reconciliation in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
+- [X] T014 Add shared assertion helpers for value comparison shape, basis metadata, and finding stability in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
 
 **Checkpoint**: Shared value-reconciliation primitives are ready for user-story tests and implementation.
 
@@ -54,19 +54,19 @@
 
 ### Tests for User Story 1
 
-- [ ] T015 [US1] Add a failing test for accepted selected participant identifier and form values across current BSRS, V1/VE, and valuation-listing evidence in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
-- [ ] T016 [US1] Add a failing test for accepted selected nullable-versus-required, numeric, and categorical values after approved normalization in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
-- [ ] T017 [US1] Add a failing test for numeric and categorical mismatch findings with compared slices, fields, raw values, normalized values, severity, and source paths in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
-- [ ] T018 [US1] Add a failing test that DD-backed V1/VE and valuation fields use `artifacts/mappings/DD.csv` canonical semantics before comparison in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
-- [ ] T019 [US1] Add a failing test that approved no-DD fallback comparisons record explicit fallback basis instead of inventing alternate semantic names in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
+- [X] T015 [US1] Add a failing test for accepted selected participant identifier and form values across current BSRS, V1/VE, and valuation-listing evidence in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
+- [X] T016 [US1] Add a failing test for accepted selected nullable-versus-required, numeric, and categorical values after approved normalization in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
+- [X] T017 [US1] Add a failing test for numeric and categorical mismatch findings with compared slices, fields, raw values, normalized values, severity, and source paths in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
+- [X] T018 [US1] Add a failing test that DD-backed V1/VE and valuation fields use `artifacts/mappings/DD.csv` canonical semantics before comparison in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
+- [X] T019 [US1] Add a failing test that approved no-DD fallback comparisons record explicit fallback basis instead of inventing alternate semantic names in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T020 [US1] Implement selected shared-value extraction from current evidence records in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T021 [US1] Implement pairwise value comparison for selected participant, identifier, form, numeric, and categorical rules in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T022 [US1] Implement mismatch finding creation with DD/fallback basis metadata and reviewed source context in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T023 [US1] Wire the focused value-reconciliation tests to the exported shared helper in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
-- [ ] T024 [US1] Run `npm test -- packages/tests/hardening-cross-slice-value-reconciliation.test.ts` and resolve US1 failures without changing output adapters or existing slice behavior
+- [X] T020 [US1] Implement selected shared-value extraction from current evidence records in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T021 [US1] Implement pairwise value comparison for selected participant, identifier, form, numeric, and categorical rules in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T022 [US1] Implement mismatch finding creation with DD/fallback basis metadata and reviewed source context in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T023 [US1] Wire the focused value-reconciliation tests to the exported shared helper in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
+- [X] T024 [US1] Run `npm test -- packages/tests/hardening-cross-slice-value-reconciliation.test.ts` and resolve US1 failures without changing output adapters or existing slice behavior
 
 **Checkpoint**: User Story 1 is independently testable as the MVP.
 
@@ -106,19 +106,19 @@
 
 ### Tests for User Story 3
 
-- [ ] T035 [US3] Add a repeated-run byte-stability test for accepted value comparisons and findings in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
+- [X] T035 [US3] Add a repeated-run byte-stability test for accepted value comparisons and findings in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
 - [ ] T036 [P] [US3] Add value-reconciliation output-shape preservation coverage to `packages/tests/hardening-output-shape.test.ts`
 - [ ] T037 [P] [US3] Add structured warning/error payload stability coverage for value-reconciliation findings to `packages/tests/hardening-warning-error-stability.test.ts`
 - [ ] T038 [US3] Add an adapter-exclusion regression that value reconciliation does not write unrelated output-adapter rows or tables in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T039 [US3] Harden deterministic ordering and serialization for repeated-run value comparisons and findings in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T040 [US3] Verify no new lower source-layer writes, migrations, seeds, adapter modules, server calls, or raw/unreviewed input reads are introduced by changes under `packages/shared/src/` and `packages/tests/`
-- [ ] T041 [P] [US3] Run existing BSRS output regressions: `npm test -- packages/tests/bsrs-configuration-output-contract.test.ts packages/tests/bsrs-configuration-output-output.test.ts packages/tests/bsrs-configuration-output-persistence.test.ts packages/tests/bsrs-configuration-output-trace.test.ts`
-- [ ] T042 [P] [US3] Run existing V1/VE output regressions: `npm test -- packages/tests/v1-ve-output-contract.test.ts packages/tests/v1-ve-output-output.test.ts packages/tests/v1-ve-output-persistence.test.ts packages/tests/v1-ve-output-trace.test.ts`
-- [ ] T043 [P] [US3] Run existing valuation-listings output regressions: `npm test -- packages/tests/valuation-listings-output-contract.test.ts packages/tests/valuation-listings-output-output.test.ts packages/tests/valuation-listings-output-persistence.test.ts packages/tests/valuation-listings-output-trace.test.ts`
-- [ ] T044 [US3] Run stability regressions: `npm test -- packages/tests/hardening-cross-slice-value-reconciliation.test.ts packages/tests/hardening-cross-slice-reconciliation.test.ts packages/tests/hardening-output-shape.test.ts packages/tests/hardening-warning-error-stability.test.ts`
+- [X] T039 [US3] Harden deterministic ordering and serialization for repeated-run value comparisons and findings in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T040 [US3] Verify no new lower source-layer writes, migrations, seeds, adapter modules, server calls, or raw/unreviewed input reads are introduced by changes under `packages/shared/src/` and `packages/tests/`
+- [X] T041 [P] [US3] Run existing BSRS output regressions: `npm test -- packages/tests/bsrs-configuration-output-contract.test.ts packages/tests/bsrs-configuration-output-output.test.ts packages/tests/bsrs-configuration-output-persistence.test.ts packages/tests/bsrs-configuration-output-trace.test.ts`
+- [X] T042 [P] [US3] Run existing V1/VE output regressions: `npm test -- packages/tests/v1-ve-output-contract.test.ts packages/tests/v1-ve-output-output.test.ts packages/tests/v1-ve-output-persistence.test.ts packages/tests/v1-ve-output-trace.test.ts`
+- [X] T043 [P] [US3] Run existing valuation-listings output regressions: `npm test -- packages/tests/valuation-listings-output-contract.test.ts packages/tests/valuation-listings-output-output.test.ts packages/tests/valuation-listings-output-persistence.test.ts packages/tests/valuation-listings-output-trace.test.ts`
+- [X] T044 [US3] Run stability regressions: `npm test -- packages/tests/hardening-cross-slice-value-reconciliation.test.ts packages/tests/hardening-cross-slice-reconciliation.test.ts packages/tests/hardening-output-shape.test.ts packages/tests/hardening-warning-error-stability.test.ts`
 
 **Checkpoint**: All user stories preserve existing slice behavior and deterministic stability.
 
@@ -132,9 +132,9 @@
 - [ ] T046 [P] Document value-reconciliation hardening boundaries and reviewed-input sources in `docs/architecture/cross_slice_value_reconciliation_hardening.md`
 - [ ] T047 Verify changed `.ts` test/helper files remain internal regression artifacts and do not require email-safe `.txt` delivery copies under the constitution
 - [ ] T048 Verify no delivered `.sql`, `.js`, `.ts`, or `.tex` artifact was added without the required appended `.txt` transport copy
-- [ ] T049 Run full test suite with `npm test`
-- [ ] T050 Run lint verification with `npm run lint`
-- [ ] T051 Run production build verification with `npm run build` and keep committed static artifacts aligned if the build output changes
+- [X] T049 Run full test suite with `npm test`
+- [X] T050 Run lint verification with `npm run lint`
+- [X] T051 Run production build verification with `npm run build` and keep committed static artifacts aligned if the build output changes
 
 ---
 
