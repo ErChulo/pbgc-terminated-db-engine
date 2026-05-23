@@ -48,7 +48,7 @@
 
 ## Phase 3: User Story 1 - Reconcile Shared Values Across Outputs (Priority: P1) MVP
 
-**Goal**: Compare selected shared participant, identifier, form, categorical, and numeric values across BSRS, V1/VE, and valuation-listing evidence with DD-first or approved fallback basis metadata.
+**Goal**: Compare selected shared participant, identifier, form, nullable-versus-required, categorical, and numeric values across BSRS, V1/VE, and valuation-listing evidence with DD-first or approved fallback basis metadata.
 
 **Independent Test**: `npm test -- packages/tests/hardening-cross-slice-value-reconciliation.test.ts` verifies matching values are accepted and mismatched selected values emit deterministic findings with traceable basis metadata.
 
