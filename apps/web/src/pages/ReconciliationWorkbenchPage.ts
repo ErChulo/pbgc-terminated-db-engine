@@ -7,11 +7,17 @@ export function renderReconciliationWorkbenchPage(root: HTMLElement): void {
 export function buildReconciliationWorkbenchMarkup(state: ReconciliationWorkbenchState): string {
   return `
     <section class="page-shell reconciliation-workbench-page">
-      <header>
-        <div>
+      <header class="workbench-header">
+        <div class="workbench-title">
           <h1>PBGC Reconciliation Workbench</h1>
-          <p class="subtle">${escapeHtml(state.sample_label)} · ${escapeHtml(state.case_id)} · ${escapeHtml(state.plan_id)}</p>
+          <p class="subtle">${escapeHtml(state.sample_context.sample_label)} · ${escapeHtml(state.case_id)} · ${escapeHtml(state.plan_id)}</p>
           <p class="subtle">Generated from stable evidence: ${escapeHtml(state.generated_at)}</p>
+        </div>
+        <div class="workbench-sample-context" aria-label="Approved sample context">
+          <strong>${escapeHtml(state.sample_context.fixed_sample_label)}</strong>
+          <span>${escapeHtml(state.sample_context.mock_case_label)}</span>
+          <span>${escapeHtml(state.sample_context.mock_population_label)}</span>
+          <span class="no-real-person-data-notice">${escapeHtml(state.sample_context.no_real_person_data_notice)}</span>
         </div>
       </header>
       <main class="workbench-grid">

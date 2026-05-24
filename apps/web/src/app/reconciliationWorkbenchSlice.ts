@@ -26,6 +26,16 @@ export type WorkbenchOutputPanel = {
   trace_count: number;
 };
 
+export type WorkbenchSampleContext = {
+  sample_id: string;
+  sample_label: string;
+  fixed_sample_label: string;
+  mock_case_label: string;
+  mock_population_label: string;
+  no_real_person_data_notice: string;
+  generated_at: string;
+};
+
 export type WorkbenchReconciliationRow = {
   comparison_id: string;
   rule_key: string;
@@ -43,12 +53,18 @@ export type ReconciliationWorkbenchState = {
   case_id: string;
   plan_id: string;
   generated_at: string;
+  sample_context: WorkbenchSampleContext;
   output_panels: WorkbenchOutputPanel[];
   reconciliation_rows: WorkbenchReconciliationRow[];
   findings: WorkbenchReconciliationRow[];
 };
 
 const STABLE_GENERATED_AT = "source:packages/tests/bsrs-configuration-output-fixtures.ts#BSRS001";
+const FIXED_SAMPLE_LABEL = "Fixed approved sample: BSRS001";
+const MOCK_CASE_LABEL = "Mock case context: simulated PBGC terminated DB case";
+const MOCK_POPULATION_LABEL = "Mock population context: simulated participant cohort";
+const NO_REAL_PERSON_DATA_NOTICE =
+  "No real participant, beneficiary, alternate payee, survivor, or other natural-person data is used on this workbench.";
 
 const PANEL_FIELDS = {
   bsrs_configuration_output: ["id", "retstat", "form_code_nsf", "xra", "current_payment_amount"],
@@ -103,6 +119,15 @@ export function buildApprovedSampleReconciliationWorkbench(): ReconciliationWork
     case_id: packet.case_id,
     plan_id: bsrs.row.plan_id,
     generated_at: STABLE_GENERATED_AT,
+    sample_context: {
+      sample_id: fixture.test_case_id,
+      sample_label: fixture.description,
+      fixed_sample_label: FIXED_SAMPLE_LABEL,
+      mock_case_label: MOCK_CASE_LABEL,
+      mock_population_label: MOCK_POPULATION_LABEL,
+      no_real_person_data_notice: NO_REAL_PERSON_DATA_NOTICE,
+      generated_at: STABLE_GENERATED_AT,
+    },
     output_panels: (Object.keys(PANEL_LABELS) as ReconciliationSliceName[]).map((sliceName) =>
       buildOutputPanel(sliceName, packet.case_id, outputRows[sliceName], bsrs.warnings.map((warning) => warning.message)),
     ),

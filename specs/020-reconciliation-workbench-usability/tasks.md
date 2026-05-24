@@ -18,12 +18,12 @@
 
 **Purpose**: Confirm the current workbench implementation, reconciliation helpers, and approved/mock display boundary before changing the page.
 
-- [ ] T001 Inspect current workbench data builder and deterministic field selection in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T002 Inspect current workbench renderer and markup structure in `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
-- [ ] T003 [P] Inspect current workbench styles and responsive constraints in `apps/web/src/styles.css`
-- [ ] T004 [P] Inspect existing focused workbench tests in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T005 [P] Inspect shared-fact and shared-value reconciliation helpers in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T006 [P] Inspect approved sample fixture sources in `packages/tests/bsrs-configuration-output-fixtures.ts`, `packages/tests/v1-ve-output-fixtures.ts`, and `packages/tests/valuation-listings-output-fixtures.ts`
+- [X] T001 Inspect current workbench data builder and deterministic field selection in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [X] T002 Inspect current workbench renderer and markup structure in `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
+- [X] T003 [P] Inspect current workbench styles and responsive constraints in `apps/web/src/styles.css`
+- [X] T004 [P] Inspect existing focused workbench tests in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T005 [P] Inspect shared-fact and shared-value reconciliation helpers in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T006 [P] Inspect approved sample fixture sources in `packages/tests/bsrs-configuration-output-fixtures.ts`, `packages/tests/v1-ve-output-fixtures.ts`, and `packages/tests/valuation-listings-output-fixtures.ts`
 
 ---
 
@@ -33,10 +33,10 @@
 
 **CRITICAL**: No user story work should begin until this phase is complete.
 
-- [ ] T007 Add or refine workbench sample context, mocked label, business panel, shared-fact row, shared-value row, and trace-detail display types in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T008 Define the fixed approved-sample label and mocked no-real-person-data display contract in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T009 Extend focused test helpers for stable workbench state and rendered markup assertions in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T010 Verify no new migrations, seeds, schemas, output adapter directories, server endpoints, raw/unreviewed reads, or real natural-person data sources are needed for this feature in `specs/020-reconciliation-workbench-usability/tasks.md`
+- [X] T007 Add or refine workbench sample context, mocked label, business panel, shared-fact row, shared-value row, and trace-detail display types in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [X] T008 Define the fixed approved-sample label and mocked no-real-person-data display contract in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [X] T009 Extend focused test helpers for stable workbench state and rendered markup assertions in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T010 Verify no new migrations, seeds, schemas, output adapter directories, server endpoints, raw/unreviewed reads, or real natural-person data sources are needed for this feature in `specs/020-reconciliation-workbench-usability/tasks.md`
 
 **Checkpoint**: The workbench usability data boundary is ready for story implementation.
 
@@ -50,16 +50,16 @@
 
 ### Tests for User Story 1
 
-- [ ] T011 [US1] Add a failing test that the workbench state includes approved sample identity, fixed-sample label, mocked case label, mocked population label, and no-real-person-data notice in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T012 [US1] Add a failing test that rendered markup shows the approved sample identity, fixed-sample label, mocked context, and no-real-person-data notice in the first visible header area in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T013 [US1] Add a failing test that the workbench state and markup contain no real-person-data markers beyond explicitly mocked labels in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T011 [US1] Add a failing test that the workbench state includes approved sample identity, fixed-sample label, mocked case label, mocked population label, and no-real-person-data notice in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T012 [US1] Add a failing test that rendered markup shows the approved sample identity, fixed-sample label, mocked context, and no-real-person-data notice in the first visible header area in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T013 [US1] Add a failing test that the workbench state and markup contain no real-person-data markers beyond explicitly mocked labels in `packages/tests/reconciliation-workbench-ui.test.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T014 [US1] Add deterministic sample context and mocked display labels to `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T015 [US1] Render the recognizable sample header, fixed-sample label, mocked context, and no-real-person-data notice in `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
-- [ ] T016 [US1] Style the sample header and privacy notice for first-visible readability in `apps/web/src/styles.css`
-- [ ] T017 [US1] Run `npm test -- packages/tests/reconciliation-workbench-ui.test.ts` and resolve US1 failures without changing output adapters or deterministic slice behavior
+- [X] T014 [US1] Add deterministic sample context and mocked display labels to `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [X] T015 [US1] Render the recognizable sample header, fixed-sample label, mocked context, and no-real-person-data notice in `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
+- [X] T016 [US1] Style the sample header and privacy notice for first-visible readability in `apps/web/src/styles.css`
+- [X] T017 [US1] Run `npm test -- packages/tests/reconciliation-workbench-ui.test.ts` and resolve US1 failures without changing output adapters or deterministic slice behavior
 
 **Checkpoint**: User Story 1 is independently testable as the usability MVP.
 
@@ -125,10 +125,10 @@
 - [ ] T039 Run existing reconciliation checks with `npm test -- packages/tests/hardening-cross-slice-reconciliation.test.ts packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
 - [ ] T040 Run existing output preservation checks with `npm test -- packages/tests/bsrs-configuration-output-output.test.ts packages/tests/v1-ve-output-output.test.ts packages/tests/valuation-listings-output-output.test.ts`
 - [ ] T041 Run full test suite for `packages/tests/` with `npm test`
-- [ ] T042 Run lint verification for `tsconfig.json` with `npm run lint`
-- [ ] T043 Run production build verification for `apps/web/` with `npm run build`
-- [ ] T044 Update committed static output under `apps/web/dist/` if `npm run build` changes bundle artifacts
-- [ ] T045 Verify no delivered `.sql`, `.js`, `.ts`, or `.tex` artifact was added without the required appended `.txt` transport copy in `specs/020-reconciliation-workbench-usability/tasks.md`
+- [X] T042 Run lint verification for `tsconfig.json` with `npm run lint`
+- [X] T043 Run production build verification for `apps/web/` with `npm run build`
+- [X] T044 Update committed static output under `apps/web/dist/` if `npm run build` changes bundle artifacts
+- [X] T045 Verify no delivered `.sql`, `.js`, `.ts`, or `.tex` artifact was added without the required appended `.txt` transport copy in `specs/020-reconciliation-workbench-usability/tasks.md`
 - [ ] T046 Start or keep the local web app on `http://127.0.0.1:5175/` with `npm --workspace @pbgc/web run dev -- --port 5175` and verify the workbench manually against `specs/020-reconciliation-workbench-usability/quickstart.md`
 
 ---
