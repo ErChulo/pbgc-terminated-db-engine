@@ -12,15 +12,15 @@
 
 ### User Story 1 - Switch Approved Samples (Priority: P1)
 
-As a casework analyst reviewing reconciliation behavior, I want a clear sample selector on the existing workbench so I can switch between approved sample artifacts and immediately see the header, output panels, comparison tables, and trace details for the selected sample.
+As a casework analyst reviewing reconciliation behavior, I want a clear sample selector on the existing workbench so I can identify the active approved sample and, when another supported approved sample exists, switch to it and immediately see the header, output panels, comparison tables, and trace details for the selected sample.
 
 **Why this priority**: The selector is the core value of this slice; without it the workbench remains tied to one fixed sample and cannot support analyst comparison across approved artifacts.
 
-**Independent Test**: Can be fully tested by opening the workbench, selecting a different approved sample, and confirming the visible header, output panels, Shared Facts table, Shared Values table, reconciliation rows, and trace expansions all reflect the selected approved sample.
+**Independent Test**: Can be fully tested by opening the workbench and confirming the fixed approved sample is identifiable; if at least two supported approved samples exist, select another approved sample and confirm the visible header, output panels, Shared Facts table, Shared Values table, reconciliation rows, and trace expansions all reflect the selected approved sample.
 
 **Acceptance Scenarios**:
 
-1. **Given** the workbench is loaded with the default approved sample, **When** the analyst selects another approved sample, **Then** the visible sample label, mocked case/population context, output panels, shared-facts rows, shared-values rows, reconciliation rows, and trace details update to the selected sample.
+1. **Given** the workbench is loaded with the default approved sample, **When** at least two supported approved samples exist and the analyst selects another approved sample, **Then** the visible sample label, mocked case/population context, output panels, shared-facts rows, shared-values rows, reconciliation rows, and trace details update to the selected sample.
 2. **Given** the analyst has switched samples, **When** the same sample is selected again in a repeated load, **Then** the displayed rows, statuses, severities, ordering, and trace-detail content are identical.
 
 ---
