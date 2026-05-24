@@ -11,6 +11,16 @@ describe("reconciliation workbench UI", () => {
     expect(state.case_id).toBe("CASE-PLACEHOLDER");
     expect(state.plan_id).toBe("PLAN-PLACEHOLDER");
     expect(state.generated_at).toBe("source:packages/tests/bsrs-configuration-output-fixtures.ts#BSRS001");
+    expect(state.sample_context).toMatchObject({
+      sample_id: "BSRS001",
+      sample_label: "Deferred vested BSRS configuration packet",
+      fixed_sample_label: "Fixed approved sample: BSRS001",
+      mock_case_label: "Mock case context: simulated PBGC terminated DB case",
+      mock_population_label: "Mock population context: simulated participant cohort",
+      no_real_person_data_notice:
+        "No real participant, beneficiary, alternate payee, survivor, or other natural-person data is used on this workbench.",
+      generated_at: "source:packages/tests/bsrs-configuration-output-fixtures.ts#BSRS001",
+    });
     expect(state.output_panels.map((panel) => panel.slice_name)).toEqual([
       "bsrs_configuration_output",
       "v1_ve_output",
@@ -36,6 +46,32 @@ describe("reconciliation workbench UI", () => {
     expect(markup).toContain("Valuation Listings");
     expect(markup).toContain("Cross-Slice Reconciliation");
     expect(markup).toContain("Generated from stable evidence");
+  });
+
+  it("renders approved sample context and no-real-person-data notice in the first visible header area", () => {
+    const markup = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench());
+    const headerMarkup = markup.slice(markup.indexOf("<header"), markup.indexOf("</header>"));
+
+    expect(headerMarkup).toContain("Deferred vested BSRS configuration packet");
+    expect(headerMarkup).toContain("Fixed approved sample: BSRS001");
+    expect(headerMarkup).toContain("Mock case context: simulated PBGC terminated DB case");
+    expect(headerMarkup).toContain("Mock population context: simulated participant cohort");
+    expect(headerMarkup).toContain("No real participant, beneficiary, alternate payee, survivor, or other natural-person data");
+  });
+
+  it("keeps person-level context explicitly mocked and free of natural-person names", () => {
+    const state = buildApprovedSampleReconciliationWorkbench();
+    const markup = buildReconciliationWorkbenchMarkup(state);
+    const personContext = [
+      state.sample_context.mock_case_label,
+      state.sample_context.mock_population_label,
+      state.sample_context.no_real_person_data_notice,
+    ].join(" ");
+
+    expect(personContext).toContain("Mock");
+    expect(personContext).toContain("No real");
+    expect(markup).toContain("no-real-person-data-notice");
+    expect(personContext).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
   });
 
   it("keeps generated_at deterministic across repeated builds", () => {

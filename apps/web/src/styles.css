@@ -86,6 +86,34 @@ th {
   max-width: 1280px;
 }
 
+.workbench-header {
+  align-items: flex-start;
+}
+
+.workbench-title {
+  min-width: 0;
+}
+
+.workbench-sample-context {
+  background: #ffffff;
+  border: 1px solid #bcccdc;
+  border-radius: 8px;
+  display: grid;
+  gap: 6px;
+  max-width: 420px;
+  padding: 12px 14px;
+}
+
+.workbench-sample-context strong,
+.workbench-sample-context span {
+  overflow-wrap: anywhere;
+}
+
+.no-real-person-data-notice {
+  color: #334e68;
+  font-size: 13px;
+}
+
 .workbench-grid {
   display: grid;
   gap: 18px;
@@ -166,6 +194,16 @@ th {
 }
 
 @media (max-width: 820px) {
+  header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .workbench-sample-context {
+    max-width: none;
+    width: 100%;
+  }
+
   .workbench-grid,
   .slice-panel dl {
     grid-template-columns: 1fr;
