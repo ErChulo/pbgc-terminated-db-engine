@@ -1,6 +1,6 @@
 # Feature Specification: Reconciliation Workbench Comparison Tables
 
-**Feature Branch**: `021-reconciliation-comparison-tables`
+**Feature Branch**: `020-reconciliation-workbench-comparison-tables`
 
 **Created**: 2026-05-24
 
