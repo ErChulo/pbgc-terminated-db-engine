@@ -88,6 +88,58 @@ describe("reconciliation workbench UI", () => {
     expect(state.reconciliation_rows.some((row) => row.canonical_semantic_name === "ID" && row.status === "agreement")).toBe(true);
   });
 
+  it("derives deterministic status filter options from existing row statuses with an unfiltered choice", () => {
+    const state = buildApprovedSampleReconciliationWorkbench();
+
+    expect(state.status_filter.value).toBe("all");
+    expect(state.status_filter_options[0]).toMatchObject({
+      value: "all",
+      label: "All statuses",
+      kind: "status",
+      ordering_key: "000000|all",
+    });
+    expect(state.status_filter_options.map((option) => option.value)).toEqual(["all", "agreement", "nullable"]);
+    expect(state.status_filter_options).toEqual(buildApprovedSampleReconciliationWorkbench().status_filter_options);
+  });
+
+  it("filters reconciliation rows, Shared Facts rows, and Shared Values rows by selected status", () => {
+    const state = buildApprovedSampleReconciliationWorkbench({ status_filter: "nullable" });
+
+    expect(state.status_filter).toMatchObject({ value: "nullable", label: "Nullable" });
+    expect(state.filtered_reconciliation_rows.length).toBeGreaterThan(0);
+    expect(state.filtered_shared_fact_rows).toEqual([]);
+    expect(state.filtered_shared_value_rows.length).toBeGreaterThan(0);
+    expect(state.filtered_reconciliation_rows.every((row) => row.status === "nullable")).toBe(true);
+    expect(state.filtered_shared_fact_rows.every((row) => row.status === "nullable")).toBe(true);
+    expect(state.filtered_shared_value_rows.every((row) => row.status === "nullable")).toBe(true);
+  });
+
+  it("clears status filtering by restoring original row counts and ordering", () => {
+    const unfiltered = buildApprovedSampleReconciliationWorkbench();
+    const cleared = buildApprovedSampleReconciliationWorkbench({ status_filter: "all" });
+
+    expect(cleared.status_filter.value).toBe("all");
+    expect(cleared.filtered_reconciliation_rows.map((row) => row.comparison_id)).toEqual(
+      unfiltered.reconciliation_rows.map((row) => row.comparison_id),
+    );
+    expect(cleared.filtered_shared_fact_rows.map((row) => row.ordering_key)).toEqual(
+      unfiltered.shared_fact_rows.map((row) => row.ordering_key),
+    );
+    expect(cleared.filtered_shared_value_rows.map((row) => row.ordering_key)).toEqual(
+      unfiltered.shared_value_rows.map((row) => row.ordering_key),
+    );
+  });
+
+  it("emits deterministic row-group empty states when a selected status has no matches", () => {
+    const state = buildApprovedSampleReconciliationWorkbench({ status_filter: "nullable" });
+
+    expect(state.status_filter.value).toBe("nullable");
+    expect(state.filtered_shared_fact_rows).toEqual([]);
+    expect(state.filtered_row_groups.shared_facts.empty_state).toBe("No Shared Facts rows match status Nullable.");
+    expect(state.filtered_row_groups.shared_facts.rows).toEqual([]);
+    expect(buildApprovedSampleReconciliationWorkbench({ status_filter: "nullable" }).filtered_row_groups).toEqual(state.filtered_row_groups);
+  });
+
   it("includes shared-fact table rows with compared sources, fields, values, status, severity, mapping basis, and ordering key", () => {
     const state = buildApprovedSampleReconciliationWorkbench();
     const row = state.shared_fact_rows.find((candidate) => candidate.fact_label === "ID");
@@ -323,6 +375,20 @@ describe("reconciliation workbench UI", () => {
     expect(markup).toContain("BSRS002 - In-pay survivor BSRS configuration packet");
     expect(markup).toContain("<option value=\"BSRS002\" selected>");
     expect(markup).not.toMatch(/\b(type="file"|http:\/\/|https:\/\/|upload|raw OCR|raw source document)\b/i);
+  });
+
+  it("renders visible status filter controls, active status labels, and filtered row empty states", () => {
+    const markup = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench({ status_filter: "nullable" }));
+
+    expect(markup).toContain("data-workbench-status-filter");
+    expect(markup).toContain("Status filter");
+    expect(markup).toContain("<option value=\"all\">All statuses");
+    expect(markup).toContain("<option value=\"nullable\" selected>Nullable");
+    expect(markup).toContain("Active status: Nullable");
+    expect(markup).toContain("No Shared Facts rows match status Nullable.");
+    expect(markup).toContain("BSRS Configuration");
+    expect(markup).toContain("V1/VE Output");
+    expect(markup).toContain("Valuation Listings");
   });
 
   it("keeps person-level context explicitly mocked and free of natural-person names", () => {

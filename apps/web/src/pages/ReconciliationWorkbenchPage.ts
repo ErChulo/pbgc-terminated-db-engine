@@ -1,4 +1,8 @@
-import { buildApprovedSampleReconciliationWorkbench, type ReconciliationWorkbenchState } from "../app/reconciliationWorkbenchSlice";
+import {
+  buildApprovedSampleReconciliationWorkbench,
+  type ReconciliationWorkbenchState,
+  type WorkbenchStatusFilterValue,
+} from "../app/reconciliationWorkbenchSlice";
 
 export function renderReconciliationWorkbenchPage(root: HTMLElement): void {
   renderWorkbench(root, buildApprovedSampleReconciliationWorkbench());
@@ -28,6 +32,7 @@ export function buildReconciliationWorkbenchMarkup(state: ReconciliationWorkbenc
         </section>
         <section class="workbench-panel reconciliation-panel" aria-label="Cross-slice reconciliation">
           <h2>Cross-Slice Reconciliation</h2>
+          ${renderStatusFilter(state)}
           <section class="comparison-table-section" aria-label="Shared Facts">
             <h3>Shared Facts</h3>
             <table class="comparison-table shared-facts-table">
@@ -42,7 +47,8 @@ export function buildReconciliationWorkbenchMarkup(state: ReconciliationWorkbenc
                 </tr>
               </thead>
               <tbody>
-                ${state.shared_fact_rows.map(renderSharedFactRow).join("")}
+                ${state.filtered_shared_fact_rows.map(renderSharedFactRow).join("")}
+                ${renderEmptyStateRow(state.filtered_row_groups.shared_facts.empty_state, 6)}
               </tbody>
             </table>
           </section>
@@ -60,7 +66,8 @@ export function buildReconciliationWorkbenchMarkup(state: ReconciliationWorkbenc
                 </tr>
               </thead>
               <tbody>
-                ${state.shared_value_rows.map(renderSharedValueRow).join("")}
+                ${state.filtered_shared_value_rows.map(renderSharedValueRow).join("")}
+                ${renderEmptyStateRow(state.filtered_row_groups.shared_values.empty_state, 6)}
               </tbody>
             </table>
           </section>
@@ -74,7 +81,8 @@ export function buildReconciliationWorkbenchMarkup(state: ReconciliationWorkbenc
               </tr>
             </thead>
             <tbody>
-              ${state.reconciliation_rows.map(renderReconciliationRow).join("")}
+              ${state.filtered_reconciliation_rows.map(renderReconciliationRow).join("")}
+              ${renderEmptyStateRow(state.filtered_row_groups.reconciliation.empty_state, 4)}
             </tbody>
           </table>
         </section>
@@ -87,7 +95,14 @@ function renderWorkbench(root: HTMLElement, state: ReconciliationWorkbenchState)
   root.innerHTML = buildReconciliationWorkbenchMarkup(state);
   const selector = root.querySelector<HTMLSelectElement>("[data-workbench-sample-selector]");
   selector?.addEventListener("change", () => {
-    renderWorkbench(root, buildApprovedSampleReconciliationWorkbench({ sample_id: selector.value }));
+    renderWorkbench(root, buildApprovedSampleReconciliationWorkbench({ sample_id: selector.value, status_filter: state.status_filter.value }));
+  });
+  const statusFilter = root.querySelector<HTMLSelectElement>("[data-workbench-status-filter]");
+  statusFilter?.addEventListener("change", () => {
+    renderWorkbench(
+      root,
+      buildApprovedSampleReconciliationWorkbench({ sample_id: state.sample_id, status_filter: statusFilter.value as WorkbenchStatusFilterValue }),
+    );
   });
 }
 
@@ -104,6 +119,31 @@ function renderSampleSelector(state: ReconciliationWorkbenchState): string {
         `).join("")}
       </select>
     </label>
+  `;
+}
+
+function renderStatusFilter(state: ReconciliationWorkbenchState): string {
+  return `
+    <div class="workbench-filter-bar" aria-label="Workbench filters">
+      <label class="status-filter">
+        <span>Status filter</span>
+        <select data-workbench-status-filter aria-label="Status filter">
+          ${state.status_filter_options.map((option) => `
+            <option value="${escapeHtml(option.value)}"${option.value === state.status_filter.value ? " selected" : ""}>${escapeHtml(option.label)} (${option.row_count})</option>
+          `).join("")}
+        </select>
+      </label>
+      <span class="active-filter-label">Active status: ${escapeHtml(state.status_filter.label)}</span>
+    </div>
+  `;
+}
+
+function renderEmptyStateRow(message: string | null, colspan: number): string {
+  if (!message) return "";
+  return `
+    <tr class="filter-empty-state">
+      <td colspan="${colspan}">${escapeHtml(message)}</td>
+    </tr>
   `;
 }
 
