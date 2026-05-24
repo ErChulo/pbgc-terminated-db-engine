@@ -12,10 +12,10 @@
 
 **Purpose**: Confirm the existing status-filtering implementation surface and severity-bearing row models before adding severity filters.
 
-- [ ] T001 Inspect current status filter state, filtered row groups, and workbench row severity fields in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T002 Inspect current filter control rendering, sample selector behavior, table rendering, and trace expansion markup in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T003 [P] Inspect current filter and table styles in apps/web/src/styles.css
-- [ ] T004 [P] Inspect existing status-filtering and workbench regression coverage in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T001 Inspect current status filter state, filtered row groups, and workbench row severity fields in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T002 Inspect current filter control rendering, sample selector behavior, table rendering, and trace expansion markup in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T003 [P] Inspect current filter and table styles in apps/web/src/styles.css
+- [X] T004 [P] Inspect existing status-filtering and workbench regression coverage in packages/tests/reconciliation-workbench-ui.test.ts
 
 ---
 
@@ -25,12 +25,12 @@
 
 **CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T005 Extend display-only filter state, filter option, filtered row group, and filter summary types with severity fields in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T006 Add deterministic severity option derivation helpers from existing row severity values and none/not-applicable conventions in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T007 Update deterministic row filtering helpers to apply status and severity filters while preserving original row order in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T008 Add severity filter inputs to buildApprovedSampleReconciliationWorkbench without changing sample selection or status filter defaults in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T009 [P] Add baseline regression tests for derived severity option ordering and repeated-run equality in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T010 Verify no new persistence, lower source-layer writes, output adapter writes, server calls, raw input reads, or real-person data paths are introduced in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T005 Extend display-only filter state, filter option, filtered row group, and filter summary types with severity fields in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T006 Add deterministic severity option derivation helpers from existing row severity values and none/not-applicable conventions in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T007 Update deterministic row filtering helpers to apply status and severity filters while preserving original row order in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T008 Add severity filter inputs to buildApprovedSampleReconciliationWorkbench without changing sample selection or status filter defaults in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T009 [P] Add baseline regression tests for derived severity option ordering and repeated-run equality in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T010 Verify no new persistence, lower source-layer writes, output adapter writes, server calls, raw input reads, or real-person data paths are introduced in apps/web/src/app/reconciliationWorkbenchSlice.ts
 
 **Checkpoint**: Foundation ready - user story implementation can now begin.
 
@@ -44,22 +44,22 @@
 
 ### Tests for User Story 1
 
-- [ ] T011 [P] [US1] Add a failing severity filter option test for existing severity and none/not-applicable choices in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T012 [P] [US1] Add a failing severity filtering test covering reconciliation rows, Shared Facts rows, and Shared Values rows in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T013 [P] [US1] Add a failing Shared Facts none/error convention test for severity filtering in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T014 [P] [US1] Add a failing clear-severity-filter test that restores row counts and deterministic ordering in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T015 [P] [US1] Add a failing severity empty-state test for row groups with no matching rows in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T016 [P] [US1] Add a failing markup test for visible active severity filter controls and labels in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T011 [P] [US1] Add a failing severity filter option test for existing severity and none/not-applicable choices in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T012 [P] [US1] Add a failing severity filtering test covering reconciliation rows, Shared Facts rows, and Shared Values rows in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T013 [P] [US1] Add a failing Shared Facts none/error convention test for severity filtering in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T014 [P] [US1] Add a failing clear-severity-filter test that restores row counts and deterministic ordering in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T015 [P] [US1] Add a failing severity empty-state test for row groups with no matching rows in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T016 [P] [US1] Add a failing markup test for visible active severity filter controls and labels in packages/tests/reconciliation-workbench-ui.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T017 [US1] Wire active severity filter values into the workbench state builder in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T018 [US1] Expose severity-filtered reconciliation rows, Shared Facts rows, Shared Values rows, and severity filter summary in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T019 [US1] Apply Shared Facts none/error severity conventions without inventing new severity names in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T020 [US1] Render visible severity filter controls and active severity labels in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T021 [US1] Render severity-filtered row groups and deterministic empty states for reconciliation rows, Shared Facts rows, and Shared Values rows in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T022 [US1] Preserve approved-sample selector behavior while passing active severity filter state through browser re-renders in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T023 [US1] Style severity filter controls, active severity labels, and severity empty states in apps/web/src/styles.css
+- [X] T017 [US1] Wire active severity filter values into the workbench state builder in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T018 [US1] Expose severity-filtered reconciliation rows, Shared Facts rows, Shared Values rows, and severity filter summary in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T019 [US1] Apply Shared Facts none/error severity conventions without inventing new severity names in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T020 [US1] Render visible severity filter controls and active severity labels in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T021 [US1] Render severity-filtered row groups and deterministic empty states for reconciliation rows, Shared Facts rows, and Shared Values rows in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T022 [US1] Preserve approved-sample selector behavior while passing active severity filter state through browser re-renders in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T023 [US1] Style severity filter controls, active severity labels, and severity empty states in apps/web/src/styles.css
 
 **Checkpoint**: User Story 1 is independently functional and testable as the MVP.
 
@@ -119,13 +119,13 @@
 
 **Purpose**: Validate the complete slice, update committed browser output, and document manual review evidence.
 
-- [ ] T042 Run focused workbench regression tests with npm test -- packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T043 Run project lint verification with npm run lint using package.json
-- [ ] T044 Run browser static build verification with npm run build using package.json and apps/web/dist/
-- [ ] T045 Update committed Vite static output in apps/web/dist/ after successful build if bundle contents changed
+- [X] T042 Run focused workbench regression tests with npm test -- packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T043 Run project lint verification with npm run lint using package.json
+- [X] T044 Run browser static build verification with npm run build using package.json and apps/web/dist/
+- [X] T045 Update committed Vite static output in apps/web/dist/ after successful build if bundle contents changed
 - [ ] T046 Perform the 10-second check that the analyst can identify and apply the severity filter on desktop 1440x900 and mobile 390x844 and record the result in specs/026-workbench-severity-filtering/quickstart.md
-- [ ] T047 Verify filtered workbench markup still contains no real participant, beneficiary, alternate payee, survivor, or other natural-person data in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T048 Confirm no delivered .sql, .js, .ts, or .tex delivery-copy artifact is introduced for this internal UI/test slice in specs/026-workbench-severity-filtering/tasks.md
+- [X] T047 Verify filtered workbench markup still contains no real participant, beneficiary, alternate payee, survivor, or other natural-person data in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T048 Confirm no delivered .sql, .js, .ts, or .tex delivery-copy artifact is introduced for this internal UI/test slice in specs/026-workbench-severity-filtering/tasks.md
 
 ---
 

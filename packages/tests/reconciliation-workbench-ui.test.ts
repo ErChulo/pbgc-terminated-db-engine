@@ -102,6 +102,20 @@ describe("reconciliation workbench UI", () => {
     expect(state.status_filter_options).toEqual(buildApprovedSampleReconciliationWorkbench().status_filter_options);
   });
 
+  it("derives deterministic severity filter options from existing row severities with an unfiltered choice", () => {
+    const state = buildApprovedSampleReconciliationWorkbench();
+
+    expect(state.severity_filter.value).toBe("all");
+    expect(state.severity_filter_options[0]).toMatchObject({
+      value: "all",
+      label: "All severities",
+      kind: "severity",
+      ordering_key: "000000|all",
+    });
+    expect(state.severity_filter_options.map((option) => option.value)).toEqual(["all", "info", "none"]);
+    expect(state.severity_filter_options).toEqual(buildApprovedSampleReconciliationWorkbench().severity_filter_options);
+  });
+
   it("filters reconciliation rows, Shared Facts rows, and Shared Values rows by selected status", () => {
     const state = buildApprovedSampleReconciliationWorkbench({ status_filter: "nullable" });
 
@@ -114,11 +128,48 @@ describe("reconciliation workbench UI", () => {
     expect(state.filtered_shared_value_rows.every((row) => row.status === "nullable")).toBe(true);
   });
 
+  it("filters reconciliation rows, Shared Facts rows, and Shared Values rows by selected severity", () => {
+    const state = buildApprovedSampleReconciliationWorkbench({ severity_filter: "info" });
+
+    expect(state.severity_filter).toMatchObject({ value: "info", label: "Info" });
+    expect(state.filtered_reconciliation_rows.length).toBeGreaterThan(0);
+    expect(state.filtered_shared_fact_rows).toEqual([]);
+    expect(state.filtered_shared_value_rows.length).toBeGreaterThan(0);
+    expect(state.filtered_reconciliation_rows.every((row) => row.severity === "info")).toBe(true);
+    expect(state.filtered_shared_value_rows.every((row) => row.severity === "info")).toBe(true);
+  });
+
+  it("uses the Shared Facts none/error convention for severity filtering", () => {
+    const state = buildApprovedSampleReconciliationWorkbench({ severity_filter: "none" });
+
+    expect(state.severity_filter).toMatchObject({ value: "none", label: "None" });
+    expect(state.filtered_shared_fact_rows.length).toBeGreaterThan(0);
+    expect(state.filtered_reconciliation_rows).toEqual([]);
+    expect(state.filtered_shared_value_rows).toEqual([]);
+    expect(state.filtered_shared_fact_rows.every((row) => row.severity_label === "None")).toBe(true);
+  });
+
   it("clears status filtering by restoring original row counts and ordering", () => {
     const unfiltered = buildApprovedSampleReconciliationWorkbench();
     const cleared = buildApprovedSampleReconciliationWorkbench({ status_filter: "all" });
 
     expect(cleared.status_filter.value).toBe("all");
+    expect(cleared.filtered_reconciliation_rows.map((row) => row.comparison_id)).toEqual(
+      unfiltered.reconciliation_rows.map((row) => row.comparison_id),
+    );
+    expect(cleared.filtered_shared_fact_rows.map((row) => row.ordering_key)).toEqual(
+      unfiltered.shared_fact_rows.map((row) => row.ordering_key),
+    );
+    expect(cleared.filtered_shared_value_rows.map((row) => row.ordering_key)).toEqual(
+      unfiltered.shared_value_rows.map((row) => row.ordering_key),
+    );
+  });
+
+  it("clears severity filtering by restoring original row counts and ordering", () => {
+    const unfiltered = buildApprovedSampleReconciliationWorkbench();
+    const cleared = buildApprovedSampleReconciliationWorkbench({ severity_filter: "all" });
+
+    expect(cleared.severity_filter.value).toBe("all");
     expect(cleared.filtered_reconciliation_rows.map((row) => row.comparison_id)).toEqual(
       unfiltered.reconciliation_rows.map((row) => row.comparison_id),
     );
@@ -138,6 +189,16 @@ describe("reconciliation workbench UI", () => {
     expect(state.filtered_row_groups.shared_facts.empty_state).toBe("No Shared Facts rows match status Nullable.");
     expect(state.filtered_row_groups.shared_facts.rows).toEqual([]);
     expect(buildApprovedSampleReconciliationWorkbench({ status_filter: "nullable" }).filtered_row_groups).toEqual(state.filtered_row_groups);
+  });
+
+  it("emits deterministic row-group empty states when a selected severity has no matches", () => {
+    const state = buildApprovedSampleReconciliationWorkbench({ severity_filter: "info" });
+
+    expect(state.severity_filter.value).toBe("info");
+    expect(state.filtered_shared_fact_rows).toEqual([]);
+    expect(state.filtered_row_groups.shared_facts.empty_state).toBe("No Shared Facts rows match severity Info.");
+    expect(state.filtered_row_groups.shared_facts.rows).toEqual([]);
+    expect(buildApprovedSampleReconciliationWorkbench({ severity_filter: "info" }).filtered_row_groups).toEqual(state.filtered_row_groups);
   });
 
   it("includes shared-fact table rows with compared sources, fields, values, status, severity, mapping basis, and ordering key", () => {
@@ -386,6 +447,21 @@ describe("reconciliation workbench UI", () => {
     expect(markup).toContain("<option value=\"nullable\" selected>Nullable");
     expect(markup).toContain("Active status: Nullable");
     expect(markup).toContain("No Shared Facts rows match status Nullable.");
+    expect(markup).toContain("BSRS Configuration");
+    expect(markup).toContain("V1/VE Output");
+    expect(markup).toContain("Valuation Listings");
+  });
+
+  it("renders visible severity filter controls, active severity labels, and filtered row empty states", () => {
+    const markup = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench({ severity_filter: "info" }));
+
+    expect(markup).toContain("data-workbench-severity-filter");
+    expect(markup).toContain("Severity filter");
+    expect(markup).toContain("<option value=\"all\">All severities");
+    expect(markup).toContain("<option value=\"info\" selected>Info");
+    expect(markup).toContain("Active severity: Info");
+    expect(markup).toContain("No Shared Facts rows match severity Info.");
+    expect(markup).toContain("data-workbench-status-filter");
     expect(markup).toContain("BSRS Configuration");
     expect(markup).toContain("V1/VE Output");
     expect(markup).toContain("Valuation Listings");

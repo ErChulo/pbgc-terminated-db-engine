@@ -1,6 +1,7 @@
 import {
   buildApprovedSampleReconciliationWorkbench,
   type ReconciliationWorkbenchState,
+  type WorkbenchSeverityFilterValue,
   type WorkbenchStatusFilterValue,
 } from "../app/reconciliationWorkbenchSlice";
 
@@ -32,7 +33,7 @@ export function buildReconciliationWorkbenchMarkup(state: ReconciliationWorkbenc
         </section>
         <section class="workbench-panel reconciliation-panel" aria-label="Cross-slice reconciliation">
           <h2>Cross-Slice Reconciliation</h2>
-          ${renderStatusFilter(state)}
+          ${renderFilterBar(state)}
           <section class="comparison-table-section" aria-label="Shared Facts">
             <h3>Shared Facts</h3>
             <table class="comparison-table shared-facts-table">
@@ -95,13 +96,35 @@ function renderWorkbench(root: HTMLElement, state: ReconciliationWorkbenchState)
   root.innerHTML = buildReconciliationWorkbenchMarkup(state);
   const selector = root.querySelector<HTMLSelectElement>("[data-workbench-sample-selector]");
   selector?.addEventListener("change", () => {
-    renderWorkbench(root, buildApprovedSampleReconciliationWorkbench({ sample_id: selector.value, status_filter: state.status_filter.value }));
+    renderWorkbench(
+      root,
+      buildApprovedSampleReconciliationWorkbench({
+        sample_id: selector.value,
+        status_filter: state.status_filter.value,
+        severity_filter: state.severity_filter.value,
+      }),
+    );
   });
   const statusFilter = root.querySelector<HTMLSelectElement>("[data-workbench-status-filter]");
   statusFilter?.addEventListener("change", () => {
     renderWorkbench(
       root,
-      buildApprovedSampleReconciliationWorkbench({ sample_id: state.sample_id, status_filter: statusFilter.value as WorkbenchStatusFilterValue }),
+      buildApprovedSampleReconciliationWorkbench({
+        sample_id: state.sample_id,
+        status_filter: statusFilter.value as WorkbenchStatusFilterValue,
+        severity_filter: state.severity_filter.value,
+      }),
+    );
+  });
+  const severityFilter = root.querySelector<HTMLSelectElement>("[data-workbench-severity-filter]");
+  severityFilter?.addEventListener("change", () => {
+    renderWorkbench(
+      root,
+      buildApprovedSampleReconciliationWorkbench({
+        sample_id: state.sample_id,
+        status_filter: state.status_filter.value,
+        severity_filter: severityFilter.value as WorkbenchSeverityFilterValue,
+      }),
     );
   });
 }
@@ -122,7 +145,7 @@ function renderSampleSelector(state: ReconciliationWorkbenchState): string {
   `;
 }
 
-function renderStatusFilter(state: ReconciliationWorkbenchState): string {
+function renderFilterBar(state: ReconciliationWorkbenchState): string {
   return `
     <div class="workbench-filter-bar" aria-label="Workbench filters">
       <label class="status-filter">
@@ -133,7 +156,16 @@ function renderStatusFilter(state: ReconciliationWorkbenchState): string {
           `).join("")}
         </select>
       </label>
+      <label class="severity-filter">
+        <span>Severity filter</span>
+        <select data-workbench-severity-filter aria-label="Severity filter">
+          ${state.severity_filter_options.map((option) => `
+            <option value="${escapeHtml(option.value)}"${option.value === state.severity_filter.value ? " selected" : ""}>${escapeHtml(option.label)} (${option.row_count})</option>
+          `).join("")}
+        </select>
+      </label>
       <span class="active-filter-label">Active status: ${escapeHtml(state.status_filter.label)}</span>
+      <span class="active-filter-label">Active severity: ${escapeHtml(state.severity_filter.label)}</span>
     </div>
   `;
 }

@@ -13,17 +13,24 @@ import { parseBsrsConfigurationFixtures } from "../../../../packages/tests/bsrs-
 
 export type WorkbenchStatus = "agreement" | "drift" | "warning" | "nullable" | "unsupported" | "formatting-only";
 export type WorkbenchStatusFilterValue = "all" | WorkbenchStatus;
+export type WorkbenchSeverity = "info" | "warning" | "error" | "none";
+export type WorkbenchSeverityFilterValue = "all" | WorkbenchSeverity;
 
 export type WorkbenchFilterOption = {
-  value: WorkbenchStatusFilterValue;
+  value: WorkbenchStatusFilterValue | WorkbenchSeverityFilterValue;
   label: string;
-  kind: "status";
+  kind: "status" | "severity";
   ordering_key: string;
   row_count: number;
 };
 
 export type WorkbenchStatusFilterState = {
   value: WorkbenchStatusFilterValue;
+  label: string;
+};
+
+export type WorkbenchSeverityFilterState = {
+  value: WorkbenchSeverityFilterValue;
   label: string;
 };
 
@@ -150,6 +157,7 @@ export type WorkbenchReconciliationRow = {
 export type WorkbenchFilteredRowGroup<Row> = {
   group_name: string;
   active_status: WorkbenchStatusFilterValue;
+  active_severity: WorkbenchSeverityFilterValue;
   rows: Row[];
   empty_state: string | null;
   visible_count: number;
@@ -159,6 +167,7 @@ export type WorkbenchFilteredRowGroup<Row> = {
 export type WorkbenchFilterSummary = {
   selected_sample_id: string;
   active_status: WorkbenchStatusFilterState;
+  active_severity: WorkbenchSeverityFilterState;
   visible_counts: {
     reconciliation: number;
     shared_facts: number;
@@ -186,6 +195,8 @@ export type ReconciliationWorkbenchState = {
   reconciliation_rows: WorkbenchReconciliationRow[];
   status_filter: WorkbenchStatusFilterState;
   status_filter_options: WorkbenchFilterOption[];
+  severity_filter: WorkbenchSeverityFilterState;
+  severity_filter_options: WorkbenchFilterOption[];
   filtered_shared_fact_rows: WorkbenchSharedFactRow[];
   filtered_shared_value_rows: WorkbenchSharedValueRow[];
   filtered_reconciliation_rows: WorkbenchReconciliationRow[];
@@ -218,9 +229,14 @@ const PANEL_LABELS = {
 } as const satisfies Record<ReconciliationSliceName, string>;
 
 const STATUS_ORDER: WorkbenchStatus[] = ["agreement", "drift", "warning", "nullable", "unsupported", "formatting-only"];
+const SEVERITY_ORDER: WorkbenchSeverity[] = ["info", "warning", "error", "none"];
 
 export function buildApprovedSampleReconciliationWorkbench(
-  options: { sample_id?: string; status_filter?: WorkbenchStatusFilterValue } = {},
+  options: {
+    sample_id?: string;
+    status_filter?: WorkbenchStatusFilterValue;
+    severity_filter?: WorkbenchSeverityFilterValue;
+  } = {},
 ): ReconciliationWorkbenchState {
   const fixtures = parseBsrsConfigurationFixtures();
   const sampleOptions = buildApprovedSampleOptions(fixtures);
@@ -291,9 +307,16 @@ export function buildApprovedSampleReconciliationWorkbench(
     sharedValueRows,
     reconciliationRows,
   });
+  const severityOptions = buildSeverityFilterOptions({
+    sharedFactRows,
+    sharedValueRows,
+    reconciliationRows,
+  });
   const activeStatus = resolveStatusFilter(options.status_filter, statusOptions);
+  const activeSeverity = resolveSeverityFilter(options.severity_filter, severityOptions);
   const filteredRowGroups = buildFilteredRowGroups({
     activeStatus: activeStatus.value,
+    activeSeverity: activeSeverity.value,
     sharedFactRows,
     sharedValueRows,
     reconciliationRows,
@@ -328,6 +351,8 @@ export function buildApprovedSampleReconciliationWorkbench(
     reconciliation_rows: reconciliationRows,
     status_filter: activeStatus,
     status_filter_options: statusOptions,
+    severity_filter: activeSeverity,
+    severity_filter_options: severityOptions,
     filtered_shared_fact_rows: filteredRowGroups.shared_facts.rows,
     filtered_shared_value_rows: filteredRowGroups.shared_values.rows,
     filtered_reconciliation_rows: filteredRowGroups.reconciliation.rows,
@@ -335,6 +360,7 @@ export function buildApprovedSampleReconciliationWorkbench(
     filter_summary: {
       selected_sample_id: fixture.test_case_id,
       active_status: activeStatus,
+      active_severity: activeSeverity,
       visible_counts: {
         reconciliation: filteredRowGroups.reconciliation.visible_count,
         shared_facts: filteredRowGroups.shared_facts.visible_count,
@@ -376,45 +402,109 @@ function buildStatusFilterOptions(args: {
   ];
 }
 
+function buildSeverityFilterOptions(args: {
+  sharedFactRows: WorkbenchSharedFactRow[];
+  sharedValueRows: WorkbenchSharedValueRow[];
+  reconciliationRows: WorkbenchReconciliationRow[];
+}): WorkbenchFilterOption[] {
+  const rows = [...args.sharedFactRows, ...args.sharedValueRows, ...args.reconciliationRows];
+  const counts = new Map<WorkbenchSeverity, number>();
+  rows.forEach((row) => {
+    const severity = getRowSeverity(row);
+    counts.set(severity, (counts.get(severity) ?? 0) + 1);
+  });
+  return [
+    {
+      value: "all",
+      label: "All severities",
+      kind: "severity",
+      ordering_key: "000000|all",
+      row_count: rows.length,
+    },
+    ...SEVERITY_ORDER.filter((severity) => counts.has(severity)).map((severity, index) => ({
+      value: severity,
+      label: formatSeverityFilterLabel(severity),
+      kind: "severity" as const,
+      ordering_key: `${String(index + 1).padStart(6, "0")}|${severity}`,
+      row_count: counts.get(severity) ?? 0,
+    })),
+  ];
+}
+
 function resolveStatusFilter(
   requested: WorkbenchStatusFilterValue | undefined,
   statusOptions: WorkbenchFilterOption[],
 ): WorkbenchStatusFilterState {
-  const selected = statusOptions.find((option) => option.value === (requested ?? "all")) ?? statusOptions[0];
+  const selected = statusOptions.find((option) => option.kind === "status" && option.value === (requested ?? "all")) ?? statusOptions[0];
   return {
-    value: selected.value,
+    value: selected.value as WorkbenchStatusFilterValue,
+    label: selected.label,
+  };
+}
+
+function resolveSeverityFilter(
+  requested: WorkbenchSeverityFilterValue | undefined,
+  severityOptions: WorkbenchFilterOption[],
+): WorkbenchSeverityFilterState {
+  const selected = severityOptions.find((option) => option.kind === "severity" && option.value === (requested ?? "all")) ?? severityOptions[0];
+  return {
+    value: selected.value as WorkbenchSeverityFilterValue,
     label: selected.label,
   };
 }
 
 function buildFilteredRowGroups(args: {
   activeStatus: WorkbenchStatusFilterValue;
+  activeSeverity: WorkbenchSeverityFilterValue;
   sharedFactRows: WorkbenchSharedFactRow[];
   sharedValueRows: WorkbenchSharedValueRow[];
   reconciliationRows: WorkbenchReconciliationRow[];
 }): ReconciliationWorkbenchState["filtered_row_groups"] {
   return {
-    shared_facts: buildFilteredRowGroup("Shared Facts", args.sharedFactRows, args.activeStatus),
-    shared_values: buildFilteredRowGroup("Shared Values", args.sharedValueRows, args.activeStatus),
-    reconciliation: buildFilteredRowGroup("Reconciliation", args.reconciliationRows, args.activeStatus),
+    shared_facts: buildFilteredRowGroup("Shared Facts", args.sharedFactRows, args.activeStatus, args.activeSeverity),
+    shared_values: buildFilteredRowGroup("Shared Values", args.sharedValueRows, args.activeStatus, args.activeSeverity),
+    reconciliation: buildFilteredRowGroup("Reconciliation", args.reconciliationRows, args.activeStatus, args.activeSeverity),
   };
 }
 
-function buildFilteredRowGroup<Row extends { status: WorkbenchStatus }>(
+function buildFilteredRowGroup<Row extends { status: WorkbenchStatus; severity?: "info" | "warning" | "error"; severity_label?: string }>(
   groupName: string,
   rows: Row[],
   activeStatus: WorkbenchStatusFilterValue,
+  activeSeverity: WorkbenchSeverityFilterValue,
 ): WorkbenchFilteredRowGroup<Row> {
-  const filteredRows = activeStatus === "all" ? rows : rows.filter((row) => row.status === activeStatus);
+  const filteredRows = rows.filter(
+    (row) => (activeStatus === "all" || row.status === activeStatus) && (activeSeverity === "all" || getRowSeverity(row) === activeSeverity),
+  );
   return {
     group_name: groupName,
     active_status: activeStatus,
+    active_severity: activeSeverity,
     rows: filteredRows,
-    empty_state:
-      filteredRows.length === 0 && activeStatus !== "all" ? `No ${groupName} rows match status ${formatStatusLabel(activeStatus)}.` : null,
+    empty_state: filteredRows.length === 0 ? buildFilteredEmptyState(groupName, activeStatus, activeSeverity) : null,
     visible_count: filteredRows.length,
     unfiltered_count: rows.length,
   };
+}
+
+function buildFilteredEmptyState(
+  groupName: string,
+  activeStatus: WorkbenchStatusFilterValue,
+  activeSeverity: WorkbenchSeverityFilterValue,
+): string | null {
+  const filters = [];
+  if (activeStatus !== "all") filters.push(`status ${formatStatusLabel(activeStatus)}`);
+  if (activeSeverity !== "all") filters.push(`severity ${formatSeverityFilterLabel(activeSeverity)}`);
+  return filters.length === 0 ? null : `No ${groupName} rows match ${filters.join(" and ")}.`;
+}
+
+function getRowSeverity(row: { severity?: "info" | "warning" | "error"; severity_label?: string }): WorkbenchSeverity {
+  if (row.severity === "error" || row.severity === "warning" || row.severity === "info") return row.severity;
+  const label = row.severity_label?.toLowerCase() ?? "";
+  if (label === "error") return "error";
+  if (label === "warning") return "warning";
+  if (label === "info") return "info";
+  return "none";
 }
 
 function buildApprovedSampleOptions(fixtures: ReturnType<typeof parseBsrsConfigurationFixtures>): ApprovedSampleOption[] {
@@ -653,6 +743,11 @@ function formatSeverity(severity: "info" | "warning" | "error"): string {
   if (severity === "error") return "Error";
   if (severity === "warning") return "Warning";
   return "Info";
+}
+
+function formatSeverityFilterLabel(severity: WorkbenchSeverity): string {
+  if (severity === "none") return "None";
+  return formatSeverity(severity);
 }
 
 function formatStatusLabel(status: WorkbenchStatus): string {
