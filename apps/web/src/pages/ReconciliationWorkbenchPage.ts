@@ -101,6 +101,7 @@ function renderSharedValueRow(row: ReconciliationWorkbenchState["shared_value_ro
         <span class="comparison-source">${escapeHtml(row.mapping_basis)}</span>
         <span class="comparison-value">${escapeHtml(row.normalization_basis)}</span>
         <span class="comparison-value">trace ${escapeHtml(row.trace.rule_version)} · ${escapeHtml(row.trace.producing_module)}</span>
+        ${renderTraceDetail(row.trace_detail)}
       </td>
     </tr>
   `;
@@ -123,6 +124,7 @@ function renderSharedFactRow(row: ReconciliationWorkbenchState["shared_fact_rows
       <td>
         <span class="comparison-source">${escapeHtml(row.mapping_basis)}</span>
         <span class="comparison-value">trace ${escapeHtml(row.trace.rule_version)} · ${escapeHtml(row.trace.producing_module)}</span>
+        ${renderTraceDetail(row.trace_detail)}
       </td>
     </tr>
   `;
@@ -152,8 +154,53 @@ function renderReconciliationRow(row: ReconciliationWorkbenchState["reconciliati
       <td>${escapeHtml(row.canonical_semantic_name)}</td>
       <td>${escapeHtml(row.status)}</td>
       <td>${escapeHtml(row.severity)}</td>
-      <td>${escapeHtml(comparedValues)}</td>
+      <td>
+        <span class="comparison-value">${escapeHtml(comparedValues)}</span>
+        ${renderTraceDetail(row.trace_detail)}
+      </td>
     </tr>
+  `;
+}
+
+function renderTraceDetail(detail: ReconciliationWorkbenchState["reconciliation_rows"][number]["trace_detail"]): string {
+  return `
+    <details class="trace-detail" id="${escapeHtml(detail.control_id)}">
+      <summary>${escapeHtml(detail.collapsed_label)}</summary>
+      <dl class="trace-detail-grid">
+        <div>
+          <dt>Compared sources</dt>
+          <dd>${escapeHtml(detail.compared_sources[0])} | ${escapeHtml(detail.compared_sources[1])}</dd>
+        </div>
+        <div>
+          <dt>Source fields</dt>
+          <dd>${escapeHtml(detail.compared_fields[0])} | ${escapeHtml(detail.compared_fields[1])}</dd>
+        </div>
+        <div>
+          <dt>Raw values</dt>
+          <dd>${escapeHtml(detail.raw_values[0])} | ${escapeHtml(detail.raw_values[1])}</dd>
+        </div>
+        <div>
+          <dt>Normalized values</dt>
+          <dd>${escapeHtml(detail.normalized_values[0])} | ${escapeHtml(detail.normalized_values[1])}</dd>
+        </div>
+        <div>
+          <dt>Mapping basis</dt>
+          <dd>${escapeHtml(detail.mapping_basis)}</dd>
+        </div>
+        <div>
+          <dt>Trace</dt>
+          <dd>${escapeHtml(detail.rule_version)} | ${escapeHtml(detail.producing_module)}</dd>
+        </div>
+        <div>
+          <dt>Source paths</dt>
+          <dd>${escapeHtml(detail.source_paths[0])} | ${escapeHtml(detail.source_paths[1])}</dd>
+        </div>
+        <div>
+          <dt>Stable evidence</dt>
+          <dd>${escapeHtml(detail.stable_evidence_basis)}</dd>
+        </div>
+      </dl>
+    </details>
   `;
 }
 

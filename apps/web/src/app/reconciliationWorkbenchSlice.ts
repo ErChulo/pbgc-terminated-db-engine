@@ -47,6 +47,24 @@ export type WorkbenchTraceCue = {
   producing_module: string;
 };
 
+export type WorkbenchTraceDetail = {
+  control_id: string;
+  row_kind: "reconciliation" | "shared_fact" | "shared_value";
+  row_label: string;
+  collapsed_label: string;
+  compared_sources: [ReconciliationSliceName, ReconciliationSliceName];
+  compared_fields: [string, string];
+  raw_values: [string, string];
+  normalized_values: [string, string];
+  status: WorkbenchStatus;
+  severity_label: string;
+  mapping_basis: string;
+  source_paths: [string, string];
+  rule_version: string;
+  producing_module: string;
+  stable_evidence_basis: string;
+};
+
 export type WorkbenchSharedFactRow = {
   comparison_id: string;
   fact_label: string;
@@ -61,6 +79,7 @@ export type WorkbenchSharedFactRow = {
   mapping_basis: string;
   ordering_key: string;
   trace: WorkbenchTraceCue;
+  trace_detail: WorkbenchTraceDetail;
 };
 
 export type WorkbenchSharedValueRow = {
@@ -82,6 +101,7 @@ export type WorkbenchSharedValueRow = {
   normalization_basis: string;
   ordering_key: string;
   trace: WorkbenchTraceCue;
+  trace_detail: WorkbenchTraceDetail;
 };
 
 export type WorkbenchReconciliationRow = {
@@ -93,6 +113,11 @@ export type WorkbenchReconciliationRow = {
   compared_slices: [ReconciliationSliceName, ReconciliationSliceName];
   compared_fields: [string, string];
   compared_values: [string, string];
+  normalized_values: [string, string];
+  mapping_basis: string;
+  source_paths: [string, string];
+  trace: WorkbenchTraceCue;
+  trace_detail: WorkbenchTraceDetail;
 };
 
 export type ReconciliationWorkbenchState = {
@@ -239,7 +264,7 @@ function buildOutputPanel(
 }
 
 function toWorkbenchSharedFactRow(comparison: ReconciliationComparison): WorkbenchSharedFactRow {
-  return {
+  const row = {
     comparison_id: comparison.comparison_id,
     fact_label: comparison.canonical_semantic_name,
     status: mapSharedFactStatus(comparison.status),
@@ -259,23 +284,76 @@ function toWorkbenchSharedFactRow(comparison: ReconciliationComparison): Workben
       producing_module: comparison.producing_module,
     },
   };
+  return {
+    ...row,
+    trace_detail: buildTraceDetail({
+      row_id: row.comparison_id,
+      row_kind: "shared_fact",
+      row_label: row.fact_label,
+      compared_sources: [row.left_source, row.right_source],
+      compared_fields: [row.left_field, row.right_field],
+      raw_values: [row.left_value, row.right_value],
+      normalized_values: [ABSENCE_MARKER, ABSENCE_MARKER],
+      status: row.status,
+      severity_label: row.severity_label,
+      mapping_basis: row.mapping_basis,
+      source_paths: [row.trace.left_source_path, row.trace.right_source_path],
+      trace: row.trace,
+      stable_evidence_basis: row.ordering_key,
+    }),
+  };
 }
 
 function toWorkbenchReconciliationRow(comparison: ValueComparisonRecord): WorkbenchReconciliationRow {
-  return {
+  const compared_slices: [ReconciliationSliceName, ReconciliationSliceName] = [comparison.left_slice, comparison.right_slice];
+  const compared_fields: [string, string] = [comparison.left_field, comparison.right_field];
+  const compared_values: [string, string] = [formatValue(comparison.left_value), formatValue(comparison.right_value)];
+  const normalized_values: [string, string] = [
+    formatOptionalValue(comparison.left_normalized_value),
+    formatOptionalValue(comparison.right_normalized_value),
+  ];
+  const source_paths: [string, string] = [comparison.left_source_path, comparison.right_source_path];
+  const row = {
     comparison_id: comparison.comparison_id,
     rule_key: comparison.rule_key,
     status: mapStatus(comparison.status),
     severity: comparison.severity,
     canonical_semantic_name: comparison.canonical_semantic_name,
-    compared_slices: [comparison.left_slice, comparison.right_slice],
-    compared_fields: [comparison.left_field, comparison.right_field],
-    compared_values: [formatValue(comparison.left_value), formatValue(comparison.right_value)],
+    compared_slices,
+    compared_fields,
+    compared_values,
+    normalized_values,
+    mapping_basis: comparison.mapping_basis,
+    source_paths,
+    trace: {
+      left_source_path: comparison.left_source_path,
+      right_source_path: comparison.right_source_path,
+      rule_version: comparison.rule_version,
+      producing_module: comparison.producing_module,
+    },
+  };
+  return {
+    ...row,
+    trace_detail: buildTraceDetail({
+      row_id: row.comparison_id,
+      row_kind: "reconciliation",
+      row_label: row.canonical_semantic_name,
+      compared_sources: row.compared_slices,
+      compared_fields: row.compared_fields,
+      raw_values: row.compared_values,
+      normalized_values: row.normalized_values,
+      status: row.status,
+      severity_label: formatSeverity(row.severity),
+      mapping_basis: row.mapping_basis,
+      source_paths: row.source_paths,
+      trace: row.trace,
+      stable_evidence_basis: row.rule_key,
+    }),
   };
 }
 
 function toWorkbenchSharedValueRow(comparison: ValueComparisonRecord): WorkbenchSharedValueRow {
-  return {
+  const row = {
     comparison_id: comparison.comparison_id,
     value_label: comparison.canonical_semantic_name,
     status: mapStatus(comparison.status),
@@ -299,6 +377,60 @@ function toWorkbenchSharedValueRow(comparison: ValueComparisonRecord): Workbench
       rule_version: comparison.rule_version,
       producing_module: comparison.producing_module,
     },
+  };
+  return {
+    ...row,
+    trace_detail: buildTraceDetail({
+      row_id: row.comparison_id,
+      row_kind: "shared_value",
+      row_label: row.value_label,
+      compared_sources: [row.left_source, row.right_source],
+      compared_fields: [row.left_field, row.right_field],
+      raw_values: [row.left_value, row.right_value],
+      normalized_values: [row.left_normalized_value, row.right_normalized_value],
+      status: row.status,
+      severity_label: row.severity_label,
+      mapping_basis: row.mapping_basis,
+      source_paths: [row.trace.left_source_path, row.trace.right_source_path],
+      trace: row.trace,
+      stable_evidence_basis: row.ordering_key,
+    }),
+  };
+}
+
+const ABSENCE_MARKER = "Not applicable";
+
+function buildTraceDetail(args: {
+  row_id: string;
+  row_kind: WorkbenchTraceDetail["row_kind"];
+  row_label: string;
+  compared_sources: [ReconciliationSliceName, ReconciliationSliceName];
+  compared_fields: [string, string];
+  raw_values: [string, string];
+  normalized_values: [string, string];
+  status: WorkbenchStatus;
+  severity_label: string;
+  mapping_basis: string;
+  source_paths: [string, string];
+  trace: WorkbenchTraceCue;
+  stable_evidence_basis: string;
+}): WorkbenchTraceDetail {
+  return {
+    control_id: `trace-${args.row_kind}-${args.row_id}`,
+    row_kind: args.row_kind,
+    row_label: args.row_label,
+    collapsed_label: `Trace details for ${args.row_label}`,
+    compared_sources: args.compared_sources,
+    compared_fields: args.compared_fields,
+    raw_values: args.raw_values,
+    normalized_values: args.normalized_values,
+    status: args.status,
+    severity_label: args.severity_label,
+    mapping_basis: args.mapping_basis || ABSENCE_MARKER,
+    source_paths: [formatOptionalText(args.source_paths[0]), formatOptionalText(args.source_paths[1])],
+    rule_version: formatOptionalText(args.trace.rule_version),
+    producing_module: formatOptionalText(args.trace.producing_module),
+    stable_evidence_basis: args.stable_evidence_basis,
   };
 }
 
@@ -332,5 +464,9 @@ function formatValue(value: string | number | boolean | null): string {
 }
 
 function formatOptionalValue(value: string | number | boolean | null): string {
-  return value === null ? "Not applicable" : formatValue(value);
+  return value === null ? ABSENCE_MARKER : formatValue(value);
+}
+
+function formatOptionalText(value: string | null | undefined): string {
+  return value ? value : ABSENCE_MARKER;
 }
