@@ -26,6 +26,24 @@ export function buildReconciliationWorkbenchMarkup(state: ReconciliationWorkbenc
         </section>
         <section class="workbench-panel reconciliation-panel" aria-label="Cross-slice reconciliation">
           <h2>Cross-Slice Reconciliation</h2>
+          <section class="comparison-table-section" aria-label="Shared Facts">
+            <h3>Shared Facts</h3>
+            <table class="comparison-table shared-facts-table">
+              <thead>
+                <tr>
+                  <th>Fact</th>
+                  <th>Left Source</th>
+                  <th>Right Source</th>
+                  <th>Status</th>
+                  <th>Severity</th>
+                  <th>Basis</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${state.shared_fact_rows.map(renderSharedFactRow).join("")}
+              </tbody>
+            </table>
+          </section>
           <table>
             <thead>
               <tr>
@@ -42,6 +60,28 @@ export function buildReconciliationWorkbenchMarkup(state: ReconciliationWorkbenc
         </section>
       </main>
     </section>
+  `;
+}
+
+function renderSharedFactRow(row: ReconciliationWorkbenchState["shared_fact_rows"][number]): string {
+  return `
+    <tr class="reconciliation-row status-${escapeHtml(row.status)}">
+      <td>${escapeHtml(row.fact_label)}</td>
+      <td>
+        <span class="comparison-source">${escapeHtml(row.left_source)}.${escapeHtml(row.left_field)}</span>
+        <span class="comparison-value">${escapeHtml(row.left_value)}</span>
+      </td>
+      <td>
+        <span class="comparison-source">${escapeHtml(row.right_source)}.${escapeHtml(row.right_field)}</span>
+        <span class="comparison-value">${escapeHtml(row.right_value)}</span>
+      </td>
+      <td>${escapeHtml(row.status)}</td>
+      <td>${escapeHtml(row.severity_label)}</td>
+      <td>
+        <span class="comparison-source">${escapeHtml(row.mapping_basis)}</span>
+        <span class="comparison-value">trace ${escapeHtml(row.trace.rule_version)} · ${escapeHtml(row.trace.producing_module)}</span>
+      </td>
+    </tr>
   `;
 }
 

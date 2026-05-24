@@ -1,8 +1,12 @@
 import { buildBsrsConfigurationPacketFromFixture, resolveBsrsConfigurationOutput } from "@pbgc/bsrs-configuration-output";
 import {
+  buildEvidenceForInventory,
   buildEvidenceForValueInventory,
+  reconcileSharedFacts,
   reconcileSharedValues,
+  type ReconciliationComparison,
   type ReconciliationSliceName,
+  type ReconciliationStatus,
   type ValueComparisonRecord,
 } from "@pbgc/shared";
 import { parseBsrsConfigurationFixtures } from "../../../../packages/tests/bsrs-configuration-output-fixtures";
@@ -36,6 +40,29 @@ export type WorkbenchSampleContext = {
   generated_at: string;
 };
 
+export type WorkbenchTraceCue = {
+  left_source_path: string;
+  right_source_path: string;
+  rule_version: string;
+  producing_module: string;
+};
+
+export type WorkbenchSharedFactRow = {
+  comparison_id: string;
+  fact_label: string;
+  status: WorkbenchStatus;
+  severity_label: string;
+  left_source: ReconciliationSliceName;
+  left_field: string;
+  left_value: string;
+  right_source: ReconciliationSliceName;
+  right_field: string;
+  right_value: string;
+  mapping_basis: string;
+  ordering_key: string;
+  trace: WorkbenchTraceCue;
+};
+
 export type WorkbenchReconciliationRow = {
   comparison_id: string;
   rule_key: string;
@@ -55,6 +82,7 @@ export type ReconciliationWorkbenchState = {
   generated_at: string;
   sample_context: WorkbenchSampleContext;
   output_panels: WorkbenchOutputPanel[];
+  shared_fact_rows: WorkbenchSharedFactRow[];
   reconciliation_rows: WorkbenchReconciliationRow[];
   findings: WorkbenchReconciliationRow[];
 };
@@ -65,6 +93,7 @@ const MOCK_CASE_LABEL = "Mock case context: simulated PBGC terminated DB case";
 const MOCK_POPULATION_LABEL = "Mock population context: simulated participant cohort";
 const NO_REAL_PERSON_DATA_NOTICE =
   "No real participant, beneficiary, alternate payee, survivor, or other natural-person data is used on this workbench.";
+const HIDDEN_SHARED_FACT_KEYS = new Set(["participant_identifier.bcv_rec_id"]);
 
 const PANEL_FIELDS = {
   bsrs_configuration_output: ["id", "retstat", "form_code_nsf", "xra", "current_payment_amount"],
@@ -90,7 +119,27 @@ export function buildApprovedSampleReconciliationWorkbench(): ReconciliationWork
     valuation_listings_output: packet.valuation_listings_output_row,
   };
 
-  const evidence = [
+  const sharedFactEvidence = [
+    ...buildEvidenceForInventory({
+      case_id: packet.case_id,
+      slice: "bsrs_configuration_output",
+      row: outputRows.bsrs_configuration_output,
+      source_path: "packages/tests/bsrs-configuration-output-fixtures.ts",
+    }),
+    ...buildEvidenceForInventory({
+      case_id: packet.case_id,
+      slice: "v1_ve_output",
+      row: outputRows.v1_ve_output,
+      source_path: "packages/tests/v1-ve-output-fixtures.ts",
+    }),
+    ...buildEvidenceForInventory({
+      case_id: packet.case_id,
+      slice: "valuation_listings_output",
+      row: outputRows.valuation_listings_output,
+      source_path: "packages/tests/valuation-listings-output-fixtures.ts",
+    }),
+  ];
+  const valueEvidence = [
     ...buildEvidenceForValueInventory({
       case_id: packet.case_id,
       slice: "bsrs_configuration_output",
@@ -110,7 +159,8 @@ export function buildApprovedSampleReconciliationWorkbench(): ReconciliationWork
       source_path: "packages/tests/valuation-listings-output-fixtures.ts",
     }),
   ];
-  const reconciliation = reconcileSharedValues({ evidence });
+  const sharedFacts = reconcileSharedFacts({ evidence: sharedFactEvidence });
+  const reconciliation = reconcileSharedValues({ evidence: valueEvidence });
   const reconciliationRows = reconciliation.comparisons.map(toWorkbenchReconciliationRow);
 
   return {
@@ -131,6 +181,10 @@ export function buildApprovedSampleReconciliationWorkbench(): ReconciliationWork
     output_panels: (Object.keys(PANEL_LABELS) as ReconciliationSliceName[]).map((sliceName) =>
       buildOutputPanel(sliceName, packet.case_id, outputRows[sliceName], bsrs.warnings.map((warning) => warning.message)),
     ),
+    shared_fact_rows: sharedFacts.comparisons
+      .filter((comparison) => !HIDDEN_SHARED_FACT_KEYS.has(comparison.fact_key))
+      .map(toWorkbenchSharedFactRow)
+      .sort((left, right) => left.ordering_key.localeCompare(right.ordering_key)),
     reconciliation_rows: reconciliationRows,
     findings: reconciliationRows.filter((row) => row.status === "drift" || row.status === "warning"),
   };
@@ -158,6 +212,29 @@ function buildOutputPanel(
   };
 }
 
+function toWorkbenchSharedFactRow(comparison: ReconciliationComparison): WorkbenchSharedFactRow {
+  return {
+    comparison_id: comparison.comparison_id,
+    fact_label: comparison.canonical_semantic_name,
+    status: mapSharedFactStatus(comparison.status),
+    severity_label: comparison.status === "drift" ? "Error" : "None",
+    left_source: comparison.left_slice,
+    left_field: comparison.left_field,
+    left_value: formatValue(comparison.left_value),
+    right_source: comparison.right_slice,
+    right_field: comparison.right_field,
+    right_value: formatValue(comparison.right_value),
+    mapping_basis: comparison.mapping_basis,
+    ordering_key: `${comparison.fact_key}|${comparison.comparison_id}`,
+    trace: {
+      left_source_path: comparison.left_source_path,
+      right_source_path: comparison.right_source_path,
+      rule_version: comparison.rule_version,
+      producing_module: comparison.producing_module,
+    },
+  };
+}
+
 function toWorkbenchReconciliationRow(comparison: ValueComparisonRecord): WorkbenchReconciliationRow {
   return {
     comparison_id: comparison.comparison_id,
@@ -169,6 +246,14 @@ function toWorkbenchReconciliationRow(comparison: ValueComparisonRecord): Workbe
     compared_fields: [comparison.left_field, comparison.right_field],
     compared_values: [formatValue(comparison.left_value), formatValue(comparison.right_value)],
   };
+}
+
+function mapSharedFactStatus(status: ReconciliationStatus): WorkbenchStatus {
+  if (status === "accepted") return "agreement";
+  if (status === "drift") return "drift";
+  if (status === "absent_optional") return "nullable";
+  if (status === "formatting_only") return "formatting-only";
+  return "unsupported";
 }
 
 function mapStatus(status: ValueComparisonRecord["status"]): WorkbenchStatus {
