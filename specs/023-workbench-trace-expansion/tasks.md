@@ -47,7 +47,7 @@
 - [ ] T011 [P] [US1] Add failing state test for reconciliation row trace details in packages/tests/reconciliation-workbench-ui.test.ts
 - [ ] T012 [P] [US1] Add failing state test for Shared Facts row trace details in packages/tests/reconciliation-workbench-ui.test.ts
 - [ ] T013 [P] [US1] Add failing state test for Shared Values row trace details with raw and normalized value context in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T014 [P] [US1] Add failing markup test for visible expansion controls and expanded details in packages/tests/reconciliation-workbench-ui.test.ts
+- [ ] T014 [P] [US1] Add failing markup test for click or activation behavior on trace expansion controls and expanded details in packages/tests/reconciliation-workbench-ui.test.ts
 
 ### Implementation for User Story 1
 

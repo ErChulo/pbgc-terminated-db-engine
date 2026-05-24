@@ -1,6 +1,6 @@
 # Feature Specification: Reconciliation Workbench Trace Expansion
 
-**Feature Branch**: `023-workbench-trace-expansion`
+**Feature Branch**: `022-reconciliation-workbench-trace-expansion`
 
 **Created**: 2026-05-24
 
