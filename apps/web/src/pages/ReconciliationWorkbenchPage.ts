@@ -1,7 +1,7 @@
 import { buildApprovedSampleReconciliationWorkbench, type ReconciliationWorkbenchState } from "../app/reconciliationWorkbenchSlice";
 
 export function renderReconciliationWorkbenchPage(root: HTMLElement): void {
-  root.innerHTML = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench());
+  renderWorkbench(root, buildApprovedSampleReconciliationWorkbench());
 }
 
 export function buildReconciliationWorkbenchMarkup(state: ReconciliationWorkbenchState): string {
@@ -15,6 +15,8 @@ export function buildReconciliationWorkbenchMarkup(state: ReconciliationWorkbenc
         </div>
         <div class="workbench-sample-context" aria-label="Approved sample context">
           <strong>${escapeHtml(state.sample_context.fixed_sample_label)}</strong>
+          ${renderSampleSelector(state)}
+          <span>Approved artifact: ${escapeHtml(state.sample_context.artifact_basis)}</span>
           <span>${escapeHtml(state.sample_context.mock_case_label)}</span>
           <span>${escapeHtml(state.sample_context.mock_population_label)}</span>
           <span class="no-real-person-data-notice">${escapeHtml(state.sample_context.no_real_person_data_notice)}</span>
@@ -78,6 +80,30 @@ export function buildReconciliationWorkbenchMarkup(state: ReconciliationWorkbenc
         </section>
       </main>
     </section>
+  `;
+}
+
+function renderWorkbench(root: HTMLElement, state: ReconciliationWorkbenchState): void {
+  root.innerHTML = buildReconciliationWorkbenchMarkup(state);
+  const selector = root.querySelector<HTMLSelectElement>("[data-workbench-sample-selector]");
+  selector?.addEventListener("change", () => {
+    renderWorkbench(root, buildApprovedSampleReconciliationWorkbench({ sample_id: selector.value }));
+  });
+}
+
+function renderSampleSelector(state: ReconciliationWorkbenchState): string {
+  const isFixed = state.sample_options.length === 1;
+  return `
+    <label class="sample-selector">
+      <span>Approved sample</span>
+      <select data-workbench-sample-selector ${isFixed ? "disabled" : ""} aria-label="Approved sample">
+        ${state.sample_options.map((sample) => `
+          <option value="${escapeHtml(sample.sample_id)}" ${sample.sample_id === state.selected_sample.sample_id ? "selected" : ""}>
+            ${escapeHtml(sample.selector_label)}
+          </option>
+        `).join("")}
+      </select>
+    </label>
   `;
 }
 

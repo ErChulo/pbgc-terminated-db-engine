@@ -34,10 +34,23 @@ export type WorkbenchSampleContext = {
   sample_id: string;
   sample_label: string;
   fixed_sample_label: string;
+  selector_label: string;
+  artifact_basis: string;
   mock_case_label: string;
   mock_population_label: string;
   no_real_person_data_notice: string;
   generated_at: string;
+};
+
+export type ApprovedSampleOption = {
+  sample_id: string;
+  sample_label: string;
+  selector_label: string;
+  artifact_basis: string;
+  mock_case_label: string;
+  mock_population_label: string;
+  ordering_key: string;
+  is_default: boolean;
 };
 
 export type WorkbenchTraceCue = {
@@ -126,6 +139,8 @@ export type ReconciliationWorkbenchState = {
   case_id: string;
   plan_id: string;
   generated_at: string;
+  sample_options: ApprovedSampleOption[];
+  selected_sample: ApprovedSampleOption;
   sample_context: WorkbenchSampleContext;
   output_panels: WorkbenchOutputPanel[];
   shared_fact_rows: WorkbenchSharedFactRow[];
@@ -134,13 +149,12 @@ export type ReconciliationWorkbenchState = {
   findings: WorkbenchReconciliationRow[];
 };
 
-const STABLE_GENERATED_AT = "source:packages/tests/bsrs-configuration-output-fixtures.ts#BSRS001";
-const FIXED_SAMPLE_LABEL = "Fixed approved sample: BSRS001";
 const MOCK_CASE_LABEL = "Mock case context: simulated PBGC terminated DB case";
 const MOCK_POPULATION_LABEL = "Mock population context: simulated participant cohort";
 const NO_REAL_PERSON_DATA_NOTICE =
   "No real participant, beneficiary, alternate payee, survivor, or other natural-person data is used on this workbench.";
 const HIDDEN_SHARED_FACT_KEYS = new Set(["participant_identifier.bcv_rec_id"]);
+const APPROVED_SAMPLE_SOURCE_PATH = "packages/tests/bsrs-configuration-output-fixtures.ts";
 
 const PANEL_FIELDS = {
   bsrs_configuration_output: ["id", "retstat", "form_code_nsf", "xra", "current_payment_amount"],
@@ -154,8 +168,11 @@ const PANEL_LABELS = {
   valuation_listings_output: "Valuation Listings",
 } as const satisfies Record<ReconciliationSliceName, string>;
 
-export function buildApprovedSampleReconciliationWorkbench(): ReconciliationWorkbenchState {
-  const fixture = parseBsrsConfigurationFixtures()[0];
+export function buildApprovedSampleReconciliationWorkbench(options: { sample_id?: string } = {}): ReconciliationWorkbenchState {
+  const fixtures = parseBsrsConfigurationFixtures();
+  const sampleOptions = buildApprovedSampleOptions(fixtures);
+  const selectedSample = resolveSelectedSample(sampleOptions, options.sample_id);
+  const fixture = fixtures.find((candidate) => candidate.test_case_id === selectedSample.sample_id);
   if (!fixture) throw new Error("Missing approved BSRS configuration fixture");
 
   const packet = buildBsrsConfigurationPacketFromFixture(fixture);
@@ -213,20 +230,26 @@ export function buildApprovedSampleReconciliationWorkbench(): ReconciliationWork
     .sort((left, right) => left.ordering_key.localeCompare(right.ordering_key));
   const reconciliationRows = reconciliation.comparisons.map(toWorkbenchReconciliationRow);
 
+  const generatedAt = selectedSample.artifact_basis;
   return {
     sample_id: fixture.test_case_id,
     sample_label: fixture.description,
     case_id: packet.case_id,
     plan_id: bsrs.row.plan_id,
-    generated_at: STABLE_GENERATED_AT,
+    generated_at: generatedAt,
+    sample_options: sampleOptions,
+    selected_sample: selectedSample,
     sample_context: {
       sample_id: fixture.test_case_id,
       sample_label: fixture.description,
-      fixed_sample_label: FIXED_SAMPLE_LABEL,
-      mock_case_label: MOCK_CASE_LABEL,
-      mock_population_label: MOCK_POPULATION_LABEL,
+      fixed_sample_label:
+        sampleOptions.length === 1 ? `Fixed approved sample: ${selectedSample.sample_id}` : `Selected approved sample: ${selectedSample.sample_id}`,
+      selector_label: selectedSample.selector_label,
+      artifact_basis: selectedSample.artifact_basis,
+      mock_case_label: selectedSample.mock_case_label,
+      mock_population_label: selectedSample.mock_population_label,
       no_real_person_data_notice: NO_REAL_PERSON_DATA_NOTICE,
-      generated_at: STABLE_GENERATED_AT,
+      generated_at: generatedAt,
     },
     output_panels: (Object.keys(PANEL_LABELS) as ReconciliationSliceName[]).map((sliceName) =>
       buildOutputPanel(sliceName, packet.case_id, outputRows[sliceName], bsrs.warnings.map((warning) => warning.message)),
@@ -239,6 +262,28 @@ export function buildApprovedSampleReconciliationWorkbench(): ReconciliationWork
     reconciliation_rows: reconciliationRows,
     findings: reconciliationRows.filter((row) => row.status === "drift" || row.status === "warning"),
   };
+}
+
+function buildApprovedSampleOptions(fixtures: ReturnType<typeof parseBsrsConfigurationFixtures>): ApprovedSampleOption[] {
+  return fixtures
+    .map((fixture, index) => ({
+      sample_id: fixture.test_case_id,
+      sample_label: fixture.description,
+      selector_label: `${fixture.test_case_id} - ${fixture.description}`,
+      artifact_basis: `source:${APPROVED_SAMPLE_SOURCE_PATH}#${fixture.test_case_id}`,
+      mock_case_label: MOCK_CASE_LABEL,
+      mock_population_label: MOCK_POPULATION_LABEL,
+      ordering_key: `${String(index + 1).padStart(6, "0")}|${fixture.test_case_id}`,
+      is_default: index === 0,
+    }))
+    .sort((left, right) => left.ordering_key.localeCompare(right.ordering_key));
+}
+
+function resolveSelectedSample(sampleOptions: ApprovedSampleOption[], requestedSampleId: string | undefined): ApprovedSampleOption {
+  const defaultSample = sampleOptions.find((sample) => sample.is_default) ?? sampleOptions[0];
+  if (!defaultSample) throw new Error("Missing approved BSRS sample option");
+  if (!requestedSampleId) return defaultSample;
+  return sampleOptions.find((sample) => sample.sample_id === requestedSampleId) ?? defaultSample;
 }
 
 function buildOutputPanel(
