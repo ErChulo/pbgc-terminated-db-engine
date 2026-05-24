@@ -170,6 +170,46 @@ th {
   margin-bottom: 18px;
 }
 
+.workbench-filter-bar {
+  align-items: end;
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin: 10px 0 16px;
+  padding: 12px;
+}
+
+.status-filter {
+  display: grid;
+  gap: 4px;
+  min-width: 220px;
+}
+
+.status-filter span,
+.active-filter-label {
+  color: #52606d;
+  font-size: 12px;
+  font-weight: 650;
+  text-transform: uppercase;
+}
+
+.status-filter select {
+  background: #ffffff;
+  border: 1px solid #9fb3c8;
+  border-radius: 6px;
+  color: #1f2933;
+  font: inherit;
+  min-width: 0;
+  padding: 8px 10px;
+}
+
+.active-filter-label {
+  align-self: center;
+}
+
 .comparison-table-section h3 {
   font-size: 15px;
   margin: 12px 0 8px;
@@ -266,6 +306,12 @@ th {
 
 .reconciliation-row td {
   overflow-wrap: anywhere;
+}
+
+.filter-empty-state td {
+  color: #52606d;
+  font-style: italic;
+  text-align: center;
 }
 
 .status-agreement td {

@@ -12,6 +12,20 @@ import {
 import { parseBsrsConfigurationFixtures } from "../../../../packages/tests/bsrs-configuration-output-fixtures";
 
 export type WorkbenchStatus = "agreement" | "drift" | "warning" | "nullable" | "unsupported" | "formatting-only";
+export type WorkbenchStatusFilterValue = "all" | WorkbenchStatus;
+
+export type WorkbenchFilterOption = {
+  value: WorkbenchStatusFilterValue;
+  label: string;
+  kind: "status";
+  ordering_key: string;
+  row_count: number;
+};
+
+export type WorkbenchStatusFilterState = {
+  value: WorkbenchStatusFilterValue;
+  label: string;
+};
 
 export type WorkbenchDisplayField = {
   field_name: string;
@@ -133,6 +147,30 @@ export type WorkbenchReconciliationRow = {
   trace_detail: WorkbenchTraceDetail;
 };
 
+export type WorkbenchFilteredRowGroup<Row> = {
+  group_name: string;
+  active_status: WorkbenchStatusFilterValue;
+  rows: Row[];
+  empty_state: string | null;
+  visible_count: number;
+  unfiltered_count: number;
+};
+
+export type WorkbenchFilterSummary = {
+  selected_sample_id: string;
+  active_status: WorkbenchStatusFilterState;
+  visible_counts: {
+    reconciliation: number;
+    shared_facts: number;
+    shared_values: number;
+  };
+  unfiltered_counts: {
+    reconciliation: number;
+    shared_facts: number;
+    shared_values: number;
+  };
+};
+
 export type ReconciliationWorkbenchState = {
   sample_id: string;
   sample_label: string;
@@ -146,6 +184,17 @@ export type ReconciliationWorkbenchState = {
   shared_fact_rows: WorkbenchSharedFactRow[];
   shared_value_rows: WorkbenchSharedValueRow[];
   reconciliation_rows: WorkbenchReconciliationRow[];
+  status_filter: WorkbenchStatusFilterState;
+  status_filter_options: WorkbenchFilterOption[];
+  filtered_shared_fact_rows: WorkbenchSharedFactRow[];
+  filtered_shared_value_rows: WorkbenchSharedValueRow[];
+  filtered_reconciliation_rows: WorkbenchReconciliationRow[];
+  filtered_row_groups: {
+    shared_facts: WorkbenchFilteredRowGroup<WorkbenchSharedFactRow>;
+    shared_values: WorkbenchFilteredRowGroup<WorkbenchSharedValueRow>;
+    reconciliation: WorkbenchFilteredRowGroup<WorkbenchReconciliationRow>;
+  };
+  filter_summary: WorkbenchFilterSummary;
   findings: WorkbenchReconciliationRow[];
 };
 
@@ -168,7 +217,11 @@ const PANEL_LABELS = {
   valuation_listings_output: "Valuation Listings",
 } as const satisfies Record<ReconciliationSliceName, string>;
 
-export function buildApprovedSampleReconciliationWorkbench(options: { sample_id?: string } = {}): ReconciliationWorkbenchState {
+const STATUS_ORDER: WorkbenchStatus[] = ["agreement", "drift", "warning", "nullable", "unsupported", "formatting-only"];
+
+export function buildApprovedSampleReconciliationWorkbench(
+  options: { sample_id?: string; status_filter?: WorkbenchStatusFilterValue } = {},
+): ReconciliationWorkbenchState {
   const fixtures = parseBsrsConfigurationFixtures();
   const sampleOptions = buildApprovedSampleOptions(fixtures);
   const selectedSample = resolveSelectedSample(sampleOptions, options.sample_id);
@@ -225,10 +278,26 @@ export function buildApprovedSampleReconciliationWorkbench(options: { sample_id?
   ];
   const sharedFacts = reconcileSharedFacts({ evidence: sharedFactEvidence });
   const reconciliation = reconcileSharedValues({ evidence: valueEvidence });
+  const sharedFactRows = sharedFacts.comparisons
+    .filter((comparison) => !HIDDEN_SHARED_FACT_KEYS.has(comparison.fact_key))
+    .map(toWorkbenchSharedFactRow)
+    .sort((left, right) => left.ordering_key.localeCompare(right.ordering_key));
   const sharedValueRows = reconciliation.comparisons
     .map(toWorkbenchSharedValueRow)
     .sort((left, right) => left.ordering_key.localeCompare(right.ordering_key));
   const reconciliationRows = reconciliation.comparisons.map(toWorkbenchReconciliationRow);
+  const statusOptions = buildStatusFilterOptions({
+    sharedFactRows,
+    sharedValueRows,
+    reconciliationRows,
+  });
+  const activeStatus = resolveStatusFilter(options.status_filter, statusOptions);
+  const filteredRowGroups = buildFilteredRowGroups({
+    activeStatus: activeStatus.value,
+    sharedFactRows,
+    sharedValueRows,
+    reconciliationRows,
+  });
 
   const generatedAt = selectedSample.artifact_basis;
   return {
@@ -254,13 +323,97 @@ export function buildApprovedSampleReconciliationWorkbench(options: { sample_id?
     output_panels: (Object.keys(PANEL_LABELS) as ReconciliationSliceName[]).map((sliceName) =>
       buildOutputPanel(sliceName, packet.case_id, outputRows[sliceName], bsrs.warnings.map((warning) => warning.message)),
     ),
-    shared_fact_rows: sharedFacts.comparisons
-      .filter((comparison) => !HIDDEN_SHARED_FACT_KEYS.has(comparison.fact_key))
-      .map(toWorkbenchSharedFactRow)
-      .sort((left, right) => left.ordering_key.localeCompare(right.ordering_key)),
+    shared_fact_rows: sharedFactRows,
     shared_value_rows: sharedValueRows,
     reconciliation_rows: reconciliationRows,
+    status_filter: activeStatus,
+    status_filter_options: statusOptions,
+    filtered_shared_fact_rows: filteredRowGroups.shared_facts.rows,
+    filtered_shared_value_rows: filteredRowGroups.shared_values.rows,
+    filtered_reconciliation_rows: filteredRowGroups.reconciliation.rows,
+    filtered_row_groups: filteredRowGroups,
+    filter_summary: {
+      selected_sample_id: fixture.test_case_id,
+      active_status: activeStatus,
+      visible_counts: {
+        reconciliation: filteredRowGroups.reconciliation.visible_count,
+        shared_facts: filteredRowGroups.shared_facts.visible_count,
+        shared_values: filteredRowGroups.shared_values.visible_count,
+      },
+      unfiltered_counts: {
+        reconciliation: filteredRowGroups.reconciliation.unfiltered_count,
+        shared_facts: filteredRowGroups.shared_facts.unfiltered_count,
+        shared_values: filteredRowGroups.shared_values.unfiltered_count,
+      },
+    },
     findings: reconciliationRows.filter((row) => row.status === "drift" || row.status === "warning"),
+  };
+}
+
+function buildStatusFilterOptions(args: {
+  sharedFactRows: WorkbenchSharedFactRow[];
+  sharedValueRows: WorkbenchSharedValueRow[];
+  reconciliationRows: WorkbenchReconciliationRow[];
+}): WorkbenchFilterOption[] {
+  const rows = [...args.sharedFactRows, ...args.sharedValueRows, ...args.reconciliationRows];
+  const counts = new Map<WorkbenchStatus, number>();
+  rows.forEach((row) => counts.set(row.status, (counts.get(row.status) ?? 0) + 1));
+  return [
+    {
+      value: "all",
+      label: "All statuses",
+      kind: "status",
+      ordering_key: "000000|all",
+      row_count: rows.length,
+    },
+    ...STATUS_ORDER.filter((status) => counts.has(status)).map((status, index) => ({
+      value: status,
+      label: formatStatusLabel(status),
+      kind: "status" as const,
+      ordering_key: `${String(index + 1).padStart(6, "0")}|${status}`,
+      row_count: counts.get(status) ?? 0,
+    })),
+  ];
+}
+
+function resolveStatusFilter(
+  requested: WorkbenchStatusFilterValue | undefined,
+  statusOptions: WorkbenchFilterOption[],
+): WorkbenchStatusFilterState {
+  const selected = statusOptions.find((option) => option.value === (requested ?? "all")) ?? statusOptions[0];
+  return {
+    value: selected.value,
+    label: selected.label,
+  };
+}
+
+function buildFilteredRowGroups(args: {
+  activeStatus: WorkbenchStatusFilterValue;
+  sharedFactRows: WorkbenchSharedFactRow[];
+  sharedValueRows: WorkbenchSharedValueRow[];
+  reconciliationRows: WorkbenchReconciliationRow[];
+}): ReconciliationWorkbenchState["filtered_row_groups"] {
+  return {
+    shared_facts: buildFilteredRowGroup("Shared Facts", args.sharedFactRows, args.activeStatus),
+    shared_values: buildFilteredRowGroup("Shared Values", args.sharedValueRows, args.activeStatus),
+    reconciliation: buildFilteredRowGroup("Reconciliation", args.reconciliationRows, args.activeStatus),
+  };
+}
+
+function buildFilteredRowGroup<Row extends { status: WorkbenchStatus }>(
+  groupName: string,
+  rows: Row[],
+  activeStatus: WorkbenchStatusFilterValue,
+): WorkbenchFilteredRowGroup<Row> {
+  const filteredRows = activeStatus === "all" ? rows : rows.filter((row) => row.status === activeStatus);
+  return {
+    group_name: groupName,
+    active_status: activeStatus,
+    rows: filteredRows,
+    empty_state:
+      filteredRows.length === 0 && activeStatus !== "all" ? `No ${groupName} rows match status ${formatStatusLabel(activeStatus)}.` : null,
+    visible_count: filteredRows.length,
+    unfiltered_count: rows.length,
   };
 }
 
@@ -500,6 +653,13 @@ function formatSeverity(severity: "info" | "warning" | "error"): string {
   if (severity === "error") return "Error";
   if (severity === "warning") return "Warning";
   return "Info";
+}
+
+function formatStatusLabel(status: WorkbenchStatus): string {
+  return status
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
 }
 
 function formatValue(value: string | number | boolean | null): string {
