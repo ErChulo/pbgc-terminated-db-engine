@@ -84,6 +84,8 @@ As an analyst using the existing workbench, I want filtering to preserve approve
 - **Source Layer Reads**: Deterministic engine outputs, output adapter display sources, cross-slice reconciliation display rows, trace-detail display rows, approved sample artifacts, and mocked display context already accepted by prior workbench slices.
 - **Source Layer Writes**: No new lower source-layer writes. This slice may update only display filter state, deterministic render evidence, regression evidence, and existing static build artifacts where current repository delivery rules require them.
 - **Traceability Required**: Active filters, selected sample identity, row status, row severity where applicable, output panel source, comparison row source fields, mapping basis, rule version, producing module, and trace-detail row identity must remain traceable in display state or regression evidence.
+- **Expected Warnings/Errors**: Filtering may display only deterministic row-group empty states and existing row statuses; it MUST NOT introduce new structured engine warnings or errors.
+- **Affected Output Adapters**: Filtering may read only existing BSRS, V1/VE, and valuation listings display sources; it MUST NOT write adapter rows or add adapter responsibilities.
 
 ### Key Entities *(include if feature involves data)*
 

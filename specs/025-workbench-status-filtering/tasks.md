@@ -121,7 +121,7 @@
 - [ ] T041 Run project lint verification with npm run lint using package.json
 - [ ] T042 Run browser static build verification with npm run build using package.json and apps/web/dist/
 - [ ] T043 Update committed Vite static output in apps/web/dist/ after successful build if bundle contents changed
-- [ ] T044 Perform the 10-second identification check for the status filter on desktop 1440x900 and mobile 390x844 and record the result in specs/025-workbench-status-filtering/quickstart.md
+- [ ] T044 Perform the 10-second check that the analyst can identify and apply the status filter on desktop 1440x900 and mobile 390x844 and record the result in specs/025-workbench-status-filtering/quickstart.md
 - [ ] T045 Verify filtered workbench markup still contains no real participant, beneficiary, alternate payee, survivor, or other natural-person data in packages/tests/reconciliation-workbench-ui.test.ts
 - [ ] T046 Confirm no delivered .sql, .js, .ts, or .tex delivery-copy artifact is introduced for this internal UI/test slice in specs/025-workbench-status-filtering/tasks.md
 
