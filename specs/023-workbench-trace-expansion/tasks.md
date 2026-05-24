@@ -12,10 +12,10 @@
 
 **Purpose**: Confirm the current workbench row evidence and renderer structure before adding expansion behavior.
 
-- [ ] T001 Inspect current reconciliation row evidence in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T002 Inspect current Shared Facts and Shared Values row evidence in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T003 Inspect current workbench markup structure in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T004 [P] Inspect existing focused workbench tests in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T001 Inspect current reconciliation row evidence in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T002 Inspect current Shared Facts and Shared Values row evidence in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T003 Inspect current workbench markup structure in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T004 [P] Inspect existing focused workbench tests in packages/tests/reconciliation-workbench-ui.test.ts
 
 ---
 
@@ -25,12 +25,12 @@
 
 **CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T005 Define WorkbenchTraceDetail and expansion-control display fields in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T006 Define trace-detail helpers for reconciliation, Shared Facts, and Shared Values rows in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T007 Define intentional absence marker behavior for missing normalized values, severities, source paths, and trace fields in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T008 Add stable trace expansion identifiers based on existing comparison identifiers or ordering keys in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T009 [P] Add focused test coverage for trace-detail projections and stable expansion identifiers in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T010 [P] Add focused test coverage for no raw, hosted, or real-person input dependencies in trace details in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T005 Define WorkbenchTraceDetail and expansion-control display fields in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T006 Define trace-detail helpers for reconciliation, Shared Facts, and Shared Values rows in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T007 Define intentional absence marker behavior for missing normalized values, severities, source paths, and trace fields in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T008 Add stable trace expansion identifiers based on existing comparison identifiers or ordering keys in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T009 [P] Add focused test coverage for trace-detail projections and stable expansion identifiers in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T010 [P] Add focused test coverage for no raw, hosted, or real-person input dependencies in trace details in packages/tests/reconciliation-workbench-ui.test.ts
 
 **Checkpoint**: Workbench state can expose deterministic trace-detail data before renderer changes.
 
@@ -44,19 +44,19 @@
 
 ### Tests for User Story 1
 
-- [ ] T011 [P] [US1] Add failing state test for reconciliation row trace details in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T012 [P] [US1] Add failing state test for Shared Facts row trace details in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T013 [P] [US1] Add failing state test for Shared Values row trace details with raw and normalized value context in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T014 [P] [US1] Add failing markup test for click or activation behavior on trace expansion controls and expanded details in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T011 [P] [US1] Add failing state test for reconciliation row trace details in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T012 [P] [US1] Add failing state test for Shared Facts row trace details in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T013 [P] [US1] Add failing state test for Shared Values row trace details with raw and normalized value context in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T014 [P] [US1] Add failing markup test for click or activation behavior on trace expansion controls and expanded details in packages/tests/reconciliation-workbench-ui.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T015 [US1] Populate trace-detail data for reconciliation rows in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T016 [US1] Populate trace-detail data for Shared Facts rows in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T017 [US1] Populate trace-detail data for Shared Values rows in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T018 [US1] Render row-level trace expansion controls and details in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T019 [US1] Add stable trace-expansion styling for desktop and mobile readability in apps/web/src/styles.css
-- [ ] T020 [US1] Run the focused workbench test command from quickstart.md for packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T015 [US1] Populate trace-detail data for reconciliation rows in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T016 [US1] Populate trace-detail data for Shared Facts rows in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T017 [US1] Populate trace-detail data for Shared Values rows in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T018 [US1] Render row-level trace expansion controls and details in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T019 [US1] Add stable trace-expansion styling for desktop and mobile readability in apps/web/src/styles.css
+- [X] T020 [US1] Run the focused workbench test command from quickstart.md for packages/tests/reconciliation-workbench-ui.test.ts
 
 **Checkpoint**: User Story 1 is independently functional and testable as the MVP.
 
@@ -111,9 +111,9 @@
 
 - [ ] T032 [P] Verify 10-second expansion coverage for one reconciliation row, one Shared Facts row, and one Shared Values row against specs/023-workbench-trace-expansion/quickstart.md
 - [ ] T033 [P] Verify long trace-detail text remains readable at desktop 1440x900 and mobile 390x844 viewports in apps/web/src/styles.css
-- [ ] T034 Run npm test -- packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T035 Run npm run lint and npm run build for package.json workspaces and apps/web/dist/
-- [ ] T036 Update committed static bundle output in apps/web/dist/ if npm run build changes it
+- [X] T034 Run npm test -- packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T035 Run npm run lint and npm run build for package.json workspaces and apps/web/dist/
+- [X] T036 Update committed static bundle output in apps/web/dist/ if npm run build changes it
 - [ ] T037 Confirm no delivered .sql, .js, .ts, or .tex artifacts were added outside internal source/test files for specs/023-workbench-trace-expansion/tasks.md
 
 ---

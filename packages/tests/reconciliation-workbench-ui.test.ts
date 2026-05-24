@@ -105,6 +105,86 @@ describe("reconciliation workbench UI", () => {
     expect(second).toEqual(first);
   });
 
+  it("includes reconciliation row trace details with compared sources, fields, values, mapping basis, and trace identifiers", () => {
+    const state = buildApprovedSampleReconciliationWorkbench();
+    const row = state.reconciliation_rows.find((candidate) => candidate.canonical_semantic_name === "ID");
+
+    expect(row?.trace_detail).toMatchObject({
+      control_id: row ? `trace-reconciliation-${row.comparison_id}` : "",
+      row_kind: "reconciliation",
+      row_label: "ID",
+      collapsed_label: "Trace details for ID",
+      compared_sources: ["bsrs_configuration_output", "v1_ve_output"],
+      compared_fields: ["id", "id"],
+      raw_values: ["VL001", "VL001"],
+      normalized_values: ["VL001", "VL001"],
+      status: "agreement",
+      severity_label: "Info",
+      mapping_basis: "dd",
+      rule_version: "0.1.0",
+      producing_module: "cross_slice_reconciliation",
+      stable_evidence_basis: "participant_identifier.id",
+    });
+  });
+
+  it("includes Shared Facts row trace details with raw values, mapping basis, source paths, and trace identifiers", () => {
+    const state = buildApprovedSampleReconciliationWorkbench();
+    const row = state.shared_fact_rows.find((candidate) => candidate.fact_label === "ID");
+
+    expect(row?.trace_detail).toMatchObject({
+      control_id: row ? `trace-shared_fact-${row.comparison_id}` : "",
+      row_kind: "shared_fact",
+      row_label: "ID",
+      compared_sources: ["bsrs_configuration_output", "v1_ve_output"],
+      compared_fields: ["id", "id"],
+      raw_values: ["VL001", "VL001"],
+      normalized_values: ["Not applicable", "Not applicable"],
+      status: "agreement",
+      severity_label: "None",
+      mapping_basis: "dd",
+      source_paths: ["packages/tests/bsrs-configuration-output-fixtures.ts", "packages/tests/v1-ve-output-fixtures.ts"],
+      rule_version: "0.1.0",
+      producing_module: "cross_slice_reconciliation",
+    });
+  });
+
+  it("includes Shared Values row trace details with raw and normalized value context", () => {
+    const state = buildApprovedSampleReconciliationWorkbench();
+    const row = state.shared_value_rows.find((candidate) => candidate.value_label === "ID");
+
+    expect(row?.trace_detail).toMatchObject({
+      control_id: row ? `trace-shared_value-${row.comparison_id}` : "",
+      row_kind: "shared_value",
+      row_label: "ID",
+      compared_sources: ["bsrs_configuration_output", "v1_ve_output"],
+      compared_fields: ["id", "id"],
+      raw_values: ["VL001", "VL001"],
+      normalized_values: ["VL001", "VL001"],
+      status: "agreement",
+      severity_label: "Info",
+      mapping_basis: "dd",
+      source_paths: ["packages/tests/bsrs-configuration-output-fixtures.ts", "packages/tests/v1-ve-output-fixtures.ts"],
+      rule_version: "0.1.0",
+      producing_module: "cross_slice_reconciliation",
+    });
+  });
+
+  it("keeps trace details derived from approved local evidence without raw, hosted, or real-person inputs", () => {
+    const state = buildApprovedSampleReconciliationWorkbench();
+    const details = [
+      ...state.reconciliation_rows.map((row) => row.trace_detail),
+      ...state.shared_fact_rows.map((row) => row.trace_detail),
+      ...state.shared_value_rows.map((row) => row.trace_detail),
+    ];
+    const detailText = JSON.stringify(details);
+
+    expect(details.length).toBeGreaterThan(0);
+    expect(detailText).toContain("packages/tests/");
+    expect(detailText).not.toMatch(/https?:\/\//);
+    expect(detailText).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
+    expect(detailText).not.toMatch(/\b(raw OCR|raw source document|unreviewed extraction)\b/i);
+  });
+
   it("renders the workbench markup with BSRS, V1/VE, valuation listings, and reconciliation sections", () => {
     const markup = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench());
 
@@ -149,6 +229,26 @@ describe("reconciliation workbench UI", () => {
     expect(sharedValuesMarkup).toContain("dd");
     expect(sharedValuesMarkup).toContain("trace 0.1.0");
     expect(sharedValuesMarkup).toContain("cross_slice_reconciliation");
+  });
+
+  it("renders native click or activation controls for trace expansion details", () => {
+    const state = buildApprovedSampleReconciliationWorkbench();
+    const markup = buildReconciliationWorkbenchMarkup(state);
+    const reconciliationRow = state.reconciliation_rows.find((row) => row.canonical_semantic_name === "ID");
+    const sharedFactRow = state.shared_fact_rows.find((row) => row.fact_label === "ID");
+    const sharedValueRow = state.shared_value_rows.find((row) => row.value_label === "ID");
+
+    expect(markup).toContain(`<details class="trace-detail" id="${reconciliationRow?.trace_detail.control_id}">`);
+    expect(markup).toContain(`<details class="trace-detail" id="${sharedFactRow?.trace_detail.control_id}">`);
+    expect(markup).toContain(`<details class="trace-detail" id="${sharedValueRow?.trace_detail.control_id}">`);
+    expect(markup).toContain("<summary>Trace details for ID</summary>");
+    expect(markup).toContain("<dt>Compared sources</dt>");
+    expect(markup).toContain("<dt>Source fields</dt>");
+    expect(markup).toContain("<dt>Raw values</dt>");
+    expect(markup).toContain("<dt>Normalized values</dt>");
+    expect(markup).toContain("<dt>Mapping basis</dt>");
+    expect(markup).toContain("<dt>Trace</dt>");
+    expect(markup).toContain("<dt>Stable evidence</dt>");
   });
 
   it("renders approved sample context and no-real-person-data notice in the first visible header area", () => {
