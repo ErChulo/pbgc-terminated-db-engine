@@ -1,6 +1,6 @@
 # Feature Specification: Reconciliation Workbench Severity Filtering
 
-**Feature Branch**: `026-workbench-severity-filtering`
+**Feature Branch**: `025-reconciliation-workbench-severity-filtering`
 
 **Created**: 2026-05-24
 
