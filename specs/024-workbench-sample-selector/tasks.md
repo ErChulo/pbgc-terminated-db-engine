@@ -75,13 +75,15 @@
 - [ ] T023 [P] [US2] Add failing test that selector state and markup expose no upload, URL, hosted sample, raw-source, OCR, email, or free-form loading path in packages/tests/reconciliation-workbench-ui.test.ts
 - [ ] T024 [P] [US2] Add failing test that selector state, sample context, panels, tables, and trace details contain no real natural-person data markers in packages/tests/reconciliation-workbench-ui.test.ts
 - [ ] T025 [P] [US2] Add failing unsupported-sample-id test proving current/default approved sample is retained without external loading in packages/tests/reconciliation-workbench-ui.test.ts
+- [ ] T026 [P] [US2] Add failing selector-allowed approved sample missing required workbench evidence test using existing structured warning/error conventions in packages/tests/reconciliation-workbench-ui.test.ts
 
 ### Implementation for User Story 2
 
-- [ ] T026 [US2] Add approved-only validation for sample options in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T027 [US2] Add unsupported sample id fallback behavior that preserves the current/default approved sample in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T028 [US2] Ensure rendered selector exposes no file, URL, upload, or free-form input controls in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T029 [US2] Preserve explicit no-real-person-data notice near the selector and sample context in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [ ] T027 [US2] Add approved-only validation for sample options in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [ ] T028 [US2] Add unsupported sample id fallback behavior that preserves the current/default approved sample in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [ ] T029 [US2] Add selector-allowed approved sample missing required workbench evidence handling with existing structured warning/error conventions in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [ ] T030 [US2] Ensure rendered selector exposes no file, URL, upload, or free-form input controls in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [ ] T031 [US2] Preserve explicit no-real-person-data notice near the selector and sample context in apps/web/src/pages/ReconciliationWorkbenchPage.ts
 
 **Checkpoint**: User Stories 1 and 2 preserve the approved-input boundary and selector restrictions.
 
@@ -95,17 +97,17 @@
 
 ### Tests for User Story 3
 
-- [ ] T030 [P] [US3] Add failing preservation test for three existing output panels after sample selection in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T031 [P] [US3] Add failing preservation test for Shared Facts and Shared Values table columns and deterministic ordering after sample selection in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T032 [P] [US3] Add failing preservation test for reconciliation row statuses, severities, and trace expansion controls after sample selection in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T033 [P] [US3] Add failing display-only regression test proving no adapter write or lower source-layer write field is introduced by selector state in packages/tests/reconciliation-workbench-ui.test.ts
+- [ ] T032 [P] [US3] Add failing preservation test for three existing output panels after sample selection in packages/tests/reconciliation-workbench-ui.test.ts
+- [ ] T033 [P] [US3] Add failing preservation test for Shared Facts and Shared Values table columns and deterministic ordering after sample selection in packages/tests/reconciliation-workbench-ui.test.ts
+- [ ] T034 [P] [US3] Add failing preservation test for reconciliation row statuses, severities, and trace expansion controls after sample selection in packages/tests/reconciliation-workbench-ui.test.ts
+- [ ] T035 [P] [US3] Add failing display-only regression test proving no adapter write or lower source-layer write field is introduced by selector state in packages/tests/reconciliation-workbench-ui.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T034 [US3] Keep output panel generation unchanged except for selected sample input in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T035 [US3] Keep Shared Facts, Shared Values, reconciliation row, and trace-detail projection unchanged except for selected sample input in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T036 [US3] Keep existing output panel, table, and trace-detail markup structure stable around the selector in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T037 [US3] Run npm test -- packages/tests/reconciliation-workbench-ui.test.ts
+- [ ] T036 [US3] Keep output panel generation unchanged except for selected sample input in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [ ] T037 [US3] Keep Shared Facts, Shared Values, reconciliation row, and trace-detail projection unchanged except for selected sample input in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [ ] T038 [US3] Keep existing output panel, table, and trace-detail markup structure stable around the selector in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [ ] T039 [US3] Run npm test -- packages/tests/reconciliation-workbench-ui.test.ts
 
 **Checkpoint**: All user stories are independently functional while preserving existing workbench behavior.
 
@@ -115,12 +117,12 @@
 
 **Purpose**: Final verification, browser bundle update, and manual review against quickstart criteria.
 
-- [ ] T038 [P] Verify the 10-second active-sample identification check from specs/024-workbench-sample-selector/quickstart.md against the rendered workbench page
-- [ ] T039 [P] Verify selector/header readability for long labels at desktop and mobile review sizes in apps/web/src/styles.css
-- [ ] T040 Run npm test -- packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T041 Run npm run lint and npm run build
-- [ ] T042 Update committed static bundle output in apps/web/dist/ if npm run build changes it
-- [ ] T043 Confirm no delivered .sql, .js, .ts, or .tex artifacts were added outside internal source/test files for specs/024-workbench-sample-selector/tasks.md
+- [ ] T040 [P] Verify the 10-second active-sample identification check from specs/024-workbench-sample-selector/quickstart.md against the rendered workbench page
+- [ ] T041 [P] Verify selector/header readability for long labels at desktop and mobile review sizes in apps/web/src/styles.css
+- [ ] T042 Run npm test -- packages/tests/reconciliation-workbench-ui.test.ts
+- [ ] T043 Run npm run lint and npm run build
+- [ ] T044 Update committed static bundle output in apps/web/dist/ if npm run build changes it
+- [ ] T045 Confirm no delivered .sql, .js, .ts, or .tex artifacts were added outside internal source/test files for specs/024-workbench-sample-selector/tasks.md
 
 ---
 
@@ -146,9 +148,9 @@
 - T004 can run in parallel with T001-T003.
 - T009-T010 can run in parallel after T005-T008 are understood.
 - T011-T014 can run in parallel before US1 implementation.
-- T022-T025 can run in parallel before US2 implementation.
-- T030-T033 can run in parallel before US3 implementation.
-- T038-T039 can run in parallel during polish before T040-T042.
+- T022-T026 can run in parallel before US2 implementation.
+- T032-T035 can run in parallel before US3 implementation.
+- T040-T041 can run in parallel during polish before T042-T044.
 
 ---
 

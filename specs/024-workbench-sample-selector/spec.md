@@ -1,6 +1,6 @@
 # Feature Specification: Reconciliation Workbench Sample Selector
 
-**Feature Branch**: `024-workbench-sample-selector`
+**Feature Branch**: `023-reconciliation-workbench-sample-selector`
 
 **Created**: 2026-05-24
 
@@ -59,7 +59,7 @@ As an analyst using existing reconciliation views, I want sample switching to pr
 - If an approved sample lacks a value that another sample contains, the workbench displays the existing absence, nullable, warning, unsupported, or formatting-only status conventions rather than inventing a fallback.
 - If the analyst selects the already active sample, the visible state remains stable and no duplicate rows or trace controls are added.
 - If a sample has long labels or long trace evidence, the selector and updated header remain readable at standard desktop and mobile review sizes.
-- If an approved sample is missing required workbench evidence, the workbench keeps deterministic structured warning/error presentation and does not load raw source material.
+- If an approved sample is allowed in the selector but lacks required workbench evidence, the workbench displays existing structured warning/error conventions for that sample and does not load raw or lower source-layer material.
 
 ## Requirements *(mandatory)*
 
@@ -74,7 +74,7 @@ As an analyst using existing reconciliation views, I want sample switching to pr
 - **FR-007**: The selector MUST produce deterministic repeated-load behavior for each approved sample, including stable row ordering, stable status/severity labels, stable selected-sample labels, and stable trace-detail content.
 - **FR-008**: The workbench MUST NOT expose upload, URL entry, raw document browsing, OCR browsing, email import, or free-form external sample loading.
 - **FR-009**: The workbench MUST use simulated or mocked person-level case/population context when a human-readable context is needed and MUST NOT display real participant, beneficiary, alternate payee, survivor, or other natural-person data.
-- **FR-010**: The workbench MUST display structured warnings or errors using existing conventions when an approved sample cannot fully populate the workbench display.
+- **FR-010**: The workbench MUST display structured warnings or errors using existing conventions when an approved sample, including a selector-allowed sample, cannot fully populate the workbench display because required workbench evidence is missing.
 - **FR-011**: The sample selector MUST remain display/navigation-only and MUST NOT create new business domains, new output adapters, or new persistence responsibilities.
 
 ### Deterministic Boundary *(mandatory)*
@@ -96,7 +96,7 @@ As an analyst using existing reconciliation views, I want sample switching to pr
 
 ### Measurable Outcomes
 
-- **SC-001**: An analyst can identify the active sample and switch to another approved sample in under 10 seconds during a review.
+- **SC-001**: If at least two supported approved samples exist, an analyst can identify the active sample and switch to another approved sample in under 10 seconds; otherwise, the analyst can identify the fixed approved sample in under 10 seconds.
 - **SC-002**: For each available approved sample, repeated selection produces identical visible labels, row counts, ordering, statuses, severities, and trace-detail content across at least two consecutive loads.
 - **SC-003**: 100% of selector options are backed by approved repository artifacts or approved mocked contexts, with zero upload, URL, raw-source, or free-form external loading paths.
 - **SC-004**: After sample switching, the workbench still displays the three existing output panels, the Shared Facts table, the Shared Values table, and trace expansion controls for supported rows.
