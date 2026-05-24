@@ -143,6 +143,34 @@ th {
   margin: 0 0 8px;
 }
 
+.comparison-table-section {
+  margin-bottom: 18px;
+}
+
+.comparison-table-section h3 {
+  font-size: 15px;
+  margin: 12px 0 8px;
+}
+
+.comparison-table {
+  table-layout: fixed;
+}
+
+.comparison-source,
+.comparison-value {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.comparison-source {
+  color: #334e68;
+  font-size: 12px;
+}
+
+.comparison-value {
+  margin-top: 4px;
+}
+
 .slice-panel dl {
   display: grid;
   gap: 8px;
