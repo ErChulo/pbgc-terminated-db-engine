@@ -11,10 +11,14 @@ describe("reconciliation workbench UI", () => {
     expect(state.case_id).toBe("CASE-PLACEHOLDER");
     expect(state.plan_id).toBe("PLAN-PLACEHOLDER");
     expect(state.generated_at).toBe("source:packages/tests/bsrs-configuration-output-fixtures.ts#BSRS001");
+    expect(state.selected_sample.sample_id).toBe("BSRS001");
+    expect(state.sample_options.map((sample) => sample.sample_id)).toEqual(["BSRS001", "BSRS002"]);
     expect(state.sample_context).toMatchObject({
       sample_id: "BSRS001",
       sample_label: "Deferred vested BSRS configuration packet",
-      fixed_sample_label: "Fixed approved sample: BSRS001",
+      fixed_sample_label: "Selected approved sample: BSRS001",
+      selector_label: "BSRS001 - Deferred vested BSRS configuration packet",
+      artifact_basis: "source:packages/tests/bsrs-configuration-output-fixtures.ts#BSRS001",
       mock_case_label: "Mock case context: simulated PBGC terminated DB case",
       mock_population_label: "Mock population context: simulated participant cohort",
       no_real_person_data_notice:
@@ -26,6 +30,53 @@ describe("reconciliation workbench UI", () => {
       "v1_ve_output",
       "valuation_listings_output",
     ]);
+  });
+
+  it("exposes approved sample options with stable local artifact basis and deterministic ordering", () => {
+    const state = buildApprovedSampleReconciliationWorkbench();
+
+    expect(state.sample_options).toEqual([
+      {
+        sample_id: "BSRS001",
+        sample_label: "Deferred vested BSRS configuration packet",
+        selector_label: "BSRS001 - Deferred vested BSRS configuration packet",
+        artifact_basis: "source:packages/tests/bsrs-configuration-output-fixtures.ts#BSRS001",
+        mock_case_label: "Mock case context: simulated PBGC terminated DB case",
+        mock_population_label: "Mock population context: simulated participant cohort",
+        ordering_key: "000001|BSRS001",
+        is_default: true,
+      },
+      {
+        sample_id: "BSRS002",
+        sample_label: "In-pay survivor BSRS configuration packet",
+        selector_label: "BSRS002 - In-pay survivor BSRS configuration packet",
+        artifact_basis: "source:packages/tests/bsrs-configuration-output-fixtures.ts#BSRS002",
+        mock_case_label: "Mock case context: simulated PBGC terminated DB case",
+        mock_population_label: "Mock population context: simulated participant cohort",
+        ordering_key: "000002|BSRS002",
+        is_default: false,
+      },
+    ]);
+  });
+
+  it("resolves selected approved sample state deterministically", () => {
+    const selected = buildApprovedSampleReconciliationWorkbench({ sample_id: "BSRS002" });
+    const repeated = buildApprovedSampleReconciliationWorkbench({ sample_id: "BSRS002" });
+
+    expect(selected.sample_id).toBe("BSRS002");
+    expect(selected.sample_label).toBe("In-pay survivor BSRS configuration packet");
+    expect(selected.selected_sample.sample_id).toBe("BSRS002");
+    expect(selected.generated_at).toBe("source:packages/tests/bsrs-configuration-output-fixtures.ts#BSRS002");
+    expect(selected.sample_context.fixed_sample_label).toBe("Selected approved sample: BSRS002");
+    expect(selected.output_panels.map((panel) => panel.slice_name)).toEqual([
+      "bsrs_configuration_output",
+      "v1_ve_output",
+      "valuation_listings_output",
+    ]);
+    expect(selected.shared_fact_rows.length).toBeGreaterThan(0);
+    expect(selected.shared_value_rows.length).toBeGreaterThan(0);
+    expect(selected.reconciliation_rows.length).toBeGreaterThan(0);
+    expect(repeated).toEqual(selected);
   });
 
   it("includes reconciliation rows with agreement-versus-drift status labels", () => {
@@ -256,10 +307,22 @@ describe("reconciliation workbench UI", () => {
     const headerMarkup = markup.slice(markup.indexOf("<header"), markup.indexOf("</header>"));
 
     expect(headerMarkup).toContain("Deferred vested BSRS configuration packet");
-    expect(headerMarkup).toContain("Fixed approved sample: BSRS001");
+    expect(headerMarkup).toContain("Selected approved sample: BSRS001");
+    expect(headerMarkup).toContain("Approved artifact: source:packages/tests/bsrs-configuration-output-fixtures.ts#BSRS001");
     expect(headerMarkup).toContain("Mock case context: simulated PBGC terminated DB case");
     expect(headerMarkup).toContain("Mock population context: simulated participant cohort");
     expect(headerMarkup).toContain("No real participant, beneficiary, alternate payee, survivor, or other natural-person data");
+  });
+
+  it("renders a visible approved-only sample selector with selected sample label", () => {
+    const markup = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench({ sample_id: "BSRS002" }));
+
+    expect(markup).toContain("data-workbench-sample-selector");
+    expect(markup).toContain("Approved sample");
+    expect(markup).toContain("BSRS001 - Deferred vested BSRS configuration packet");
+    expect(markup).toContain("BSRS002 - In-pay survivor BSRS configuration packet");
+    expect(markup).toContain("<option value=\"BSRS002\" selected>");
+    expect(markup).not.toMatch(/\b(type="file"|http:\/\/|https:\/\/|upload|raw OCR|raw source document)\b/i);
   });
 
   it("keeps person-level context explicitly mocked and free of natural-person names", () => {

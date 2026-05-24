@@ -12,10 +12,10 @@
 
 **Purpose**: Inspect the current workbench builder, renderer, styles, and tests before adding selector state.
 
-- [ ] T001 Inspect current sample context and fixed-sample state in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T002 Inspect current workbench header, output panel, table, and trace markup in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T003 Inspect current workbench styling for header and panel layout in apps/web/src/styles.css
-- [ ] T004 [P] Inspect existing focused workbench tests in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T001 Inspect current sample context and fixed-sample state in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T002 Inspect current workbench header, output panel, table, and trace markup in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T003 Inspect current workbench styling for header and panel layout in apps/web/src/styles.css
+- [X] T004 [P] Inspect existing focused workbench tests in packages/tests/reconciliation-workbench-ui.test.ts
 
 ---
 
@@ -25,12 +25,12 @@
 
 **CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T005 Define ApprovedSampleOption and selected sample display fields in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T006 Define deterministic approved sample option inventory from existing approved fixture evidence in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T007 Define selected-sample resolution helper for default, supported, and unsupported sample ids in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T008 Preserve stable generated evidence and mocked context labels on selected sample state in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T009 [P] Add focused regression tests for approved sample option inventory shape in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T010 [P] Add focused regression tests for selected sample resolution and repeated-build stability in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T005 Define ApprovedSampleOption and selected sample display fields in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T006 Define deterministic approved sample option inventory from existing approved fixture evidence in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T007 Define selected-sample resolution helper for default, supported, and unsupported sample ids in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T008 Preserve stable generated evidence and mocked context labels on selected sample state in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T009 [P] Add focused regression tests for approved sample option inventory shape in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T010 [P] Add focused regression tests for selected sample resolution and repeated-build stability in packages/tests/reconciliation-workbench-ui.test.ts
 
 **Checkpoint**: Workbench state can expose approved selector options and resolve the selected approved sample deterministically.
 
@@ -44,20 +44,20 @@
 
 ### Tests for User Story 1
 
-- [ ] T011 [P] [US1] Add failing state test for selected sample header and sample context updates in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T012 [P] [US1] Add failing state test proving selected sample output panels, Shared Facts rows, Shared Values rows, reconciliation rows, and trace details remain populated in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T013 [P] [US1] Add failing markup test for visible selector or fixed-sample control with selected sample label in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T014 [P] [US1] Add failing repeated-selection equality test for selected sample display state in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T011 [P] [US1] Add failing state test for selected sample header and sample context updates in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T012 [P] [US1] Add failing state test proving selected sample output panels, Shared Facts rows, Shared Values rows, reconciliation rows, and trace details remain populated in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T013 [P] [US1] Add failing markup test for visible selector or fixed-sample control with selected sample label in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T014 [P] [US1] Add failing repeated-selection equality test for selected sample display state in packages/tests/reconciliation-workbench-ui.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T015 [US1] Add selected sample id parameter or options object to buildApprovedSampleReconciliationWorkbench in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T016 [US1] Populate selected sample option and selector metadata on ReconciliationWorkbenchState in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T017 [US1] Use selected sample context to update sample header labels and stable evidence values in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T018 [US1] Render the selector or fixed-sample control in the existing header in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T019 [US1] Wire selector change behavior to rebuild the workbench markup from approved sample ids only in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T020 [US1] Add selector readability and stable layout styles in apps/web/src/styles.css
-- [ ] T021 [US1] Run npm test -- packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T015 [US1] Add selected sample id parameter or options object to buildApprovedSampleReconciliationWorkbench in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T016 [US1] Populate selected sample option and selector metadata on ReconciliationWorkbenchState in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T017 [US1] Use selected sample context to update sample header labels and stable evidence values in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T018 [US1] Render the selector or fixed-sample control in the existing header in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T019 [US1] Wire selector change behavior to rebuild the workbench markup from approved sample ids only in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T020 [US1] Add selector readability and stable layout styles in apps/web/src/styles.css
+- [X] T021 [US1] Run npm test -- packages/tests/reconciliation-workbench-ui.test.ts
 
 **Checkpoint**: User Story 1 is independently functional and testable as the MVP.
 
@@ -119,10 +119,10 @@
 
 - [ ] T040 [P] Verify the 10-second active-sample identification check from specs/024-workbench-sample-selector/quickstart.md against the rendered workbench page
 - [ ] T041 [P] Verify selector/header readability for long labels at desktop and mobile review sizes in apps/web/src/styles.css
-- [ ] T042 Run npm test -- packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T043 Run npm run lint and npm run build
-- [ ] T044 Update committed static bundle output in apps/web/dist/ if npm run build changes it
-- [ ] T045 Confirm no delivered .sql, .js, .ts, or .tex artifacts were added outside internal source/test files for specs/024-workbench-sample-selector/tasks.md
+- [X] T042 Run npm test -- packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T043 Run npm run lint and npm run build
+- [X] T044 Update committed static bundle output in apps/web/dist/ if npm run build changes it
+- [X] T045 Confirm no delivered .sql, .js, .ts, or .tex artifacts were added outside internal source/test files for specs/024-workbench-sample-selector/tasks.md
 
 ---
 
@@ -179,10 +179,10 @@ Task: "T025 Add failing unsupported-sample-id test proving current/default appro
 ## Parallel Example: User Story 3
 
 ```bash
-Task: "T030 Add failing preservation test for three existing output panels after sample selection in packages/tests/reconciliation-workbench-ui.test.ts"
-Task: "T031 Add failing preservation test for Shared Facts and Shared Values table columns and deterministic ordering after sample selection in packages/tests/reconciliation-workbench-ui.test.ts"
-Task: "T032 Add failing preservation test for reconciliation row statuses, severities, and trace expansion controls after sample selection in packages/tests/reconciliation-workbench-ui.test.ts"
-Task: "T033 Add failing display-only regression test proving no adapter write or lower source-layer write field is introduced by selector state in packages/tests/reconciliation-workbench-ui.test.ts"
+Task: "T032 Add failing preservation test for three existing output panels after sample selection in packages/tests/reconciliation-workbench-ui.test.ts"
+Task: "T033 Add failing preservation test for Shared Facts and Shared Values table columns and deterministic ordering after sample selection in packages/tests/reconciliation-workbench-ui.test.ts"
+Task: "T034 Add failing preservation test for reconciliation row statuses, severities, and trace expansion controls after sample selection in packages/tests/reconciliation-workbench-ui.test.ts"
+Task: "T035 Add failing display-only regression test proving no adapter write or lower source-layer write field is introduced by selector state in packages/tests/reconciliation-workbench-ui.test.ts"
 ```
 
 ---

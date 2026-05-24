@@ -109,6 +109,29 @@ th {
   overflow-wrap: anywhere;
 }
 
+.sample-selector {
+  display: grid;
+  gap: 4px;
+}
+
+.sample-selector span {
+  color: #52606d;
+  font-size: 12px;
+  font-weight: 650;
+  text-transform: uppercase;
+}
+
+.sample-selector select {
+  background: #ffffff;
+  border: 1px solid #9fb3c8;
+  border-radius: 6px;
+  color: #1f2933;
+  font: inherit;
+  max-width: 100%;
+  min-width: 0;
+  padding: 8px 10px;
+}
+
 .no-real-person-data-notice {
   color: #334e68;
   font-size: 13px;
