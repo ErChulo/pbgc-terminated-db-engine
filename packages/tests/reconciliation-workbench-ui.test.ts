@@ -69,6 +69,42 @@ describe("reconciliation workbench UI", () => {
     expect(second.map((row) => row.ordering_key)).toEqual(orderingKeys);
   });
 
+  it("includes shared-value rows with compared sources, fields, raw values, normalized values, status, severity, and trace cue", () => {
+    const state = buildApprovedSampleReconciliationWorkbench();
+    const row = state.shared_value_rows.find((candidate) => candidate.value_label === "ID");
+
+    expect(state.shared_value_rows.length).toBeGreaterThan(0);
+    expect(row).toMatchObject({
+      value_label: "ID",
+      left_source: "bsrs_configuration_output",
+      left_field: "id",
+      left_value: "VL001",
+      left_normalized_value: "VL001",
+      right_source: "v1_ve_output",
+      right_field: "id",
+      right_value: "VL001",
+      right_normalized_value: "VL001",
+      status: "agreement",
+      severity: "info",
+      severity_label: "Info",
+      mapping_basis: "dd",
+    });
+    expect(row?.ordering_key).toMatch(/^participant_identifier\.id\|value-comparison-\d{6}$/);
+    expect(row?.trace.left_source_path).toBe("packages/tests/bsrs-configuration-output-fixtures.ts");
+    expect(row?.trace.rule_version).toBe("0.1.0");
+    expect(row?.trace.producing_module).toBe("cross_slice_reconciliation");
+  });
+
+  it("keeps shared-value rows sorted by stable ordering key across repeated builds", () => {
+    const first = buildApprovedSampleReconciliationWorkbench().shared_value_rows;
+    const second = buildApprovedSampleReconciliationWorkbench().shared_value_rows;
+    const orderingKeys = first.map((row) => row.ordering_key);
+
+    expect(orderingKeys).toEqual([...orderingKeys].sort());
+    expect(second.map((row) => row.ordering_key)).toEqual(orderingKeys);
+    expect(second).toEqual(first);
+  });
+
   it("renders the workbench markup with BSRS, V1/VE, valuation listings, and reconciliation sections", () => {
     const markup = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench());
 
@@ -94,6 +130,25 @@ describe("reconciliation workbench UI", () => {
     expect(sharedFactsMarkup).toContain("agreement");
     expect(sharedFactsMarkup).toContain("None");
     expect(sharedFactsMarkup).toContain("dd");
+  });
+
+  it("renders a visible Shared Values table with compared sources, fields, raw values, normalized values, status, and severity marker", () => {
+    const markup = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench());
+    const sharedValuesMarkup = markup.slice(markup.indexOf("Shared Values"), markup.indexOf("</table>", markup.indexOf("Shared Values")));
+
+    expect(sharedValuesMarkup).toContain("Shared Values");
+    expect(sharedValuesMarkup).toContain("Value");
+    expect(sharedValuesMarkup).toContain("Left Source");
+    expect(sharedValuesMarkup).toContain("Right Source");
+    expect(sharedValuesMarkup).toContain("bsrs_configuration_output.id");
+    expect(sharedValuesMarkup).toContain("v1_ve_output.id");
+    expect(sharedValuesMarkup).toContain("raw VL001");
+    expect(sharedValuesMarkup).toContain("normalized VL001");
+    expect(sharedValuesMarkup).toContain("agreement");
+    expect(sharedValuesMarkup).toContain("Info");
+    expect(sharedValuesMarkup).toContain("dd");
+    expect(sharedValuesMarkup).toContain("trace 0.1.0");
+    expect(sharedValuesMarkup).toContain("cross_slice_reconciliation");
   });
 
   it("renders approved sample context and no-real-person-data notice in the first visible header area", () => {

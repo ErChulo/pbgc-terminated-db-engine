@@ -171,6 +171,11 @@ th {
   margin-top: 4px;
 }
 
+.shared-values-table th,
+.shared-values-table td {
+  vertical-align: top;
+}
+
 .slice-panel dl {
   display: grid;
   gap: 8px;

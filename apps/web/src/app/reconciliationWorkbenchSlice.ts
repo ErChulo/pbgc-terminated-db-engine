@@ -63,6 +63,27 @@ export type WorkbenchSharedFactRow = {
   trace: WorkbenchTraceCue;
 };
 
+export type WorkbenchSharedValueRow = {
+  comparison_id: string;
+  value_label: string;
+  status: WorkbenchStatus;
+  severity: "info" | "warning" | "error";
+  severity_label: string;
+  left_source: ReconciliationSliceName;
+  left_field: string;
+  left_value: string;
+  left_normalized_value: string;
+  right_source: ReconciliationSliceName;
+  right_field: string;
+  right_value: string;
+  right_normalized_value: string;
+  mapping_basis: string;
+  required_or_nullable_basis: string;
+  normalization_basis: string;
+  ordering_key: string;
+  trace: WorkbenchTraceCue;
+};
+
 export type WorkbenchReconciliationRow = {
   comparison_id: string;
   rule_key: string;
@@ -83,6 +104,7 @@ export type ReconciliationWorkbenchState = {
   sample_context: WorkbenchSampleContext;
   output_panels: WorkbenchOutputPanel[];
   shared_fact_rows: WorkbenchSharedFactRow[];
+  shared_value_rows: WorkbenchSharedValueRow[];
   reconciliation_rows: WorkbenchReconciliationRow[];
   findings: WorkbenchReconciliationRow[];
 };
@@ -161,6 +183,9 @@ export function buildApprovedSampleReconciliationWorkbench(): ReconciliationWork
   ];
   const sharedFacts = reconcileSharedFacts({ evidence: sharedFactEvidence });
   const reconciliation = reconcileSharedValues({ evidence: valueEvidence });
+  const sharedValueRows = reconciliation.comparisons
+    .map(toWorkbenchSharedValueRow)
+    .sort((left, right) => left.ordering_key.localeCompare(right.ordering_key));
   const reconciliationRows = reconciliation.comparisons.map(toWorkbenchReconciliationRow);
 
   return {
@@ -185,6 +210,7 @@ export function buildApprovedSampleReconciliationWorkbench(): ReconciliationWork
       .filter((comparison) => !HIDDEN_SHARED_FACT_KEYS.has(comparison.fact_key))
       .map(toWorkbenchSharedFactRow)
       .sort((left, right) => left.ordering_key.localeCompare(right.ordering_key)),
+    shared_value_rows: sharedValueRows,
     reconciliation_rows: reconciliationRows,
     findings: reconciliationRows.filter((row) => row.status === "drift" || row.status === "warning"),
   };
@@ -248,6 +274,34 @@ function toWorkbenchReconciliationRow(comparison: ValueComparisonRecord): Workbe
   };
 }
 
+function toWorkbenchSharedValueRow(comparison: ValueComparisonRecord): WorkbenchSharedValueRow {
+  return {
+    comparison_id: comparison.comparison_id,
+    value_label: comparison.canonical_semantic_name,
+    status: mapStatus(comparison.status),
+    severity: comparison.severity,
+    severity_label: formatSeverity(comparison.severity),
+    left_source: comparison.left_slice,
+    left_field: comparison.left_field,
+    left_value: formatValue(comparison.left_value),
+    left_normalized_value: formatOptionalValue(comparison.left_normalized_value),
+    right_source: comparison.right_slice,
+    right_field: comparison.right_field,
+    right_value: formatValue(comparison.right_value),
+    right_normalized_value: formatOptionalValue(comparison.right_normalized_value),
+    mapping_basis: comparison.mapping_basis,
+    required_or_nullable_basis: comparison.required_or_nullable_basis,
+    normalization_basis: comparison.normalization_basis,
+    ordering_key: `${comparison.rule_key}|${comparison.comparison_id}`,
+    trace: {
+      left_source_path: comparison.left_source_path,
+      right_source_path: comparison.right_source_path,
+      rule_version: comparison.rule_version,
+      producing_module: comparison.producing_module,
+    },
+  };
+}
+
 function mapSharedFactStatus(status: ReconciliationStatus): WorkbenchStatus {
   if (status === "accepted") return "agreement";
   if (status === "drift") return "drift";
@@ -265,8 +319,18 @@ function mapStatus(status: ValueComparisonRecord["status"]): WorkbenchStatus {
   return "unsupported";
 }
 
+function formatSeverity(severity: "info" | "warning" | "error"): string {
+  if (severity === "error") return "Error";
+  if (severity === "warning") return "Warning";
+  return "Info";
+}
+
 function formatValue(value: string | number | boolean | null): string {
   if (value === null) return "null";
   if (typeof value === "boolean") return value ? "true" : "false";
   return String(value);
+}
+
+function formatOptionalValue(value: string | number | boolean | null): string {
+  return value === null ? "Not applicable" : formatValue(value);
 }
