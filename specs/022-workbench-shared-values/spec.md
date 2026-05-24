@@ -1,6 +1,6 @@
 # Feature Specification: Reconciliation Workbench Shared Values
 
-**Feature Branch**: `022-workbench-shared-values`
+**Feature Branch**: `021-reconciliation-workbench-shared-values`
 
 **Created**: 2026-05-24
 
@@ -59,7 +59,7 @@ An analyst can use the Shared Values table without changing deterministic output
 - A comparison may have normalized values that match while raw values differ; the table must preserve the existing formatting-only classification.
 - A comparison may be nullable or unsupported; the row must preserve the existing classification rather than forcing agreement or drift.
 - A comparison may have no applicable normalized value or severity; the table must show a clear intentional absence marker.
-- Long source names, field names, raw values, normalized values, or traceability cues must remain readable without hiding status or severity.
+- Long source names, field names, raw values, normalized values, or traceability cues must remain readable without hiding status or severity at desktop 1440x900 and mobile 390x844 viewports.
 - Repeated loads of the same fixed approved sample must not reorder rows or alter displayed shared-value content.
 
 ## Requirements *(mandatory)*
@@ -67,7 +67,7 @@ An analyst can use the Shared Values table without changing deterministic output
 ### Functional Requirements
 
 - **FR-001**: The workbench MUST display a dedicated Shared Values table for the fixed approved sample.
-- **FR-002**: Each Shared Values row MUST show a business-readable value label, compared sources, compared field names, raw compared values, normalized values where applicable, agreement-versus-drift status, severity when applicable, mapping basis, and traceability cues.
+- **FR-002**: Each Shared Values row MUST show a business-readable value label, compared sources, compared field names, raw compared values, normalized values where applicable, reconciliation status including agreement, drift, warning, nullable, unsupported, and formatting-only where applicable, severity when applicable, mapping basis, and traceability cues.
 - **FR-003**: The Shared Values table MUST use stable deterministic ordering across repeated loads of the same fixed approved sample.
 - **FR-004**: The Shared Values table MUST preserve existing agreement, drift, warning, nullable, unsupported, and formatting-only classifications from the existing reconciliation evidence.
 - **FR-005**: The Shared Values table MUST display intentional absence markers for non-applicable severity or normalized values.

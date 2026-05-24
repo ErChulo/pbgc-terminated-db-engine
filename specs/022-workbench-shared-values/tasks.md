@@ -106,7 +106,7 @@
 **Purpose**: Final verification, styling checks, static bundle update, and documentation consistency.
 
 - [ ] T028 [P] Verify 10-second identification coverage for Shared Values sources, fields, raw values, normalized values, status, severity, and trace cue against specs/022-workbench-shared-values/quickstart.md
-- [ ] T029 [P] Verify long field/value/trace text remains readable on desktop and mobile layouts in apps/web/src/styles.css
+- [ ] T029 [P] Verify long field/value/trace text remains readable at desktop 1440x900 and mobile 390x844 viewports in apps/web/src/styles.css
 - [ ] T030 Run npm test -- packages/tests/reconciliation-workbench-ui.test.ts
 - [ ] T031 Run npm run lint and npm run build for package.json workspaces and apps/web/dist/
 - [ ] T032 Update committed static bundle output in apps/web/dist/ if npm run build changes it
