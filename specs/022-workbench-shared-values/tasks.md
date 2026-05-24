@@ -12,9 +12,9 @@
 
 **Purpose**: Confirm the current workbench and shared-value evidence surfaces before changing the UI.
 
-- [ ] T001 Inspect current shared-value evidence fields in packages/shared/src/crossSliceReconciliation.ts
-- [ ] T002 Inspect current workbench state builder and markup in apps/web/src/app/reconciliationWorkbenchSlice.ts and apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T003 [P] Inspect existing focused workbench tests in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T001 Inspect current shared-value evidence fields in packages/shared/src/crossSliceReconciliation.ts
+- [X] T002 Inspect current workbench state builder and markup in apps/web/src/app/reconciliationWorkbenchSlice.ts and apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T003 [P] Inspect existing focused workbench tests in packages/tests/reconciliation-workbench-ui.test.ts
 
 ---
 
@@ -24,11 +24,11 @@
 
 **CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T004 Define WorkbenchSharedValueRow and normalized-value display fields in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T005 Define status, severity, absence-marker, and trace cue display helpers in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T006 Add deterministic shared-value row sorting by stable comparison key in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T007 [P] Add focused test coverage for shared_value_rows presence and deterministic ordering in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T008 [P] Add focused test coverage for no raw, hosted, or real-person input dependencies in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T004 Define WorkbenchSharedValueRow and normalized-value display fields in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T005 Define status, severity, absence-marker, and trace cue display helpers in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T006 Add deterministic shared-value row sorting by stable comparison key in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T007 [P] Add focused test coverage for shared_value_rows presence and deterministic ordering in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T008 [P] Add focused test coverage for no raw, hosted, or real-person input dependencies in packages/tests/reconciliation-workbench-ui.test.ts
 
 **Checkpoint**: Workbench state can expose stable Shared Values display rows without renderer changes.
 
@@ -42,17 +42,17 @@
 
 ### Tests for User Story 1
 
-- [ ] T009 [P] [US1] Add failing state test for Shared Values rows with compared sources, compared fields, raw values, normalized values, status, severity, and trace cue in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T010 [P] [US1] Add failing markup test for a visible Shared Values table and required headers in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T011 [P] [US1] Add failing repeated-build equality test for Shared Values row order and displayed content in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T009 [P] [US1] Add failing state test for Shared Values rows with compared sources, compared fields, raw values, normalized values, status, severity, and trace cue in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T010 [P] [US1] Add failing markup test for a visible Shared Values table and required headers in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T011 [P] [US1] Add failing repeated-build equality test for Shared Values row order and displayed content in packages/tests/reconciliation-workbench-ui.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T012 [US1] Map existing ValueComparisonRecord entries into shared_value_rows in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T013 [US1] Include left/right normalized values, mapping basis, required-or-nullable basis, normalization basis, and trace metadata in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T014 [US1] Render the Shared Values table in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T015 [US1] Add stable analyst-readable Shared Values table styling in apps/web/src/styles.css
-- [ ] T016 [US1] Run the focused workbench test command from quickstart.md for packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T012 [US1] Map existing ValueComparisonRecord entries into shared_value_rows in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T013 [US1] Include left/right normalized values, mapping basis, required-or-nullable basis, normalization basis, and trace metadata in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T014 [US1] Render the Shared Values table in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T015 [US1] Add stable analyst-readable Shared Values table styling in apps/web/src/styles.css
+- [X] T016 [US1] Run the focused workbench test command from quickstart.md for packages/tests/reconciliation-workbench-ui.test.ts
 
 **Checkpoint**: User Story 1 is independently functional and testable as the MVP.
 
@@ -107,10 +107,10 @@
 
 - [ ] T028 [P] Verify 10-second identification coverage for Shared Values sources, fields, raw values, normalized values, status, severity, and trace cue against specs/022-workbench-shared-values/quickstart.md
 - [ ] T029 [P] Verify long field/value/trace text remains readable at desktop 1440x900 and mobile 390x844 viewports in apps/web/src/styles.css
-- [ ] T030 Run npm test -- packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T031 Run npm run lint and npm run build for package.json workspaces and apps/web/dist/
-- [ ] T032 Update committed static bundle output in apps/web/dist/ if npm run build changes it
-- [ ] T033 Confirm no delivered .sql, .js, .ts, or .tex artifacts were added outside internal source/test files for specs/022-workbench-shared-values/tasks.md
+- [X] T030 Run npm test -- packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T031 Run npm run lint and npm run build for package.json workspaces and apps/web/dist/
+- [X] T032 Update committed static bundle output in apps/web/dist/ if npm run build changes it
+- [X] T033 Confirm no delivered .sql, .js, .ts, or .tex artifacts were added outside internal source/test files for specs/022-workbench-shared-values/tasks.md
 
 ---
 

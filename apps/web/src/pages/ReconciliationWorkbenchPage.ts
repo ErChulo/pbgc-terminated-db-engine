@@ -44,6 +44,24 @@ export function buildReconciliationWorkbenchMarkup(state: ReconciliationWorkbenc
               </tbody>
             </table>
           </section>
+          <section class="comparison-table-section" aria-label="Shared Values">
+            <h3>Shared Values</h3>
+            <table class="comparison-table shared-values-table">
+              <thead>
+                <tr>
+                  <th>Value</th>
+                  <th>Left Source</th>
+                  <th>Right Source</th>
+                  <th>Status</th>
+                  <th>Severity</th>
+                  <th>Basis</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${state.shared_value_rows.map(renderSharedValueRow).join("")}
+              </tbody>
+            </table>
+          </section>
           <table>
             <thead>
               <tr>
@@ -60,6 +78,31 @@ export function buildReconciliationWorkbenchMarkup(state: ReconciliationWorkbenc
         </section>
       </main>
     </section>
+  `;
+}
+
+function renderSharedValueRow(row: ReconciliationWorkbenchState["shared_value_rows"][number]): string {
+  return `
+    <tr class="reconciliation-row status-${escapeHtml(row.status)}">
+      <td>${escapeHtml(row.value_label)}</td>
+      <td>
+        <span class="comparison-source">${escapeHtml(row.left_source)}.${escapeHtml(row.left_field)}</span>
+        <span class="comparison-value">raw ${escapeHtml(row.left_value)}</span>
+        <span class="comparison-value">normalized ${escapeHtml(row.left_normalized_value)}</span>
+      </td>
+      <td>
+        <span class="comparison-source">${escapeHtml(row.right_source)}.${escapeHtml(row.right_field)}</span>
+        <span class="comparison-value">raw ${escapeHtml(row.right_value)}</span>
+        <span class="comparison-value">normalized ${escapeHtml(row.right_normalized_value)}</span>
+      </td>
+      <td>${escapeHtml(row.status)}</td>
+      <td>${escapeHtml(row.severity_label)}</td>
+      <td>
+        <span class="comparison-source">${escapeHtml(row.mapping_basis)}</span>
+        <span class="comparison-value">${escapeHtml(row.normalization_basis)}</span>
+        <span class="comparison-value">trace ${escapeHtml(row.trace.rule_version)} · ${escapeHtml(row.trace.producing_module)}</span>
+      </td>
+    </tr>
   `;
 }
 
