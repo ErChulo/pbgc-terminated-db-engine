@@ -85,6 +85,8 @@ An analyst can use the comparison tables without changing deterministic outputs,
 - **Source Layer Reads**: Deterministic outputs and output-adapter evidence already produced by existing slices, plus approved committed sample artifacts and mapping metadata.
 - **Source Layer Writes**: Display-only workbench state and deterministic rendered presentation for the existing page; no lower source-layer writes and no new output-adapter rows.
 - **Traceability Required**: Every displayed comparison row must identify the compared source slices, compared fields, compared values, normalized values where applicable, status, severity where applicable, and the stable evidence basis used to produce the row.
+- **Expected Warnings/Errors**: The workbench displays only existing comparison statuses, severities, and intentional absence markers; it does not introduce new calculation warnings or errors.
+- **Affected Output Adapters**: Existing BSRS configuration, V1/VE, and valuation listings outputs are display sources only; the feature must not write to output-adapter rows or change adapter behavior.
 
 ### Key Entities *(include if feature involves data)*
 

@@ -128,7 +128,7 @@
 - [ ] T042 Run production build verification with `npm run build`
 - [ ] T043 Update committed static output under `apps/web/dist/` if `npm run build` changes bundle artifacts
 - [ ] T044 Verify no delivered `.sql`, `.js`, `.ts`, or `.tex` artifact was added without the required appended `.txt` transport copy in `specs/021-reconciliation-comparison-tables/tasks.md`
-- [ ] T045 Keep or start the local web app on `http://127.0.0.1:5175/` with `npm --workspace @pbgc/web run dev -- --host 127.0.0.1 --port 5175` and verify the comparison tables manually against `specs/021-reconciliation-comparison-tables/quickstart.md`
+- [ ] T045 Keep or start the local web app on `http://127.0.0.1:5175/` with `npm --workspace @pbgc/web run dev -- --host 127.0.0.1 --port 5175` and verify against `specs/021-reconciliation-comparison-tables/quickstart.md` that an analyst can identify compared sources, fields, values, status, and severity within 10 seconds for both the Shared Facts table and the Shared Values table
 
 ---
 
