@@ -4,11 +4,13 @@ import { buildUploadImportPipeline } from "../../apps/web/src/app/uploadImportPi
 import { buildPromptLibrary } from "../../apps/web/src/app/promptLibrarySlice";
 import { buildPbgcTemplateLibrary } from "../../apps/web/src/app/pbgcTemplateLibrarySlice";
 import { buildApprovedSampleReconciliationWorkbench } from "../../apps/web/src/app/reconciliationWorkbenchSlice";
+import { buildReviewedInputApproval } from "../../apps/web/src/app/reviewedInputApprovalSlice";
 import { buildSchemaLibrary } from "../../apps/web/src/app/schemaLibrarySlice";
 import { buildCaseNavigationDashboardMarkup } from "../../apps/web/src/pages/CaseNavigationDashboardPage";
 import { buildPbgcTemplateLibraryMarkup } from "../../apps/web/src/pages/PbgcTemplateLibraryPage";
 import { buildPromptLibraryMarkup } from "../../apps/web/src/pages/PromptLibraryPage";
 import { buildReconciliationWorkbenchMarkup } from "../../apps/web/src/pages/ReconciliationWorkbenchPage";
+import { buildReviewedInputApprovalMarkup } from "../../apps/web/src/pages/ReviewedInputApprovalPage";
 import { buildSchemaLibraryMarkup } from "../../apps/web/src/pages/SchemaLibraryPage";
 import { buildUploadImportPipelineMarkup } from "../../apps/web/src/pages/UploadImportPipelinePage";
 
@@ -374,6 +376,96 @@ describe("reconciliation workbench UI", () => {
     expect(markup).toContain("Accepted as inert review text");
     expect(markup).toContain("No real participant, beneficiary");
     expect(markup).not.toMatch(/\b(type="file"|https?:\/\/|server call|telemetry|raw OCR|raw source document|run scraping|run OCR|insert into|sql\.js write|output-adapter write)\b/i);
+    expect(markup).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
+  });
+
+  it("links the case dashboard reviewed-input approval stage to the approval route", () => {
+    const dashboard = buildCaseNavigationDashboard({ active_stage_key: "reviewed_input_approval" });
+    const markup = buildCaseNavigationDashboardMarkup(dashboard);
+
+    expect(dashboard.stages.find((stage) => stage.stage_key === "reviewed_input_approval")).toMatchObject({
+      status: "available",
+      target: "#reviewed-input-approval",
+    });
+    expect(markup).toContain("href=\"#reviewed-input-approval\"");
+    expect(markup).toContain("Reviewed Input Approval");
+  });
+
+  it("normalizes mocked reviewed records into deterministic approval rows", () => {
+    const state = buildReviewedInputApproval();
+    const repeated = buildReviewedInputApproval();
+
+    expect(state.rows.map((row) => row.reviewed_record_id)).toEqual(["ASSERTION-MOCK-001", "FACT-MOCK-001"]);
+    expect(state.rows.map((row) => row.ordering_key)).toEqual([...state.rows.map((row) => row.ordering_key)].sort());
+    expect(state.rows[0]).toMatchObject({
+      case_id: "CASE-MOCK-001",
+      reviewed_record_id: "ASSERTION-MOCK-001",
+      source_layer: "source_assertion",
+      decision: "pending",
+      eligibility: "blocked",
+    });
+    expect(state.rows[0].warnings.map((warning) => warning.code)).toEqual(["APPROVAL_DECISION_PENDING"]);
+    expect(state.approved_packet_preview).toMatchObject({
+      approved_count: 0,
+      blocked_count: 2,
+      basis: "browser-local reviewed input approval preview",
+    });
+    expect(repeated).toEqual(state);
+  });
+
+  it("applies display-only approve and reject decisions while blocking rejected rows", () => {
+    const state = buildReviewedInputApproval({
+      decisions: {
+        "ASSERTION-MOCK-001": "approved",
+        "FACT-MOCK-001": "rejected",
+      },
+    });
+
+    expect(state.rows.map((row) => [row.reviewed_record_id, row.decision, row.eligibility])).toEqual([
+      ["ASSERTION-MOCK-001", "approved", "eligible"],
+      ["FACT-MOCK-001", "rejected", "blocked"],
+    ]);
+    expect(state.approved_packet_preview.approved_count).toBe(1);
+    expect(state.approved_packet_preview.blocked_count).toBe(1);
+    expect(state.approved_packet_preview.approved_fields).toEqual(["assertion_id", "case_id", "source_layer", "stage"]);
+    expect(state.rows[1].errors.map((error) => error.code)).toEqual(["APPROVAL_DECISION_REJECTED"]);
+  });
+
+  it("blocks malformed, invalid, and empty reviewed-input approval queues deterministically", () => {
+    const malformed = buildReviewedInputApproval({ reviewed_json_text: "{not-json" });
+    const invalid = buildReviewedInputApproval({ reviewed_json_text: JSON.stringify({ case_id: "CASE-MOCK-001" }) });
+    const empty = buildReviewedInputApproval({ reviewed_json_text: "" });
+
+    expect(malformed.queue_status).toBe("malformed");
+    expect(malformed.errors.map((error) => error.code)).toEqual(["APPROVAL_JSON_MALFORMED"]);
+    expect(invalid.rows[0]).toMatchObject({
+      decision: "blocked",
+      eligibility: "blocked",
+    });
+    expect(invalid.rows[0].errors.map((error) => error.code)).toEqual(["REVIEWED_RECORD_ID_MISSING"]);
+    expect(empty.queue_status).toBe("empty");
+    expect(empty.rows).toEqual([]);
+    expect(buildReviewedInputApproval({ reviewed_json_text: "{not-json" })).toEqual(malformed);
+  });
+
+  it("renders reviewed-input approval page with normalized rows, packet preview, and no prohibited runtime paths", () => {
+    const markup = buildReviewedInputApprovalMarkup(
+      buildReviewedInputApproval({
+        decisions: {
+          "ASSERTION-MOCK-001": "approved",
+          "FACT-MOCK-001": "rejected",
+        },
+      }),
+    );
+
+    expect(markup).toContain("PBGC Reviewed Input Approval");
+    expect(markup).toContain("Return to case dashboard");
+    expect(markup).toContain("data-reviewed-input-approval-table");
+    expect(markup).toContain("ASSERTION-MOCK-001");
+    expect(markup).toContain("Approved packet preview");
+    expect(markup).toContain("Blocked records: 1");
+    expect(markup).toContain("No real participant, beneficiary");
+    expect(markup).not.toMatch(/\b(type="file"|https?:\/\/|server call|telemetry|raw OCR|raw source document|run scraping|run OCR|insert into|sql\.js write|output-adapter write|filled artifact|exported artifact)\b/i);
     expect(markup).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
   });
 

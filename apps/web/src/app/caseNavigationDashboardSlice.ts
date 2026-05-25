@@ -89,10 +89,10 @@ const STAGE_DEFINITIONS = [
   {
     stage_key: "reviewed_input_approval",
     label: "Reviewed Input Approval",
-    status: "planned",
-    status_label: "Planned",
-    detail: "Normalization and approval steps will be managed in a later slice.",
-    target: null,
+    status: "available",
+    status_label: "Available",
+    detail: "Mocked reviewed records can be normalized and approved or rejected locally before later template work.",
+    target: "#reviewed-input-approval",
   },
   {
     stage_key: "template_filling_export",
@@ -131,7 +131,10 @@ export function buildCaseNavigationDashboard(
     ...stage,
     ordering_key: `${String(index + 1).padStart(6, "0")}|${stage.stage_key}`,
       basis:
-        stage.stage_key === "reconciliation_workbench" || stage.stage_key === "case_workspace" || stage.stage_key === "upload_import"
+        stage.stage_key === "reconciliation_workbench" ||
+          stage.stage_key === "case_workspace" ||
+          stage.stage_key === "upload_import" ||
+          stage.stage_key === "reviewed_input_approval"
           ? workbench.generated_at
           : "planned-alpha-stage-display-only",
   })).sort((left, right) => left.ordering_key.localeCompare(right.ordering_key));
