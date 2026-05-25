@@ -3,6 +3,7 @@ import { renderPbgcTemplateLibraryPage } from "./pages/PbgcTemplateLibraryPage";
 import { renderPromptLibraryPage } from "./pages/PromptLibraryPage";
 import { renderReconciliationWorkbenchPage } from "./pages/ReconciliationWorkbenchPage";
 import { renderReviewedInputApprovalPage } from "./pages/ReviewedInputApprovalPage";
+import { renderSampleMockPackManagementPage } from "./pages/SampleMockPackManagementPage";
 import { renderSchemaLibraryPage } from "./pages/SchemaLibraryPage";
 import { renderTemplateFillingExportPage } from "./pages/TemplateFillingExportPage";
 import { renderUnresolvedIssuesQueuePage } from "./pages/UnresolvedIssuesQueuePage";
@@ -44,6 +45,10 @@ function renderApp(): void {
   }
   if (window.location.hash === "#unresolved-issues") {
     renderUnresolvedIssuesQueuePage(appRoot);
+    return;
+  }
+  if (window.location.hash === "#sample-mock-packs") {
+    renderSampleMockPackManagementPage(appRoot);
     return;
   }
   renderCaseNavigationDashboardPage(appRoot);

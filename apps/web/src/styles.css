@@ -129,6 +129,10 @@ th {
   max-width: 1220px;
 }
 
+.sample-pack-page {
+  max-width: 1180px;
+}
+
 .case-dashboard-header {
   align-items: flex-start;
 }
@@ -161,6 +165,10 @@ th {
   align-items: flex-start;
 }
 
+.sample-pack-header {
+  align-items: flex-start;
+}
+
 .case-dashboard-title {
   min-width: 0;
 }
@@ -190,6 +198,10 @@ th {
 }
 
 .issues-title {
+  min-width: 0;
+}
+
+.sample-pack-title {
   min-width: 0;
 }
 
@@ -280,6 +292,17 @@ th {
   padding: 12px 14px;
 }
 
+.sample-pack-boundary-notice {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 8px;
+  color: #14532d;
+  display: grid;
+  gap: 6px;
+  max-width: 460px;
+  padding: 12px 14px;
+}
+
 .case-dashboard-summary strong,
 .case-dashboard-summary span,
 .prompt-boundary-notice strong,
@@ -308,6 +331,11 @@ th {
 
 .issues-boundary-notice strong,
 .issues-boundary-notice span {
+  overflow-wrap: anywhere;
+}
+
+.sample-pack-boundary-notice strong,
+.sample-pack-boundary-notice span {
   overflow-wrap: anywhere;
 }
 
@@ -358,6 +386,12 @@ th {
   grid-template-columns: minmax(260px, 0.28fr) minmax(0, 0.72fr);
 }
 
+.sample-pack-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(260px, 0.36fr) minmax(0, 0.64fr);
+}
+
 .case-dashboard-panel {
   min-width: 0;
 }
@@ -388,6 +422,11 @@ th {
 
 .issues-summary-panel,
 .issues-table-panel {
+  min-width: 0;
+}
+
+.sample-pack-list-panel,
+.sample-pack-detail-panel {
   min-width: 0;
 }
 
@@ -433,6 +472,12 @@ th {
 
 .issues-summary-panel h2,
 .issues-table-panel h2 {
+  font-size: 18px;
+  margin: 0 0 8px;
+}
+
+.sample-pack-list-panel h2,
+.sample-pack-detail-panel h2 {
   font-size: 18px;
   margin: 0 0 8px;
 }
@@ -1008,6 +1053,59 @@ th {
   border-left: 4px solid #64748b;
 }
 
+.sample-pack-list {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+.sample-pack-item {
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+}
+
+.sample-pack-item.is-selected {
+  border-color: #155e75;
+  box-shadow: 0 0 0 1px #155e75 inset;
+}
+
+.sample-pack-item a {
+  color: #155e75;
+  font-weight: 650;
+}
+
+.sample-pack-item span {
+  color: #52606d;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.sample-pack-detail-list {
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+}
+
+.sample-pack-detail-list dt {
+  color: #52606d;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.sample-pack-detail-list dd {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+}
+
 .readiness-input_ready,
 .readiness-browse_ready {
   background: #ecfdf3;
@@ -1534,6 +1632,7 @@ th {
     .approval-boundary-notice,
     .template-filling-boundary-notice,
     .issues-boundary-notice,
+    .sample-pack-boundary-notice,
     .workbench-sample-context {
     max-width: none;
     width: 100%;
@@ -1547,6 +1646,7 @@ th {
     .approval-grid,
     .template-filling-grid,
     .issues-grid,
+    .sample-pack-grid,
     .filled-artifact-metadata,
     .workbench-grid,
   .slice-panel dl {
