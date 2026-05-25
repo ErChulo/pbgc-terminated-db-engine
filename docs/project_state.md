@@ -2,9 +2,9 @@
 
 **Current branch**: `main`
 
-**Last merged PR**: `#34`
+**Last merged PR**: `#35`
 
-**Completed features count**: 25
+**Completed features count**: 26
 
 ## Completed Features
 
@@ -33,6 +33,7 @@
 23. `pbgc-template-library`
 24. `upload-import-pipeline`
 25. `reviewed-input-normalization-and-approval-flow`
+26. `template-filling-and-artifact-export`
 
 ## Current Workbench State
 
@@ -53,14 +54,15 @@
 - Browser-only PBGC template library with template metadata and readiness preview
 - Browser-only upload/import pipeline with deterministic reviewed JSON and inert external-LLM artifact preview states
 - Browser-only reviewed-input approval flow with normalized mocked records, display-only approve/reject decisions, and blocked-record packet preview
+- Browser-only template filling/export page that produces one deterministic PBGC-style reviewed-input artifact from approved mocked records
 
 ## Next Feature
 
-`template-filling-and-artifact-export`
+`unresolved-issues-and-error-queue`
 
 ## Alpha Readiness Status
 
-Not alpha-ready yet. The app has the backend engine slices, a productized reconciliation workbench surface with local mocked workspace session state, a top-level case navigation dashboard, browser-only prompt/schema/template libraries, local validation/readiness previews, a browser-only upload/import preview surface, and a reviewed-input approval gate, but still needs template filling/export, unresolved-issue queue, and sample/mock pack management before the first usable alpha definition is met.
+Not alpha-ready yet. The app has the backend engine slices, a productized reconciliation workbench surface with local mocked workspace session state, a top-level case navigation dashboard, browser-only prompt/schema/template libraries, local validation/readiness previews, a browser-only upload/import preview surface, a reviewed-input approval gate, and one browser-local filled artifact/export surface, but still needs unresolved-issue queue and sample/mock pack management before the first usable alpha definition is met.
 
 ## Core Constraints
 
