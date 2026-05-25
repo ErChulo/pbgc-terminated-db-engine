@@ -113,6 +113,10 @@ th {
   max-width: 1180px;
 }
 
+.upload-import-page {
+  max-width: 1180px;
+}
+
 .case-dashboard-header {
   align-items: flex-start;
 }
@@ -129,6 +133,10 @@ th {
   align-items: flex-start;
 }
 
+.upload-import-header {
+  align-items: flex-start;
+}
+
 .case-dashboard-title {
   min-width: 0;
 }
@@ -142,6 +150,10 @@ th {
 }
 
 .template-library-title {
+  min-width: 0;
+}
+
+.upload-import-title {
   min-width: 0;
 }
 
@@ -188,6 +200,17 @@ th {
   padding: 12px 14px;
 }
 
+.upload-boundary-notice {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 8px;
+  color: #14532d;
+  display: grid;
+  gap: 6px;
+  max-width: 460px;
+  padding: 12px 14px;
+}
+
 .case-dashboard-summary strong,
 .case-dashboard-summary span,
 .prompt-boundary-notice strong,
@@ -196,6 +219,11 @@ th {
 .schema-boundary-notice span,
 .template-boundary-notice strong,
 .template-boundary-notice span {
+  overflow-wrap: anywhere;
+}
+
+.upload-boundary-notice strong,
+.upload-boundary-notice span {
   overflow-wrap: anywhere;
 }
 
@@ -222,6 +250,12 @@ th {
   grid-template-columns: minmax(260px, 0.36fr) minmax(0, 0.64fr);
 }
 
+.upload-import-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(260px, 0.36fr) minmax(0, 0.64fr);
+}
+
 .case-dashboard-panel {
   min-width: 0;
 }
@@ -232,6 +266,11 @@ th {
 .schema-detail-panel,
 .template-list-panel,
 .template-detail-panel {
+  min-width: 0;
+}
+
+.upload-source-panel,
+.upload-input-panel {
   min-width: 0;
 }
 
@@ -253,6 +292,12 @@ th {
 .schema-detail-panel h2,
 .template-list-panel h2,
 .template-detail-panel h2 {
+  font-size: 18px;
+  margin: 0 0 8px;
+}
+
+.upload-source-panel h2,
+.upload-input-panel h2 {
   font-size: 18px;
   margin: 0 0 8px;
 }
@@ -282,6 +327,14 @@ th {
 }
 
 .template-entry-list {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+.upload-source-list {
   display: grid;
   gap: 8px;
   list-style: none;
@@ -328,6 +381,15 @@ th {
   padding: 10px 12px;
 }
 
+.upload-source-item {
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+}
+
 .prompt-stage-item.is-selected {
   border-color: #155e75;
   box-shadow: 0 0 0 1px #155e75 inset;
@@ -355,6 +417,12 @@ th {
   overflow-wrap: anywhere;
 }
 
+.upload-source-item strong,
+.upload-source-item span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
 .prompt-stage-item a,
 .schema-entry-item a,
 .template-entry-item a {
@@ -365,6 +433,11 @@ th {
 .prompt-stage-item span,
 .schema-entry-item span,
 .template-entry-item span {
+  color: #52606d;
+  font-size: 12px;
+}
+
+.upload-source-item span {
   color: #52606d;
   font-size: 12px;
 }
@@ -558,6 +631,69 @@ th {
 .template-readiness-preview span,
 .template-placeholder-status span {
   overflow-wrap: anywhere;
+}
+
+.upload-import-form {
+  display: grid;
+  gap: 12px;
+}
+
+.upload-textarea-field {
+  display: grid;
+  gap: 6px;
+}
+
+.upload-textarea-field span {
+  color: #52606d;
+  font-size: 12px;
+  font-weight: 650;
+  text-transform: uppercase;
+}
+
+.upload-textarea-field textarea {
+  border: 1px solid #9fb3c8;
+  border-radius: 6px;
+  font: inherit;
+  min-height: 130px;
+  padding: 10px;
+  resize: vertical;
+}
+
+.upload-preview {
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+}
+
+.upload-preview span {
+  overflow-wrap: anywhere;
+}
+
+.preview-accepted {
+  background: #ecfdf3;
+  border-color: #86efac;
+  color: #166534;
+}
+
+.preview-empty {
+  background: #fff7ed;
+  border-color: #fdba74;
+  color: #7c2d12;
+}
+
+.preview-invalid,
+.preview-malformed,
+.preview-oversized {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
+
+.upload-validate-button {
+  justify-self: start;
 }
 
 .readiness-input_ready,
@@ -1079,19 +1215,21 @@ th {
   }
 
   .case-dashboard-summary,
-  .prompt-boundary-notice,
-  .schema-boundary-notice,
-  .template-boundary-notice,
-  .workbench-sample-context {
+    .prompt-boundary-notice,
+    .schema-boundary-notice,
+    .template-boundary-notice,
+    .upload-boundary-notice,
+    .workbench-sample-context {
     max-width: none;
     width: 100%;
   }
 
   .case-stage-item,
-  .prompt-library-grid,
-  .schema-library-grid,
-  .template-library-grid,
-  .workbench-grid,
+    .prompt-library-grid,
+    .schema-library-grid,
+    .template-library-grid,
+    .upload-import-grid,
+    .workbench-grid,
   .slice-panel dl {
     grid-template-columns: 1fr;
   }

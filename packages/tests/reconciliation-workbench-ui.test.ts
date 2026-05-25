@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildCaseNavigationDashboard } from "../../apps/web/src/app/caseNavigationDashboardSlice";
+import { buildUploadImportPipeline } from "../../apps/web/src/app/uploadImportPipelineSlice";
 import { buildPromptLibrary } from "../../apps/web/src/app/promptLibrarySlice";
 import { buildPbgcTemplateLibrary } from "../../apps/web/src/app/pbgcTemplateLibrarySlice";
 import { buildApprovedSampleReconciliationWorkbench } from "../../apps/web/src/app/reconciliationWorkbenchSlice";
@@ -9,6 +10,7 @@ import { buildPbgcTemplateLibraryMarkup } from "../../apps/web/src/pages/PbgcTem
 import { buildPromptLibraryMarkup } from "../../apps/web/src/pages/PromptLibraryPage";
 import { buildReconciliationWorkbenchMarkup } from "../../apps/web/src/pages/ReconciliationWorkbenchPage";
 import { buildSchemaLibraryMarkup } from "../../apps/web/src/pages/SchemaLibraryPage";
+import { buildUploadImportPipelineMarkup } from "../../apps/web/src/pages/UploadImportPipelinePage";
 
 describe("reconciliation workbench UI", () => {
   it("builds deterministic case navigation dashboard state from the approved mocked workspace", () => {
@@ -291,6 +293,88 @@ describe("reconciliation workbench UI", () => {
     expect(markup).toContain("artifacts/templates/pbgc-official/plan-summary/Plan Summary Shell.docx");
     expect(markup).toContain("Official PBGC template");
     expect(markup).toContain("Template readiness");
+  });
+
+  it("links the case dashboard upload/import stage to the upload/import route", () => {
+    const dashboard = buildCaseNavigationDashboard({ active_stage_key: "upload_import" });
+    const markup = buildCaseNavigationDashboardMarkup(dashboard);
+
+    expect(dashboard.stages.find((stage) => stage.stage_key === "upload_import")).toMatchObject({
+      status: "available",
+      target: "#upload-import",
+    });
+    expect(markup).toContain("href=\"#upload-import\"");
+    expect(markup).toContain("Upload / Import");
+  });
+
+  it("builds deterministic upload/import preview sources and accepted reviewed JSON", () => {
+    const input = {
+      reviewed_json_text: JSON.stringify({
+        case_id: "CASE-MOCK-001",
+        assertion_id: "ASSERTION-MOCK-001",
+        source_layer: "source_assertion",
+        stage: "upload_import",
+      }),
+      external_artifact_text: "External LLM artifact for CASE-MOCK-001 prepared outside the app. Mocked review notes only.",
+    };
+    const state = buildUploadImportPipeline(input);
+    const repeated = buildUploadImportPipeline(input);
+
+    expect(state.sources.map((source) => source.source_id)).toEqual(["reviewed_structured_json", "external_llm_artifact"]);
+    expect(state.reviewed_json_preview).toMatchObject({
+      status: "accepted",
+      status_label: "Accepted",
+      errors: [],
+    });
+    expect(state.reviewed_json_preview.accepted_fields).toEqual(["assertion_id", "case_id", "source_layer", "stage"]);
+    expect(state.external_artifact_preview).toMatchObject({
+      status: "accepted",
+      status_label: "Accepted as inert review text",
+      accepted_fields: [],
+    });
+    expect(state.external_artifact_preview.warnings[0]).toMatchObject({
+      code: "INERT_EXTERNAL_ARTIFACT",
+      severity: "info",
+    });
+    expect(repeated).toEqual(state);
+  });
+
+  it("reports malformed, invalid, empty, and oversized upload/import previews deterministically", () => {
+    const malformed = buildUploadImportPipeline({ reviewed_json_text: "{not-json" });
+    const invalid = buildUploadImportPipeline({ reviewed_json_text: JSON.stringify({ case_id: "CASE-MOCK-001" }) });
+    const empty = buildUploadImportPipeline();
+    const oversized = buildUploadImportPipeline({ reviewed_json_text: "x".repeat(8001), external_artifact_text: "x".repeat(8001) });
+
+    expect(malformed.reviewed_json_preview).toMatchObject({
+      status: "malformed",
+      errors: [{ code: "REVIEWED_JSON_MALFORMED", severity: "error" }],
+    });
+    expect(invalid.reviewed_json_preview.status).toBe("invalid");
+    expect(invalid.reviewed_json_preview.errors.map((error) => error.code)).toEqual(["REVIEWED_RECORD_ID_MISSING"]);
+    expect(empty.reviewed_json_preview.status).toBe("empty");
+    expect(empty.external_artifact_preview.status).toBe("empty");
+    expect(oversized.reviewed_json_preview.status).toBe("oversized");
+    expect(oversized.external_artifact_preview.status).toBe("oversized");
+    expect(buildUploadImportPipeline({ reviewed_json_text: "{not-json" }).reviewed_json_preview).toEqual(malformed.reviewed_json_preview);
+  });
+
+  it("renders upload/import page with boundary notice, preview panels, and no prohibited runtime paths", () => {
+    const markup = buildUploadImportPipelineMarkup(
+      buildUploadImportPipeline({
+        reviewed_json_text: JSON.stringify({ case_id: "CASE-MOCK-001", fact_id: "FACT-MOCK-001", source_layer: "resolved_fact" }),
+        external_artifact_text: "External LLM artifact for CASE-MOCK-001 prepared outside the app. Mocked review notes only.",
+      }),
+    );
+
+    expect(markup).toContain("PBGC Upload / Import");
+    expect(markup).toContain("Return to case dashboard");
+    expect(markup).toContain("data-upload-reviewed-json");
+    expect(markup).toContain("data-upload-external-artifact");
+    expect(markup).toContain("Accepted");
+    expect(markup).toContain("Accepted as inert review text");
+    expect(markup).toContain("No real participant, beneficiary");
+    expect(markup).not.toMatch(/\b(type="file"|https?:\/\/|server call|telemetry|raw OCR|raw source document|run scraping|run OCR|insert into|sql\.js write|output-adapter write)\b/i);
+    expect(markup).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
   });
 
   it("distinguishes official PBGC template readiness from reviewed-input import templates", () => {
