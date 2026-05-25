@@ -7,6 +7,7 @@ import { buildApprovedSampleReconciliationWorkbench } from "../../apps/web/src/a
 import { buildReviewedInputApproval } from "../../apps/web/src/app/reviewedInputApprovalSlice";
 import { buildSchemaLibrary } from "../../apps/web/src/app/schemaLibrarySlice";
 import { buildTemplateFillingExport } from "../../apps/web/src/app/templateFillingExportSlice";
+import { buildUnresolvedIssuesQueue } from "../../apps/web/src/app/unresolvedIssuesQueueSlice";
 import { buildCaseNavigationDashboardMarkup } from "../../apps/web/src/pages/CaseNavigationDashboardPage";
 import { buildPbgcTemplateLibraryMarkup } from "../../apps/web/src/pages/PbgcTemplateLibraryPage";
 import { buildPromptLibraryMarkup } from "../../apps/web/src/pages/PromptLibraryPage";
@@ -14,6 +15,7 @@ import { buildReconciliationWorkbenchMarkup } from "../../apps/web/src/pages/Rec
 import { buildReviewedInputApprovalMarkup } from "../../apps/web/src/pages/ReviewedInputApprovalPage";
 import { buildSchemaLibraryMarkup } from "../../apps/web/src/pages/SchemaLibraryPage";
 import { buildTemplateFillingExportMarkup } from "../../apps/web/src/pages/TemplateFillingExportPage";
+import { buildUnresolvedIssuesQueueMarkup } from "../../apps/web/src/pages/UnresolvedIssuesQueuePage";
 import { buildUploadImportPipelineMarkup } from "../../apps/web/src/pages/UploadImportPipelinePage";
 
 describe("reconciliation workbench UI", () => {
@@ -523,6 +525,45 @@ describe("reconciliation workbench UI", () => {
     expect(markup).toContain("CASE-MOCK-001-source-assertion-import.csv");
     expect(markup).toContain("Copy artifact content");
     expect(markup).toContain("Download artifact");
+    expect(markup).toContain("No real participant, beneficiary");
+    expect(markup).not.toMatch(/\b(type="file"|https?:\/\/|server call|telemetry|raw OCR|raw source document|run scraping|run OCR|insert into|sql\.js write|output-adapter write)\b/i);
+    expect(markup).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
+  });
+
+  it("links the case dashboard unresolved issues stage to the issue queue route", () => {
+    const dashboard = buildCaseNavigationDashboard({ active_stage_key: "unresolved_issues" });
+    const markup = buildCaseNavigationDashboardMarkup(dashboard);
+
+    expect(dashboard.stages.find((stage) => stage.stage_key === "unresolved_issues")).toMatchObject({
+      status: "available",
+      target: "#unresolved-issues",
+    });
+    expect(markup).toContain("href=\"#unresolved-issues\"");
+    expect(markup).toContain("Unresolved Issues");
+  });
+
+  it("builds deterministic unresolved issue queue rows and severity counts", () => {
+    const state = buildUnresolvedIssuesQueue();
+    const repeated = buildUnresolvedIssuesQueue();
+
+    expect(state.items.length).toBeGreaterThan(0);
+    expect(state.items.map((item) => item.ordering_key)).toEqual([...state.items.map((item) => item.ordering_key)].sort());
+    expect(state.items.some((item) => item.code === "NO_APPROVED_RECORDS")).toBe(true);
+    expect(state.items.some((item) => item.code === "APPROVAL_DECISION_PENDING")).toBe(true);
+    expect(state.summary.total_count).toBe(state.items.length);
+    expect(state.summary.error_count).toBeGreaterThan(0);
+    expect(state.summary.warning_count).toBeGreaterThan(0);
+    expect(repeated).toEqual(state);
+  });
+
+  it("renders unresolved issue queue with trace basis and no prohibited runtime paths", () => {
+    const markup = buildUnresolvedIssuesQueueMarkup(buildUnresolvedIssuesQueue());
+
+    expect(markup).toContain("PBGC Unresolved Issues");
+    expect(markup).toContain("Return to case dashboard");
+    expect(markup).toContain("data-unresolved-issues-table");
+    expect(markup).toContain("NO_APPROVED_RECORDS");
+    expect(markup).toContain("APPROVAL_DECISION_PENDING");
     expect(markup).toContain("No real participant, beneficiary");
     expect(markup).not.toMatch(/\b(type="file"|https?:\/\/|server call|telemetry|raw OCR|raw source document|run scraping|run OCR|insert into|sql\.js write|output-adapter write)\b/i);
     expect(markup).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);

@@ -105,10 +105,10 @@ const STAGE_DEFINITIONS = [
   {
     stage_key: "unresolved_issues",
     label: "Unresolved Issues",
-    status: "planned",
-    status_label: "Planned",
-    detail: "Missing fields, validation issues, and unresolved mappings will be queued in a later slice.",
-    target: null,
+    status: "available",
+    status_label: "Available",
+    detail: "Existing warnings, errors, and blocked states are visible in one local queue.",
+    target: "#unresolved-issues",
   },
   {
     stage_key: "sample_mock_packs",
@@ -135,7 +135,8 @@ export function buildCaseNavigationDashboard(
           stage.stage_key === "case_workspace" ||
           stage.stage_key === "upload_import" ||
           stage.stage_key === "reviewed_input_approval" ||
-          stage.stage_key === "template_filling_export"
+          stage.stage_key === "template_filling_export" ||
+          stage.stage_key === "unresolved_issues"
           ? workbench.generated_at
           : "planned-alpha-stage-display-only",
   })).sort((left, right) => left.ordering_key.localeCompare(right.ordering_key));

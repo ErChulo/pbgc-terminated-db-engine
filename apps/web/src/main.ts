@@ -5,6 +5,7 @@ import { renderReconciliationWorkbenchPage } from "./pages/ReconciliationWorkben
 import { renderReviewedInputApprovalPage } from "./pages/ReviewedInputApprovalPage";
 import { renderSchemaLibraryPage } from "./pages/SchemaLibraryPage";
 import { renderTemplateFillingExportPage } from "./pages/TemplateFillingExportPage";
+import { renderUnresolvedIssuesQueuePage } from "./pages/UnresolvedIssuesQueuePage";
 import { renderUploadImportPipelinePage } from "./pages/UploadImportPipelinePage";
 import "./styles.css";
 
@@ -39,6 +40,10 @@ function renderApp(): void {
   }
   if (window.location.hash === "#template-filling-export") {
     renderTemplateFillingExportPage(appRoot);
+    return;
+  }
+  if (window.location.hash === "#unresolved-issues") {
+    renderUnresolvedIssuesQueuePage(appRoot);
     return;
   }
   renderCaseNavigationDashboardPage(appRoot);
