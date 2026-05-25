@@ -53,7 +53,7 @@ Any delivered .sql, .js, .ts, or .tex artifact must be stored with appended .txt
 - Preserve traceability for every computed output
 
 <!-- SPECKIT START -->
-Current feature plan: `specs/030-case-navigation-dashboard/plan.md`
+Current feature plan: `specs/031-prompt-library-by-stage/plan.md`
 <!-- SPECKIT END -->
 
 ## V1 data dictionary invariant

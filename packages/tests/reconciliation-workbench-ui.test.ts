@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { buildCaseNavigationDashboard } from "../../apps/web/src/app/caseNavigationDashboardSlice";
+import { buildPromptLibrary } from "../../apps/web/src/app/promptLibrarySlice";
 import { buildApprovedSampleReconciliationWorkbench } from "../../apps/web/src/app/reconciliationWorkbenchSlice";
 import { buildCaseNavigationDashboardMarkup } from "../../apps/web/src/pages/CaseNavigationDashboardPage";
+import { buildPromptLibraryMarkup } from "../../apps/web/src/pages/PromptLibraryPage";
 import { buildReconciliationWorkbenchMarkup } from "../../apps/web/src/pages/ReconciliationWorkbenchPage";
 
 describe("reconciliation workbench UI", () => {
@@ -104,6 +106,92 @@ describe("reconciliation workbench UI", () => {
     expect(markup).toContain("data-case-dashboard-workbench-link");
     expect(markup).toContain("Current mocked workspace");
     expect(markup).toContain("Stage status");
+  });
+
+  it("builds deterministic stage prompt entries with external LLM boundary notices", () => {
+    const state = buildPromptLibrary();
+    const repeated = buildPromptLibrary();
+
+    expect(state.prompts.map((prompt) => prompt.stage_key)).toEqual([
+      "case_workspace",
+      "reconciliation_workbench",
+      "prompt_library",
+      "schema_library",
+      "pbgc_template_library",
+      "upload_import",
+      "reviewed_input_approval",
+      "template_filling_export",
+      "unresolved_issues",
+      "sample_mock_packs",
+    ]);
+    expect(state.prompts.map((prompt) => prompt.ordering_key)).toEqual([...state.prompts.map((prompt) => prompt.ordering_key)].sort());
+    expect(state.selected_prompt.title).toBe("Case Workspace Prompt");
+    expect(state.boundary_notice).toContain("external LLM outside this app");
+    expect(repeated).toEqual(state);
+  });
+
+  it("renders prompt library with selected prompt, dashboard return, and no OCR or scraping execution", () => {
+    const markup = buildPromptLibraryMarkup(buildPromptLibrary({ selected_prompt_id: "prompt-reconciliation-workbench" }));
+
+    expect(markup).toContain("PBGC Prompt Library");
+    expect(markup).toContain("Reconciliation Workbench Prompt");
+    expect(markup).toContain("External LLM boundary");
+    expect(markup).toContain("href=\"#case-dashboard\"");
+    expect(markup).toContain("data-prompt-draft-editor");
+    expect(markup).toContain("data-prompt-import-payload");
+    expect(markup).not.toMatch(/\b(run scraping|run OCR|server call|telemetry|insert into|output-adapter write)\b/i);
+    expect(markup).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
+  });
+
+  it("links the case dashboard prompt stage to the prompt library route", () => {
+    const dashboard = buildCaseNavigationDashboard();
+    const markup = buildCaseNavigationDashboardMarkup(dashboard);
+
+    expect(dashboard.stages.find((stage) => stage.stage_key === "prompt_library")).toMatchObject({
+      status: "available",
+      target: "#prompt-library",
+    });
+    expect(markup).toContain("href=\"#prompt-library\"");
+    expect(markup).toContain("Prompt Library");
+  });
+
+  it("builds browser-local edited prompt drafts without changing the approved baseline prompt", () => {
+    const baseline = buildPromptLibrary({ selected_prompt_id: "prompt-schema-library" });
+    const edited = buildPromptLibrary({
+      selected_prompt_id: "prompt-schema-library",
+      draft_text: "Browser-local draft: inspect reviewed schema gaps for the mocked case only.",
+    });
+
+    expect(edited.draft).toMatchObject({
+      status: "edited",
+      validation_message: "Browser-local draft is not approved baseline prompt text.",
+      basis: "browser-local prompt draft display state",
+    });
+    expect(edited.selected_prompt.body).toEqual(baseline.selected_prompt.body);
+    expect(edited.draft.draft_text).toContain("Browser-local draft");
+  });
+
+  it("accepts local prompt text or JSON import and rejects unsupported oversized import display-only", () => {
+    const acceptedText = buildPromptLibrary({ import_payload: "Use only mocked case context and summarize schema questions." });
+    const acceptedJson = buildPromptLibrary({
+      import_payload: JSON.stringify({ stage_key: "schema_library", prompt_text: "Review schema fields for mocked approved samples only." }),
+    });
+    const rejected = buildPromptLibrary({ import_payload: "x".repeat(5001) });
+
+    expect(acceptedText.draft).toMatchObject({ status: "imported", validation_message: "Local prompt import accepted as browser-local draft." });
+    expect(acceptedJson.selected_prompt.stage_key).toBe("schema_library");
+    expect(acceptedJson.draft.draft_text).toContain("Review schema fields");
+    expect(rejected.draft).toMatchObject({ status: "invalid", validation_message: "Prompt import exceeds the alpha size limit." });
+  });
+
+  it("keeps prompt library markup deterministic and free of real-person, server, OCR, scraping execution, sql.js, and adapter-write paths", () => {
+    const first = buildPromptLibraryMarkup(buildPromptLibrary({ import_payload: "External LLM prompt draft for mocked data only." }));
+    const second = buildPromptLibraryMarkup(buildPromptLibrary({ import_payload: "External LLM prompt draft for mocked data only." }));
+
+    expect(second).toBe(first);
+    expect(first).toContain("Browser-local draft");
+    expect(first).not.toMatch(/\b(https?:\/\/|server call|telemetry|raw OCR|raw source document|run scraping|run OCR|insert into|sql\.js write|output-adapter write)\b/i);
+    expect(first).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
   });
 
   it("builds one approved sample workbench with sample identity and exactly three output slice panels", () => {

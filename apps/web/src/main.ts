@@ -1,4 +1,5 @@
 import { renderCaseNavigationDashboardPage } from "./pages/CaseNavigationDashboardPage";
+import { renderPromptLibraryPage } from "./pages/PromptLibraryPage";
 import { renderReconciliationWorkbenchPage } from "./pages/ReconciliationWorkbenchPage";
 import "./styles.css";
 
@@ -9,6 +10,10 @@ const appRoot = root;
 function renderApp(): void {
   if (window.location.hash === "#reconciliation-workbench") {
     renderReconciliationWorkbenchPage(appRoot);
+    return;
+  }
+  if (window.location.hash === "#prompt-library") {
+    renderPromptLibraryPage(appRoot);
     return;
   }
   renderCaseNavigationDashboardPage(appRoot);
