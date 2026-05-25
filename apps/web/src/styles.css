@@ -117,6 +117,10 @@ th {
   max-width: 1180px;
 }
 
+.reviewed-input-approval-page {
+  max-width: 1220px;
+}
+
 .case-dashboard-header {
   align-items: flex-start;
 }
@@ -137,6 +141,10 @@ th {
   align-items: flex-start;
 }
 
+.approval-header {
+  align-items: flex-start;
+}
+
 .case-dashboard-title {
   min-width: 0;
 }
@@ -154,6 +162,10 @@ th {
 }
 
 .upload-import-title {
+  min-width: 0;
+}
+
+.approval-title {
   min-width: 0;
 }
 
@@ -211,6 +223,17 @@ th {
   padding: 12px 14px;
 }
 
+.approval-boundary-notice {
+  background: #eef2ff;
+  border: 1px solid #a5b4fc;
+  border-radius: 8px;
+  color: #312e81;
+  display: grid;
+  gap: 6px;
+  max-width: 460px;
+  padding: 12px 14px;
+}
+
 .case-dashboard-summary strong,
 .case-dashboard-summary span,
 .prompt-boundary-notice strong,
@@ -224,6 +247,11 @@ th {
 
 .upload-boundary-notice strong,
 .upload-boundary-notice span {
+  overflow-wrap: anywhere;
+}
+
+.approval-boundary-notice strong,
+.approval-boundary-notice span {
   overflow-wrap: anywhere;
 }
 
@@ -256,6 +284,12 @@ th {
   grid-template-columns: minmax(260px, 0.36fr) minmax(0, 0.64fr);
 }
 
+.approval-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(280px, 0.34fr) minmax(0, 0.66fr);
+}
+
 .case-dashboard-panel {
   min-width: 0;
 }
@@ -271,6 +305,11 @@ th {
 
 .upload-source-panel,
 .upload-input-panel {
+  min-width: 0;
+}
+
+.approval-input-panel,
+.approval-table-panel {
   min-width: 0;
 }
 
@@ -298,6 +337,12 @@ th {
 
 .upload-source-panel h2,
 .upload-input-panel h2 {
+  font-size: 18px;
+  margin: 0 0 8px;
+}
+
+.approval-input-panel h2,
+.approval-table-panel h2 {
   font-size: 18px;
   margin: 0 0 8px;
 }
@@ -694,6 +739,77 @@ th {
 
 .upload-validate-button {
   justify-self: start;
+}
+
+.approval-form {
+  display: grid;
+  gap: 12px;
+}
+
+.approval-textarea-field {
+  display: grid;
+  gap: 6px;
+}
+
+.approval-textarea-field span {
+  color: #52606d;
+  font-size: 12px;
+  font-weight: 650;
+  text-transform: uppercase;
+}
+
+.approval-textarea-field textarea {
+  border: 1px solid #9fb3c8;
+  border-radius: 6px;
+  font: inherit;
+  min-height: 180px;
+  padding: 10px;
+  resize: vertical;
+}
+
+.approval-packet-preview,
+.approval-status-summary {
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  display: grid;
+  gap: 4px;
+  margin-top: 12px;
+  padding: 12px;
+}
+
+.approval-packet-preview span,
+.approval-status-summary span {
+  overflow-wrap: anywhere;
+}
+
+.approval-table {
+  table-layout: fixed;
+}
+
+.approval-row td {
+  overflow-wrap: anywhere;
+  vertical-align: top;
+}
+
+.decision-approved td {
+  border-left: 4px solid #2f855a;
+}
+
+.decision-pending td {
+  border-left: 4px solid #f59e0b;
+}
+
+.decision-rejected td,
+.decision-blocked td {
+  border-left: 4px solid #dc2626;
+}
+
+.status-empty,
+.status-malformed {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #991b1b;
 }
 
 .readiness-input_ready,
@@ -1219,6 +1335,7 @@ th {
     .schema-boundary-notice,
     .template-boundary-notice,
     .upload-boundary-notice,
+    .approval-boundary-notice,
     .workbench-sample-context {
     max-width: none;
     width: 100%;
@@ -1229,6 +1346,7 @@ th {
     .schema-library-grid,
     .template-library-grid,
     .upload-import-grid,
+    .approval-grid,
     .workbench-grid,
   .slice-panel dl {
     grid-template-columns: 1fr;
