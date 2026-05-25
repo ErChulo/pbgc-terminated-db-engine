@@ -123,7 +123,7 @@
 - [X] T043 Run project lint verification with npm run lint using package.json
 - [X] T044 Run browser static build verification with npm run build using package.json and apps/web/dist/
 - [X] T045 Update committed Vite static output in apps/web/dist/ after successful build if bundle contents changed
-- [ ] T046 Perform the 10-second check that the analyst can identify and apply the severity filter on desktop 1440x900 and mobile 390x844 and record the result in specs/026-workbench-severity-filtering/quickstart.md
+- [X] T046 Perform the 10-second check that the analyst can identify and apply the severity filter on desktop 1440x900 and mobile 390x844 and record the result in specs/026-workbench-severity-filtering/quickstart.md
 - [X] T047 Verify filtered workbench markup still contains no real participant, beneficiary, alternate payee, survivor, or other natural-person data in packages/tests/reconciliation-workbench-ui.test.ts
 - [X] T048 Confirm no delivered .sql, .js, .ts, or .tex delivery-copy artifact is introduced for this internal UI/test slice in specs/026-workbench-severity-filtering/tasks.md
 

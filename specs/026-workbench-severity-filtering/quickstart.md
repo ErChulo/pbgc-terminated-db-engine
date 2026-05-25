@@ -32,6 +32,9 @@ If the browser bundle changes, keep the regenerated `apps/web/dist/` output comm
 
 ## Manual Review
 
+- Recorded severity-filter 10-second verification:
+  - Desktop `1440x900`: passed. The severity filter was identifiable and applicable within 10 seconds.
+  - Mobile `390x844`: passed. The severity filter was identifiable and applicable within 10 seconds.
 - At desktop `1440x900`, verify an analyst can identify and apply the severity filter within 10 seconds.
 - At mobile `390x844`, verify an analyst can identify and apply the severity filter within 10 seconds.
 - Apply a severity filter while no status filter is active and confirm row ordering remains stable.
