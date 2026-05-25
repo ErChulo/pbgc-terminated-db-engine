@@ -65,10 +65,10 @@ const STAGE_DEFINITIONS = [
   {
     stage_key: "schema_library",
     label: "Schema Library",
-    status: "planned",
-    status_label: "Planned",
-    detail: "Reviewed-input schemas and validator surfaces will be managed in a later slice.",
-    target: null,
+    status: "available",
+    status_label: "Available",
+    detail: "Reviewed-input schema browsing and local validation preview are available.",
+    target: "#schema-library",
   },
   {
     stage_key: "pbgc_template_library",

@@ -2,9 +2,11 @@ import { describe, expect, it } from "vitest";
 import { buildCaseNavigationDashboard } from "../../apps/web/src/app/caseNavigationDashboardSlice";
 import { buildPromptLibrary } from "../../apps/web/src/app/promptLibrarySlice";
 import { buildApprovedSampleReconciliationWorkbench } from "../../apps/web/src/app/reconciliationWorkbenchSlice";
+import { buildSchemaLibrary } from "../../apps/web/src/app/schemaLibrarySlice";
 import { buildCaseNavigationDashboardMarkup } from "../../apps/web/src/pages/CaseNavigationDashboardPage";
 import { buildPromptLibraryMarkup } from "../../apps/web/src/pages/PromptLibraryPage";
 import { buildReconciliationWorkbenchMarkup } from "../../apps/web/src/pages/ReconciliationWorkbenchPage";
+import { buildSchemaLibraryMarkup } from "../../apps/web/src/pages/SchemaLibraryPage";
 
 describe("reconciliation workbench UI", () => {
   it("builds deterministic case navigation dashboard state from the approved mocked workspace", () => {
@@ -190,6 +192,64 @@ describe("reconciliation workbench UI", () => {
 
     expect(second).toBe(first);
     expect(first).toContain("Browser-local draft");
+    expect(first).not.toMatch(/\b(https?:\/\/|server call|telemetry|raw OCR|raw source document|run scraping|run OCR|insert into|sql\.js write|output-adapter write)\b/i);
+    expect(first).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
+  });
+
+  it("builds deterministic committed schema library entries with repository basis", () => {
+    const state = buildSchemaLibrary();
+    const repeated = buildSchemaLibrary();
+
+    expect(state.schemas.map((schema) => schema.schema_id)).toEqual([
+      "source_assertion_schema",
+      "resolved_fact_schema",
+      "resolved_plan_provision_schema",
+      "sqlite_schema_blueprint",
+    ]);
+    expect(state.schemas.map((schema) => schema.ordering_key)).toEqual([...state.schemas.map((schema) => schema.ordering_key)].sort());
+    expect(state.selected_schema.repository_path).toBe("artifacts/schemas/source_assertion_schema_v0.1.0.md");
+    expect(state.selected_schema.required_fields).toContain("case_id");
+    expect(state.boundary_notice).toContain("local reviewed JSON preview");
+    expect(repeated).toEqual(state);
+  });
+
+  it("renders schema library details and links from the dashboard schema stage", () => {
+    const dashboard = buildCaseNavigationDashboard();
+    const dashboardMarkup = buildCaseNavigationDashboardMarkup(dashboard);
+    const markup = buildSchemaLibraryMarkup(buildSchemaLibrary({ selected_schema_id: "resolved_fact_schema" }));
+
+    expect(dashboard.stages.find((stage) => stage.stage_key === "schema_library")).toMatchObject({
+      status: "available",
+      target: "#schema-library",
+    });
+    expect(dashboardMarkup).toContain("href=\"#schema-library\"");
+    expect(markup).toContain("PBGC Schema Library");
+    expect(markup).toContain("Resolved Fact Schema");
+    expect(markup).toContain("artifacts/schemas/resolved_fact_schema_v0.1.0.md");
+    expect(markup).toContain("data-schema-json-preview");
+    expect(markup).toContain("Local validation preview");
+  });
+
+  it("previews accepted, missing-field, malformed, and oversized reviewed JSON deterministically", () => {
+    const accepted = buildSchemaLibrary({ json_text: JSON.stringify({ case_id: "CASE-MOCK", assertion_id: "ASSERTION-MOCK", source_layer: "source_assertion" }) });
+    const invalid = buildSchemaLibrary({ json_text: JSON.stringify({ case_id: "CASE-MOCK" }) });
+    const malformed = buildSchemaLibrary({ json_text: "{not-json" });
+    const oversized = buildSchemaLibrary({ json_text: "x".repeat(8001) });
+
+    expect(accepted.validation).toMatchObject({ status: "accepted", errors: [] });
+    expect(accepted.validation.checked_fields).toEqual(["case_id", "assertion_id", "source_layer"]);
+    expect(invalid.validation.status).toBe("invalid");
+    expect(invalid.validation.errors).toContain("Missing required field: assertion_id");
+    expect(malformed.validation).toMatchObject({ status: "malformed", errors: ["JSON text could not be parsed."] });
+    expect(oversized.validation).toMatchObject({ status: "oversized", errors: ["JSON preview exceeds the alpha size limit."] });
+  });
+
+  it("keeps schema library markup deterministic and free of server, OCR, scraping, raw, sql.js, adapter-write, and real-person paths", () => {
+    const first = buildSchemaLibraryMarkup(buildSchemaLibrary({ json_text: JSON.stringify({ case_id: "CASE-MOCK", assertion_id: "ASSERTION-MOCK", source_layer: "source_assertion" }) }));
+    const second = buildSchemaLibraryMarkup(buildSchemaLibrary({ json_text: JSON.stringify({ case_id: "CASE-MOCK", assertion_id: "ASSERTION-MOCK", source_layer: "source_assertion" }) }));
+
+    expect(second).toBe(first);
+    expect(first).toContain("Accepted");
     expect(first).not.toMatch(/\b(https?:\/\/|server call|telemetry|raw OCR|raw source document|run scraping|run OCR|insert into|sql\.js write|output-adapter write)\b/i);
     expect(first).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
   });
