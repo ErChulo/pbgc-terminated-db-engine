@@ -73,10 +73,10 @@ const STAGE_DEFINITIONS = [
   {
     stage_key: "pbgc_template_library",
     label: "PBGC Template Library",
-    status: "planned",
-    status_label: "Planned",
-    detail: "PBGC template viewing and selection will be managed in a later slice.",
-    target: null,
+    status: "available",
+    status_label: "Available",
+    detail: "Committed PBGC template metadata and readiness preview are available.",
+    target: "#template-library",
   },
   {
     stage_key: "upload_import",

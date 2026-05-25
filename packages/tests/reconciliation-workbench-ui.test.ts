@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { buildCaseNavigationDashboard } from "../../apps/web/src/app/caseNavigationDashboardSlice";
 import { buildPromptLibrary } from "../../apps/web/src/app/promptLibrarySlice";
+import { buildPbgcTemplateLibrary } from "../../apps/web/src/app/pbgcTemplateLibrarySlice";
 import { buildApprovedSampleReconciliationWorkbench } from "../../apps/web/src/app/reconciliationWorkbenchSlice";
 import { buildSchemaLibrary } from "../../apps/web/src/app/schemaLibrarySlice";
 import { buildCaseNavigationDashboardMarkup } from "../../apps/web/src/pages/CaseNavigationDashboardPage";
+import { buildPbgcTemplateLibraryMarkup } from "../../apps/web/src/pages/PbgcTemplateLibraryPage";
 import { buildPromptLibraryMarkup } from "../../apps/web/src/pages/PromptLibraryPage";
 import { buildReconciliationWorkbenchMarkup } from "../../apps/web/src/pages/ReconciliationWorkbenchPage";
 import { buildSchemaLibraryMarkup } from "../../apps/web/src/pages/SchemaLibraryPage";
@@ -251,6 +253,69 @@ describe("reconciliation workbench UI", () => {
     expect(second).toBe(first);
     expect(first).toContain("Accepted");
     expect(first).not.toMatch(/\b(https?:\/\/|server call|telemetry|raw OCR|raw source document|run scraping|run OCR|insert into|sql\.js write|output-adapter write)\b/i);
+    expect(first).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
+  });
+
+  it("builds deterministic PBGC template library entries with committed repository paths", () => {
+    const state = buildPbgcTemplateLibrary();
+    const repeated = buildPbgcTemplateLibrary();
+
+    expect(state.templates.map((template) => template.template_id)).toEqual([
+      "source_assertion_import_template",
+      "resolved_fact_import_template",
+      "resolved_plan_provision_import_template",
+      "plan_summary_shell",
+      "actuarial_case_memo",
+      "436_evaluation",
+      "estimated_benefit_administration_analysis",
+      "estimated_benefit_adjustment_analysis",
+    ]);
+    expect(state.templates.map((template) => template.ordering_key)).toEqual([...state.templates.map((template) => template.ordering_key)].sort());
+    expect(state.selected_template.repository_path).toBe("artifacts/templates/source_assertion_import_template_v0.1.0.csv");
+    expect(state.boundary_notice).toContain("metadata and readiness preview only");
+    expect(repeated).toEqual(state);
+  });
+
+  it("renders template library metadata and links from the dashboard template stage", () => {
+    const dashboard = buildCaseNavigationDashboard();
+    const dashboardMarkup = buildCaseNavigationDashboardMarkup(dashboard);
+    const markup = buildPbgcTemplateLibraryMarkup(buildPbgcTemplateLibrary({ selected_template_id: "plan_summary_shell" }));
+
+    expect(dashboard.stages.find((stage) => stage.stage_key === "pbgc_template_library")).toMatchObject({
+      status: "available",
+      target: "#template-library",
+    });
+    expect(dashboardMarkup).toContain("href=\"#template-library\"");
+    expect(markup).toContain("PBGC Template Library");
+    expect(markup).toContain("Plan Summary Shell");
+    expect(markup).toContain("artifacts/templates/pbgc-official/plan-summary/Plan Summary Shell.docx");
+    expect(markup).toContain("Official PBGC template");
+    expect(markup).toContain("Template readiness");
+  });
+
+  it("distinguishes official PBGC template readiness from reviewed-input import templates", () => {
+    const official = buildPbgcTemplateLibrary({ selected_template_id: "actuarial_case_memo" });
+    const importTemplate = buildPbgcTemplateLibrary({ selected_template_id: "resolved_fact_import_template" });
+
+    expect(official.readiness).toMatchObject({
+      status: "planned_for_filling",
+      status_label: "Planned for future filling",
+    });
+    expect(official.readiness.dependencies).toContain("reviewed-input approval");
+    expect(importTemplate.selected_template.category).toBe("reviewed_input_import");
+    expect(importTemplate.readiness).toMatchObject({
+      status: "input_ready",
+      status_label: "Ready for local reviewed-input preparation",
+    });
+  });
+
+  it("keeps template library markup deterministic and free of server, OCR, scraping, raw, sql.js, adapter-write, filling, export, and real-person paths", () => {
+    const first = buildPbgcTemplateLibraryMarkup(buildPbgcTemplateLibrary({ selected_template_id: "436_evaluation" }));
+    const second = buildPbgcTemplateLibraryMarkup(buildPbgcTemplateLibrary({ selected_template_id: "436_evaluation" }));
+
+    expect(second).toBe(first);
+    expect(first).toContain("436 Evaluation");
+    expect(first).not.toMatch(/\b(https?:\/\/|server call|telemetry|raw OCR|raw source document|run scraping|run OCR|insert into|sql\.js write|output-adapter write|filled artifact|exported artifact)\b/i);
     expect(first).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
   });
 
