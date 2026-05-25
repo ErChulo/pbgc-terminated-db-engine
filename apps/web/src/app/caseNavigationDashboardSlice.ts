@@ -113,10 +113,10 @@ const STAGE_DEFINITIONS = [
   {
     stage_key: "sample_mock_packs",
     label: "Sample / Mock Packs",
-    status: "planned",
-    status_label: "Planned",
-    detail: "Approved sample and mock data pack management will be added in a later slice.",
-    target: null,
+    status: "available",
+    status_label: "Available",
+    detail: "Approved sample packs and mocked alpha-path packs are available for local selection.",
+    target: "#sample-mock-packs",
   },
 ] as const;
 
@@ -136,7 +136,8 @@ export function buildCaseNavigationDashboard(
           stage.stage_key === "upload_import" ||
           stage.stage_key === "reviewed_input_approval" ||
           stage.stage_key === "template_filling_export" ||
-          stage.stage_key === "unresolved_issues"
+          stage.stage_key === "unresolved_issues" ||
+          stage.stage_key === "sample_mock_packs"
           ? workbench.generated_at
           : "planned-alpha-stage-display-only",
   })).sort((left, right) => left.ordering_key.localeCompare(right.ordering_key));

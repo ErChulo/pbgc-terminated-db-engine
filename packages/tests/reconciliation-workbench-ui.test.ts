@@ -5,6 +5,7 @@ import { buildPromptLibrary } from "../../apps/web/src/app/promptLibrarySlice";
 import { buildPbgcTemplateLibrary } from "../../apps/web/src/app/pbgcTemplateLibrarySlice";
 import { buildApprovedSampleReconciliationWorkbench } from "../../apps/web/src/app/reconciliationWorkbenchSlice";
 import { buildReviewedInputApproval } from "../../apps/web/src/app/reviewedInputApprovalSlice";
+import { buildSampleMockPackManagement } from "../../apps/web/src/app/sampleMockPackManagementSlice";
 import { buildSchemaLibrary } from "../../apps/web/src/app/schemaLibrarySlice";
 import { buildTemplateFillingExport } from "../../apps/web/src/app/templateFillingExportSlice";
 import { buildUnresolvedIssuesQueue } from "../../apps/web/src/app/unresolvedIssuesQueueSlice";
@@ -13,6 +14,7 @@ import { buildPbgcTemplateLibraryMarkup } from "../../apps/web/src/pages/PbgcTem
 import { buildPromptLibraryMarkup } from "../../apps/web/src/pages/PromptLibraryPage";
 import { buildReconciliationWorkbenchMarkup } from "../../apps/web/src/pages/ReconciliationWorkbenchPage";
 import { buildReviewedInputApprovalMarkup } from "../../apps/web/src/pages/ReviewedInputApprovalPage";
+import { buildSampleMockPackManagementMarkup } from "../../apps/web/src/pages/SampleMockPackManagementPage";
 import { buildSchemaLibraryMarkup } from "../../apps/web/src/pages/SchemaLibraryPage";
 import { buildTemplateFillingExportMarkup } from "../../apps/web/src/pages/TemplateFillingExportPage";
 import { buildUnresolvedIssuesQueueMarkup } from "../../apps/web/src/pages/UnresolvedIssuesQueuePage";
@@ -37,7 +39,7 @@ describe("reconciliation workbench UI", () => {
     expect(repeated).toEqual(state);
   });
 
-  it("exposes required alpha case stages in stable order with display-only planned stages", () => {
+  it("exposes required alpha case stages in stable order with no unavailable stages", () => {
     const state = buildCaseNavigationDashboard();
 
     expect(state.stages.map((stage) => stage.stage_key)).toEqual([
@@ -57,8 +59,8 @@ describe("reconciliation workbench UI", () => {
       status: "available",
       target: "#reconciliation-workbench",
     });
-    expect(state.stages.filter((stage) => stage.status === "planned").length).toBeGreaterThan(0);
-    expect(JSON.stringify(state.stages.filter((stage) => stage.status === "planned"))).not.toMatch(/\b(executed|started|completed|uploaded)\b/i);
+    expect(state.stages.filter((stage) => stage.status === "planned")).toEqual([]);
+    expect(state.stages.filter((stage) => stage.status === "unavailable")).toEqual([]);
   });
 
   it("renders dashboard summary, stage navigation, and workbench action without real-person data", () => {
@@ -564,6 +566,47 @@ describe("reconciliation workbench UI", () => {
     expect(markup).toContain("data-unresolved-issues-table");
     expect(markup).toContain("NO_APPROVED_RECORDS");
     expect(markup).toContain("APPROVAL_DECISION_PENDING");
+    expect(markup).toContain("No real participant, beneficiary");
+    expect(markup).not.toMatch(/\b(type="file"|https?:\/\/|server call|telemetry|raw OCR|raw source document|run scraping|run OCR|insert into|sql\.js write|output-adapter write)\b/i);
+    expect(markup).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
+  });
+
+  it("links the case dashboard sample/mock packs stage to the pack route", () => {
+    const dashboard = buildCaseNavigationDashboard({ active_stage_key: "sample_mock_packs" });
+    const markup = buildCaseNavigationDashboardMarkup(dashboard);
+
+    expect(dashboard.stages.find((stage) => stage.stage_key === "sample_mock_packs")).toMatchObject({
+      status: "available",
+      target: "#sample-mock-packs",
+    });
+    expect(markup).toContain("href=\"#sample-mock-packs\"");
+    expect(markup).toContain("Sample / Mock Packs");
+  });
+
+  it("builds deterministic approved sample and mock pack metadata", () => {
+    const state = buildSampleMockPackManagement();
+    const repeated = buildSampleMockPackManagement();
+
+    expect(state.packs.map((pack) => pack.pack_id)).toEqual(["approved-bsrs-samples", "alpha-mock-case-pack"]);
+    expect(state.packs.map((pack) => pack.ordering_key)).toEqual([...state.packs.map((pack) => pack.ordering_key)].sort());
+    expect(state.selected_pack).toMatchObject({
+      pack_id: "approved-bsrs-samples",
+      kind: "approved_sample",
+      readiness: "ready",
+    });
+    expect(state.selected_pack.included_stages).toContain("reconciliation_workbench");
+    expect(state.selected_pack.mocked_only_notice).toContain("No real participant");
+    expect(repeated).toEqual(state);
+  });
+
+  it("renders sample/mock pack page with selected readiness and no prohibited runtime paths", () => {
+    const markup = buildSampleMockPackManagementMarkup(buildSampleMockPackManagement({ selected_pack_id: "alpha-mock-case-pack" }));
+
+    expect(markup).toContain("PBGC Sample / Mock Packs");
+    expect(markup).toContain("Return to case dashboard");
+    expect(markup).toContain("data-sample-mock-pack-list");
+    expect(markup).toContain("Alpha Mock Case Pack");
+    expect(markup).toContain("sample_mock_packs");
     expect(markup).toContain("No real participant, beneficiary");
     expect(markup).not.toMatch(/\b(type="file"|https?:\/\/|server call|telemetry|raw OCR|raw source document|run scraping|run OCR|insert into|sql\.js write|output-adapter write)\b/i);
     expect(markup).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
