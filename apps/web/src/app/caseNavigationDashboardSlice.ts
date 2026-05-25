@@ -57,10 +57,10 @@ const STAGE_DEFINITIONS = [
   {
     stage_key: "prompt_library",
     label: "Prompt Library",
-    status: "planned",
-    status_label: "Planned",
-    detail: "Stage-specific scraping prompts will be managed in a later slice.",
-    target: null,
+    status: "available",
+    status_label: "Available",
+    detail: "Stage-specific external-LLM prompts are available for browser-local viewing and draft editing.",
+    target: "#prompt-library",
   },
   {
     stage_key: "schema_library",
