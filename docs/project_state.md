@@ -2,9 +2,9 @@
 
 **Current branch**: `main`
 
-**Last merged PR**: `#28`
+**Last merged PR**: `#29`
 
-**Completed features count**: 19
+**Completed features count**: 20
 
 ## Completed Features
 
@@ -27,6 +27,7 @@
 17. `theme-and-progress`
 18. `responsiveness-and-work-guards`
 19. `case-workspace-and-session-state`
+20. `case-navigation-dashboard`
 
 ## Current Workbench State
 
@@ -41,14 +42,15 @@
 - Display-only progress/loading, failed, and unsupported states
 - Display-only guarded local work, cancellation, and fail-fast oversized-work evidence
 - Browser-local mocked workspace save/restore session state
+- Top-level mocked case navigation dashboard with deterministic alpha stage status
 
 ## Next Feature
 
-`case-navigation-dashboard`
+`prompt-library-by-stage`
 
 ## Alpha Readiness Status
 
-Not alpha-ready yet. The app has the backend engine slices and a productized reconciliation workbench surface with local mocked workspace session state, but still needs stage navigation, prompt/schema/template libraries, upload/import, reviewed-input approval, template filling/export, unresolved-issue queue, and sample/mock pack management before the first usable alpha definition is met.
+Not alpha-ready yet. The app has the backend engine slices, a productized reconciliation workbench surface with local mocked workspace session state, and a top-level case navigation dashboard, but still needs prompt/schema/template libraries, upload/import, reviewed-input approval, template filling/export, unresolved-issue queue, and sample/mock pack management before the first usable alpha definition is met.
 
 ## Core Constraints
 
