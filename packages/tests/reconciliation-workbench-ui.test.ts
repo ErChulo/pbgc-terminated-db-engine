@@ -1,8 +1,111 @@
 import { describe, expect, it } from "vitest";
+import { buildCaseNavigationDashboard } from "../../apps/web/src/app/caseNavigationDashboardSlice";
 import { buildApprovedSampleReconciliationWorkbench } from "../../apps/web/src/app/reconciliationWorkbenchSlice";
+import { buildCaseNavigationDashboardMarkup } from "../../apps/web/src/pages/CaseNavigationDashboardPage";
 import { buildReconciliationWorkbenchMarkup } from "../../apps/web/src/pages/ReconciliationWorkbenchPage";
 
 describe("reconciliation workbench UI", () => {
+  it("builds deterministic case navigation dashboard state from the approved mocked workspace", () => {
+    const state = buildCaseNavigationDashboard();
+    const repeated = buildCaseNavigationDashboard();
+
+    expect(state.summary).toMatchObject({
+      workspace_id: "mock-workspace-approved-samples",
+      workspace_label: "Mock approved-sample case workspace",
+      sample_id: "BSRS001",
+      sample_label: "Deferred vested BSRS configuration packet",
+      artifact_basis: "source:packages/tests/bsrs-configuration-output-fixtures.ts#BSRS001",
+      mock_case_label: "Mock case context: simulated PBGC terminated DB case",
+      mock_population_label: "Mock population context: simulated participant cohort",
+    });
+    expect(state.summary.no_real_person_data_notice).toContain("No real participant");
+    expect(state.generated_at).toBe("source:packages/tests/bsrs-configuration-output-fixtures.ts#BSRS001");
+    expect(repeated).toEqual(state);
+  });
+
+  it("exposes required alpha case stages in stable order with display-only planned stages", () => {
+    const state = buildCaseNavigationDashboard();
+
+    expect(state.stages.map((stage) => stage.stage_key)).toEqual([
+      "case_workspace",
+      "reconciliation_workbench",
+      "prompt_library",
+      "schema_library",
+      "pbgc_template_library",
+      "upload_import",
+      "reviewed_input_approval",
+      "template_filling_export",
+      "unresolved_issues",
+      "sample_mock_packs",
+    ]);
+    expect(state.stages.map((stage) => stage.ordering_key)).toEqual([...state.stages.map((stage) => stage.ordering_key)].sort());
+    expect(state.stages.find((stage) => stage.stage_key === "reconciliation_workbench")).toMatchObject({
+      status: "available",
+      target: "#reconciliation-workbench",
+    });
+    expect(state.stages.filter((stage) => stage.status === "planned").length).toBeGreaterThan(0);
+    expect(JSON.stringify(state.stages.filter((stage) => stage.status === "planned"))).not.toMatch(/\b(executed|started|completed|uploaded)\b/i);
+  });
+
+  it("renders dashboard summary, stage navigation, and workbench action without real-person data", () => {
+    const markup = buildCaseNavigationDashboardMarkup(buildCaseNavigationDashboard());
+
+    expect(markup).toContain("PBGC Case Dashboard");
+    expect(markup).toContain("Mock approved-sample case workspace");
+    expect(markup).toContain("Deferred vested BSRS configuration packet");
+    expect(markup).toContain("Open reconciliation workbench");
+    expect(markup).toContain("href=\"#reconciliation-workbench\"");
+    expect(markup).toContain("Prompt Library");
+    expect(markup).toContain("Schema Library");
+    expect(markup).toContain("PBGC Template Library");
+    expect(markup).toContain("No real participant, beneficiary");
+    expect(markup).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
+  });
+
+  it("keeps dashboard renders deterministic and free of server, raw, OCR, upload execution, sql.js write, and adapter-write paths", () => {
+    const first = buildCaseNavigationDashboardMarkup(buildCaseNavigationDashboard({ sample_id: "BSRS002" }));
+    const second = buildCaseNavigationDashboardMarkup(buildCaseNavigationDashboard({ sample_id: "BSRS002" }));
+
+    expect(second).toBe(first);
+    expect(first).toContain("BSRS002");
+    expect(first).not.toMatch(/\b(https?:\/\/|server call|telemetry|raw OCR|raw source document|type="file"|insert into|sql\.js write|output-adapter write)\b/i);
+    expect(first).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
+  });
+
+  it("preserves existing workbench output and workspace session when dashboard state is built", () => {
+    const workbench = buildApprovedSampleReconciliationWorkbench({
+      sample_id: "BSRS002",
+      theme: "dark",
+      status_filter: "agreement",
+      severity_filter: "info",
+      workspace_session_status: "saved",
+    });
+    const dashboard = buildCaseNavigationDashboard({ sample_id: "BSRS002" });
+    const repeatedWorkbench = buildApprovedSampleReconciliationWorkbench({
+      sample_id: "BSRS002",
+      theme: "dark",
+      status_filter: "agreement",
+      severity_filter: "info",
+      workspace_session_status: "saved",
+    });
+
+    expect(dashboard.summary.sample_id).toBe("BSRS002");
+    expect(repeatedWorkbench.output_panels).toEqual(workbench.output_panels);
+    expect(repeatedWorkbench.filtered_reconciliation_rows).toEqual(workbench.filtered_reconciliation_rows);
+    expect(repeatedWorkbench.workspace_session).toEqual(workbench.workspace_session);
+  });
+
+  it("renders responsive dashboard landmarks with stable labels and required controls", () => {
+    const markup = buildCaseNavigationDashboardMarkup(buildCaseNavigationDashboard());
+
+    expect(markup).toContain("case-dashboard-page");
+    expect(markup).toContain("case-dashboard-summary");
+    expect(markup).toContain("case-stage-list");
+    expect(markup).toContain("data-case-dashboard-workbench-link");
+    expect(markup).toContain("Current mocked workspace");
+    expect(markup).toContain("Stage status");
+  });
+
   it("builds one approved sample workbench with sample identity and exactly three output slice panels", () => {
     const state = buildApprovedSampleReconciliationWorkbench();
 

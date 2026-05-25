@@ -42,6 +42,17 @@ button.secondary {
   background: #52606d;
 }
 
+.primary-link {
+  background: #155e75;
+  border-radius: 6px;
+  color: white;
+  display: inline-flex;
+  font-weight: 650;
+  margin-top: 14px;
+  padding: 10px 14px;
+  text-decoration: none;
+}
+
 nav {
   display: flex;
   gap: 8px;
@@ -84,6 +95,108 @@ th {
 
 .reconciliation-workbench-page {
   max-width: 1280px;
+}
+
+.case-dashboard-page {
+  max-width: 1180px;
+}
+
+.case-dashboard-header {
+  align-items: flex-start;
+}
+
+.case-dashboard-title {
+  min-width: 0;
+}
+
+.case-dashboard-summary {
+  background: #ffffff;
+  border: 1px solid #bcccdc;
+  border-radius: 8px;
+  display: grid;
+  gap: 6px;
+  max-width: 440px;
+  padding: 12px 14px;
+}
+
+.case-dashboard-summary strong,
+.case-dashboard-summary span {
+  overflow-wrap: anywhere;
+}
+
+.case-dashboard-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.case-dashboard-panel {
+  min-width: 0;
+}
+
+.case-dashboard-panel-heading {
+  align-items: baseline;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.case-dashboard-panel h2 {
+  font-size: 18px;
+  margin: 0 0 8px;
+}
+
+.case-stage-list {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+.case-stage-item {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-left: 4px solid #64748b;
+  border-radius: 8px;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 12px 14px;
+}
+
+.case-stage-item strong,
+.case-stage-item span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.case-stage-item.stage-current {
+  border-left-color: #155e75;
+}
+
+.case-stage-item.stage-available {
+  border-left-color: #2f855a;
+}
+
+.case-stage-status {
+  align-items: flex-end;
+  display: grid;
+  gap: 6px;
+  min-width: 128px;
+  text-align: right;
+}
+
+.case-stage-status span:first-child {
+  color: #334e68;
+  font-size: 12px;
+  font-weight: 650;
+  text-transform: uppercase;
+}
+
+.case-stage-status a {
+  color: #155e75;
+  font-weight: 650;
 }
 
 .reconciliation-workbench-page.theme-dark {
@@ -591,14 +704,27 @@ th {
     flex-direction: column;
   }
 
+  .case-dashboard-summary,
   .workbench-sample-context {
     max-width: none;
     width: 100%;
   }
 
+  .case-stage-item,
   .workbench-grid,
   .slice-panel dl {
     grid-template-columns: 1fr;
+  }
+
+  .case-dashboard-panel-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .case-stage-status {
+    align-items: start;
+    min-width: 0;
+    text-align: left;
   }
 
   .workbench-action-bar,
