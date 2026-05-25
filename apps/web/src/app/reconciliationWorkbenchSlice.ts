@@ -18,6 +18,7 @@ export type WorkbenchSeverityFilterValue = "all" | WorkbenchSeverity;
 export type WorkbenchTheme = "light" | "dark";
 export type WorkbenchProgressStatus = "idle" | "loading" | "complete" | "failed" | "unsupported";
 export type WorkbenchWorkGuardStatus = "idle" | "running" | "cancelled" | "complete" | "unsupported";
+export type WorkbenchWorkspaceSessionStatus = "unsaved" | "saved" | "restored" | "unavailable";
 
 export type WorkbenchFilterOption = {
   value: WorkbenchStatusFilterValue | WorkbenchSeverityFilterValue;
@@ -72,6 +73,24 @@ export type WorkbenchWorkGuardState = {
   cancellable: boolean;
   started_at: string | null;
   evidence: WorkbenchWorkGuardEvidence;
+};
+
+export type WorkbenchWorkspaceSessionSnapshot = {
+  workspace_id: string;
+  workspace_label: string;
+  sample_id: string;
+  theme: WorkbenchTheme;
+  status_filter: WorkbenchStatusFilterValue;
+  severity_filter: WorkbenchSeverityFilterValue;
+  saved_at: string;
+  basis: string;
+};
+
+export type WorkbenchWorkspaceSessionState = {
+  status: WorkbenchWorkspaceSessionStatus;
+  label: string;
+  message: string;
+  snapshot: WorkbenchWorkspaceSessionSnapshot | null;
 };
 
 export type WorkbenchDisplayField = {
@@ -241,6 +260,7 @@ export type ReconciliationWorkbenchState = {
   theme_options: WorkbenchThemeOption[];
   progress: WorkbenchProgressState;
   work_guard: WorkbenchWorkGuardState;
+  workspace_session: WorkbenchWorkspaceSessionState;
   filtered_shared_fact_rows: WorkbenchSharedFactRow[];
   filtered_shared_value_rows: WorkbenchSharedValueRow[];
   filtered_reconciliation_rows: WorkbenchReconciliationRow[];
@@ -281,6 +301,9 @@ const THEME_OPTIONS: WorkbenchThemeOption[] = [
 const SUPPORTED_WORK_UNITS = 250;
 const WORK_UNIT_LABEL = "display rows";
 const WORK_UNIT_BASIS = "approved-sample workbench display rows";
+const WORKSPACE_ID = "mock-workspace-approved-samples";
+const WORKSPACE_LABEL = "Mock approved-sample workspace";
+const WORKSPACE_BASIS = "local mocked workspace display state";
 
 export function buildApprovedSampleReconciliationWorkbench(
   options: {
@@ -292,11 +315,15 @@ export function buildApprovedSampleReconciliationWorkbench(
     progress_status?: WorkbenchProgressStatus;
     work_guard_status?: WorkbenchWorkGuardStatus;
     attempted_work_units?: number;
+    workspace_session_status?: WorkbenchWorkspaceSessionStatus;
+    session_snapshot?: WorkbenchWorkspaceSessionSnapshot;
   } = {},
 ): ReconciliationWorkbenchState {
   const fixtures = parseBsrsConfigurationFixtures();
   const sampleOptions = buildApprovedSampleOptions(fixtures);
-  const selectedSample = resolveSelectedSample(sampleOptions, options.sample_id);
+  const restoredSnapshot =
+    options.workspace_session_status === "restored" ? validateWorkspaceSessionSnapshot(options.session_snapshot, sampleOptions) : null;
+  const selectedSample = resolveSelectedSample(sampleOptions, restoredSnapshot?.sample_id ?? options.sample_id);
   const fixture = fixtures.find((candidate) => candidate.test_case_id === selectedSample.sample_id);
   if (!fixture) throw new Error("Missing approved BSRS configuration fixture");
 
@@ -368,9 +395,9 @@ export function buildApprovedSampleReconciliationWorkbench(
     sharedValueRows,
     reconciliationRows,
   });
-  const activeStatus = resolveStatusFilter(options.status_filter, statusOptions);
-  const activeSeverity = resolveSeverityFilter(options.severity_filter, severityOptions);
-  const theme = resolveTheme(options.theme, options.theme_source);
+  const activeStatus = resolveStatusFilter(restoredSnapshot?.status_filter ?? options.status_filter, statusOptions);
+  const activeSeverity = resolveSeverityFilter(restoredSnapshot?.severity_filter ?? options.severity_filter, severityOptions);
+  const theme = resolveTheme(restoredSnapshot?.theme ?? options.theme, restoredSnapshot ? "session" : options.theme_source);
   const progress = resolveProgress(options.progress_status);
   const attemptedWorkUnits = options.attempted_work_units ?? sharedFactRows.length + sharedValueRows.length + reconciliationRows.length;
   const workGuard = resolveWorkGuard(options.work_guard_status, attemptedWorkUnits);
@@ -383,6 +410,14 @@ export function buildApprovedSampleReconciliationWorkbench(
   });
 
   const generatedAt = selectedSample.artifact_basis;
+  const sessionSnapshot = buildWorkspaceSessionSnapshot({
+    selectedSample,
+    theme: theme.value,
+    activeStatus: activeStatus.value,
+    activeSeverity: activeSeverity.value,
+    generatedAt,
+  });
+  const workspaceSession = resolveWorkspaceSession(options.workspace_session_status, sessionSnapshot, restoredSnapshot);
   return {
     sample_id: fixture.test_case_id,
     sample_label: fixture.description,
@@ -417,6 +452,7 @@ export function buildApprovedSampleReconciliationWorkbench(
     theme_options: THEME_OPTIONS,
     progress,
     work_guard: workGuard,
+    workspace_session: workspaceSession,
     filtered_shared_fact_rows: filteredRowGroups.shared_facts.rows,
     filtered_shared_value_rows: filteredRowGroups.shared_values.rows,
     filtered_reconciliation_rows: filteredRowGroups.reconciliation.rows,
@@ -631,6 +667,94 @@ function resolveWorkGuard(requested: WorkbenchWorkGuardStatus | undefined, attem
         evidence,
       };
   }
+}
+
+function buildWorkspaceSessionSnapshot(args: {
+  selectedSample: ApprovedSampleOption;
+  theme: WorkbenchTheme;
+  activeStatus: WorkbenchStatusFilterValue;
+  activeSeverity: WorkbenchSeverityFilterValue;
+  generatedAt: string;
+}): WorkbenchWorkspaceSessionSnapshot {
+  return {
+    workspace_id: WORKSPACE_ID,
+    workspace_label: WORKSPACE_LABEL,
+    sample_id: args.selectedSample.sample_id,
+    theme: args.theme,
+    status_filter: args.activeStatus,
+    severity_filter: args.activeSeverity,
+    saved_at: args.generatedAt,
+    basis: WORKSPACE_BASIS,
+  };
+}
+
+function resolveWorkspaceSession(
+  requested: WorkbenchWorkspaceSessionStatus | undefined,
+  currentSnapshot: WorkbenchWorkspaceSessionSnapshot,
+  restoredSnapshot: WorkbenchWorkspaceSessionSnapshot | null,
+): WorkbenchWorkspaceSessionState {
+  switch (requested) {
+    case "saved":
+      return {
+        status: "saved",
+        label: "Saved",
+        message: "Mock workspace session saved locally.",
+        snapshot: currentSnapshot,
+      };
+    case "restored":
+      if (restoredSnapshot) {
+        return {
+          status: "restored",
+          label: "Restored",
+          message: "Mock workspace session restored.",
+          snapshot: restoredSnapshot,
+        };
+      }
+      return {
+        status: "unavailable",
+        label: "Unavailable",
+        message: "Workspace session unavailable. Stable workbench content remains visible.",
+        snapshot: null,
+      };
+    case "unavailable":
+      return {
+        status: "unavailable",
+        label: "Unavailable",
+        message: "Workspace session unavailable. Stable workbench content remains visible.",
+        snapshot: null,
+      };
+    default:
+      return {
+        status: "unsaved",
+        label: "Unsaved",
+        message: "Mock workspace session has not been saved.",
+        snapshot: null,
+      };
+  }
+}
+
+function validateWorkspaceSessionSnapshot(
+  snapshot: WorkbenchWorkspaceSessionSnapshot | undefined,
+  sampleOptions: ApprovedSampleOption[],
+): WorkbenchWorkspaceSessionSnapshot | null {
+  if (!snapshot) return null;
+  const sampleExists = sampleOptions.some((sample) => sample.sample_id === snapshot.sample_id);
+  const themeExists = THEME_OPTIONS.some((theme) => theme.value === snapshot.theme);
+  const statusExists = snapshot.status_filter === "all" || STATUS_ORDER.includes(snapshot.status_filter);
+  const severityExists = snapshot.severity_filter === "all" || SEVERITY_ORDER.includes(snapshot.severity_filter);
+  if (
+    snapshot.workspace_id !== WORKSPACE_ID ||
+    snapshot.workspace_label !== WORKSPACE_LABEL ||
+    snapshot.basis !== WORKSPACE_BASIS ||
+    !sampleExists ||
+    !themeExists ||
+    !statusExists ||
+    !severityExists ||
+    !snapshot.saved_at
+  ) {
+    return null;
+  }
+  return snapshot;
 }
 
 function buildFilteredRowGroups(args: {

@@ -192,6 +192,13 @@ th {
   gap: 8px;
 }
 
+.workbench-session-controls {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .theme-control-label {
   color: #52606d;
   font-size: 12px;
@@ -203,13 +210,16 @@ th {
 .workbench-refresh,
 .workbench-guarded-work,
 .workbench-cancel-work,
-.workbench-oversized-work {
+.workbench-oversized-work,
+.workbench-save-session,
+.workbench-restore-session {
   min-height: 38px;
 }
 
 .workbench-progress-banner,
 .workbench-guard-banner,
-.workbench-guard-evidence {
+.workbench-guard-evidence,
+.workbench-session-banner {
   align-items: center;
   background: #fff7ed;
   border: 1px solid #fdba74;
@@ -229,7 +239,8 @@ th {
 }
 
 .theme-dark .workbench-progress-banner,
-.theme-dark .workbench-guard-banner {
+.theme-dark .workbench-guard-banner,
+.theme-dark .workbench-session-banner {
   background: #422006;
   border-color: #c2410c;
   color: #ffedd5;
@@ -304,6 +315,19 @@ th {
   color: #991b1b;
 }
 
+.session-saved,
+.session-restored {
+  background: #ecfdf3;
+  border-color: #86efac;
+  color: #166534;
+}
+
+.session-unavailable {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
+
 .theme-dark .guard-running {
   background: #172554;
   border-color: #2563eb;
@@ -328,15 +352,30 @@ th {
   color: #fee2e2;
 }
 
+.theme-dark .session-saved,
+.theme-dark .session-restored {
+  background: #052e16;
+  border-color: #15803d;
+  color: #dcfce7;
+}
+
+.theme-dark .session-unavailable {
+  background: #450a0a;
+  border-color: #dc2626;
+  color: #fee2e2;
+}
+
 .progress-message,
-.guard-message {
+.guard-message,
+.session-message {
   font-weight: 650;
 }
 
 .progress-detail,
 .guard-detail,
 .workbench-guard-banner span,
-.workbench-guard-evidence span {
+.workbench-guard-evidence span,
+.workbench-session-banner span {
   overflow-wrap: anywhere;
 }
 
@@ -564,9 +603,11 @@ th {
 
   .workbench-action-bar,
   .workbench-guard-controls,
+  .workbench-session-controls,
   .workbench-progress-banner,
   .workbench-guard-banner,
-  .workbench-guard-evidence {
+  .workbench-guard-evidence,
+  .workbench-session-banner {
     align-items: stretch;
     flex-direction: column;
   }
@@ -575,7 +616,9 @@ th {
   .workbench-refresh,
   .workbench-guarded-work,
   .workbench-cancel-work,
-  .workbench-oversized-work {
+  .workbench-oversized-work,
+  .workbench-save-session,
+  .workbench-restore-session {
     width: 100%;
   }
 }

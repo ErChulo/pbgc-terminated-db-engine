@@ -5,10 +5,12 @@ import {
   type WorkbenchSeverityFilterValue,
   type WorkbenchStatusFilterValue,
   type WorkbenchTheme,
+  type WorkbenchWorkspaceSessionSnapshot,
   type WorkbenchWorkGuardStatus,
 } from "../app/reconciliationWorkbenchSlice";
 
 let activeGuardRunId = 0;
+const WORKBENCH_SESSION_STORAGE_KEY = "pbgc-workbench-session";
 
 export function renderReconciliationWorkbenchPage(root: HTMLElement): void {
   renderWorkbench(root, buildApprovedSampleReconciliationWorkbench({ theme: readStoredTheme(), theme_source: readStoredTheme() ? "session" : "default" }));
@@ -260,6 +262,41 @@ function renderWorkbench(root: HTMLElement, state: ReconciliationWorkbenchState)
       }),
     );
   });
+  const saveSession = root.querySelector<HTMLButtonElement>("[data-workbench-save-session]");
+  saveSession?.addEventListener("click", () => {
+    const savedState = buildApprovedSampleReconciliationWorkbench({
+      sample_id: state.sample_id,
+      status_filter: state.status_filter.value,
+      severity_filter: state.severity_filter.value,
+      theme: state.theme.value,
+      theme_source: state.theme.source,
+      progress_status: state.progress.status,
+      work_guard_status: state.work_guard.status,
+      attempted_work_units: state.work_guard.evidence.attempted_work_units,
+      workspace_session_status: "saved",
+    });
+    writeStoredWorkspaceSession(savedState.workspace_session.snapshot);
+    renderWorkbench(root, savedState);
+  });
+  const restoreSession = root.querySelector<HTMLButtonElement>("[data-workbench-restore-session]");
+  restoreSession?.addEventListener("click", () => {
+    const snapshot = readStoredWorkspaceSession();
+    renderWorkbench(
+      root,
+      buildApprovedSampleReconciliationWorkbench({
+        sample_id: state.sample_id,
+        status_filter: state.status_filter.value,
+        severity_filter: state.severity_filter.value,
+        theme: state.theme.value,
+        theme_source: state.theme.source,
+        progress_status: state.progress.status,
+        work_guard_status: state.work_guard.status,
+        attempted_work_units: state.work_guard.evidence.attempted_work_units,
+        workspace_session_status: snapshot ? "restored" : "unavailable",
+        session_snapshot: snapshot ?? undefined,
+      }),
+    );
+  });
 }
 
 function renderActionBar(state: ReconciliationWorkbenchState): string {
@@ -289,9 +326,19 @@ function renderActionBar(state: ReconciliationWorkbenchState): string {
           Oversized work check
         </button>
       </div>
+      <div class="workbench-session-controls" aria-label="Mock workspace session controls">
+        <button type="button" class="secondary workbench-save-session" data-workbench-save-session>
+          Save workspace
+        </button>
+        <button type="button" class="secondary workbench-restore-session" data-workbench-restore-session>
+          Restore workspace
+        </button>
+      </div>
+      <span class="active-filter-label">Workspace session: ${escapeHtml(state.workspace_session.label)}</span>
     </div>
     ${renderProgressBanner(state.progress)}
     ${renderWorkGuardBanner(state.work_guard)}
+    ${renderWorkspaceSessionBanner(state.workspace_session)}
   `;
 }
 
@@ -322,6 +369,27 @@ function renderWorkGuardBanner(workGuard: ReconciliationWorkbenchState["work_gua
       <span>Supported work units: ${evidence.supported_work_units}</span>
       <span>Attempted work units: ${evidence.attempted_work_units}</span>
       <span>${escapeHtml(evidence.basis)}</span>
+    </div>
+  `;
+}
+
+function renderWorkspaceSessionBanner(workspaceSession: ReconciliationWorkbenchState["workspace_session"]): string {
+  if (workspaceSession.status === "unsaved") return "";
+  const snapshot = workspaceSession.snapshot;
+  const message =
+    workspaceSession.status === "unavailable" ? "Workspace session unavailable" : `Workspace session: ${workspaceSession.label}`;
+  return `
+    <div class="workbench-session-banner session-${escapeHtml(workspaceSession.status)}" data-workbench-session-state role="status" aria-label="Workspace session status">
+      <span class="session-message">${escapeHtml(message)}</span>
+      <span>${escapeHtml(workspaceSession.message)}</span>
+      ${snapshot ? `
+        <span>${escapeHtml(snapshot.workspace_label)}</span>
+        <span>Sample ${escapeHtml(snapshot.sample_id)}</span>
+        <span>Theme ${escapeHtml(snapshot.theme)}</span>
+        <span>Status ${escapeHtml(snapshot.status_filter)}</span>
+        <span>Severity ${escapeHtml(snapshot.severity_filter)}</span>
+        <span>Saved at ${escapeHtml(snapshot.saved_at)}</span>
+      ` : ""}
     </div>
   `;
 }
@@ -530,5 +598,23 @@ function writeStoredTheme(theme: WorkbenchTheme): void {
     window.localStorage.setItem("pbgc-workbench-theme", theme);
   } catch {
     // Theme switching still works for the current render when storage is unavailable.
+  }
+}
+
+function readStoredWorkspaceSession(): WorkbenchWorkspaceSessionSnapshot | null {
+  try {
+    const stored = window.localStorage.getItem(WORKBENCH_SESSION_STORAGE_KEY);
+    return stored ? (JSON.parse(stored) as WorkbenchWorkspaceSessionSnapshot) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeStoredWorkspaceSession(snapshot: WorkbenchWorkspaceSessionSnapshot | null): void {
+  if (!snapshot) return;
+  try {
+    window.localStorage.setItem(WORKBENCH_SESSION_STORAGE_KEY, JSON.stringify(snapshot));
+  } catch {
+    // Session save degrades to the visible current render when local storage is unavailable.
   }
 }
