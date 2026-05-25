@@ -185,6 +185,13 @@ th {
   margin-top: 14px;
 }
 
+.workbench-guard-controls {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .theme-control-label {
   color: #52606d;
   font-size: 12px;
@@ -193,11 +200,16 @@ th {
 }
 
 .theme-toggle,
-.workbench-refresh {
+.workbench-refresh,
+.workbench-guarded-work,
+.workbench-cancel-work,
+.workbench-oversized-work {
   min-height: 38px;
 }
 
-.workbench-progress-banner {
+.workbench-progress-banner,
+.workbench-guard-banner,
+.workbench-guard-evidence {
   align-items: center;
   background: #fff7ed;
   border: 1px solid #fdba74;
@@ -210,10 +222,23 @@ th {
   padding: 10px 12px;
 }
 
-.theme-dark .workbench-progress-banner {
+.workbench-guard-evidence {
+  background: #f8fafc;
+  border-color: #bcccdc;
+  color: #334e68;
+}
+
+.theme-dark .workbench-progress-banner,
+.theme-dark .workbench-guard-banner {
   background: #422006;
   border-color: #c2410c;
   color: #ffedd5;
+}
+
+.theme-dark .workbench-guard-evidence {
+  background: #243447;
+  border-color: #486581;
+  color: #d9e2ec;
 }
 
 .progress-spinner {
@@ -255,11 +280,63 @@ th {
   color: #fee2e2;
 }
 
-.progress-message {
+.guard-running {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #1e3a8a;
+}
+
+.guard-cancelled {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #334155;
+}
+
+.guard-complete {
+  background: #ecfdf3;
+  border-color: #86efac;
+  color: #166534;
+}
+
+.guard-unsupported {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
+
+.theme-dark .guard-running {
+  background: #172554;
+  border-color: #2563eb;
+  color: #dbeafe;
+}
+
+.theme-dark .guard-cancelled {
+  background: #1f2937;
+  border-color: #64748b;
+  color: #e2e8f0;
+}
+
+.theme-dark .guard-complete {
+  background: #052e16;
+  border-color: #15803d;
+  color: #dcfce7;
+}
+
+.theme-dark .guard-unsupported {
+  background: #450a0a;
+  border-color: #dc2626;
+  color: #fee2e2;
+}
+
+.progress-message,
+.guard-message {
   font-weight: 650;
 }
 
-.progress-detail {
+.progress-detail,
+.guard-detail,
+.workbench-guard-banner span,
+.workbench-guard-evidence span {
   overflow-wrap: anywhere;
 }
 
@@ -486,13 +563,19 @@ th {
   }
 
   .workbench-action-bar,
-  .workbench-progress-banner {
+  .workbench-guard-controls,
+  .workbench-progress-banner,
+  .workbench-guard-banner,
+  .workbench-guard-evidence {
     align-items: stretch;
     flex-direction: column;
   }
 
   .theme-toggle,
-  .workbench-refresh {
+  .workbench-refresh,
+  .workbench-guarded-work,
+  .workbench-cancel-work,
+  .workbench-oversized-work {
     width: 100%;
   }
 }
