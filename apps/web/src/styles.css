@@ -105,6 +105,10 @@ th {
   max-width: 1180px;
 }
 
+.schema-library-page {
+  max-width: 1180px;
+}
+
 .case-dashboard-header {
   align-items: flex-start;
 }
@@ -113,11 +117,19 @@ th {
   align-items: flex-start;
 }
 
+.schema-library-header {
+  align-items: flex-start;
+}
+
 .case-dashboard-title {
   min-width: 0;
 }
 
 .prompt-library-title {
+  min-width: 0;
+}
+
+.schema-library-title {
   min-width: 0;
 }
 
@@ -142,10 +154,23 @@ th {
   padding: 12px 14px;
 }
 
+.schema-boundary-notice {
+  background: #eff6ff;
+  border: 1px solid #93c5fd;
+  border-radius: 8px;
+  color: #1e3a8a;
+  display: grid;
+  gap: 6px;
+  max-width: 460px;
+  padding: 12px 14px;
+}
+
 .case-dashboard-summary strong,
 .case-dashboard-summary span,
 .prompt-boundary-notice strong,
-.prompt-boundary-notice span {
+.prompt-boundary-notice span,
+.schema-boundary-notice strong,
+.schema-boundary-notice span {
   overflow-wrap: anywhere;
 }
 
@@ -160,12 +185,20 @@ th {
   grid-template-columns: minmax(260px, 0.36fr) minmax(0, 0.64fr);
 }
 
+.schema-library-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(260px, 0.36fr) minmax(0, 0.64fr);
+}
+
 .case-dashboard-panel {
   min-width: 0;
 }
 
 .prompt-list-panel,
-.prompt-detail-panel {
+.prompt-detail-panel,
+.schema-list-panel,
+.schema-detail-panel {
   min-width: 0;
 }
 
@@ -182,7 +215,9 @@ th {
 }
 
 .prompt-list-panel h2,
-.prompt-detail-panel h2 {
+.prompt-detail-panel h2,
+.schema-list-panel h2,
+.schema-detail-panel h2 {
   font-size: 18px;
   margin: 0 0 8px;
 }
@@ -196,6 +231,14 @@ th {
 }
 
 .prompt-stage-list {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+.schema-entry-list {
   display: grid;
   gap: 8px;
   list-style: none;
@@ -224,7 +267,21 @@ th {
   padding: 10px 12px;
 }
 
+.schema-entry-item {
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+}
+
 .prompt-stage-item.is-selected {
+  border-color: #155e75;
+  box-shadow: 0 0 0 1px #155e75 inset;
+}
+
+.schema-entry-item.is-selected {
   border-color: #155e75;
   box-shadow: 0 0 0 1px #155e75 inset;
 }
@@ -232,17 +289,21 @@ th {
 .case-stage-item strong,
 .case-stage-item span,
 .prompt-stage-item a,
-.prompt-stage-item span {
+.prompt-stage-item span,
+.schema-entry-item a,
+.schema-entry-item span {
   display: block;
   overflow-wrap: anywhere;
 }
 
-.prompt-stage-item a {
+.prompt-stage-item a,
+.schema-entry-item a {
   color: #155e75;
   font-weight: 650;
 }
 
-.prompt-stage-item span {
+.prompt-stage-item span,
+.schema-entry-item span {
   color: #52606d;
   font-size: 12px;
 }
@@ -333,6 +394,81 @@ th {
 
 .prompt-import-button {
   margin-top: 10px;
+}
+
+.schema-detail-list {
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
+  padding: 12px;
+}
+
+.schema-detail-list dt {
+  color: #52606d;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.schema-detail-list dd {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.schema-json-preview {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.schema-json-preview span {
+  color: #52606d;
+  font-size: 12px;
+  font-weight: 650;
+  text-transform: uppercase;
+}
+
+.schema-json-preview textarea {
+  border: 1px solid #9fb3c8;
+  border-radius: 6px;
+  font: inherit;
+  min-height: 120px;
+  padding: 10px;
+  resize: vertical;
+}
+
+.schema-validate-button {
+  margin-top: 10px;
+}
+
+.schema-validation-preview {
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  display: grid;
+  gap: 4px;
+  margin-top: 12px;
+  padding: 12px;
+}
+
+.schema-validation-preview span {
+  overflow-wrap: anywhere;
+}
+
+.validation-accepted {
+  background: #ecfdf3;
+  border-color: #86efac;
+  color: #166534;
+}
+
+.validation-invalid,
+.validation-malformed,
+.validation-oversized {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #991b1b;
 }
 
 .reconciliation-workbench-page.theme-dark {
@@ -842,6 +978,7 @@ th {
 
   .case-dashboard-summary,
   .prompt-boundary-notice,
+  .schema-boundary-notice,
   .workbench-sample-context {
     max-width: none;
     width: 100%;
@@ -849,6 +986,7 @@ th {
 
   .case-stage-item,
   .prompt-library-grid,
+  .schema-library-grid,
   .workbench-grid,
   .slice-panel dl {
     grid-template-columns: 1fr;
