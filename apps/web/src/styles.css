@@ -86,6 +86,51 @@ th {
   max-width: 1280px;
 }
 
+.reconciliation-workbench-page.theme-dark {
+  background: #17212b;
+  color: #e6eef7;
+}
+
+.reconciliation-workbench-page.theme-dark .subtle,
+.reconciliation-workbench-page.theme-dark .active-filter-label,
+.reconciliation-workbench-page.theme-dark .theme-control-label,
+.reconciliation-workbench-page.theme-dark .comparison-source,
+.reconciliation-workbench-page.theme-dark .trace-detail-grid dt,
+.reconciliation-workbench-page.theme-dark .slice-panel dt,
+.reconciliation-workbench-page.theme-dark .sample-selector span,
+.reconciliation-workbench-page.theme-dark .status-filter span,
+.reconciliation-workbench-page.theme-dark .severity-filter span {
+  color: #bcccdc;
+}
+
+.reconciliation-workbench-page.theme-dark .slice-panel,
+.reconciliation-workbench-page.theme-dark .workbench-sample-context,
+.reconciliation-workbench-page.theme-dark .workbench-filter-bar,
+.reconciliation-workbench-page.theme-dark table {
+  background: #243447;
+  border-color: #486581;
+  color: #e6eef7;
+}
+
+.reconciliation-workbench-page.theme-dark th {
+  background: #334e68;
+}
+
+.reconciliation-workbench-page.theme-dark td,
+.reconciliation-workbench-page.theme-dark th {
+  border-bottom-color: #486581;
+}
+
+.reconciliation-workbench-page.theme-dark select {
+  background: #102a43;
+  border-color: #627d98;
+  color: #f0f4f8;
+}
+
+.reconciliation-workbench-page.theme-dark .trace-detail summary {
+  color: #7cc4d8;
+}
+
 .workbench-header {
   align-items: flex-start;
 }
@@ -130,6 +175,98 @@ th {
   max-width: 100%;
   min-width: 0;
   padding: 8px 10px;
+}
+
+.workbench-action-bar {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-top: 14px;
+}
+
+.theme-control-label {
+  color: #52606d;
+  font-size: 12px;
+  font-weight: 650;
+  text-transform: uppercase;
+}
+
+.theme-toggle,
+.workbench-refresh {
+  min-height: 38px;
+}
+
+.workbench-progress-banner {
+  align-items: center;
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  border-radius: 8px;
+  color: #7c2d12;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  margin-top: 12px;
+  padding: 10px 12px;
+}
+
+.theme-dark .workbench-progress-banner {
+  background: #422006;
+  border-color: #c2410c;
+  color: #ffedd5;
+}
+
+.progress-spinner {
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  height: 14px;
+  width: 14px;
+}
+
+.progress-loading .progress-spinner {
+  animation: progress-spin 900ms linear infinite;
+}
+
+.progress-complete {
+  background: #ecfdf3;
+  border-color: #86efac;
+  color: #166534;
+}
+
+.progress-failed,
+.progress-unsupported {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
+
+.theme-dark .progress-complete {
+  background: #052e16;
+  border-color: #15803d;
+  color: #dcfce7;
+}
+
+.theme-dark .progress-failed,
+.theme-dark .progress-unsupported {
+  background: #450a0a;
+  border-color: #dc2626;
+  color: #fee2e2;
+}
+
+.progress-message {
+  font-weight: 650;
+}
+
+.progress-detail {
+  overflow-wrap: anywhere;
+}
+
+@keyframes progress-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .no-real-person-data-notice {
@@ -346,5 +483,16 @@ th {
   .workbench-grid,
   .slice-panel dl {
     grid-template-columns: 1fr;
+  }
+
+  .workbench-action-bar,
+  .workbench-progress-banner {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .theme-toggle,
+  .workbench-refresh {
+    width: 100%;
   }
 }

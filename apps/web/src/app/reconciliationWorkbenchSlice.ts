@@ -15,6 +15,8 @@ export type WorkbenchStatus = "agreement" | "drift" | "warning" | "nullable" | "
 export type WorkbenchStatusFilterValue = "all" | WorkbenchStatus;
 export type WorkbenchSeverity = "info" | "warning" | "error" | "none";
 export type WorkbenchSeverityFilterValue = "all" | WorkbenchSeverity;
+export type WorkbenchTheme = "light" | "dark";
+export type WorkbenchProgressStatus = "idle" | "loading" | "complete" | "failed" | "unsupported";
 
 export type WorkbenchFilterOption = {
   value: WorkbenchStatusFilterValue | WorkbenchSeverityFilterValue;
@@ -32,6 +34,26 @@ export type WorkbenchStatusFilterState = {
 export type WorkbenchSeverityFilterState = {
   value: WorkbenchSeverityFilterValue;
   label: string;
+};
+
+export type WorkbenchThemeState = {
+  value: WorkbenchTheme;
+  label: string;
+  source: "default" | "session" | "explicit";
+};
+
+export type WorkbenchThemeOption = {
+  value: WorkbenchTheme;
+  label: string;
+  ordering_key: string;
+};
+
+export type WorkbenchProgressState = {
+  status: WorkbenchProgressStatus;
+  label: string;
+  message: string;
+  detail: string | null;
+  busy: boolean;
 };
 
 export type WorkbenchDisplayField = {
@@ -197,6 +219,9 @@ export type ReconciliationWorkbenchState = {
   status_filter_options: WorkbenchFilterOption[];
   severity_filter: WorkbenchSeverityFilterState;
   severity_filter_options: WorkbenchFilterOption[];
+  theme: WorkbenchThemeState;
+  theme_options: WorkbenchThemeOption[];
+  progress: WorkbenchProgressState;
   filtered_shared_fact_rows: WorkbenchSharedFactRow[];
   filtered_shared_value_rows: WorkbenchSharedValueRow[];
   filtered_reconciliation_rows: WorkbenchReconciliationRow[];
@@ -230,12 +255,19 @@ const PANEL_LABELS = {
 
 const STATUS_ORDER: WorkbenchStatus[] = ["agreement", "drift", "warning", "nullable", "unsupported", "formatting-only"];
 const SEVERITY_ORDER: WorkbenchSeverity[] = ["info", "warning", "error", "none"];
+const THEME_OPTIONS: WorkbenchThemeOption[] = [
+  { value: "light", label: "Light", ordering_key: "000001|light" },
+  { value: "dark", label: "Dark", ordering_key: "000002|dark" },
+];
 
 export function buildApprovedSampleReconciliationWorkbench(
   options: {
     sample_id?: string;
     status_filter?: WorkbenchStatusFilterValue;
     severity_filter?: WorkbenchSeverityFilterValue;
+    theme?: WorkbenchTheme;
+    theme_source?: WorkbenchThemeState["source"];
+    progress_status?: WorkbenchProgressStatus;
   } = {},
 ): ReconciliationWorkbenchState {
   const fixtures = parseBsrsConfigurationFixtures();
@@ -314,6 +346,8 @@ export function buildApprovedSampleReconciliationWorkbench(
   });
   const activeStatus = resolveStatusFilter(options.status_filter, statusOptions);
   const activeSeverity = resolveSeverityFilter(options.severity_filter, severityOptions);
+  const theme = resolveTheme(options.theme, options.theme_source);
+  const progress = resolveProgress(options.progress_status);
   const filteredRowGroups = buildFilteredRowGroups({
     activeStatus: activeStatus.value,
     activeSeverity: activeSeverity.value,
@@ -353,6 +387,9 @@ export function buildApprovedSampleReconciliationWorkbench(
     status_filter_options: statusOptions,
     severity_filter: activeSeverity,
     severity_filter_options: severityOptions,
+    theme,
+    theme_options: THEME_OPTIONS,
+    progress,
     filtered_shared_fact_rows: filteredRowGroups.shared_facts.rows,
     filtered_shared_value_rows: filteredRowGroups.shared_values.rows,
     filtered_reconciliation_rows: filteredRowGroups.reconciliation.rows,
@@ -451,6 +488,60 @@ function resolveSeverityFilter(
     value: selected.value as WorkbenchSeverityFilterValue,
     label: selected.label,
   };
+}
+
+function resolveTheme(requested: WorkbenchTheme | undefined, source: WorkbenchThemeState["source"] | undefined): WorkbenchThemeState {
+  const selected = THEME_OPTIONS.find((option) => option.value === requested) ?? THEME_OPTIONS[0];
+  return {
+    value: selected.value,
+    label: selected.label,
+    source: requested === selected.value ? source ?? "explicit" : "default",
+  };
+}
+
+function resolveProgress(requested: WorkbenchProgressStatus | undefined): WorkbenchProgressState {
+  switch (requested) {
+    case "loading":
+      return {
+        status: "loading",
+        label: "Loading",
+        message: "Loading workbench sample locally...",
+        detail: "Existing workbench content remains visible while local work completes.",
+        busy: true,
+      };
+    case "complete":
+      return {
+        status: "complete",
+        label: "Complete",
+        message: "Workbench refresh complete.",
+        detail: "Deterministic workbench content was refreshed from approved local artifacts.",
+        busy: false,
+      };
+    case "failed":
+      return {
+        status: "failed",
+        label: "Failed",
+        message: "Workbench refresh failed.",
+        detail: "Stable workbench content remains visible; no output rows or persistence records were written.",
+        busy: false,
+      };
+    case "unsupported":
+      return {
+        status: "unsupported",
+        label: "Unsupported",
+        message: "Unsupported local sample load.",
+        detail: "The alpha MVP supports approved sample artifacts only and does not start oversized or raw-source work.",
+        busy: false,
+      };
+    default:
+      return {
+        status: "idle",
+        label: "Idle",
+        message: "",
+        detail: null,
+        busy: false,
+      };
+  }
 }
 
 function buildFilteredRowGroups(args: {

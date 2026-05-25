@@ -116,6 +116,25 @@ describe("reconciliation workbench UI", () => {
     expect(state.severity_filter_options).toEqual(buildApprovedSampleReconciliationWorkbench().severity_filter_options);
   });
 
+  it("derives deterministic default theme and progress display state", () => {
+    const state = buildApprovedSampleReconciliationWorkbench();
+
+    expect(state.theme).toEqual({ value: "light", label: "Light", source: "default" });
+    expect(state.theme_options).toEqual([
+      { value: "light", label: "Light", ordering_key: "000001|light" },
+      { value: "dark", label: "Dark", ordering_key: "000002|dark" },
+    ]);
+    expect(state.progress).toEqual({
+      status: "idle",
+      label: "Idle",
+      message: "",
+      detail: null,
+      busy: false,
+    });
+    expect(buildApprovedSampleReconciliationWorkbench().theme).toEqual(state.theme);
+    expect(buildApprovedSampleReconciliationWorkbench().progress).toEqual(state.progress);
+  });
+
   it("filters reconciliation rows, Shared Facts rows, and Shared Values rows by selected status", () => {
     const state = buildApprovedSampleReconciliationWorkbench({ status_filter: "nullable" });
 
@@ -147,6 +166,36 @@ describe("reconciliation workbench UI", () => {
     expect(state.filtered_reconciliation_rows).toEqual([]);
     expect(state.filtered_shared_value_rows).toEqual([]);
     expect(state.filtered_shared_fact_rows.every((row) => row.severity_label === "None")).toBe(true);
+  });
+
+  it("preserves sample, filters, output panels, visible rows, and traces when theme changes", () => {
+    const base = buildApprovedSampleReconciliationWorkbench({
+      sample_id: "BSRS002",
+      status_filter: "agreement",
+      severity_filter: "info",
+    });
+    const themed = buildApprovedSampleReconciliationWorkbench({
+      sample_id: "BSRS002",
+      status_filter: "agreement",
+      severity_filter: "info",
+      theme: "dark",
+    });
+
+    expect(themed.theme).toMatchObject({ value: "dark", label: "Dark" });
+    expect(themed.selected_sample).toEqual(base.selected_sample);
+    expect(themed.status_filter).toEqual(base.status_filter);
+    expect(themed.severity_filter).toEqual(base.severity_filter);
+    expect(themed.output_panels).toEqual(base.output_panels);
+    expect(themed.filtered_reconciliation_rows.map((row) => row.comparison_id)).toEqual(
+      base.filtered_reconciliation_rows.map((row) => row.comparison_id),
+    );
+    expect(themed.filtered_shared_fact_rows.map((row) => row.ordering_key)).toEqual(
+      base.filtered_shared_fact_rows.map((row) => row.ordering_key),
+    );
+    expect(themed.filtered_shared_value_rows.map((row) => row.ordering_key)).toEqual(
+      base.filtered_shared_value_rows.map((row) => row.ordering_key),
+    );
+    expect(themed.filtered_reconciliation_rows[0]?.trace_detail).toEqual(base.filtered_reconciliation_rows[0]?.trace_detail);
   });
 
   it("clears status filtering by restoring original row counts and ordering", () => {
@@ -465,6 +514,80 @@ describe("reconciliation workbench UI", () => {
     expect(markup).toContain("BSRS Configuration");
     expect(markup).toContain("V1/VE Output");
     expect(markup).toContain("Valuation Listings");
+  });
+
+  it("renders visible theme controls, active theme labels, and themed workbench markup", () => {
+    const markup = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench({ theme: "dark" }));
+
+    expect(markup).toContain("data-workbench-theme=\"dark\"");
+    expect(markup).toContain("data-workbench-theme-toggle");
+    expect(markup).toContain("Switch to Light");
+    expect(markup).toContain("Active theme: Dark");
+    expect(markup).toContain("data-workbench-status-filter");
+    expect(markup).toContain("data-workbench-severity-filter");
+    expect(markup).toContain("Trace details for ID");
+  });
+
+  it("keeps dark-theme markup deterministic across repeated builds", () => {
+    const first = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench({ theme: "dark" }));
+    const second = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench({ theme: "dark" }));
+
+    expect(second).toBe(first);
+  });
+
+  it("renders loading progress without hiding stable workbench content", () => {
+    const state = buildApprovedSampleReconciliationWorkbench({ progress_status: "loading" });
+    const markup = buildReconciliationWorkbenchMarkup(state);
+
+    expect(state.progress).toMatchObject({
+      status: "loading",
+      label: "Loading",
+      busy: true,
+    });
+    expect(markup).toContain("data-workbench-progress");
+    expect(markup).toContain("aria-busy=\"true\"");
+    expect(markup).toContain("Loading workbench");
+    expect(markup).toContain("BSRS Configuration");
+    expect(markup).toContain("Shared Facts");
+    expect(markup).toContain("Trace details for ID");
+  });
+
+  it("renders failed and unsupported progress states as display-only messages", () => {
+    const failed = buildApprovedSampleReconciliationWorkbench({ progress_status: "failed" });
+    const unsupported = buildApprovedSampleReconciliationWorkbench({ progress_status: "unsupported" });
+    const failedMarkup = buildReconciliationWorkbenchMarkup(failed);
+    const unsupportedMarkup = buildReconciliationWorkbenchMarkup(unsupported);
+
+    expect(failed.progress).toMatchObject({ status: "failed", busy: false });
+    expect(unsupported.progress).toMatchObject({ status: "unsupported", busy: false });
+    expect(failedMarkup).toContain("Workbench refresh failed");
+    expect(unsupportedMarkup).toContain("Unsupported local sample load");
+    expect(failedMarkup).toContain("BSRS Configuration");
+    expect(unsupportedMarkup).toContain("Valuation Listings");
+    expect(`${failedMarkup} ${unsupportedMarkup}`).not.toMatch(/\b(insert into|output-adapter write|persisted progress)\b/i);
+  });
+
+  it("keeps progress states deterministic and free of raw, hosted, upload, server, and real-person paths", () => {
+    const first = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench({ theme: "dark", progress_status: "loading" }));
+    const second = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench({ theme: "dark", progress_status: "loading" }));
+
+    expect(second).toBe(first);
+    expect(first).toContain("data-workbench-progress");
+    expect(first).not.toMatch(/\b(type="file"|https?:\/\/|upload|raw OCR|raw source document|server call|telemetry)\b/i);
+    expect(first).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
+  });
+
+  it("renders responsive theme and progress controls with stable labels", () => {
+    const markup = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench({ theme: "dark", progress_status: "loading" }));
+
+    expect(markup).toContain("workbench-action-bar");
+    expect(markup).toContain("workbench-progress-banner");
+    expect(markup).toContain("Theme");
+    expect(markup).toContain("Refresh sample");
+    expect(markup).toContain("Loading workbench");
+    expect(markup).toContain("Approved sample");
+    expect(markup).toContain("Status filter");
+    expect(markup).toContain("Severity filter");
   });
 
   it("keeps person-level context explicitly mocked and free of natural-person names", () => {

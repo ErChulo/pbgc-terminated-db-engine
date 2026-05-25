@@ -1,22 +1,25 @@
 import {
   buildApprovedSampleReconciliationWorkbench,
   type ReconciliationWorkbenchState,
+  type WorkbenchProgressStatus,
   type WorkbenchSeverityFilterValue,
   type WorkbenchStatusFilterValue,
+  type WorkbenchTheme,
 } from "../app/reconciliationWorkbenchSlice";
 
 export function renderReconciliationWorkbenchPage(root: HTMLElement): void {
-  renderWorkbench(root, buildApprovedSampleReconciliationWorkbench());
+  renderWorkbench(root, buildApprovedSampleReconciliationWorkbench({ theme: readStoredTheme(), theme_source: readStoredTheme() ? "session" : "default" }));
 }
 
 export function buildReconciliationWorkbenchMarkup(state: ReconciliationWorkbenchState): string {
   return `
-    <section class="page-shell reconciliation-workbench-page">
+    <section class="page-shell reconciliation-workbench-page theme-${escapeHtml(state.theme.value)}" data-workbench-theme="${escapeHtml(state.theme.value)}">
       <header class="workbench-header">
         <div class="workbench-title">
           <h1>PBGC Reconciliation Workbench</h1>
           <p class="subtle">${escapeHtml(state.sample_context.sample_label)} · ${escapeHtml(state.case_id)} · ${escapeHtml(state.plan_id)}</p>
           <p class="subtle">Generated from stable evidence: ${escapeHtml(state.generated_at)}</p>
+          ${renderActionBar(state)}
         </div>
         <div class="workbench-sample-context" aria-label="Approved sample context">
           <strong>${escapeHtml(state.sample_context.fixed_sample_label)}</strong>
@@ -102,6 +105,9 @@ function renderWorkbench(root: HTMLElement, state: ReconciliationWorkbenchState)
         sample_id: selector.value,
         status_filter: state.status_filter.value,
         severity_filter: state.severity_filter.value,
+        theme: state.theme.value,
+        theme_source: state.theme.source,
+        progress_status: state.progress.status,
       }),
     );
   });
@@ -113,6 +119,9 @@ function renderWorkbench(root: HTMLElement, state: ReconciliationWorkbenchState)
         sample_id: state.sample_id,
         status_filter: statusFilter.value as WorkbenchStatusFilterValue,
         severity_filter: state.severity_filter.value,
+        theme: state.theme.value,
+        theme_source: state.theme.source,
+        progress_status: state.progress.status,
       }),
     );
   });
@@ -124,9 +133,84 @@ function renderWorkbench(root: HTMLElement, state: ReconciliationWorkbenchState)
         sample_id: state.sample_id,
         status_filter: state.status_filter.value,
         severity_filter: severityFilter.value as WorkbenchSeverityFilterValue,
+        theme: state.theme.value,
+        theme_source: state.theme.source,
+        progress_status: state.progress.status,
       }),
     );
   });
+  const themeToggle = root.querySelector<HTMLButtonElement>("[data-workbench-theme-toggle]");
+  themeToggle?.addEventListener("click", () => {
+    const nextTheme = themeToggle.dataset.nextTheme === "dark" ? "dark" : "light";
+    writeStoredTheme(nextTheme);
+    renderWorkbench(
+      root,
+      buildApprovedSampleReconciliationWorkbench({
+        sample_id: state.sample_id,
+        status_filter: state.status_filter.value,
+        severity_filter: state.severity_filter.value,
+        theme: nextTheme,
+        theme_source: "explicit",
+        progress_status: state.progress.status,
+      }),
+    );
+  });
+  const refresh = root.querySelector<HTMLButtonElement>("[data-workbench-refresh]");
+  refresh?.addEventListener("click", () => {
+    renderWorkbench(
+      root,
+      buildApprovedSampleReconciliationWorkbench({
+        sample_id: state.sample_id,
+        status_filter: state.status_filter.value,
+        severity_filter: state.severity_filter.value,
+        theme: state.theme.value,
+        theme_source: state.theme.source,
+        progress_status: "loading",
+      }),
+    );
+    window.setTimeout(() => {
+      renderWorkbench(
+        root,
+        buildApprovedSampleReconciliationWorkbench({
+          sample_id: state.sample_id,
+          status_filter: state.status_filter.value,
+          severity_filter: state.severity_filter.value,
+          theme: state.theme.value,
+          theme_source: state.theme.source,
+          progress_status: "complete",
+        }),
+      );
+    }, 16);
+  });
+}
+
+function renderActionBar(state: ReconciliationWorkbenchState): string {
+  const nextTheme: WorkbenchTheme = state.theme.value === "dark" ? "light" : "dark";
+  const nextThemeLabel = nextTheme === "dark" ? "Dark" : "Light";
+  return `
+    <div class="workbench-action-bar" aria-label="Workbench display controls">
+      <span class="theme-control-label">Theme</span>
+      <button type="button" class="secondary theme-toggle" data-workbench-theme-toggle data-next-theme="${nextTheme}">
+        Switch to ${nextThemeLabel}
+      </button>
+      <span class="active-filter-label">Active theme: ${escapeHtml(state.theme.label)}</span>
+      <button type="button" class="secondary workbench-refresh" data-workbench-refresh>
+        Refresh sample
+      </button>
+    </div>
+    ${renderProgressBanner(state.progress)}
+  `;
+}
+
+function renderProgressBanner(progress: ReconciliationWorkbenchState["progress"]): string {
+  if (progress.status === "idle") return "";
+  return `
+    <div class="workbench-progress-banner progress-${escapeHtml(progress.status)}" data-workbench-progress role="status" aria-busy="${progress.busy ? "true" : "false"}">
+      <span class="progress-spinner" aria-hidden="true"></span>
+      <span class="progress-message">${escapeHtml(progress.message)}</span>
+      ${progress.detail ? `<span class="progress-detail">${escapeHtml(progress.detail)}</span>` : ""}
+    </div>
+  `;
 }
 
 function renderSampleSelector(state: ReconciliationWorkbenchState): string {
@@ -317,4 +401,21 @@ function escapeHtml(value: string | number | boolean | null | undefined): string
         return "&#39;";
     }
   });
+}
+
+function readStoredTheme(): WorkbenchTheme | undefined {
+  try {
+    const stored = window.localStorage.getItem("pbgc-workbench-theme");
+    return stored === "dark" || stored === "light" ? stored : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function writeStoredTheme(theme: WorkbenchTheme): void {
+  try {
+    window.localStorage.setItem("pbgc-workbench-theme", theme);
+  } catch {
+    // Theme switching still works for the current render when storage is unavailable.
+  }
 }
