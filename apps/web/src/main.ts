@@ -3,6 +3,7 @@ import { renderPbgcTemplateLibraryPage } from "./pages/PbgcTemplateLibraryPage";
 import { renderPromptLibraryPage } from "./pages/PromptLibraryPage";
 import { renderReconciliationWorkbenchPage } from "./pages/ReconciliationWorkbenchPage";
 import { renderSchemaLibraryPage } from "./pages/SchemaLibraryPage";
+import { renderUploadImportPipelinePage } from "./pages/UploadImportPipelinePage";
 import "./styles.css";
 
 const root = document.querySelector<HTMLElement>("#app");
@@ -24,6 +25,10 @@ function renderApp(): void {
   }
   if (window.location.hash === "#template-library") {
     renderPbgcTemplateLibraryPage(appRoot);
+    return;
+  }
+  if (window.location.hash === "#upload-import") {
+    renderUploadImportPipelinePage(appRoot);
     return;
   }
   renderCaseNavigationDashboardPage(appRoot);

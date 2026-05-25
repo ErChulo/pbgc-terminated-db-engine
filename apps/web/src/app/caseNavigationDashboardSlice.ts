@@ -81,10 +81,10 @@ const STAGE_DEFINITIONS = [
   {
     stage_key: "upload_import",
     label: "Upload / Import",
-    status: "planned",
-    status_label: "Planned",
-    detail: "External-LLM artifacts and reviewed structured inputs will be imported in a later slice.",
-    target: null,
+    status: "available",
+    status_label: "Available",
+    detail: "Reviewed JSON and external-LLM artifact text can be previewed locally before later approval work.",
+    target: "#upload-import",
   },
   {
     stage_key: "reviewed_input_approval",
@@ -130,10 +130,10 @@ export function buildCaseNavigationDashboard(
   const stages = STAGE_DEFINITIONS.map((stage, index) => ({
     ...stage,
     ordering_key: `${String(index + 1).padStart(6, "0")}|${stage.stage_key}`,
-    basis:
-      stage.stage_key === "reconciliation_workbench" || stage.stage_key === "case_workspace"
-        ? workbench.generated_at
-        : "planned-alpha-stage-display-only",
+      basis:
+        stage.stage_key === "reconciliation_workbench" || stage.stage_key === "case_workspace" || stage.stage_key === "upload_import"
+          ? workbench.generated_at
+          : "planned-alpha-stage-display-only",
   })).sort((left, right) => left.ordering_key.localeCompare(right.ordering_key));
   return {
     summary: {
