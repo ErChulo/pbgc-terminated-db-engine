@@ -109,6 +109,10 @@ th {
   max-width: 1180px;
 }
 
+.template-library-page {
+  max-width: 1180px;
+}
+
 .case-dashboard-header {
   align-items: flex-start;
 }
@@ -121,6 +125,10 @@ th {
   align-items: flex-start;
 }
 
+.template-library-header {
+  align-items: flex-start;
+}
+
 .case-dashboard-title {
   min-width: 0;
 }
@@ -130,6 +138,10 @@ th {
 }
 
 .schema-library-title {
+  min-width: 0;
+}
+
+.template-library-title {
   min-width: 0;
 }
 
@@ -165,12 +177,25 @@ th {
   padding: 12px 14px;
 }
 
+.template-boundary-notice {
+  background: #f8fafc;
+  border: 1px solid #bcccdc;
+  border-radius: 8px;
+  color: #334e68;
+  display: grid;
+  gap: 6px;
+  max-width: 460px;
+  padding: 12px 14px;
+}
+
 .case-dashboard-summary strong,
 .case-dashboard-summary span,
 .prompt-boundary-notice strong,
 .prompt-boundary-notice span,
 .schema-boundary-notice strong,
-.schema-boundary-notice span {
+.schema-boundary-notice span,
+.template-boundary-notice strong,
+.template-boundary-notice span {
   overflow-wrap: anywhere;
 }
 
@@ -191,6 +216,12 @@ th {
   grid-template-columns: minmax(260px, 0.36fr) minmax(0, 0.64fr);
 }
 
+.template-library-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(260px, 0.36fr) minmax(0, 0.64fr);
+}
+
 .case-dashboard-panel {
   min-width: 0;
 }
@@ -198,7 +229,9 @@ th {
 .prompt-list-panel,
 .prompt-detail-panel,
 .schema-list-panel,
-.schema-detail-panel {
+.schema-detail-panel,
+.template-list-panel,
+.template-detail-panel {
   min-width: 0;
 }
 
@@ -217,7 +250,9 @@ th {
 .prompt-list-panel h2,
 .prompt-detail-panel h2,
 .schema-list-panel h2,
-.schema-detail-panel h2 {
+.schema-detail-panel h2,
+.template-list-panel h2,
+.template-detail-panel h2 {
   font-size: 18px;
   margin: 0 0 8px;
 }
@@ -239,6 +274,14 @@ th {
 }
 
 .schema-entry-list {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+.template-entry-list {
   display: grid;
   gap: 8px;
   list-style: none;
@@ -276,6 +319,15 @@ th {
   padding: 10px 12px;
 }
 
+.template-entry-item {
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+}
+
 .prompt-stage-item.is-selected {
   border-color: #155e75;
   box-shadow: 0 0 0 1px #155e75 inset;
@@ -286,24 +338,33 @@ th {
   box-shadow: 0 0 0 1px #155e75 inset;
 }
 
+.template-entry-item.is-selected {
+  border-color: #155e75;
+  box-shadow: 0 0 0 1px #155e75 inset;
+}
+
 .case-stage-item strong,
 .case-stage-item span,
 .prompt-stage-item a,
 .prompt-stage-item span,
 .schema-entry-item a,
-.schema-entry-item span {
+.schema-entry-item span,
+.template-entry-item a,
+.template-entry-item span {
   display: block;
   overflow-wrap: anywhere;
 }
 
 .prompt-stage-item a,
-.schema-entry-item a {
+.schema-entry-item a,
+.template-entry-item a {
   color: #155e75;
   font-weight: 650;
 }
 
 .prompt-stage-item span,
-.schema-entry-item span {
+.schema-entry-item span,
+.template-entry-item span {
   color: #52606d;
   font-size: 12px;
 }
@@ -469,6 +530,47 @@ th {
   background: #fef2f2;
   border-color: #fca5a5;
   color: #991b1b;
+}
+
+.template-detail-list,
+.template-readiness-preview,
+.template-placeholder-status {
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px;
+}
+
+.template-detail-list dt {
+  color: #52606d;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.template-detail-list dd {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.template-readiness-preview span,
+.template-placeholder-status span {
+  overflow-wrap: anywhere;
+}
+
+.readiness-input_ready,
+.readiness-browse_ready {
+  background: #ecfdf3;
+  border-color: #86efac;
+  color: #166534;
+}
+
+.readiness-planned_for_filling {
+  background: #fff7ed;
+  border-color: #fdba74;
+  color: #7c2d12;
 }
 
 .reconciliation-workbench-page.theme-dark {
@@ -979,6 +1081,7 @@ th {
   .case-dashboard-summary,
   .prompt-boundary-notice,
   .schema-boundary-notice,
+  .template-boundary-notice,
   .workbench-sample-context {
     max-width: none;
     width: 100%;
@@ -987,6 +1090,7 @@ th {
   .case-stage-item,
   .prompt-library-grid,
   .schema-library-grid,
+  .template-library-grid,
   .workbench-grid,
   .slice-panel dl {
     grid-template-columns: 1fr;

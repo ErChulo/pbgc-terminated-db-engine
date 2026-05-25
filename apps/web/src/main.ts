@@ -1,4 +1,5 @@
 import { renderCaseNavigationDashboardPage } from "./pages/CaseNavigationDashboardPage";
+import { renderPbgcTemplateLibraryPage } from "./pages/PbgcTemplateLibraryPage";
 import { renderPromptLibraryPage } from "./pages/PromptLibraryPage";
 import { renderReconciliationWorkbenchPage } from "./pages/ReconciliationWorkbenchPage";
 import { renderSchemaLibraryPage } from "./pages/SchemaLibraryPage";
@@ -19,6 +20,10 @@ function renderApp(): void {
   }
   if (window.location.hash === "#schema-library") {
     renderSchemaLibraryPage(appRoot);
+    return;
+  }
+  if (window.location.hash === "#template-library") {
+    renderPbgcTemplateLibraryPage(appRoot);
     return;
   }
   renderCaseNavigationDashboardPage(appRoot);
