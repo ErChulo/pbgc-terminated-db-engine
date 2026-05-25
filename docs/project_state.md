@@ -2,9 +2,9 @@
 
 **Current branch**: `main`
 
-**Last merged PR**: `#35`
+**Last merged PR**: `#36`
 
-**Completed features count**: 26
+**Completed features count**: 27
 
 ## Completed Features
 
@@ -34,6 +34,7 @@
 24. `upload-import-pipeline`
 25. `reviewed-input-normalization-and-approval-flow`
 26. `template-filling-and-artifact-export`
+27. `unresolved-issues-and-error-queue`
 
 ## Current Workbench State
 
@@ -55,14 +56,15 @@
 - Browser-only upload/import pipeline with deterministic reviewed JSON and inert external-LLM artifact preview states
 - Browser-only reviewed-input approval flow with normalized mocked records, display-only approve/reject decisions, and blocked-record packet preview
 - Browser-only template filling/export page that produces one deterministic PBGC-style reviewed-input artifact from approved mocked records
+- Browser-local unresolved issue queue aggregating existing warnings, errors, and blocked states
 
 ## Next Feature
 
-`unresolved-issues-and-error-queue`
+`sample-mock-pack-management`
 
 ## Alpha Readiness Status
 
-Not alpha-ready yet. The app has the backend engine slices, a productized reconciliation workbench surface with local mocked workspace session state, a top-level case navigation dashboard, browser-only prompt/schema/template libraries, local validation/readiness previews, a browser-only upload/import preview surface, a reviewed-input approval gate, and one browser-local filled artifact/export surface, but still needs unresolved-issue queue and sample/mock pack management before the first usable alpha definition is met.
+Not alpha-ready yet. The app has the backend engine slices, a productized reconciliation workbench surface with local mocked workspace session state, a top-level case navigation dashboard, browser-only prompt/schema/template libraries, local validation/readiness previews, a browser-only upload/import preview surface, a reviewed-input approval gate, one browser-local filled artifact/export surface, and an unresolved issue queue, but still needs sample/mock pack management before the first usable alpha definition is met.
 
 ## Core Constraints
 
