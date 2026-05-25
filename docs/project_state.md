@@ -2,9 +2,9 @@
 
 **Current branch**: `main`
 
-**Last merged PR**: `#33`
+**Last merged PR**: `#34`
 
-**Completed features count**: 24
+**Completed features count**: 25
 
 ## Completed Features
 
@@ -32,6 +32,7 @@
 22. `schema-library-and-validator-surfaces`
 23. `pbgc-template-library`
 24. `upload-import-pipeline`
+25. `reviewed-input-normalization-and-approval-flow`
 
 ## Current Workbench State
 
@@ -51,14 +52,15 @@
 - Browser-only schema library with local reviewed JSON validation preview
 - Browser-only PBGC template library with template metadata and readiness preview
 - Browser-only upload/import pipeline with deterministic reviewed JSON and inert external-LLM artifact preview states
+- Browser-only reviewed-input approval flow with normalized mocked records, display-only approve/reject decisions, and blocked-record packet preview
 
 ## Next Feature
 
-`reviewed-input-normalization-and-approval-flow`
+`template-filling-and-artifact-export`
 
 ## Alpha Readiness Status
 
-Not alpha-ready yet. The app has the backend engine slices, a productized reconciliation workbench surface with local mocked workspace session state, a top-level case navigation dashboard, browser-only prompt/schema/template libraries, local validation/readiness previews, and a browser-only upload/import preview surface, but still needs reviewed-input approval, template filling/export, unresolved-issue queue, and sample/mock pack management before the first usable alpha definition is met.
+Not alpha-ready yet. The app has the backend engine slices, a productized reconciliation workbench surface with local mocked workspace session state, a top-level case navigation dashboard, browser-only prompt/schema/template libraries, local validation/readiness previews, a browser-only upload/import preview surface, and a reviewed-input approval gate, but still needs template filling/export, unresolved-issue queue, and sample/mock pack management before the first usable alpha definition is met.
 
 ## Core Constraints
 
