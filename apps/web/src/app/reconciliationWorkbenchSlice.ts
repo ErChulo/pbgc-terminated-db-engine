@@ -17,6 +17,7 @@ export type WorkbenchSeverity = "info" | "warning" | "error" | "none";
 export type WorkbenchSeverityFilterValue = "all" | WorkbenchSeverity;
 export type WorkbenchTheme = "light" | "dark";
 export type WorkbenchProgressStatus = "idle" | "loading" | "complete" | "failed" | "unsupported";
+export type WorkbenchWorkGuardStatus = "idle" | "running" | "cancelled" | "complete" | "unsupported";
 
 export type WorkbenchFilterOption = {
   value: WorkbenchStatusFilterValue | WorkbenchSeverityFilterValue;
@@ -54,6 +55,23 @@ export type WorkbenchProgressState = {
   message: string;
   detail: string | null;
   busy: boolean;
+};
+
+export type WorkbenchWorkGuardEvidence = {
+  supported_work_units: number;
+  attempted_work_units: number;
+  unit_label: string;
+  basis: string;
+};
+
+export type WorkbenchWorkGuardState = {
+  status: WorkbenchWorkGuardStatus;
+  label: string;
+  message: string;
+  detail: string | null;
+  cancellable: boolean;
+  started_at: string | null;
+  evidence: WorkbenchWorkGuardEvidence;
 };
 
 export type WorkbenchDisplayField = {
@@ -222,6 +240,7 @@ export type ReconciliationWorkbenchState = {
   theme: WorkbenchThemeState;
   theme_options: WorkbenchThemeOption[];
   progress: WorkbenchProgressState;
+  work_guard: WorkbenchWorkGuardState;
   filtered_shared_fact_rows: WorkbenchSharedFactRow[];
   filtered_shared_value_rows: WorkbenchSharedValueRow[];
   filtered_reconciliation_rows: WorkbenchReconciliationRow[];
@@ -259,6 +278,9 @@ const THEME_OPTIONS: WorkbenchThemeOption[] = [
   { value: "light", label: "Light", ordering_key: "000001|light" },
   { value: "dark", label: "Dark", ordering_key: "000002|dark" },
 ];
+const SUPPORTED_WORK_UNITS = 250;
+const WORK_UNIT_LABEL = "display rows";
+const WORK_UNIT_BASIS = "approved-sample workbench display rows";
 
 export function buildApprovedSampleReconciliationWorkbench(
   options: {
@@ -268,6 +290,8 @@ export function buildApprovedSampleReconciliationWorkbench(
     theme?: WorkbenchTheme;
     theme_source?: WorkbenchThemeState["source"];
     progress_status?: WorkbenchProgressStatus;
+    work_guard_status?: WorkbenchWorkGuardStatus;
+    attempted_work_units?: number;
   } = {},
 ): ReconciliationWorkbenchState {
   const fixtures = parseBsrsConfigurationFixtures();
@@ -348,6 +372,8 @@ export function buildApprovedSampleReconciliationWorkbench(
   const activeSeverity = resolveSeverityFilter(options.severity_filter, severityOptions);
   const theme = resolveTheme(options.theme, options.theme_source);
   const progress = resolveProgress(options.progress_status);
+  const attemptedWorkUnits = options.attempted_work_units ?? sharedFactRows.length + sharedValueRows.length + reconciliationRows.length;
+  const workGuard = resolveWorkGuard(options.work_guard_status, attemptedWorkUnits);
   const filteredRowGroups = buildFilteredRowGroups({
     activeStatus: activeStatus.value,
     activeSeverity: activeSeverity.value,
@@ -390,6 +416,7 @@ export function buildApprovedSampleReconciliationWorkbench(
     theme,
     theme_options: THEME_OPTIONS,
     progress,
+    work_guard: workGuard,
     filtered_shared_fact_rows: filteredRowGroups.shared_facts.rows,
     filtered_shared_value_rows: filteredRowGroups.shared_values.rows,
     filtered_reconciliation_rows: filteredRowGroups.reconciliation.rows,
@@ -540,6 +567,68 @@ function resolveProgress(requested: WorkbenchProgressStatus | undefined): Workbe
         message: "",
         detail: null,
         busy: false,
+      };
+  }
+}
+
+function resolveWorkGuard(requested: WorkbenchWorkGuardStatus | undefined, attemptedWorkUnits: number): WorkbenchWorkGuardState {
+  const evidence: WorkbenchWorkGuardEvidence = {
+    supported_work_units: SUPPORTED_WORK_UNITS,
+    attempted_work_units: attemptedWorkUnits,
+    unit_label: WORK_UNIT_LABEL,
+    basis: WORK_UNIT_BASIS,
+  };
+  if (attemptedWorkUnits > SUPPORTED_WORK_UNITS || requested === "unsupported") {
+    return {
+      status: "unsupported",
+      label: "Unsupported",
+      message: "Unsupported work size.",
+      detail: "Requested local work exceeds the alpha supported display-row limit and was stopped before delayed work began.",
+      cancellable: false,
+      started_at: null,
+      evidence,
+    };
+  }
+  switch (requested) {
+    case "running":
+      return {
+        status: "running",
+        label: "Running",
+        message: "Guarded work is running.",
+        detail: "Stable workbench content remains visible and this display operation can be cancelled.",
+        cancellable: true,
+        started_at: "stable:work-guard-start",
+        evidence,
+      };
+    case "cancelled":
+      return {
+        status: "cancelled",
+        label: "Cancelled",
+        message: "Guarded work was cancelled.",
+        detail: "Stable workbench content remains visible; no output rows or persistence records were written.",
+        cancellable: false,
+        started_at: null,
+        evidence,
+      };
+    case "complete":
+      return {
+        status: "complete",
+        label: "Complete",
+        message: "Guarded work completed.",
+        detail: "Local work completed within the supported display-row limit.",
+        cancellable: false,
+        started_at: "stable:work-guard-start",
+        evidence,
+      };
+    default:
+      return {
+        status: "idle",
+        label: "Idle",
+        message: "",
+        detail: null,
+        cancellable: false,
+        started_at: null,
+        evidence,
       };
   }
 }

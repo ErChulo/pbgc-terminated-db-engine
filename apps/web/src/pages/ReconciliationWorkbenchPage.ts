@@ -5,7 +5,10 @@ import {
   type WorkbenchSeverityFilterValue,
   type WorkbenchStatusFilterValue,
   type WorkbenchTheme,
+  type WorkbenchWorkGuardStatus,
 } from "../app/reconciliationWorkbenchSlice";
+
+let activeGuardRunId = 0;
 
 export function renderReconciliationWorkbenchPage(root: HTMLElement): void {
   renderWorkbench(root, buildApprovedSampleReconciliationWorkbench({ theme: readStoredTheme(), theme_source: readStoredTheme() ? "session" : "default" }));
@@ -108,6 +111,8 @@ function renderWorkbench(root: HTMLElement, state: ReconciliationWorkbenchState)
         theme: state.theme.value,
         theme_source: state.theme.source,
         progress_status: state.progress.status,
+        work_guard_status: state.work_guard.status,
+        attempted_work_units: state.work_guard.evidence.attempted_work_units,
       }),
     );
   });
@@ -122,6 +127,8 @@ function renderWorkbench(root: HTMLElement, state: ReconciliationWorkbenchState)
         theme: state.theme.value,
         theme_source: state.theme.source,
         progress_status: state.progress.status,
+        work_guard_status: state.work_guard.status,
+        attempted_work_units: state.work_guard.evidence.attempted_work_units,
       }),
     );
   });
@@ -136,6 +143,8 @@ function renderWorkbench(root: HTMLElement, state: ReconciliationWorkbenchState)
         theme: state.theme.value,
         theme_source: state.theme.source,
         progress_status: state.progress.status,
+        work_guard_status: state.work_guard.status,
+        attempted_work_units: state.work_guard.evidence.attempted_work_units,
       }),
     );
   });
@@ -152,6 +161,8 @@ function renderWorkbench(root: HTMLElement, state: ReconciliationWorkbenchState)
         theme: nextTheme,
         theme_source: "explicit",
         progress_status: state.progress.status,
+        work_guard_status: state.work_guard.status,
+        attempted_work_units: state.work_guard.evidence.attempted_work_units,
       }),
     );
   });
@@ -163,11 +174,13 @@ function renderWorkbench(root: HTMLElement, state: ReconciliationWorkbenchState)
         sample_id: state.sample_id,
         status_filter: state.status_filter.value,
         severity_filter: state.severity_filter.value,
-        theme: state.theme.value,
-        theme_source: state.theme.source,
-        progress_status: "loading",
-      }),
-    );
+          theme: state.theme.value,
+          theme_source: state.theme.source,
+          progress_status: "loading",
+          work_guard_status: state.work_guard.status,
+          attempted_work_units: state.work_guard.evidence.attempted_work_units,
+        }),
+      );
     window.setTimeout(() => {
       renderWorkbench(
         root,
@@ -178,9 +191,74 @@ function renderWorkbench(root: HTMLElement, state: ReconciliationWorkbenchState)
           theme: state.theme.value,
           theme_source: state.theme.source,
           progress_status: "complete",
+          work_guard_status: state.work_guard.status,
+          attempted_work_units: state.work_guard.evidence.attempted_work_units,
         }),
       );
     }, 16);
+  });
+  const guardedWork = root.querySelector<HTMLButtonElement>("[data-workbench-guarded-work]");
+  guardedWork?.addEventListener("click", () => {
+    const runId = ++activeGuardRunId;
+    renderWorkbench(
+      root,
+      buildApprovedSampleReconciliationWorkbench({
+        sample_id: state.sample_id,
+        status_filter: state.status_filter.value,
+        severity_filter: state.severity_filter.value,
+        theme: state.theme.value,
+        theme_source: state.theme.source,
+        progress_status: "loading",
+        work_guard_status: "running",
+      }),
+    );
+    window.setTimeout(() => {
+      if (runId !== activeGuardRunId) return;
+      renderWorkbench(
+        root,
+        buildApprovedSampleReconciliationWorkbench({
+          sample_id: state.sample_id,
+          status_filter: state.status_filter.value,
+          severity_filter: state.severity_filter.value,
+          theme: state.theme.value,
+          theme_source: state.theme.source,
+          progress_status: "complete",
+          work_guard_status: "complete",
+        }),
+      );
+    }, 16);
+  });
+  const cancelWork = root.querySelector<HTMLButtonElement>("[data-workbench-cancel-work]");
+  cancelWork?.addEventListener("click", () => {
+    activeGuardRunId += 1;
+    renderWorkbench(
+      root,
+      buildApprovedSampleReconciliationWorkbench({
+        sample_id: state.sample_id,
+        status_filter: state.status_filter.value,
+        severity_filter: state.severity_filter.value,
+        theme: state.theme.value,
+        theme_source: state.theme.source,
+        progress_status: "idle",
+        work_guard_status: state.work_guard.status === "running" ? "cancelled" : "idle",
+      }),
+    );
+  });
+  const oversizedWork = root.querySelector<HTMLButtonElement>("[data-workbench-oversized-work]");
+  oversizedWork?.addEventListener("click", () => {
+    activeGuardRunId += 1;
+    renderWorkbench(
+      root,
+      buildApprovedSampleReconciliationWorkbench({
+        sample_id: state.sample_id,
+        status_filter: state.status_filter.value,
+        severity_filter: state.severity_filter.value,
+        theme: state.theme.value,
+        theme_source: state.theme.source,
+        progress_status: "unsupported",
+        attempted_work_units: state.work_guard.evidence.supported_work_units + 1,
+      }),
+    );
   });
 }
 
@@ -197,8 +275,23 @@ function renderActionBar(state: ReconciliationWorkbenchState): string {
       <button type="button" class="secondary workbench-refresh" data-workbench-refresh>
         Refresh sample
       </button>
+      <span class="active-filter-label">Guard: ${escapeHtml(state.work_guard.label)}</span>
+      <div class="workbench-guard-controls" aria-label="Workbench work guards">
+        <button type="button" class="secondary workbench-guarded-work" data-workbench-guarded-work>
+          Start guarded work
+        </button>
+        ${state.work_guard.cancellable ? `
+          <button type="button" class="secondary workbench-cancel-work" data-workbench-cancel-work>
+            Cancel work
+          </button>
+        ` : ""}
+        <button type="button" class="secondary workbench-oversized-work" data-workbench-oversized-work>
+          Oversized work check
+        </button>
+      </div>
     </div>
     ${renderProgressBanner(state.progress)}
+    ${renderWorkGuardBanner(state.work_guard)}
   `;
 }
 
@@ -209,6 +302,26 @@ function renderProgressBanner(progress: ReconciliationWorkbenchState["progress"]
       <span class="progress-spinner" aria-hidden="true"></span>
       <span class="progress-message">${escapeHtml(progress.message)}</span>
       ${progress.detail ? `<span class="progress-detail">${escapeHtml(progress.detail)}</span>` : ""}
+    </div>
+  `;
+}
+
+function renderWorkGuardBanner(workGuard: ReconciliationWorkbenchState["work_guard"]): string {
+  const evidence = workGuard.evidence;
+  if (workGuard.status === "idle") return `
+    <div class="workbench-guard-evidence" aria-label="Workbench work guard evidence">
+      <span>Supported work units: ${evidence.supported_work_units}</span>
+      <span>Attempted work units: ${evidence.attempted_work_units}</span>
+      <span>${escapeHtml(evidence.unit_label)}</span>
+    </div>
+  `;
+  return `
+    <div class="workbench-guard-banner guard-${escapeHtml(workGuard.status)}" data-workbench-work-guard role="status" aria-label="Workbench work guard status">
+      <span class="guard-message">${escapeHtml(workGuard.message)}</span>
+      ${workGuard.detail ? `<span class="guard-detail">${escapeHtml(workGuard.detail)}</span>` : ""}
+      <span>Supported work units: ${evidence.supported_work_units}</span>
+      <span>Attempted work units: ${evidence.attempted_work_units}</span>
+      <span>${escapeHtml(evidence.basis)}</span>
     </div>
   `;
 }

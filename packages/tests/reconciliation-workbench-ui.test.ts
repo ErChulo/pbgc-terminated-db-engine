@@ -135,6 +135,26 @@ describe("reconciliation workbench UI", () => {
     expect(buildApprovedSampleReconciliationWorkbench().progress).toEqual(state.progress);
   });
 
+  it("derives deterministic default work guard state with supported work-unit evidence", () => {
+    const state = buildApprovedSampleReconciliationWorkbench();
+
+    expect(state.work_guard).toEqual({
+      status: "idle",
+      label: "Idle",
+      message: "",
+      detail: null,
+      cancellable: false,
+      started_at: null,
+      evidence: {
+        supported_work_units: 250,
+        attempted_work_units: 37,
+        unit_label: "display rows",
+        basis: "approved-sample workbench display rows",
+      },
+    });
+    expect(buildApprovedSampleReconciliationWorkbench().work_guard).toEqual(state.work_guard);
+  });
+
   it("filters reconciliation rows, Shared Facts rows, and Shared Values rows by selected status", () => {
     const state = buildApprovedSampleReconciliationWorkbench({ status_filter: "nullable" });
 
@@ -196,6 +216,47 @@ describe("reconciliation workbench UI", () => {
       base.filtered_shared_value_rows.map((row) => row.ordering_key),
     );
     expect(themed.filtered_reconciliation_rows[0]?.trace_detail).toEqual(base.filtered_reconciliation_rows[0]?.trace_detail);
+  });
+
+  it("renders running work guard state with visible cancel control while preserving stable content", () => {
+    const state = buildApprovedSampleReconciliationWorkbench({ work_guard_status: "running" });
+    const markup = buildReconciliationWorkbenchMarkup(state);
+
+    expect(state.work_guard).toMatchObject({
+      status: "running",
+      label: "Running",
+      cancellable: true,
+      started_at: "stable:work-guard-start",
+    });
+    expect(markup).toContain("data-workbench-work-guard");
+    expect(markup).toContain("Guarded work is running");
+    expect(markup).toContain("data-workbench-cancel-work");
+    expect(markup).toContain("Cancel work");
+    expect(markup).toContain("BSRS Configuration");
+    expect(markup).toContain("Shared Facts");
+    expect(markup).toContain("Trace details for ID");
+  });
+
+  it("renders cancelled work guard state and preserves sample, theme, filters, rows, and traces", () => {
+    const base = buildApprovedSampleReconciliationWorkbench({ theme: "dark", status_filter: "agreement", severity_filter: "info" });
+    const cancelled = buildApprovedSampleReconciliationWorkbench({
+      theme: "dark",
+      status_filter: "agreement",
+      severity_filter: "info",
+      work_guard_status: "cancelled",
+    });
+
+    expect(cancelled.work_guard).toMatchObject({ status: "cancelled", label: "Cancelled", cancellable: false });
+    expect(cancelled.theme).toEqual(base.theme);
+    expect(cancelled.status_filter).toEqual(base.status_filter);
+    expect(cancelled.severity_filter).toEqual(base.severity_filter);
+    expect(cancelled.output_panels).toEqual(base.output_panels);
+    expect(cancelled.filtered_reconciliation_rows.map((row) => row.comparison_id)).toEqual(
+      base.filtered_reconciliation_rows.map((row) => row.comparison_id),
+    );
+    expect(cancelled.filtered_shared_value_rows.map((row) => row.ordering_key)).toEqual(
+      base.filtered_shared_value_rows.map((row) => row.ordering_key),
+    );
   });
 
   it("clears status filtering by restoring original row counts and ordering", () => {
@@ -585,6 +646,50 @@ describe("reconciliation workbench UI", () => {
     expect(markup).toContain("Theme");
     expect(markup).toContain("Refresh sample");
     expect(markup).toContain("Loading workbench");
+    expect(markup).toContain("Approved sample");
+    expect(markup).toContain("Status filter");
+    expect(markup).toContain("Severity filter");
+  });
+
+  it("renders fail-fast unsupported work guard state with deterministic unit evidence", () => {
+    const state = buildApprovedSampleReconciliationWorkbench({ attempted_work_units: 999 });
+    const markup = buildReconciliationWorkbenchMarkup(state);
+
+    expect(state.work_guard).toMatchObject({
+      status: "unsupported",
+      label: "Unsupported",
+      cancellable: false,
+      evidence: {
+        supported_work_units: 250,
+        attempted_work_units: 999,
+      },
+    });
+    expect(markup).toContain("Unsupported work size");
+    expect(markup).toContain("Supported work units: 250");
+    expect(markup).toContain("Attempted work units: 999");
+    expect(markup).toContain("data-workbench-oversized-work");
+    expect(markup).toContain("Valuation Listings");
+  });
+
+  it("keeps work guard states deterministic and free of raw, hosted, server, persistence, and real-person paths", () => {
+    const first = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench({ work_guard_status: "running" }));
+    const second = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench({ work_guard_status: "running" }));
+
+    expect(second).toBe(first);
+    expect(first).toContain("data-workbench-work-guard");
+    expect(first).not.toMatch(/\b(type="file"|https?:\/\/|upload|raw OCR|raw source document|server call|telemetry|insert into|persisted progress)\b/i);
+    expect(first).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
+  });
+
+  it("renders responsive work guard controls with stable labels", () => {
+    const markup = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench({ work_guard_status: "running" }));
+
+    expect(markup).toContain("workbench-guard-controls");
+    expect(markup).toContain("Start guarded work");
+    expect(markup).toContain("Cancel work");
+    expect(markup).toContain("Oversized work check");
+    expect(markup).toContain("Supported work units");
+    expect(markup).toContain("Attempted work units");
     expect(markup).toContain("Approved sample");
     expect(markup).toContain("Status filter");
     expect(markup).toContain("Severity filter");
