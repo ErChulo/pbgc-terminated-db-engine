@@ -2,9 +2,9 @@
 
 **Current branch**: `main`
 
-**Last merged PR**: `#31`
+**Last merged PR**: `#32`
 
-**Completed features count**: 22
+**Completed features count**: 23
 
 ## Completed Features
 
@@ -30,6 +30,7 @@
 20. `case-navigation-dashboard`
 21. `prompt-library-by-stage`
 22. `schema-library-and-validator-surfaces`
+23. `pbgc-template-library`
 
 ## Current Workbench State
 
@@ -47,14 +48,15 @@
 - Top-level mocked case navigation dashboard with deterministic alpha stage status
 - Browser-only stage prompt library with local draft/import display state
 - Browser-only schema library with local reviewed JSON validation preview
+- Browser-only PBGC template library with template metadata and readiness preview
 
 ## Next Feature
 
-`pbgc-template-library`
+`upload-import-pipeline`
 
 ## Alpha Readiness Status
 
-Not alpha-ready yet. The app has the backend engine slices, a productized reconciliation workbench surface with local mocked workspace session state, a top-level case navigation dashboard, a browser-only prompt library, and a schema library with validation preview, but still needs template library, upload/import, reviewed-input approval, template filling/export, unresolved-issue queue, and sample/mock pack management before the first usable alpha definition is met.
+Not alpha-ready yet. The app has the backend engine slices, a productized reconciliation workbench surface with local mocked workspace session state, a top-level case navigation dashboard, browser-only prompt/schema/template libraries, and local validation/readiness previews, but still needs upload/import, reviewed-input approval, template filling/export, unresolved-issue queue, and sample/mock pack management before the first usable alpha definition is met.
 
 ## Core Constraints
 
