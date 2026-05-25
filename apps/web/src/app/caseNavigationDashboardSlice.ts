@@ -97,10 +97,10 @@ const STAGE_DEFINITIONS = [
   {
     stage_key: "template_filling_export",
     label: "Template Filling / Export",
-    status: "planned",
-    status_label: "Planned",
-    detail: "Template filling and artifact export will be managed in a later slice.",
-    target: null,
+    status: "available",
+    status_label: "Available",
+    detail: "Approved mocked reviewed records can fill one browser-local PBGC-style artifact.",
+    target: "#template-filling-export",
   },
   {
     stage_key: "unresolved_issues",
@@ -134,7 +134,8 @@ export function buildCaseNavigationDashboard(
         stage.stage_key === "reconciliation_workbench" ||
           stage.stage_key === "case_workspace" ||
           stage.stage_key === "upload_import" ||
-          stage.stage_key === "reviewed_input_approval"
+          stage.stage_key === "reviewed_input_approval" ||
+          stage.stage_key === "template_filling_export"
           ? workbench.generated_at
           : "planned-alpha-stage-display-only",
   })).sort((left, right) => left.ordering_key.localeCompare(right.ordering_key));

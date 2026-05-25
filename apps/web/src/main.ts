@@ -4,6 +4,7 @@ import { renderPromptLibraryPage } from "./pages/PromptLibraryPage";
 import { renderReconciliationWorkbenchPage } from "./pages/ReconciliationWorkbenchPage";
 import { renderReviewedInputApprovalPage } from "./pages/ReviewedInputApprovalPage";
 import { renderSchemaLibraryPage } from "./pages/SchemaLibraryPage";
+import { renderTemplateFillingExportPage } from "./pages/TemplateFillingExportPage";
 import { renderUploadImportPipelinePage } from "./pages/UploadImportPipelinePage";
 import "./styles.css";
 
@@ -34,6 +35,10 @@ function renderApp(): void {
   }
   if (window.location.hash === "#reviewed-input-approval") {
     renderReviewedInputApprovalPage(appRoot);
+    return;
+  }
+  if (window.location.hash === "#template-filling-export") {
+    renderTemplateFillingExportPage(appRoot);
     return;
   }
   renderCaseNavigationDashboardPage(appRoot);
