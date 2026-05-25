@@ -1,0 +1,61 @@
+# Project State
+
+**Current branch**: `main`
+
+**Last merged PR**: `#26`
+
+**Completed features count**: 17
+
+## Completed Features
+
+1. `date-resolution-slice`
+2. `service-resolution-slice`
+3. `compensation-resolution-slice`
+4. `form-resolution-slice`
+5. `benefit-kernel-slice`
+6. `v1-ve-output`
+7. `valuation-listings-output`
+8. `bsrs-configuration-output`
+9. `engine-hardening-review`
+10. `bsrs-semantic-hardening`
+11. `bsrs-field-reference-hardening`
+12. `bsrs-block/recalculation/optional-form-pattern-hardening`
+13. `cross-slice-reconciliation-hardening`
+14. `cross-slice-value-reconciliation-hardening`
+15. `reconciliation-workbench-ui`
+16. `reconciliation-workbench-status-and-severity-filtering`
+17. `theme-and-progress`
+
+## Current Workbench State
+
+- Approved-sample selector
+- Sample header and mocked case/population context
+- Shared Facts table
+- Shared Values table
+- Trace expansion
+- Status filtering
+- Severity filtering
+- Light/dark theme toggle
+- Display-only progress/loading, failed, and unsupported states
+
+## Next Feature
+
+`responsiveness-and-work-guards`
+
+## Alpha Readiness Status
+
+Not alpha-ready yet. The app has the backend engine slices and a productized reconciliation workbench surface, but still needs case workspace/session state, stage navigation, prompt/schema/template libraries, upload/import, reviewed-input approval, template filling/export, unresolved-issue queue, and sample/mock pack management before the first usable alpha definition is met.
+
+## Core Constraints
+
+- Browser-only static app; no server calls, hosted runtime dependencies, telemetry, or network-loaded business logic.
+- SQLite persistence remains in-browser via `sql.js`.
+- The app must not perform terminated-plan-case-knowledge scraping itself.
+- External LLM scraping happens outside the app and is chosen by the user.
+- No OCR in the app.
+- Deterministic engine modules accept only reviewed structured inputs.
+- No real participant, beneficiary, alternate payee, survivor, or other natural-person data.
+- Person-level and population-level data in the app must be simulated or mocked.
+- DD.csv remains the canonical V1 naming layer where matching fields exist.
+- Static `apps/web/dist/` output and bundles remain committed.
+- Keep UI responsive, use progress indicators for delayed work, fail fast on unsupported oversized loads, and avoid long blocking tasks.
