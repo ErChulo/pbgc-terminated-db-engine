@@ -121,6 +121,10 @@ th {
   max-width: 1220px;
 }
 
+.template-filling-export-page {
+  max-width: 1220px;
+}
+
 .case-dashboard-header {
   align-items: flex-start;
 }
@@ -145,6 +149,10 @@ th {
   align-items: flex-start;
 }
 
+.template-filling-header {
+  align-items: flex-start;
+}
+
 .case-dashboard-title {
   min-width: 0;
 }
@@ -166,6 +174,10 @@ th {
 }
 
 .approval-title {
+  min-width: 0;
+}
+
+.template-filling-title {
   min-width: 0;
 }
 
@@ -234,6 +246,17 @@ th {
   padding: 12px 14px;
 }
 
+.template-filling-boundary-notice {
+  background: #f8fafc;
+  border: 1px solid #bcccdc;
+  border-radius: 8px;
+  color: #334e68;
+  display: grid;
+  gap: 6px;
+  max-width: 460px;
+  padding: 12px 14px;
+}
+
 .case-dashboard-summary strong,
 .case-dashboard-summary span,
 .prompt-boundary-notice strong,
@@ -252,6 +275,11 @@ th {
 
 .approval-boundary-notice strong,
 .approval-boundary-notice span {
+  overflow-wrap: anywhere;
+}
+
+.template-filling-boundary-notice strong,
+.template-filling-boundary-notice span {
   overflow-wrap: anywhere;
 }
 
@@ -290,6 +318,12 @@ th {
   grid-template-columns: minmax(280px, 0.34fr) minmax(0, 0.66fr);
 }
 
+.template-filling-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(0, 0.64fr) minmax(280px, 0.36fr);
+}
+
 .case-dashboard-panel {
   min-width: 0;
 }
@@ -310,6 +344,11 @@ th {
 
 .approval-input-panel,
 .approval-table-panel {
+  min-width: 0;
+}
+
+.filled-artifact-panel,
+.export-control-panel {
   min-width: 0;
 }
 
@@ -343,6 +382,12 @@ th {
 
 .approval-input-panel h2,
 .approval-table-panel h2 {
+  font-size: 18px;
+  margin: 0 0 8px;
+}
+
+.filled-artifact-panel h2,
+.export-control-panel h2 {
   font-size: 18px;
   margin: 0 0 8px;
 }
@@ -810,6 +855,70 @@ th {
   background: #fef2f2;
   border-color: #fca5a5;
   color: #991b1b;
+}
+
+.filled-artifact-metadata,
+.export-readiness {
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+}
+
+.filled-artifact-metadata {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.filled-artifact-metadata dt {
+  color: #52606d;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.filled-artifact-metadata dd {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.filled-artifact-content {
+  background: #102a43;
+  border-radius: 8px;
+  color: #f0f4f8;
+  margin: 12px 0 0;
+  overflow-x: auto;
+  padding: 12px;
+  white-space: pre-wrap;
+}
+
+.export-readiness span {
+  overflow-wrap: anywhere;
+}
+
+.status-ready {
+  background: #ecfdf3;
+  border-color: #86efac;
+  color: #166534;
+}
+
+.status-blocked {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
+
+.export-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.primary-link.is-disabled {
+  background: #94a3b8;
+  pointer-events: none;
 }
 
 .readiness-input_ready,
@@ -1336,6 +1445,7 @@ th {
     .template-boundary-notice,
     .upload-boundary-notice,
     .approval-boundary-notice,
+    .template-filling-boundary-notice,
     .workbench-sample-context {
     max-width: none;
     width: 100%;
@@ -1347,6 +1457,8 @@ th {
     .template-library-grid,
     .upload-import-grid,
     .approval-grid,
+    .template-filling-grid,
+    .filled-artifact-metadata,
     .workbench-grid,
   .slice-panel dl {
     grid-template-columns: 1fr;

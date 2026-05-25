@@ -6,12 +6,14 @@ import { buildPbgcTemplateLibrary } from "../../apps/web/src/app/pbgcTemplateLib
 import { buildApprovedSampleReconciliationWorkbench } from "../../apps/web/src/app/reconciliationWorkbenchSlice";
 import { buildReviewedInputApproval } from "../../apps/web/src/app/reviewedInputApprovalSlice";
 import { buildSchemaLibrary } from "../../apps/web/src/app/schemaLibrarySlice";
+import { buildTemplateFillingExport } from "../../apps/web/src/app/templateFillingExportSlice";
 import { buildCaseNavigationDashboardMarkup } from "../../apps/web/src/pages/CaseNavigationDashboardPage";
 import { buildPbgcTemplateLibraryMarkup } from "../../apps/web/src/pages/PbgcTemplateLibraryPage";
 import { buildPromptLibraryMarkup } from "../../apps/web/src/pages/PromptLibraryPage";
 import { buildReconciliationWorkbenchMarkup } from "../../apps/web/src/pages/ReconciliationWorkbenchPage";
 import { buildReviewedInputApprovalMarkup } from "../../apps/web/src/pages/ReviewedInputApprovalPage";
 import { buildSchemaLibraryMarkup } from "../../apps/web/src/pages/SchemaLibraryPage";
+import { buildTemplateFillingExportMarkup } from "../../apps/web/src/pages/TemplateFillingExportPage";
 import { buildUploadImportPipelineMarkup } from "../../apps/web/src/pages/UploadImportPipelinePage";
 
 describe("reconciliation workbench UI", () => {
@@ -466,6 +468,63 @@ describe("reconciliation workbench UI", () => {
     expect(markup).toContain("Blocked records: 1");
     expect(markup).toContain("No real participant, beneficiary");
     expect(markup).not.toMatch(/\b(type="file"|https?:\/\/|server call|telemetry|raw OCR|raw source document|run scraping|run OCR|insert into|sql\.js write|output-adapter write|filled artifact|exported artifact)\b/i);
+    expect(markup).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
+  });
+
+  it("links the case dashboard template filling/export stage to the export route", () => {
+    const dashboard = buildCaseNavigationDashboard({ active_stage_key: "template_filling_export" });
+    const markup = buildCaseNavigationDashboardMarkup(dashboard);
+
+    expect(dashboard.stages.find((stage) => stage.stage_key === "template_filling_export")).toMatchObject({
+      status: "available",
+      target: "#template-filling-export",
+    });
+    expect(markup).toContain("href=\"#template-filling-export\"");
+    expect(markup).toContain("Template Filling / Export");
+  });
+
+  it("fills one deterministic PBGC-style reviewed-input artifact from approved mocked records", () => {
+    const state = buildTemplateFillingExport();
+    const repeated = buildTemplateFillingExport();
+
+    expect(state.artifact).toMatchObject({
+      artifact_id: "filled-source-assertion-import-template",
+      file_name: "CASE-MOCK-001-source-assertion-import.csv",
+      template_id: "source_assertion_import_template",
+      export_status: "ready",
+      errors: [],
+    });
+    expect(state.artifact.source_record_ids).toEqual(["ASSERTION-MOCK-001"]);
+    expect(state.artifact.content).toContain("case_id,reviewed_record_id,source_layer,stage");
+    expect(state.artifact.content).toContain("CASE-MOCK-001,ASSERTION-MOCK-001,source_assertion,upload_import");
+    expect(state.export_control).toMatchObject({
+      enabled: true,
+      download_name: "CASE-MOCK-001-source-assertion-import.csv",
+    });
+    expect(repeated).toEqual(state);
+  });
+
+  it("blocks template export when no approved mocked reviewed records exist", () => {
+    const blocked = buildTemplateFillingExport({ decisions: {} });
+
+    expect(blocked.artifact.export_status).toBe("blocked");
+    expect(blocked.artifact.source_record_ids).toEqual([]);
+    expect(blocked.artifact.content).toBe("");
+    expect(blocked.artifact.errors.map((error) => error.code)).toEqual(["NO_APPROVED_RECORDS"]);
+    expect(blocked.export_control.enabled).toBe(false);
+  });
+
+  it("renders template filling/export page with browser-local controls and no prohibited runtime paths", () => {
+    const markup = buildTemplateFillingExportMarkup(buildTemplateFillingExport());
+
+    expect(markup).toContain("PBGC Template Filling / Export");
+    expect(markup).toContain("Return to case dashboard");
+    expect(markup).toContain("data-filled-artifact-preview");
+    expect(markup).toContain("CASE-MOCK-001-source-assertion-import.csv");
+    expect(markup).toContain("Copy artifact content");
+    expect(markup).toContain("Download artifact");
+    expect(markup).toContain("No real participant, beneficiary");
+    expect(markup).not.toMatch(/\b(type="file"|https?:\/\/|server call|telemetry|raw OCR|raw source document|run scraping|run OCR|insert into|sql\.js write|output-adapter write)\b/i);
     expect(markup).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
   });
 
