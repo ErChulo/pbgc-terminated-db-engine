@@ -2,9 +2,9 @@
 
 **Current branch**: `main`
 
-**Last merged PR**: `#26`
+**Last merged PR**: `#27`
 
-**Completed features count**: 17
+**Completed features count**: 18
 
 ## Completed Features
 
@@ -25,6 +25,7 @@
 15. `reconciliation-workbench-ui`
 16. `reconciliation-workbench-status-and-severity-filtering`
 17. `theme-and-progress`
+18. `responsiveness-and-work-guards`
 
 ## Current Workbench State
 
@@ -37,10 +38,11 @@
 - Severity filtering
 - Light/dark theme toggle
 - Display-only progress/loading, failed, and unsupported states
+- Display-only guarded local work, cancellation, and fail-fast oversized-work evidence
 
 ## Next Feature
 
-`responsiveness-and-work-guards`
+`case-workspace-and-session-state`
 
 ## Alpha Readiness Status
 
