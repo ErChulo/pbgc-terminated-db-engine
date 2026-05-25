@@ -2,9 +2,9 @@
 
 **Current branch**: `main`
 
-**Last merged PR**: `#36`
+**Last merged PR**: `#37`
 
-**Completed features count**: 27
+**Completed features count**: 28
 
 ## Completed Features
 
@@ -35,6 +35,7 @@
 25. `reviewed-input-normalization-and-approval-flow`
 26. `template-filling-and-artifact-export`
 27. `unresolved-issues-and-error-queue`
+28. `sample-mock-pack-management`
 
 ## Current Workbench State
 
@@ -57,14 +58,15 @@
 - Browser-only reviewed-input approval flow with normalized mocked records, display-only approve/reject decisions, and blocked-record packet preview
 - Browser-only template filling/export page that produces one deterministic PBGC-style reviewed-input artifact from approved mocked records
 - Browser-local unresolved issue queue aggregating existing warnings, errors, and blocked states
+- Browser-local sample/mock pack management with approved sample pack and mocked alpha-path pack selection
 
 ## Next Feature
 
-`sample-mock-pack-management`
+`alpha-stabilization-review`
 
 ## Alpha Readiness Status
 
-Not alpha-ready yet. The app has the backend engine slices, a productized reconciliation workbench surface with local mocked workspace session state, a top-level case navigation dashboard, browser-only prompt/schema/template libraries, local validation/readiness previews, a browser-only upload/import preview surface, a reviewed-input approval gate, one browser-local filled artifact/export surface, and an unresolved issue queue, but still needs sample/mock pack management before the first usable alpha definition is met.
+First usable alpha feature path is present. The app can open a mocked case workspace, choose case stages, access stage-specific prompts/schemas/templates, preview imported external-LLM artifacts and reviewed JSON, normalize and approve mocked reviewed inputs, inspect reconciliation/workbench results, fill one PBGC-style reviewed-input artifact, export it browser-locally, review unresolved issues, and manage approved sample/mock packs. Remaining work should be alpha stabilization, richer pack/template support, and broader manual UX verification.
 
 ## Core Constraints
 
