@@ -155,6 +155,18 @@ describe("reconciliation workbench UI", () => {
     expect(buildApprovedSampleReconciliationWorkbench().work_guard).toEqual(state.work_guard);
   });
 
+  it("derives deterministic default workspace session state", () => {
+    const state = buildApprovedSampleReconciliationWorkbench();
+
+    expect(state.workspace_session).toEqual({
+      status: "unsaved",
+      label: "Unsaved",
+      message: "Mock workspace session has not been saved.",
+      snapshot: null,
+    });
+    expect(buildApprovedSampleReconciliationWorkbench().workspace_session).toEqual(state.workspace_session);
+  });
+
   it("filters reconciliation rows, Shared Facts rows, and Shared Values rows by selected status", () => {
     const state = buildApprovedSampleReconciliationWorkbench({ status_filter: "nullable" });
 
@@ -257,6 +269,62 @@ describe("reconciliation workbench UI", () => {
     expect(cancelled.filtered_shared_value_rows.map((row) => row.ordering_key)).toEqual(
       base.filtered_shared_value_rows.map((row) => row.ordering_key),
     );
+  });
+
+  it("builds a saved mocked workspace session snapshot without changing workbench output", () => {
+    const base = buildApprovedSampleReconciliationWorkbench({
+      sample_id: "BSRS002",
+      theme: "dark",
+      status_filter: "agreement",
+      severity_filter: "info",
+    });
+    const saved = buildApprovedSampleReconciliationWorkbench({
+      sample_id: "BSRS002",
+      theme: "dark",
+      status_filter: "agreement",
+      severity_filter: "info",
+      workspace_session_status: "saved",
+    });
+
+    expect(saved.workspace_session).toMatchObject({
+      status: "saved",
+      label: "Saved",
+      snapshot: {
+        workspace_id: "mock-workspace-approved-samples",
+        workspace_label: "Mock approved-sample workspace",
+        sample_id: "BSRS002",
+        theme: "dark",
+        status_filter: "agreement",
+        severity_filter: "info",
+        saved_at: "source:packages/tests/bsrs-configuration-output-fixtures.ts#BSRS002",
+        basis: "local mocked workspace display state",
+      },
+    });
+    expect(saved.output_panels).toEqual(base.output_panels);
+    expect(saved.filtered_reconciliation_rows.map((row) => row.comparison_id)).toEqual(
+      base.filtered_reconciliation_rows.map((row) => row.comparison_id),
+    );
+  });
+
+  it("restores selected sample, theme, status filter, and severity filter from a valid session snapshot", () => {
+    const saved = buildApprovedSampleReconciliationWorkbench({
+      sample_id: "BSRS002",
+      theme: "dark",
+      status_filter: "agreement",
+      severity_filter: "info",
+      workspace_session_status: "saved",
+    });
+    const restored = buildApprovedSampleReconciliationWorkbench({
+      session_snapshot: saved.workspace_session.snapshot ?? undefined,
+      workspace_session_status: "restored",
+    });
+
+    expect(restored.workspace_session.status).toBe("restored");
+    expect(restored.sample_id).toBe("BSRS002");
+    expect(restored.theme.value).toBe("dark");
+    expect(restored.status_filter.value).toBe("agreement");
+    expect(restored.severity_filter.value).toBe("info");
+    expect(restored.output_panels).toEqual(saved.output_panels);
   });
 
   it("clears status filtering by restoring original row counts and ordering", () => {
@@ -693,6 +761,37 @@ describe("reconciliation workbench UI", () => {
     expect(markup).toContain("Approved sample");
     expect(markup).toContain("Status filter");
     expect(markup).toContain("Severity filter");
+  });
+
+  it("renders visible workspace session controls and saved/restored/unavailable labels", () => {
+    const saved = buildApprovedSampleReconciliationWorkbench({ workspace_session_status: "saved" });
+    const savedMarkup = buildReconciliationWorkbenchMarkup(saved);
+    const restoredMarkup = buildReconciliationWorkbenchMarkup(
+      buildApprovedSampleReconciliationWorkbench({
+        session_snapshot: saved.workspace_session.snapshot ?? undefined,
+        workspace_session_status: "restored",
+      }),
+    );
+    const unavailableMarkup = buildReconciliationWorkbenchMarkup(
+      buildApprovedSampleReconciliationWorkbench({ workspace_session_status: "unavailable" }),
+    );
+
+    expect(savedMarkup).toContain("data-workbench-save-session");
+    expect(savedMarkup).toContain("data-workbench-restore-session");
+    expect(savedMarkup).toContain("Workspace session: Saved");
+    expect(restoredMarkup).toContain("Workspace session: Restored");
+    expect(unavailableMarkup).toContain("Workspace session unavailable");
+    expect(unavailableMarkup).toContain("BSRS Configuration");
+  });
+
+  it("keeps workspace session markup deterministic and free of raw, hosted, server, persistence, and real-person paths", () => {
+    const first = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench({ workspace_session_status: "saved" }));
+    const second = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench({ workspace_session_status: "saved" }));
+
+    expect(second).toBe(first);
+    expect(first).toContain("Mock approved-sample workspace");
+    expect(first).not.toMatch(/\b(type="file"|https?:\/\/|upload|raw OCR|raw source document|server call|telemetry|insert into|sql.js write)\b/i);
+    expect(first).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
   });
 
   it("keeps person-level context explicitly mocked and free of natural-person names", () => {
