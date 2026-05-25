@@ -182,13 +182,15 @@ th {
   padding: 12px;
 }
 
-.status-filter {
+.status-filter,
+.severity-filter {
   display: grid;
   gap: 4px;
   min-width: 220px;
 }
 
 .status-filter span,
+.severity-filter span,
 .active-filter-label {
   color: #52606d;
   font-size: 12px;
@@ -196,7 +198,8 @@ th {
   text-transform: uppercase;
 }
 
-.status-filter select {
+.status-filter select,
+.severity-filter select {
   background: #ffffff;
   border: 1px solid #9fb3c8;
   border-radius: 6px;
