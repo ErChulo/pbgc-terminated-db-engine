@@ -1,5 +1,5 @@
 import type { Database } from "sql.js";
-import { createDeterministicId, currentTimestamp, type EngineRunRecord, type ModuleTrace, type StructuredIssue } from "@pbgc/shared";
+import { createDeterministicId, currentTimestamp, type EngineRunRecord, type StructuredIssue } from "@pbgc/shared";
 import {
   getEngineInputPacket,
   insertEngineRun,
@@ -7,16 +7,20 @@ import {
   insertResolvedServiceOutput,
   parsePacketJson,
 } from "@pbgc/db";
+import { buildInputPacketNotActiveError } from "./errors";
 import { resolveService } from "./resolveService";
+import {
+  buildServiceResolutionTraces,
+  collectWarnings,
+  writeModuleTraceRows,
+} from "./trace";
 import { validateServiceResolutionPacket } from "./validatePacket";
 import {
-  SERVICE_RESOLUTION_MODULE_NAME,
   SERVICE_RESOLUTION_MODULE_VERSION,
   type RunServiceResolutionRequest,
   type RunServiceResolutionResult,
   type ServiceResolutionPacket,
   type ServiceResolutionOutput,
-  type ServiceResolutionValues,
 } from "./types";
 
 export function runServiceResolution(db: Database, request: RunServiceResolutionRequest): RunServiceResolutionResult {
@@ -25,12 +29,7 @@ export function runServiceResolution(db: Database, request: RunServiceResolution
   const started_at = currentTimestamp();
 
   if (!record || record.status !== "active" || record.packet_type !== "service_resolution") {
-    const error = makeIssue(
-      "INPUT_PACKET_NOT_ACTIVE",
-      "Active service_resolution input packet was not found",
-      request.input_packet_id,
-      request.rule_version,
-    );
+    const error = buildInputPacketNotActiveError(request.input_packet_id, request.rule_version);
     insertEngineRun(db, makeRun(request, calculation_run_id, started_at, "failed", 0, 1));
     return failedResult(calculation_run_id, [error]);
   }
@@ -43,7 +42,14 @@ export function runServiceResolution(db: Database, request: RunServiceResolution
   }
 
   const values = resolveService(packet);
-  const warnings = buildWarnings(packet, request.input_packet_id, request.rule_version);
+  const traceEntries = buildServiceResolutionTraces(values, packet, {
+    inputPacketId: request.input_packet_id,
+    caseId: request.case_id,
+    subjectKey: request.subject_key,
+    ruleVersion: request.rule_version,
+    moduleVersion: SERVICE_RESOLUTION_MODULE_VERSION,
+  });
+  const warnings = collectWarnings(traceEntries, packet, request.input_packet_id, request.rule_version);
   const output: ServiceResolutionOutput = {
     resolved_service_comp_output_id: createDeterministicId("resolved-service"),
     calculation_run_id,
@@ -54,7 +60,7 @@ export function runServiceResolution(db: Database, request: RunServiceResolution
     average_compensation_resolved: null,
     covered_compensation_resolved: null,
   };
-  const traces = buildTraces(calculation_run_id, request.subject_key, values, warnings);
+  const traces = writeModuleTraceRows(calculation_run_id, request.subject_key, traceEntries, packet, request.rule_version);
   insertEngineRun(db, makeRun(request, calculation_run_id, started_at, "completed", warnings.length, 0));
   insertResolvedServiceOutput(db, output);
   for (const trace of traces) insertModuleTrace(db, trace);
@@ -104,75 +110,4 @@ function failedResult(calculationRunId: string, errors: StructuredIssue[]): RunS
     errors,
     traces: [],
   };
-}
-
-function buildWarnings(packet: { service_employment_history: { dote: string | null } }, inputPacketId: string, ruleVersion: string): StructuredIssue[] {
-  if (packet.service_employment_history.dote !== null) return [];
-  return [
-    makeIssue(
-      "ACTIVE_AT_DOPT_SERVICE_END",
-      "Participant has no DOTE; service resolved through DOPT for the MVP fixture path",
-      inputPacketId,
-      ruleVersion,
-      "dote",
-      "service_employment_history",
-    ),
-  ];
-}
-
-function makeIssue(
-  code: string,
-  message: string,
-  inputPacketId: string,
-  ruleVersion: string,
-  field_name?: string,
-  input_group?: string,
-): StructuredIssue {
-  return {
-    code,
-    message,
-    field_name,
-    input_group,
-    input_packet_id: inputPacketId,
-    module_name: SERVICE_RESOLUTION_MODULE_NAME,
-    rule_version: ruleVersion,
-  };
-}
-
-function buildTraces(
-  calculationRunId: string,
-  subjectKey: string,
-  values: ServiceResolutionValues,
-  warnings: StructuredIssue[],
-): ModuleTrace[] {
-  const warningNote = warnings.map((warning) => warning.message).join("; ") || null;
-  return Object.entries(values)
-    .filter(([, value]) => value !== null)
-    .map(([field, value]) => ({
-      module_trace_id: createDeterministicId("trace"),
-      calculation_run_id: calculationRunId,
-      module_name: SERVICE_RESOLUTION_MODULE_NAME,
-      subject_key: subjectKey,
-      field_name: field,
-      rule_applied: `${SERVICE_RESOLUTION_MODULE_NAME}@${SERVICE_RESOLUTION_MODULE_VERSION}:plan_year_1000_hours`,
-      input_fields_used_json: JSON.stringify([
-        "case_plan_timeline",
-        "resolved_plan_logic",
-        "participant_role_population",
-        "service_employment_history",
-        "actuarial_assumption_factor_set",
-        "limitation_packet",
-      ]),
-      intermediate_values_json: JSON.stringify({
-        module_version: SERVICE_RESOLUTION_MODULE_VERSION,
-        branch: "fixture_plan_year_inclusive",
-        freeze_applied: field === "benefit_service_resolved" || field === "accrual_service_resolved",
-        break_applied: false,
-        transfer_applied: false,
-        segment_applied: false,
-        override_applied: false,
-      }),
-      output_value: String(value),
-      warning_note: warningNote,
-    }));
 }

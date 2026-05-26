@@ -1,4 +1,4 @@
-import { applyMvpDatabaseFoundation, createSqlJsContext, insertEngineInputPacket, listResolvedServiceOutputs } from "@pbgc/db";
+import { applyMvpDatabaseFoundation, createSqlJsContext, insertEngineInputPacket } from "@pbgc/db";
 import { buildServicePacketFromFixture, runServiceResolution, type RunServiceResolutionResult } from "@pbgc/service-resolution";
 import { currentTimestamp } from "@pbgc/shared";
 import { parseServiceResolutionFixtures } from "../../../../packages/tests/service-resolution-fixtures";
@@ -27,15 +27,15 @@ export async function runFixtureServiceResolution(): Promise<ServiceResolutionAp
       built_at: currentTimestamp(),
       status: "active",
     });
-    results.push(runServiceResolution(db, {
+    const result = runServiceResolution(db, {
       case_id: packet.case_id,
       subject_type: packet.subject_type,
       subject_key: packet.subject_key,
       input_packet_id: inputPacketId,
       rule_version: "0.1.0",
       deliverable_version: "0.1.0",
-    }));
+    });
+    results.push(result);
   }
-  listResolvedServiceOutputs(db);
   return { results };
 }

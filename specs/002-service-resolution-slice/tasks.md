@@ -83,18 +83,18 @@
 
 ### Tests for User Story 2
 
-- [ ] T034 [P] [US2] Add invalid-packet tests for missing required service groups in packages/tests/service-resolution-validation.test.ts
-- [ ] T035 [P] [US2] Add invalid-packet tests for blank string values instead of explicit nulls in packages/tests/service-resolution-validation.test.ts
-- [ ] T036 [P] [US2] Add invalid-packet tests for malformed dates and invalid date ordering in packages/tests/service-resolution-validation.test.ts
-- [ ] T037 [P] [US2] Add failed-run no-output persistence tests in packages/tests/service-resolution-validation.test.ts
+- [X] T034 [P] [US2] Add invalid-packet tests for missing required service groups in packages/tests/service-resolution-validation.test.ts
+- [X] T035 [P] [US2] Add invalid-packet tests for blank string values instead of explicit nulls in packages/tests/service-resolution-validation.test.ts
+- [X] T036 [P] [US2] Add invalid-packet tests for malformed dates and invalid date ordering in packages/tests/service-resolution-validation.test.ts
+- [X] T037 [P] [US2] Add failed-run no-output persistence tests in packages/tests/service-resolution-validation.test.ts
 
 ### Implementation for User Story 2
 
-- [ ] T038 [US2] Add structured blocking error builders in packages/engine/service-resolution/src/errors.ts
-- [ ] T039 [US2] Extend service packet validation for required groups, blank strings, malformed dates, and date ordering in packages/engine/service-resolution/src/validatePacket.ts
-- [ ] T040 [US2] Persist failed validation attempts as failed engine_run records without service output rows in packages/engine/service-resolution/src/runServiceResolution.ts
-- [ ] T041 [US2] Display service validation error summaries in apps/web/src/pages/ServiceResolutionPage.ts
-- [ ] T042 [US2] Verify User Story 2 with npm test -- packages/tests/service-resolution-validation.test.ts
+- [X] T038 [US2] Add structured blocking error builders in packages/engine/service-resolution/src/errors.ts
+- [X] T039 [US2] Extend service packet validation for required groups, blank strings, malformed dates, and date ordering in packages/engine/service-resolution/src/validatePacket.ts
+- [X] T040 [US2] Persist failed validation attempts as failed engine_run records without service output rows in packages/engine/service-resolution/src/runServiceResolution.ts
+- [X] T041 [US2] Display service validation error summaries in apps/web/src/pages/ServiceResolutionPage.ts
+- [X] T042 [US2] Verify User Story 2 with npm test -- packages/tests/service-resolution-validation.test.ts
 
 **Checkpoint**: User Stories 1 and 2 work independently with valid and invalid packet paths.
 
@@ -108,17 +108,17 @@
 
 ### Tests for User Story 3
 
-- [ ] T043 [P] [US3] Add trace completeness tests for all populated service fields in packages/tests/service-resolution-trace.test.ts
-- [ ] T044 [P] [US3] Add repeated-run determinism tests that compare service values and trace decisions across five runs in packages/tests/service-resolution-trace.test.ts
-- [ ] T045 [P] [US3] Add active-at-DOPT warning trace tests for SR003 in packages/tests/service-resolution-trace.test.ts
+- [X] T043 [P] [US3] Add trace completeness tests for all populated service fields in packages/tests/service-resolution-trace.test.ts
+- [X] T044 [P] [US3] Add repeated-run determinism tests that compare service values and trace decisions across five runs in packages/tests/service-resolution-trace.test.ts
+- [X] T045 [P] [US3] Add active-at-DOPT warning trace tests for SR003 in packages/tests/service-resolution-trace.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T046 [US3] Implement trace row construction for service outputs and warnings in packages/engine/service-resolution/src/trace.ts
-- [ ] T047 [US3] Persist module_trace rows for each populated service output in packages/engine/service-resolution/src/runServiceResolution.ts
-- [ ] T048 [US3] Add trace and warning state selectors to apps/web/src/app/serviceResolutionSlice.ts
-- [ ] T049 [US3] Render service trace details and warning notes in apps/web/src/pages/ServiceResolutionPage.ts
-- [ ] T050 [US3] Verify User Story 3 with npm test -- packages/tests/service-resolution-trace.test.ts
+- [X] T046 [US3] Implement trace row construction for service outputs and warnings in packages/engine/service-resolution/src/trace.ts
+- [X] T047 [US3] Persist module_trace rows for each populated service output in packages/engine/service-resolution/src/runServiceResolution.ts
+- [X] T048 [US3] Add trace and warning state selectors to apps/web/src/app/serviceResolutionSlice.ts
+- [X] T049 [US3] Render service trace details and warning notes in apps/web/src/pages/ServiceResolutionPage.ts
+- [X] T050 [US3] Verify User Story 3 with npm test -- packages/tests/service-resolution-trace.test.ts
 
 **Checkpoint**: All service-resolution stories are independently functional and traceable.
 
@@ -128,13 +128,13 @@
 
 **Purpose**: Complete regression, static-browser verification, docs alignment, and committed build output.
 
-- [ ] T051 [P] Add date-resolution regression guard to the service validation command notes in specs/002-service-resolution-slice/quickstart.md
-- [ ] T052 [P] Update implementation completion notes in docs/architecture/service_resolution_slice_v0.1.0.md
+- [X] T051 [P] Add date-resolution regression guard to the service validation command notes in specs/002-service-resolution-slice/quickstart.md
+- [X] T052 [P] Update implementation completion notes in docs/architecture/service_resolution_slice_v0.1.0.md
 - [X] T053 Run all deterministic tests with npm test and fix issues in packages/tests/
 - [X] T054 Run lint/type checks with npm run lint and fix issues in packages/engine/service-resolution/src/
 - [X] T055 Run the static browser build with npm run build and update committed assets under apps/web/dist/
-- [ ] T056 Start the Vite app and validate the quickstart flow in apps/web/src/pages/ServiceResolutionPage.ts
-- [ ] T057 Confirm browser-only/no-network execution by inspecting service-resolution imports in packages/engine/service-resolution/src/
+- [X] T056 Start the Vite app and validate the quickstart flow in apps/web/src/pages/ServiceResolutionPage.ts
+- [X] T057 Confirm browser-only/no-network execution by inspecting service-resolution imports in packages/engine/service-resolution/src/
 - [X] T058 Confirm compensation, form, benefit-kernel, V1/VE, valuation listing, and BSRS implementations remain out of scope in packages/engine/ and packages/output-adapters/
 - [X] T059 Update task completion checkboxes in specs/002-service-resolution-slice/tasks.md after implementation verification
 

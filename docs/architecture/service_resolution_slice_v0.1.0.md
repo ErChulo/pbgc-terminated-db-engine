@@ -29,6 +29,34 @@ Successful runs write:
 - service columns in `resolved_service_comp_output`
 - `module_trace` rows for populated service outputs
 
+Failed validation runs write:
+
+- `engine_run` with `run_status = failed` and `error_count > 0`
+- No `resolved_service_comp_output` rows
+
 Compensation columns in `resolved_service_comp_output` remain null. No
 compensation, form, benefit-kernel, V1/VE, valuation-listing, or BSRS adapter
 implementation is included in this slice.
+
+## Validation & Error Handling
+
+- **Blocking errors**: Missing required groups, blank strings in required fields,
+  malformed dates, invalid date ordering (DOH > DOP, DOP > DOTE),
+  unsupported service basis codes, inactive/missing input packets.
+- **Non-blocking warnings**: Active-at-DOPT with no DOTE (service resolved
+  through DOPT).
+- Error codes: `MISSING_INPUT_GROUP`, `BLANK_FIELD_VALUE`, `MALFORMED_DATE_VALUE`,
+  `INVALID_DATE_ORDERING`, `UNSUPPORTED_SERVICE_VALUE`, `INPUT_PACKET_NOT_ACTIVE`,
+  `INVALID_PACKET_TYPE`.
+
+## Trace
+
+Each populated service output produces a `module_trace` row with:
+- `rule_applied`: `service_resolution@{ruleVersion}:{ruleField}`
+- `input_fields_used_json`: Array of `{group, field, value}` from service
+  employment history, case plan timeline, resolved plan logic, and frozen
+  accrual packet.
+- `intermediate_values_json`: participation_date, service_end_date, freeze_date,
+  effective_end_date, freeze/break/transfer/segment/override flags, branch, and
+  module_version.
+- Trace determinism verified across 5 repeated runs.

@@ -41,6 +41,17 @@ on top of the existing browser-side SQLite foundation and date-resolution MVP.
 Do not run compensation resolution, form resolution, benefit kernel, V1/VE
 output, valuation listings, or BSRS configuration in this slice.
 
+## Validation Evidence (2026-05-26)
+
+- **Build**: ✅ Exit 0 (chunk-size advisory only)
+- **Tests**: ✅ 229/229 pass (52 test files)
+- **Lint**: ✅ Exit 0
+- **Date-resolution regression**: ✅ All 211 date-resolution tests pass
+- **US2 validation**: ✅ 12/12 tests pass (missing groups, blank strings, malformed dates, date ordering, failed persistence)
+- **US3 trace**: ✅ 6/6 tests pass (completeness, repeatability across 5 runs, active-at-DOPT warning)
+- **Static build**: ✅ `apps/web/dist/` updated
+- **No network**: ✅ All service-resolution imports are local modules only
+
 ## Completion Criteria
 
 - Existing service-resolution fixtures pass.

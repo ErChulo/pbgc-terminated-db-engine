@@ -37,7 +37,7 @@ describe("hardening reviewed-input boundary", () => {
     expect(validateDateResolutionPacket(datePacket, "packet-DR001", "0.1.0").map((issue) => issue.code)).toContain("MISSING_REQUIRED_GROUP");
 
     const servicePacket = { ...buildServicePacketFromFixture(parseServiceResolutionFixtures()[0]), resolved_plan_logic: {} } as any;
-    expect(validateServiceResolutionPacket(servicePacket, "packet-SR001", "0.1.0").map((issue) => issue.code)).toContain("MISSING_INPUT_FIELD");
+    expect(validateServiceResolutionPacket(servicePacket, "packet-SR001", "0.1.0").map((issue) => issue.code)).toContain("BLANK_FIELD_VALUE");
 
     const compensationPacket = { ...buildCompensationPacketFromFixture(parseCompensationResolutionFixtures()[0]), compensation_accrual_inputs: {} } as any;
     expect(validateCompensationResolutionPacket(compensationPacket, "packet-CR001", "0.1.0").map((issue) => issue.code)).toContain("MISSING_INPUT_FIELD");
