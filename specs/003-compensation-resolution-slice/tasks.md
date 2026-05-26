@@ -87,20 +87,20 @@
 
 ### Tests for User Story 2
 
-- [ ] T038 [P] [US2] Add invalid-packet tests for missing required compensation groups in packages/tests/compensation-resolution-validation.test.ts
-- [ ] T039 [P] [US2] Add invalid-packet tests for blank strings instead of explicit null or numeric values in packages/tests/compensation-resolution-validation.test.ts
-- [ ] T040 [P] [US2] Add invalid-packet tests for malformed or negative compensation amounts in packages/tests/compensation-resolution-validation.test.ts
-- [ ] T041 [P] [US2] Add invalid-packet tests for unsupported compensation bases and missing conditional packets in packages/tests/compensation-resolution-validation.test.ts
-- [ ] T042 [P] [US2] Add failed-run no-authoritative-output persistence tests in packages/tests/compensation-resolution-validation.test.ts
+- [X] T038 [P] [US2] Add invalid-packet tests for missing required compensation groups in packages/tests/compensation-resolution-validation.test.ts
+- [X] T039 [P] [US2] Add invalid-packet tests for blank strings instead of explicit null or numeric values in packages/tests/compensation-resolution-validation.test.ts
+- [X] T040 [P] [US2] Add invalid-packet tests for malformed or negative compensation amounts in packages/tests/compensation-resolution-validation.test.ts
+- [X] T041 [P] [US2] Add invalid-packet tests for unsupported compensation bases and missing conditional packets in packages/tests/compensation-resolution-validation.test.ts
+- [X] T042 [P] [US2] Add failed-run no-authoritative-output persistence tests in packages/tests/compensation-resolution-validation.test.ts
 
 ### Implementation for User Story 2
 
-- [ ] T043 [US2] Add structured blocking error builders in packages/engine/compensation-resolution/src/errors.ts
-- [ ] T044 [US2] Extend compensation packet validation for missing groups, blank strings, malformed amounts, negative amounts, and unsupported bases in packages/engine/compensation-resolution/src/validatePacket.ts
-- [ ] T045 [US2] Extend conditional trigger validation for compensation history, covered compensation, limit, frozen-benefit support, and PIA packets in packages/engine/compensation-resolution/src/validatePacket.ts
-- [ ] T046 [US2] Persist failed validation attempts as failed engine_run records without authoritative compensation values in packages/engine/compensation-resolution/src/runCompensationResolution.ts
-- [ ] T047 [US2] Display compensation validation error summaries in apps/web/src/pages/CompensationResolutionPage.ts
-- [ ] T048 [US2] Verify User Story 2 with npm test -- packages/tests/compensation-resolution-validation.test.ts
+- [X] T043 [US2] Add structured blocking error builders in packages/engine/compensation-resolution/src/errors.ts
+- [X] T044 [US2] Extend compensation packet validation for missing groups, blank strings, malformed amounts, negative amounts, and unsupported bases in packages/engine/compensation-resolution/src/validatePacket.ts
+- [X] T045 [US2] Extend conditional trigger validation for compensation history, covered compensation, limit, frozen-benefit support, and PIA packets in packages/engine/compensation-resolution/src/validatePacket.ts
+- [X] T046 [US2] Persist failed validation attempts as failed engine_run records without authoritative compensation values in packages/engine/compensation-resolution/src/runCompensationResolution.ts
+- [X] T047 [US2] Display compensation validation error summaries in apps/web/src/pages/CompensationResolutionPage.ts
+- [X] T048 [US2] Verify User Story 2 with npm test -- packages/tests/compensation-resolution-validation.test.ts
 
 **Checkpoint**: User Stories 1 and 2 work independently with valid and invalid packet paths.
 
@@ -114,17 +114,17 @@
 
 ### Tests for User Story 3
 
-- [ ] T049 [P] [US3] Add trace completeness tests for all populated compensation fields in packages/tests/compensation-resolution-trace.test.ts
-- [ ] T050 [P] [US3] Add repeated-run determinism tests that compare compensation values and trace decisions across five runs in packages/tests/compensation-resolution-trace.test.ts
-- [ ] T051 [P] [US3] Add frozen-benefit warning trace tests for CR003 in packages/tests/compensation-resolution-trace.test.ts
+- [X] T049 [P] [US3] Add trace completeness tests for all populated compensation fields in packages/tests/compensation-resolution-trace.test.ts
+- [X] T050 [P] [US3] Add repeated-run determinism tests that compare compensation values and trace decisions across five runs in packages/tests/compensation-resolution-trace.test.ts
+- [X] T051 [P] [US3] Add frozen-benefit warning trace tests for CR003 in packages/tests/compensation-resolution-trace.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T052 [US3] Implement trace row construction for compensation outputs and warnings in packages/engine/compensation-resolution/src/trace.ts
-- [ ] T053 [US3] Persist module_trace rows for each populated compensation output and warning path in packages/engine/compensation-resolution/src/runCompensationResolution.ts
-- [ ] T054 [US3] Add trace and warning state selectors to apps/web/src/app/compensationResolutionSlice.ts
-- [ ] T055 [US3] Render compensation trace details and warning notes in apps/web/src/pages/CompensationResolutionPage.ts
-- [ ] T056 [US3] Verify User Story 3 with npm test -- packages/tests/compensation-resolution-trace.test.ts
+- [X] T052 [US3] Implement trace row construction for compensation outputs and warnings in packages/engine/compensation-resolution/src/trace.ts
+- [X] T053 [US3] Persist module_trace rows for each populated compensation output and warning path in packages/engine/compensation-resolution/src/runCompensationResolution.ts
+- [X] T054 [US3] Add trace and warning state selectors to apps/web/src/app/compensationResolutionSlice.ts
+- [X] T055 [US3] Render compensation trace details and warning notes in apps/web/src/pages/CompensationResolutionPage.ts
+- [X] T056 [US3] Verify User Story 3 with npm test -- packages/tests/compensation-resolution-trace.test.ts
 
 **Checkpoint**: All compensation-resolution stories are independently functional and traceable.
 
@@ -134,7 +134,7 @@
 
 **Purpose**: Complete regression, static-browser verification, docs alignment, and committed build output.
 
-- [ ] T057 [P] Add prior-slice regression guard to the compensation validation command notes in specs/003-compensation-resolution-slice/quickstart.md
+- [X] T057 [P] Add prior-slice regression guard to the compensation validation command notes in specs/003-compensation-resolution-slice/quickstart.md
 - [X] T058 [P] Update implementation completion notes in docs/architecture/compensation_resolution_slice_v0.1.0.md
 - [X] T059 Run all deterministic tests with npm test and fix issues in packages/tests/
 - [X] T060 Run lint/type checks with npm run lint and fix issues in packages/engine/compensation-resolution/src/

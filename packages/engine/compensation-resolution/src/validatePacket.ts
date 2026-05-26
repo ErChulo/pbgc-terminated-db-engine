@@ -1,5 +1,16 @@
 import type { StructuredIssue } from "@pbgc/shared";
-import { COMPENSATION_RESOLUTION_MODULE_NAME, type CompensationResolutionPacket } from "./types";
+import {
+  buildBlankFieldError,
+  buildConditionalPacketMissingError,
+  buildInvalidPacketTypeError,
+  buildMalformedAmountError,
+  buildMissingGroupError,
+  buildNegativeAmountError,
+  buildUnsupportedAveragePeriodError,
+  buildUnsupportedAverageRuleError,
+  buildUnsupportedBasisError,
+} from "./errors";
+import type { CompensationResolutionPacket } from "./types";
 
 const REQUIRED_GROUPS = [
   "case_plan_timeline",
@@ -41,54 +52,103 @@ const REQUIRED_FIELDS: Record<(typeof REQUIRED_GROUPS)[number], string[]> = {
   limitation_packet: ["bankruptcy_plan_indicator", "bpd_limitation_indicator"],
 };
 
+const NUMERIC_FIELDS: Record<string, string[]> = {
+  compensation_accrual_inputs: [
+    "final_average_compensation",
+    "covered_compensation_amount",
+    "frozen_accrued_monthly_benefit",
+    "accrued_benefit_at_dopt",
+    "vested_percentage_at_dopt",
+  ],
+};
+
+function isBlank(value: unknown): boolean {
+  if (value === null || value === undefined) return false;
+  if (typeof value === "string") return value.trim() === "";
+  return false;
+}
+
+function isMalformedAmount(value: unknown): boolean {
+  if (value === null || value === undefined) return false;
+  if (typeof value === "number") return !Number.isFinite(value);
+  if (typeof value === "string" && value.trim() !== "") {
+    const parsed = Number(value.trim().replace(/,/g, ""));
+    return !Number.isFinite(parsed);
+  }
+  return typeof value !== "number" && typeof value !== "string";
+}
+
+type GroupValue = Record<string, unknown> | null | undefined;
+
 export function validateCompensationResolutionPacket(
   packet: CompensationResolutionPacket,
   inputPacketId: string,
   ruleVersion: string,
 ): StructuredIssue[] {
   const errors: StructuredIssue[] = [];
+
   if (packet.packet_type !== "compensation_resolution") {
-    errors.push(issue("INVALID_PACKET_TYPE", "Packet type must be compensation_resolution", inputPacketId, ruleVersion, "packet_type"));
+    errors.push(buildInvalidPacketTypeError(inputPacketId, ruleVersion));
   }
+
   for (const group of REQUIRED_GROUPS) {
-    const value = packet[group];
+    const value = (packet as Record<string, unknown>)[group] as GroupValue;
     if (!value || typeof value !== "object") {
-      errors.push(issue("MISSING_INPUT_GROUP", `Missing required compensation input group ${group}`, inputPacketId, ruleVersion, undefined, group));
+      errors.push(buildMissingGroupError(group, inputPacketId, ruleVersion));
       continue;
     }
     for (const field of REQUIRED_FIELDS[group]) {
       if (!(field in value)) {
-        errors.push(issue("MISSING_INPUT_FIELD", `Missing required compensation input field ${group}.${field}`, inputPacketId, ruleVersion, field, group));
+        errors.push(buildBlankFieldError(group, field, inputPacketId, ruleVersion, "entire group missing or field absent"));
+      } else {
+        const fieldValue = value[field];
+        if (isBlank(fieldValue)) {
+          errors.push(buildBlankFieldError(group, field, inputPacketId, ruleVersion));
+        }
+      }
+    }
+    const numericFields = NUMERIC_FIELDS[group];
+    if (numericFields) {
+      for (const field of numericFields) {
+        if (field in value) {
+          const fieldValue = value[field];
+          if (fieldValue !== null && fieldValue !== undefined && fieldValue !== "") {
+            if (isMalformedAmount(fieldValue)) {
+              errors.push(buildMalformedAmountError(group, field, fieldValue, inputPacketId, ruleVersion));
+            } else if (typeof fieldValue === "number" && fieldValue < 0) {
+              errors.push(buildNegativeAmountError(group, field, fieldValue, inputPacketId, ruleVersion));
+            }
+          }
+        }
       }
     }
   }
-  if (packet.compensation_accrual_inputs.compensation_basis_code !== "final_average_pay") {
-    errors.push(issue("UNSUPPORTED_COMPENSATION_BASIS", "MVP supports only final_average_pay fixture compensation basis", inputPacketId, ruleVersion, "compensation_basis_code", "compensation_accrual_inputs"));
-  }
-  if (packet.compensation_accrual_inputs.average_compensation_period !== "5_year") {
-    errors.push(issue("UNSUPPORTED_AVERAGE_COMPENSATION_PERIOD", "MVP supports only 5_year fixture average compensation period", inputPacketId, ruleVersion, "average_compensation_period", "compensation_accrual_inputs"));
-  }
-  if (packet.resolved_plan_logic.average_compensation_rule !== "highest_consecutive_5_years") {
-    errors.push(issue("UNSUPPORTED_AVERAGE_COMPENSATION_RULE", "MVP supports only highest_consecutive_5_years fixture rule", inputPacketId, ruleVersion, "average_compensation_rule", "resolved_plan_logic"));
-  }
-  return errors;
-}
 
-function issue(
-  code: string,
-  message: string,
-  inputPacketId: string,
-  ruleVersion: string,
-  field_name?: string,
-  input_group?: string,
-): StructuredIssue {
-  return {
-    code,
-    message,
-    field_name,
-    input_group,
-    input_packet_id: inputPacketId,
-    module_name: COMPENSATION_RESOLUTION_MODULE_NAME,
-    rule_version: ruleVersion,
-  };
+  if (packet.compensation_accrual_inputs) {
+    const inputs = packet.compensation_accrual_inputs;
+    if (inputs.compensation_basis_code !== "final_average_pay") {
+      errors.push(buildUnsupportedBasisError("compensation_basis_code", inputs.compensation_basis_code, inputPacketId, ruleVersion));
+    }
+    if (inputs.average_compensation_period !== "5_year") {
+      errors.push(buildUnsupportedAveragePeriodError(inputs.average_compensation_period, inputPacketId, ruleVersion));
+    }
+  }
+
+  if (packet.resolved_plan_logic) {
+    if (packet.resolved_plan_logic.average_compensation_rule !== "highest_consecutive_5_years") {
+      errors.push(buildUnsupportedAverageRuleError(packet.resolved_plan_logic.average_compensation_rule, inputPacketId, ruleVersion));
+    }
+  }
+
+  // Conditional packet triggers
+  if (packet.compensation_accrual_inputs) {
+    const inputs = packet.compensation_accrual_inputs;
+    if (inputs.frozen_accrued_benefit_indicator && !packet.frozen_benefit_support_packet) {
+      errors.push(
+        buildConditionalPacketMissingError("frozen_accrued_benefit_indicator", "frozen_benefit_support_packet", inputPacketId, ruleVersion),
+      );
+    }
+  }
+
+  return errors;
 }

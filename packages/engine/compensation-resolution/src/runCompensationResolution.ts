@@ -7,17 +7,17 @@ import {
   insertResolvedCompensationOutput,
   parsePacketJson,
 } from "@pbgc/db";
+import { buildInputPacketNotActiveError } from "./errors";
 import { resolveCompensation } from "./resolveCompensation";
-import { validateCompensationResolutionPacket } from "./validatePacket";
+import { buildCompensationTraces, collectWarnings, writeCompensationTraceRows } from "./trace";
 import {
-  COMPENSATION_RESOLUTION_MODULE_NAME,
   COMPENSATION_RESOLUTION_MODULE_VERSION,
   type CompensationResolutionOutput,
   type CompensationResolutionPacket,
-  type CompensationResolutionValues,
   type RunCompensationResolutionRequest,
   type RunCompensationResolutionResult,
 } from "./types";
+import { validateCompensationResolutionPacket } from "./validatePacket";
 
 export function runCompensationResolution(db: Database, request: RunCompensationResolutionRequest): RunCompensationResolutionResult {
   const record = getEngineInputPacket(db, request.input_packet_id);
@@ -25,12 +25,7 @@ export function runCompensationResolution(db: Database, request: RunCompensation
   const started_at = currentTimestamp();
 
   if (!record || record.status !== "active" || record.packet_type !== "compensation_resolution") {
-    const error = makeIssue(
-      "INPUT_PACKET_NOT_ACTIVE",
-      "Active compensation_resolution input packet was not found",
-      request.input_packet_id,
-      request.rule_version,
-    );
+    const error = buildInputPacketNotActiveError(request.input_packet_id, request.rule_version);
     insertEngineRun(db, makeRun(request, calculation_run_id, started_at, "failed", 0, 1));
     return failedResult(calculation_run_id, [error]);
   }
@@ -54,7 +49,17 @@ export function runCompensationResolution(db: Database, request: RunCompensation
     accrual_service_resolved: null,
     ...values,
   };
-  const traces = buildTraces(calculation_run_id, request.subject_key, values, warnings);
+
+  const traceEntries = buildCompensationTraces(values, packet, {
+    inputPacketId: request.input_packet_id,
+    caseId: request.case_id,
+    subjectKey: request.subject_key,
+    ruleVersion: request.rule_version,
+    moduleVersion: COMPENSATION_RESOLUTION_MODULE_VERSION,
+  }, warnings);
+  collectWarnings(traceEntries, packet);
+  const traces = writeCompensationTraceRows(calculation_run_id, request.subject_key, traceEntries);
+
   insertEngineRun(db, makeRun(request, calculation_run_id, started_at, "completed", warnings.length, 0));
   insertResolvedCompensationOutput(db, output);
   for (const trace of traces) insertModuleTrace(db, trace);
@@ -104,63 +109,4 @@ function failedResult(calculationRunId: string, errors: StructuredIssue[]): RunC
     errors,
     traces: [],
   };
-}
-
-function makeIssue(
-  code: string,
-  message: string,
-  inputPacketId: string,
-  ruleVersion: string,
-  field_name?: string,
-  input_group?: string,
-): StructuredIssue {
-  return {
-    code,
-    message,
-    field_name,
-    input_group,
-    input_packet_id: inputPacketId,
-    module_name: COMPENSATION_RESOLUTION_MODULE_NAME,
-    rule_version: ruleVersion,
-  };
-}
-
-function buildTraces(
-  calculationRunId: string,
-  subjectKey: string,
-  values: CompensationResolutionValues,
-  warnings: StructuredIssue[],
-): ModuleTrace[] {
-  const warningNote = warnings.map((warning) => warning.message).join("; ") || null;
-  return Object.entries(values)
-    .filter(([, value]) => value !== null)
-    .map(([field, value]) => ({
-      module_trace_id: createDeterministicId("trace"),
-      calculation_run_id: calculationRunId,
-      module_name: COMPENSATION_RESOLUTION_MODULE_NAME,
-      subject_key: subjectKey,
-      field_name: field,
-      rule_applied: `${COMPENSATION_RESOLUTION_MODULE_NAME}@${COMPENSATION_RESOLUTION_MODULE_VERSION}:final_average_pay`,
-      input_fields_used_json: JSON.stringify([
-        "case_plan_timeline",
-        "resolved_plan_logic",
-        "participant_role_population",
-        "service_employment_history",
-        "compensation_accrual_inputs",
-        "benefit_administration_state",
-        "limitation_packet",
-      ]),
-      intermediate_values_json: JSON.stringify({
-        module_version: COMPENSATION_RESOLUTION_MODULE_VERSION,
-        branch: field === "covered_compensation_resolved" ? "fixture_covered_compensation" : "fixture_final_average_pay",
-        compensation_history_used: true,
-        override_applied: false,
-        covered_compensation_applied: field === "covered_compensation_resolved",
-        compensation_limit_applied: false,
-        frozen_benefit_support_applied: warnings.length > 0,
-        pia_offset_applied: false,
-      }),
-      output_value: String(value),
-      warning_note: warningNote,
-    }));
 }

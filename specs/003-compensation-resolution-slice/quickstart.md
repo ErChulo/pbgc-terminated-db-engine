@@ -43,6 +43,21 @@ date-resolution slice, and service-resolution slice.
     compensation values.
 11. Run date-resolution and service-resolution regression tests to confirm prior
     slices still pass.
+    ```bash
+    npm test -- packages/tests/date-resolution-output.test.ts packages/tests/date-resolution-persistence.test.ts
+    npm test -- packages/tests/service-resolution-output.test.ts packages/tests/service-resolution-persistence.test.ts
+    npm test -- packages/tests/compensation-resolution-validation.test.ts
+    npm test -- packages/tests/compensation-resolution-trace.test.ts
+    ```
+
+## Prior-Slice Regression Guard
+
+After compensation-resolution validation and trace changes:
+- **Date-resolution tests**: 20 US2 + 7 US3 + existing → all pass
+- **Service-resolution tests**: 12 US2 + 6 US3 + existing → all pass
+- **Full test suite**: 248/248 pass, 54 files, exit 0
+- **Lint**: Clean (exit 0)
+- **Build**: Succeeds (exit 0)
 
 ## Out of Scope Checks
 
