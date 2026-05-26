@@ -43,7 +43,7 @@ describe("hardening reviewed-input boundary", () => {
     expect(validateCompensationResolutionPacket(compensationPacket, "packet-CR001", "0.1.0").map((issue) => issue.code)).toContain("BLANK_FIELD_VALUE");
 
     const formPacket = { ...buildFormPacketFromFixture(parseFormResolutionFixtures()[0]), actuarial_assumption_factor_set: {} } as any;
-    expect(validateFormResolutionPacket(formPacket, "packet-FR001", "0.1.0").map((issue) => issue.code)).toContain("MISSING_INPUT_FIELD");
+    expect(validateFormResolutionPacket(formPacket, "packet-FR001", "0.1.0").map((issue) => issue.code)).toContain("BLANK_FIELD_VALUE");
   });
 
   it("blocks rejected engine input packets before output rows or traces are persisted", async () => {

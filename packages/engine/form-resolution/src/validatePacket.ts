@@ -1,5 +1,14 @@
 import type { StructuredIssue } from "@pbgc/shared";
-import { FORM_RESOLUTION_MODULE_NAME, type FormResolutionPacket } from "./types";
+import {
+  buildBlankFieldError,
+  buildConflictingPayStatusError,
+  buildInvalidPacketTypeError,
+  buildMalformedBooleanError,
+  buildMissingConditionalPacketError,
+  buildMissingGroupError,
+  buildUnsupportedRuleError,
+} from "./errors";
+import type { FormResolutionPacket } from "./types";
 
 const REQUIRED_GROUPS = [
   "case_plan_timeline",
@@ -10,7 +19,9 @@ const REQUIRED_GROUPS = [
   "limitation_packet",
 ] as const;
 
-const REQUIRED_FIELDS: Record<(typeof REQUIRED_GROUPS)[number], string[]> = {
+type GroupName = (typeof REQUIRED_GROUPS)[number];
+
+const REQUIRED_FIELDS: Record<GroupName, string[]> = {
   case_plan_timeline: ["case_id", "plan_id", "dopt", "bpd", "dobf"],
   resolved_plan_logic: [
     "normal_single_form_rule",
@@ -56,53 +67,136 @@ const REQUIRED_FIELDS: Record<(typeof REQUIRED_GROUPS)[number], string[]> = {
   ],
 };
 
-export function validateFormResolutionPacket(packet: FormResolutionPacket, inputPacketId: string, ruleVersion: string): StructuredIssue[] {
+const BOOLEAN_FIELDS: Record<string, string[]> = {
+  participant_role_population: ["non_spouse_benf", "qdro_indicator", "qpsa_indicator"],
+  benefit_administration_state: ["elected_form_indicator"],
+  limitation_packet: [
+    "annuity_starting_date_limitation_indicator",
+    "death_benefit_limitation_indicator",
+    "form_of_benefit_limitation_indicator",
+    "actuarial_equivalence_limitation_indicator",
+  ],
+};
+
+const SUPPORTED_FORM_RULES: Record<string, Set<string>> = {
+  normal_single_form_rule: new Set(["sla"]),
+  normal_married_form_rule: new Set(["qjsa_50"]),
+  pre_retirement_death_benefit_rule: new Set(["qpsa"]),
+  consensual_lump_sum_rule: new Set(["not_available"]),
+};
+
+export function validateFormResolutionPacket(
+  packet: FormResolutionPacket,
+  inputPacketId: string,
+  ruleVersion: string,
+): StructuredIssue[] {
   const errors: StructuredIssue[] = [];
+
   if (packet.packet_type !== "form_resolution") {
-    errors.push(issue("INVALID_PACKET_TYPE", "Packet type must be form_resolution", inputPacketId, ruleVersion, "packet_type"));
+    errors.push(buildInvalidPacketTypeError(inputPacketId, ruleVersion));
+    return errors;
   }
+
   for (const group of REQUIRED_GROUPS) {
     const value = packet[group];
     if (!value || typeof value !== "object") {
-      errors.push(issue("MISSING_INPUT_GROUP", `Missing required form input group ${group}`, inputPacketId, ruleVersion, undefined, group));
+      errors.push(buildMissingGroupError(group, inputPacketId, ruleVersion));
       continue;
     }
+
     for (const field of REQUIRED_FIELDS[group]) {
       if (!(field in value)) {
-        errors.push(issue("MISSING_INPUT_FIELD", `Missing required form input field ${group}.${field}`, inputPacketId, ruleVersion, field, group));
+        errors.push(buildBlankFieldError(group, field, inputPacketId, ruleVersion));
+        continue;
+      }
+      const fieldValue = (value as Record<string, unknown>)[field];
+      if (isBlank(fieldValue)) {
+        errors.push(buildBlankFieldError(group, field, inputPacketId, ruleVersion));
+      }
+    }
+
+    const booleanFields = BOOLEAN_FIELDS[group];
+    if (booleanFields) {
+      for (const field of booleanFields) {
+        const fieldValue = (value as Record<string, unknown>)[field];
+        if (fieldValue !== undefined && fieldValue !== null && typeof fieldValue !== "boolean") {
+          errors.push(buildMalformedBooleanError(group, field, inputPacketId, ruleVersion));
+        }
       }
     }
   }
-  if (packet.resolved_plan_logic.normal_single_form_rule !== "sla") {
-    errors.push(issue("UNSUPPORTED_NORMAL_SINGLE_FORM_RULE", "MVP supports only sla normal single form rule", inputPacketId, ruleVersion, "normal_single_form_rule", "resolved_plan_logic"));
+
+  // Validate supported form rules
+  if (packet.resolved_plan_logic) {
+    for (const [field, supportedValues] of Object.entries(SUPPORTED_FORM_RULES)) {
+      const value = (packet.resolved_plan_logic as Record<string, unknown>)[field];
+      if (value !== null && value !== undefined && !supportedValues.has(String(value))) {
+        errors.push(
+          buildUnsupportedRuleError(
+            "resolved_plan_logic",
+            field,
+            `Expected one of: ${[...supportedValues].join(", ")}`,
+            inputPacketId,
+            ruleVersion,
+          ),
+        );
+      }
+    }
   }
-  if (packet.resolved_plan_logic.normal_married_form_rule !== "qjsa_50") {
-    errors.push(issue("UNSUPPORTED_NORMAL_MARRIED_FORM_RULE", "MVP supports only qjsa_50 normal married form rule", inputPacketId, ruleVersion, "normal_married_form_rule", "resolved_plan_logic"));
+
+  // Conditional packet validation
+  checkConditionalPackets(packet, inputPacketId, ruleVersion, errors);
+
+  // Conflicting pay status
+  if (
+    packet.benefit_administration_state?.current_pay_status === "in_pay" &&
+    !packet.in_pay_packet
+  ) {
+    errors.push(
+      buildMissingConditionalPacketError("in_pay", "benefit_administration_state", inputPacketId, ruleVersion),
+    );
   }
-  if (packet.resolved_plan_logic.pre_retirement_death_benefit_rule !== "qpsa") {
-    errors.push(issue("UNSUPPORTED_DEATH_BENEFIT_RULE", "MVP supports only qpsa pre-retirement death benefit rule", inputPacketId, ruleVersion, "pre_retirement_death_benefit_rule", "resolved_plan_logic"));
+
+  if (
+    packet.participant_role_population?.qpsa_indicator === true &&
+    !packet.qpsa_packet
+  ) {
+    errors.push(
+      buildMissingConditionalPacketError("QPSA", "participant_role_population", inputPacketId, ruleVersion),
+    );
   }
-  if (packet.resolved_plan_logic.consensual_lump_sum_rule !== "not_available") {
-    errors.push(issue("UNSUPPORTED_LUMP_SUM_RULE", "MVP supports only not_available consensual lump-sum rule", inputPacketId, ruleVersion, "consensual_lump_sum_rule", "resolved_plan_logic"));
+
+  if (
+    packet.participant_role_population?.qdro_indicator === true &&
+    !packet.qdro_packet
+  ) {
+    errors.push(
+      buildMissingConditionalPacketError("QDRO", "participant_role_population", inputPacketId, ruleVersion),
+    );
   }
+
   return errors;
 }
 
-function issue(
-  code: string,
-  message: string,
+function checkConditionalPackets(
+  packet: FormResolutionPacket,
   inputPacketId: string,
   ruleVersion: string,
-  field_name?: string,
-  input_group?: string,
-): StructuredIssue {
-  return {
-    code,
-    message,
-    field_name,
-    input_group,
-    input_packet_id: inputPacketId,
-    module_name: FORM_RESOLUTION_MODULE_NAME,
-    rule_version: ruleVersion,
-  };
+  errors: StructuredIssue[],
+): void {
+  const role = packet.participant_role_population;
+  if (role?.role_type === "beneficiary" || (role?.dod && role.dod !== null)) {
+    if (!packet.death_benefit_packet) {
+      errors.push(
+        buildMissingConditionalPacketError("death_benefit", "participant_role_population", inputPacketId, ruleVersion),
+      );
+    }
+  }
+}
+
+function isBlank(value: unknown): boolean {
+  if (value === null || value === undefined) return false;
+  if (typeof value === "string") return value.trim().length === 0;
+  if (typeof value === "number") return !Number.isFinite(value);
+  return false;
 }

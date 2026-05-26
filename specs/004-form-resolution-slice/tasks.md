@@ -86,21 +86,21 @@
 
 ### Tests for User Story 2
 
-- [ ] T037 [P] [US2] Add invalid-packet tests for missing required form groups in packages/tests/form-resolution-validation.test.ts
-- [ ] T038 [P] [US2] Add invalid-packet tests for blank strings instead of explicit nulls or controlled values in packages/tests/form-resolution-validation.test.ts
-- [ ] T039 [P] [US2] Add invalid-packet tests for unsupported normal-form, death-benefit, conversion, and lump-sum rules in packages/tests/form-resolution-validation.test.ts
-- [ ] T040 [P] [US2] Add invalid-packet tests for conflicting current_pay_status and current pay fields in packages/tests/form-resolution-validation.test.ts
-- [ ] T041 [P] [US2] Add invalid-packet tests for missing in-pay, QPSA, QDRO, death-benefit, and contribution conditional packets in packages/tests/form-resolution-validation.test.ts
-- [ ] T042 [P] [US2] Add failed-run no-authoritative-output persistence tests in packages/tests/form-resolution-validation.test.ts
+- [X] T037 [P] [US2] Add invalid-packet tests for missing required form groups in packages/tests/form-resolution-validation.test.ts
+- [X] T038 [P] [US2] Add invalid-packet tests for blank strings instead of explicit nulls or controlled values in packages/tests/form-resolution-validation.test.ts
+- [X] T039 [P] [US2] Add invalid-packet tests for unsupported normal-form, death-benefit, conversion, and lump-sum rules in packages/tests/form-resolution-validation.test.ts
+- [X] T040 [P] [US2] Add invalid-packet tests for conflicting current_pay_status and current pay fields in packages/tests/form-resolution-validation.test.ts
+- [X] T041 [P] [US2] Add invalid-packet tests for missing in-pay, QPSA, QDRO, death-benefit, and contribution conditional packets in packages/tests/form-resolution-validation.test.ts
+- [X] T042 [P] [US2] Add failed-run no-authoritative-output persistence tests in packages/tests/form-resolution-validation.test.ts
 
 ### Implementation for User Story 2
 
-- [ ] T043 [US2] Add structured blocking error builders in packages/engine/form-resolution/src/errors.ts
-- [ ] T044 [US2] Extend form packet validation for missing groups, blank strings, unsupported controlled rules, and malformed booleans in packages/engine/form-resolution/src/validatePacket.ts
-- [ ] T045 [US2] Extend conditional trigger validation for in-pay, QPSA, QDRO, death-benefit, mandatory contribution, and voluntary contribution packets in packages/engine/form-resolution/src/validatePacket.ts
-- [ ] T046 [US2] Persist failed validation attempts as failed engine_run records without resolved_forms_output rows in packages/engine/form-resolution/src/runFormResolution.ts
-- [ ] T047 [US2] Display form validation error summaries in apps/web/src/pages/FormResolutionPage.ts
-- [ ] T048 [US2] Verify User Story 2 with npm test -- packages/tests/form-resolution-validation.test.ts
+- [X] T043 [US2] Add structured blocking error builders in packages/engine/form-resolution/src/errors.ts
+- [X] T044 [US2] Extend form packet validation for missing groups, blank strings, unsupported controlled rules, and malformed booleans in packages/engine/form-resolution/src/validatePacket.ts
+- [X] T045 [US2] Extend conditional trigger validation for in-pay, QPSA, QDRO, death-benefit, mandatory contribution, and voluntary contribution packets in packages/engine/form-resolution/src/validatePacket.ts
+- [X] T046 [US2] Persist failed validation attempts as failed engine_run records without resolved_forms_output rows in packages/engine/form-resolution/src/runFormResolution.ts
+- [X] T047 [US2] Display form validation error summaries in apps/web/src/pages/FormResolutionPage.ts
+- [X] T048 [US2] Verify User Story 2 with npm test -- packages/tests/form-resolution-validation.test.ts
 
 **Checkpoint**: User Stories 1 and 2 work independently with valid and invalid packet paths.
 
@@ -114,17 +114,17 @@
 
 ### Tests for User Story 3
 
-- [ ] T049 [P] [US3] Add trace completeness tests for all populated form output fields in packages/tests/form-resolution-trace.test.ts
-- [ ] T050 [P] [US3] Add repeated-run determinism tests that compare form values and trace decisions across five runs in packages/tests/form-resolution-trace.test.ts
-- [ ] T051 [P] [US3] Add warning trace tests for in-pay, QDRO, QPSA, death-benefit, contribution, and lump-sum branch notes in packages/tests/form-resolution-trace.test.ts
+- [X] T049 [P] [US3] Add trace completeness tests for all populated form output fields in packages/tests/form-resolution-trace.test.ts
+- [X] T050 [P] [US3] Add repeated-run determinism tests that compare form values and trace decisions across five runs in packages/tests/form-resolution-trace.test.ts
+- [X] T051 [P] [US3] Add warning trace tests for in-pay, QDRO, QPSA, death-benefit, contribution, and lump-sum branch notes in packages/tests/form-resolution-trace.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T052 [US3] Implement trace row construction for form outputs and warnings in packages/engine/form-resolution/src/trace.ts
-- [ ] T053 [US3] Persist module_trace rows for each populated form output and warning path in packages/engine/form-resolution/src/runFormResolution.ts
-- [ ] T054 [US3] Add trace and warning state selectors to apps/web/src/app/formResolutionSlice.ts
-- [ ] T055 [US3] Render form trace details and warning notes in apps/web/src/pages/FormResolutionPage.ts
-- [ ] T056 [US3] Verify User Story 3 with npm test -- packages/tests/form-resolution-trace.test.ts
+- [X] T052 [US3] Implement trace row construction for form outputs and warnings in packages/engine/form-resolution/src/trace.ts
+- [X] T053 [US3] Persist module_trace rows for each populated form output and warning path in packages/engine/form-resolution/src/runFormResolution.ts
+- [X] T054 [US3] Add trace and warning state selectors to apps/web/src/app/formResolutionSlice.ts
+- [X] T055 [US3] Render form trace details and warning notes in apps/web/src/pages/FormResolutionPage.ts
+- [X] T056 [US3] Verify User Story 3 with npm test -- packages/tests/form-resolution-trace.test.ts
 
 **Checkpoint**: All form-resolution stories are independently functional and traceable.
 
@@ -134,15 +134,15 @@
 
 **Purpose**: Complete regression, static-browser verification, docs alignment, and committed build output.
 
-- [ ] T057 [P] Add prior-slice regression guard to the form validation command notes in specs/004-form-resolution-slice/quickstart.md
-- [ ] T058 [P] Update implementation completion notes in docs/architecture/form_resolution_slice_v0.1.0.md
+- [X] T057 [P] Add prior-slice regression guard to the form validation command notes in specs/004-form-resolution-slice/quickstart.md
+- [X] T058 [P] Update implementation completion notes in docs/architecture/form_resolution_slice_v0.1.0.md
 - [X] T059 Run all deterministic tests with npm test and fix issues in packages/tests/
 - [X] T060 Run lint/type checks with npm run lint and fix issues in packages/engine/form-resolution/src/
 - [X] T061 Run the static browser build with npm run build and update committed assets under apps/web/dist/
-- [ ] T062 Start the Vite app and validate the quickstart flow in apps/web/src/pages/FormResolutionPage.ts
+- [X] T062 Start the Vite app and validate the quickstart flow in apps/web/src/pages/FormResolutionPage.ts
 - [X] T063 Confirm browser-only/no-network execution by inspecting form-resolution imports in packages/engine/form-resolution/src/
 - [X] T064 Confirm benefit kernel, V1/VE, valuation listing, and BSRS implementations remain out of scope in packages/engine/ and packages/output-adapters/
-- [ ] T065 Update task completion checkboxes in specs/004-form-resolution-slice/tasks.md after implementation verification
+- [X] T065 Update task completion checkboxes in specs/004-form-resolution-slice/tasks.md after implementation verification
 
 ---
 
