@@ -587,7 +587,13 @@ describe("reconciliation workbench UI", () => {
     const state = buildSampleMockPackManagement();
     const repeated = buildSampleMockPackManagement();
 
-    expect(state.packs.map((pack) => pack.pack_id)).toEqual(["approved-bsrs-samples", "alpha-mock-case-pack"]);
+    expect(state.packs.map((pack) => pack.pack_id)).toEqual([
+      "approved-bsrs-samples",
+      "alpha-mock-case-pack",
+      "v1-workbook-samples",
+      "single-life-joint-scenarios",
+      "qpsa-statement-scenarios",
+    ]);
     expect(state.packs.map((pack) => pack.ordering_key)).toEqual([...state.packs.map((pack) => pack.ordering_key)].sort());
     expect(state.selected_pack).toMatchObject({
       pack_id: "approved-bsrs-samples",
@@ -596,7 +602,33 @@ describe("reconciliation workbench UI", () => {
     });
     expect(state.selected_pack.included_stages).toContain("reconciliation_workbench");
     expect(state.selected_pack.mocked_only_notice).toContain("No real participant");
+    expect(state.selected_pack.description).toContain("primary deterministic engine output fixtures");
+    expect(state.selected_pack.approved_sample_refs.length).toBeGreaterThan(0);
+    expect(state.selected_pack.template_refs.length).toBeGreaterThan(0);
+    expect(state.selected_pack.stage_coverage.length).toBeGreaterThan(0);
     expect(repeated).toEqual(state);
+  });
+
+  it("builds deterministic richer pack details with template refs and stage coverage", () => {
+    const state = buildSampleMockPackManagement({ selected_pack_id: "v1-workbook-samples" });
+    const repeated = buildSampleMockPackManagement({ selected_pack_id: "v1-workbook-samples" });
+
+    expect(state.selected_pack.pack_id).toBe("v1-workbook-samples");
+    expect(state.selected_pack.template_refs.some((ref) => ref.template_id === "436_evaluation")).toBe(true);
+    expect(state.selected_pack.stage_coverage.some((cov) => cov.stage_key === "v1_ve_output" && cov.coverage === "full")).toBe(true);
+    expect(state.selected_pack.approved_sample_refs.some((ref) => ref.file_name.includes("sample-1-v1"))).toBe(true);
+    expect(repeated).toEqual(state);
+  });
+
+  it("selects alternative packs deterministically", () => {
+    const singleLife = buildSampleMockPackManagement({ selected_pack_id: "single-life-joint-scenarios" });
+    const qpsa = buildSampleMockPackManagement({ selected_pack_id: "qpsa-statement-scenarios" });
+
+    expect(singleLife.selected_pack.pack_id).toBe("single-life-joint-scenarios");
+    expect(singleLife.selected_pack.kind).toBe("approved_sample");
+    expect(singleLife.selected_pack.included_stages).toContain("form_resolution");
+    expect(qpsa.selected_pack.pack_id).toBe("qpsa-statement-scenarios");
+    expect(qpsa.selected_pack.included_stages).toContain("valuation_listings_output");
   });
 
   it("renders sample/mock pack page with selected readiness and no prohibited runtime paths", () => {
