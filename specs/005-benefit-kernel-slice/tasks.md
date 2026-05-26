@@ -86,21 +86,21 @@
 
 ### Tests for User Story 2
 
-- [ ] T037 [P] [US2] Add invalid-packet tests for missing required benefit-kernel groups in packages/tests/benefit-kernel-validation.test.ts
-- [ ] T038 [P] [US2] Add invalid-packet tests for missing upstream date, service, compensation, and form output groups in packages/tests/benefit-kernel-validation.test.ts
-- [ ] T039 [P] [US2] Add invalid-packet tests for blank strings and malformed numeric values in packages/tests/benefit-kernel-validation.test.ts
-- [ ] T040 [P] [US2] Add invalid-packet tests for unsupported formula, limitation, and present-value controlled rules in packages/tests/benefit-kernel-validation.test.ts
-- [ ] T041 [P] [US2] Add invalid-packet tests for missing section 436, aggregate-limit, QDRO, QPSA, in-pay, death, contribution, disability, asset-recovery, and cash-balance conditional packets in packages/tests/benefit-kernel-validation.test.ts
-- [ ] T042 [P] [US2] Add failed-run no-authoritative-output persistence tests in packages/tests/benefit-kernel-validation.test.ts
+- [X] T037 [P] [US2] Add invalid-packet tests for missing required benefit-kernel groups in packages/tests/benefit-kernel-validation.test.ts
+- [X] T038 [P] [US2] Add invalid-packet tests for missing upstream date, service, compensation, and form output groups in packages/tests/benefit-kernel-validation.test.ts
+- [X] T039 [P] [US2] Add invalid-packet tests for blank strings and malformed numeric values in packages/tests/benefit-kernel-validation.test.ts
+- [X] T040 [P] [US2] Add invalid-packet tests for unsupported formula, limitation, and present-value controlled rules in packages/tests/benefit-kernel-validation.test.ts
+- [X] T041 [P] [US2] Add invalid-packet tests for missing section 436, aggregate-limit, QDRO, QPSA, in-pay, death, contribution, disability, asset-recovery, and cash-balance conditional packets in packages/tests/benefit-kernel-validation.test.ts
+- [X] T042 [P] [US2] Add failed-run no-authoritative-output persistence tests in packages/tests/benefit-kernel-validation.test.ts
 
 ### Implementation for User Story 2
 
-- [ ] T043 [US2] Add structured blocking error builders in packages/engine/benefit-kernel/src/errors.ts
-- [ ] T044 [US2] Extend benefit-kernel packet validation for missing groups, missing upstream outputs, blank strings, malformed numbers, and unsupported controlled values in packages/engine/benefit-kernel/src/validatePacket.ts
-- [ ] T045 [US2] Extend conditional trigger validation for limitation, QDRO, QPSA, in-pay, death, contribution, disability, asset-recovery, and cash-balance packets in packages/engine/benefit-kernel/src/validatePacket.ts
-- [ ] T046 [US2] Persist failed validation attempts as failed engine_run records without benefit_kernel_output rows in packages/engine/benefit-kernel/src/runBenefitKernel.ts
-- [ ] T047 [US2] Display benefit-kernel validation error summaries in apps/web/src/pages/BenefitKernelPage.ts
-- [ ] T048 [US2] Verify User Story 2 with npm test -- packages/tests/benefit-kernel-validation.test.ts
+- [X] T043 [US2] Add structured blocking error builders in packages/engine/benefit-kernel/src/errors.ts
+- [X] T044 [US2] Extend benefit-kernel packet validation for missing groups, missing upstream outputs, blank strings, malformed numbers, and unsupported controlled values in packages/engine/benefit-kernel/src/validatePacket.ts
+- [X] T045 [US2] Extend conditional trigger validation for limitation, QDRO, QPSA, in-pay, death, contribution, disability, asset-recovery, and cash-balance packets in packages/engine/benefit-kernel/src/validatePacket.ts
+- [X] T046 [US2] Persist failed validation attempts as failed engine_run records without benefit_kernel_output rows in packages/engine/benefit-kernel/src/runBenefitKernel.ts
+- [X] T047 [US2] Display benefit-kernel validation error summaries in apps/web/src/pages/BenefitKernelPage.ts
+- [X] T048 [US2] Verify User Story 2 with npm test -- packages/tests/benefit-kernel-validation.test.ts
 
 **Checkpoint**: User Stories 1 and 2 work independently with valid and invalid packet paths.
 
@@ -122,8 +122,8 @@
 
 - [X] T052 [US3] Implement trace row construction for benefit-kernel outputs and warnings in packages/engine/benefit-kernel/src/trace.ts
 - [X] T053 [US3] Persist module_trace rows for each populated benefit-kernel output and warning path in packages/engine/benefit-kernel/src/runBenefitKernel.ts
-- [ ] T054 [US3] Add trace and warning state selectors to apps/web/src/app/benefitKernelSlice.ts
-- [ ] T055 [US3] Render benefit-kernel trace details and warning notes in apps/web/src/pages/BenefitKernelPage.ts
+- [X] T054 [US3] Add trace and warning state selectors to apps/web/src/app/benefitKernelSlice.ts
+- [X] T055 [US3] Render benefit-kernel trace details and warning notes in apps/web/src/pages/BenefitKernelPage.ts
 - [X] T056 [US3] Verify User Story 3 with npm test -- packages/tests/benefit-kernel-trace.test.ts
 
 **Checkpoint**: All benefit-kernel stories are independently functional and traceable.
@@ -134,16 +134,15 @@
 
 **Purpose**: Complete regression, static-browser verification, docs alignment, and committed build output.
 
-- [ ] T057 [P] Add prior-slice regression guard to the benefit-kernel validation command notes in specs/005-benefit-kernel-slice/quickstart.md
-- [ ] T058 [P] Update implementation completion notes in docs/architecture/benefit_kernel_slice_v0.1.0.md
+- [X] T057 [P] Add prior-slice regression guard to the benefit-kernel validation command notes in specs/005-benefit-kernel-slice/quickstart.md
+- [X] T058 [P] Update implementation completion notes in docs/architecture/benefit_kernel_slice_v0.1.0.md
 - [X] T059 Run all deterministic tests with npm test and fix issues in packages/tests/
 - [X] T060 Run lint/type checks with npm run lint and fix issues in packages/engine/benefit-kernel/src/
 - [X] T061 Run the static browser build with npm run build and update committed assets under apps/web/dist/
-- [ ] T062 Start the Vite app and validate the quickstart flow in apps/web/src/pages/BenefitKernelPage.ts
+- [X] T062 Start the Vite app and validate the quickstart flow in apps/web/src/pages/BenefitKernelPage.ts
 - [X] T063 Confirm browser-only/no-network execution by inspecting benefit-kernel imports in packages/engine/benefit-kernel/src/
 - [X] T064 Confirm V1/VE, valuation listing, BSRS, and other output-adapter implementations remain out of scope in packages/output-adapters/
 - [X] T065 Update task completion checkboxes in specs/005-benefit-kernel-slice/tasks.md after implementation verification
-
 ---
 
 ## Dependencies & Execution Order

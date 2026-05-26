@@ -7,6 +7,7 @@ import {
   insertResolvedBenefitKernelOutput,
   parsePacketJson,
 } from "@pbgc/db";
+import { buildInputPacketNotActiveError } from "./errors";
 import { resolveBenefitKernel } from "./resolveBenefitKernel";
 import { validateBenefitKernelPacket } from "./validatePacket";
 import {
@@ -25,12 +26,7 @@ export function runBenefitKernel(db: Database, request: RunBenefitKernelRequest)
   const started_at = currentTimestamp();
 
   if (!record || record.status !== "active" || record.packet_type !== "benefit_kernel") {
-    const error = makeIssue(
-      "INPUT_PACKET_NOT_ACTIVE",
-      "Active benefit_kernel input packet was not found",
-      request.input_packet_id,
-      request.rule_version,
-    );
+    const error = buildInputPacketNotActiveError(request.input_packet_id, request.rule_version);
     insertEngineRun(db, makeRun(request, calculation_run_id, started_at, "failed", 0, 1));
     return failedResult(calculation_run_id, [error]);
   }
@@ -99,25 +95,6 @@ function failedResult(calculationRunId: string, errors: StructuredIssue[]): RunB
     warnings: [],
     errors,
     traces: [],
-  };
-}
-
-function makeIssue(
-  code: string,
-  message: string,
-  inputPacketId: string,
-  ruleVersion: string,
-  field_name?: string,
-  input_group?: string,
-): StructuredIssue {
-  return {
-    code,
-    message,
-    field_name,
-    input_group,
-    input_packet_id: inputPacketId,
-    module_name: BENEFIT_KERNEL_MODULE_NAME,
-    rule_version: ruleVersion,
   };
 }
 

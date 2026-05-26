@@ -1,4 +1,11 @@
 import type { StructuredIssue } from "@pbgc/shared";
+import {
+  buildBlankFieldError,
+  buildMalformedNumberError,
+  buildMissingConditionalPacketError,
+  buildMissingInputGroupError,
+  buildUnsupportedControlledRuleError,
+} from "./errors";
 import { BENEFIT_KERNEL_MODULE_NAME, type BenefitKernelPacket } from "./types";
 
 const REQUIRED_GROUPS = [
@@ -168,57 +175,146 @@ const REQUIRED_FIELDS: Record<(typeof REQUIRED_GROUPS)[number], string[]> = {
   ],
 };
 
+const NUMERIC_FIELDS = new Set<string>([
+  "vesting_service_at_dopt",
+  "benefit_service_at_dopt",
+  "accrual_service_at_dopt",
+  "final_average_compensation",
+  "covered_compensation_amount",
+  "frozen_accrued_monthly_benefit",
+  "accrued_benefit_at_dopt",
+  "vested_percentage_at_dopt",
+  "current_payment_amount",
+  "xra",
+  "sxra",
+  "term_lw_xra",
+  "term_lw_anb",
+  "eligibility_service_resolved",
+  "vesting_service_resolved",
+  "benefit_service_resolved",
+  "accrual_service_resolved",
+  "compensation_resolved",
+  "average_compensation_resolved",
+  "covered_compensation_resolved",
+]);
+
+const SUPPORTED_ACCRUED_FORMULAS = new Set([
+  "1.5pct_final_avg_pay_x_service",
+  "1.0pct_plus_integration",
+]);
+
+const SUPPORTED_FORM_RULES = new Set(["sla"]);
+const SUPPORTED_MARRIED_FORM_RULES = new Set(["qjsa_50"]);
+const SUPPORTED_DEATH_RULES = new Set(["qpsa"]);
+const SUPPORTED_LUMP_SUM_RULES = new Set(["not_available"]);
+
+function isBlank(value: unknown): boolean {
+  if (value === null || value === undefined) return false;
+  if (typeof value === "string") return value.trim().length === 0;
+  if (typeof value === "number") return !Number.isFinite(value);
+  return false;
+}
+
+function isMalformedNumber(value: unknown, _group: string, field: string): boolean {
+  if (value === null || value === undefined) return false;
+  if (typeof value === "number") return !Number.isFinite(value) || (NUMERIC_FIELDS.has(field) && value < 0);
+  if (typeof value === "string") return isNaN(Number(value.replace(/,/g, "")));
+  return typeof value !== "number";
+}
+
 export function validateBenefitKernelPacket(packet: BenefitKernelPacket, inputPacketId: string, ruleVersion: string): StructuredIssue[] {
   const errors: StructuredIssue[] = [];
+
   if (packet.packet_type !== "benefit_kernel") {
-    errors.push(issue("INVALID_PACKET_TYPE", "Packet type must be benefit_kernel", inputPacketId, ruleVersion, "packet_type"));
+    errors.push(buildBlankFieldError("packet_type", "packet_type", inputPacketId, ruleVersion, "invalid packet type"));
   }
+
   for (const group of REQUIRED_GROUPS) {
     const value = packet[group];
     if (!value || typeof value !== "object") {
-      errors.push(issue("MISSING_INPUT_GROUP", `Missing required benefit input group ${group}`, inputPacketId, ruleVersion, undefined, group));
+      errors.push(buildMissingInputGroupError(group, inputPacketId, ruleVersion));
       continue;
     }
     for (const field of REQUIRED_FIELDS[group]) {
-      if (!(field in value)) {
-        errors.push(issue("MISSING_INPUT_FIELD", `Missing required benefit input field ${group}.${field}`, inputPacketId, ruleVersion, field, group));
+      if (!(field in (value as Record<string, unknown>))) {
+        errors.push(buildBlankFieldError(group, field, inputPacketId, ruleVersion, "missing field"));
+        continue;
+      }
+      const fieldValue = (value as Record<string, unknown>)[field];
+      if (isBlank(fieldValue)) {
+        errors.push(buildBlankFieldError(group, field, inputPacketId, ruleVersion));
+      } else if (NUMERIC_FIELDS.has(field) && isMalformedNumber(fieldValue, group, field)) {
+        errors.push(buildMalformedNumberError(group, field, inputPacketId, ruleVersion));
       }
     }
   }
 
-  if (packet.resolved_plan_logic.accrued_benefit_formula !== "1.5pct_final_avg_pay_x_service" && packet.resolved_plan_logic.accrued_benefit_formula !== "1.0pct_plus_integration") {
-    errors.push(issue("UNSUPPORTED_ACCRUED_BENEFIT_FORMULA", "MVP supports only committed benefit formula fixture values", inputPacketId, ruleVersion, "accrued_benefit_formula", "resolved_plan_logic"));
+  // Controlled rule checks
+  if (!SUPPORTED_ACCRUED_FORMULAS.has(packet.resolved_plan_logic.accrued_benefit_formula)) {
+    errors.push(buildUnsupportedControlledRuleError(
+      "resolved_plan_logic", "accrued_benefit_formula",
+      "MVP supports only 1.5pct_final_avg_pay_x_service and 1.0pct_plus_integration",
+      inputPacketId, ruleVersion,
+    ));
   }
-  if (packet.resolved_plan_logic.normal_single_form_rule !== "sla") {
-    errors.push(issue("UNSUPPORTED_NORMAL_SINGLE_FORM_RULE", "MVP supports only sla normal single form rule", inputPacketId, ruleVersion, "normal_single_form_rule", "resolved_plan_logic"));
+  if (!SUPPORTED_FORM_RULES.has(packet.resolved_plan_logic.normal_single_form_rule)) {
+    errors.push(buildUnsupportedControlledRuleError(
+      "resolved_plan_logic", "normal_single_form_rule",
+      "MVP supports only sla",
+      inputPacketId, ruleVersion,
+    ));
   }
-  if (packet.resolved_plan_logic.normal_married_form_rule !== "qjsa_50") {
-    errors.push(issue("UNSUPPORTED_NORMAL_MARRIED_FORM_RULE", "MVP supports only qjsa_50 normal married form rule", inputPacketId, ruleVersion, "normal_married_form_rule", "resolved_plan_logic"));
+  if (!SUPPORTED_MARRIED_FORM_RULES.has(packet.resolved_plan_logic.normal_married_form_rule)) {
+    errors.push(buildUnsupportedControlledRuleError(
+      "resolved_plan_logic", "normal_married_form_rule",
+      "MVP supports only qjsa_50",
+      inputPacketId, ruleVersion,
+    ));
   }
-  if (packet.resolved_plan_logic.pre_retirement_death_benefit_rule !== "qpsa") {
-    errors.push(issue("UNSUPPORTED_DEATH_BENEFIT_RULE", "MVP supports only qpsa pre-retirement death benefit rule", inputPacketId, ruleVersion, "pre_retirement_death_benefit_rule", "resolved_plan_logic"));
+  if (!SUPPORTED_DEATH_RULES.has(packet.resolved_plan_logic.pre_retirement_death_benefit_rule)) {
+    errors.push(buildUnsupportedControlledRuleError(
+      "resolved_plan_logic", "pre_retirement_death_benefit_rule",
+      "MVP supports only qpsa",
+      inputPacketId, ruleVersion,
+    ));
   }
-  if (packet.resolved_plan_logic.consensual_lump_sum_rule !== "not_available") {
-    errors.push(issue("UNSUPPORTED_LUMP_SUM_RULE", "MVP supports only not_available consensual lump-sum rule", inputPacketId, ruleVersion, "consensual_lump_sum_rule", "resolved_plan_logic"));
+  if (!SUPPORTED_LUMP_SUM_RULES.has(packet.resolved_plan_logic.consensual_lump_sum_rule)) {
+    errors.push(buildUnsupportedControlledRuleError(
+      "resolved_plan_logic", "consensual_lump_sum_rule",
+      "MVP supports only not_available",
+      inputPacketId, ruleVersion,
+    ));
   }
-  return errors;
-}
 
-function issue(
-  code: string,
-  message: string,
-  inputPacketId: string,
-  ruleVersion: string,
-  field_name?: string,
-  input_group?: string,
-): StructuredIssue {
-  return {
-    code,
-    message,
-    field_name,
-    input_group,
-    input_packet_id: inputPacketId,
-    module_name: BENEFIT_KERNEL_MODULE_NAME,
-    rule_version: ruleVersion,
-  };
+  // Conditional packet trigger checks
+  if (packet.limitation_packet.section_436_applicable_indicator && !packet.section_436_packet) {
+    errors.push(buildMissingConditionalPacketError("section_436_packet", "section_436_applicable_indicator", inputPacketId, ruleVersion));
+  }
+  if (packet.limitation_packet.aggregate_limit_applicable_indicator && !packet.aggregate_limit_packet) {
+    errors.push(buildMissingConditionalPacketError("aggregate_limit_packet", "aggregate_limit_applicable_indicator", inputPacketId, ruleVersion));
+  }
+  if (packet.participant_role_population.qdro_indicator && !packet.qdro_packet) {
+    errors.push(buildMissingConditionalPacketError("qdro_packet", "qdro_indicator", inputPacketId, ruleVersion));
+  }
+  if (packet.participant_role_population.qpsa_indicator && !packet.qpsa_packet) {
+    errors.push(buildMissingConditionalPacketError("qpsa_packet", "qpsa_indicator", inputPacketId, ruleVersion));
+  }
+  if (packet.benefit_administration_state.current_pay_status === "in_pay" && !packet.in_pay_packet) {
+    errors.push(buildMissingConditionalPacketError("in_pay_packet", "current_pay_status=in_pay", inputPacketId, ruleVersion));
+  }
+  // death_benefit_packet only required when an actual death event is indicated (not just the plan provision)
+  if ((packet.participant_role_population.dod !== null || packet.participant_role_population.role_type === "beneficiary") && !packet.death_benefit_packet) {
+    errors.push(buildMissingConditionalPacketError("death_benefit_packet", "dod_or_beneficiary_role", inputPacketId, ruleVersion));
+  }
+  if (packet.resolved_plan_logic.mandatory_employee_contribution_rule !== null && (packet.resolved_plan_logic.mandatory_employee_contribution_rule as string).trim() !== "" && !packet.mandatory_employee_contribution_packet) {
+    errors.push(buildMissingConditionalPacketError("mandatory_employee_contribution_packet", "mandatory_employee_contribution_rule set", inputPacketId, ruleVersion));
+  }
+  if (packet.resolved_plan_logic.voluntary_employee_contribution_rule !== null && (packet.resolved_plan_logic.voluntary_employee_contribution_rule as string).trim() !== "" && !packet.voluntary_employee_contribution_packet) {
+    errors.push(buildMissingConditionalPacketError("voluntary_employee_contribution_packet", "voluntary_employee_contribution_rule set", inputPacketId, ruleVersion));
+  }
+  if (packet.resolved_plan_logic.disability_benefit_rule !== null && (packet.resolved_plan_logic.disability_benefit_rule as string).trim() !== "" && !packet.disability_packet) {
+    errors.push(buildMissingConditionalPacketError("disability_packet", "disability_benefit_rule set", inputPacketId, ruleVersion));
+  }
+
+  return errors;
 }

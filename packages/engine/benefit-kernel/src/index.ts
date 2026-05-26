@@ -1,4 +1,5 @@
 export * from "./benefitMath";
+export * from "./errors";
 export * from "./fixturePacketBuilder";
 export * from "./resolveBenefitKernel";
 export * from "./runBenefitKernel";
