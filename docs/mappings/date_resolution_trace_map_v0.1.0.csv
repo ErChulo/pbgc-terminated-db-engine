@@ -1,0 +1,11 @@
+output_field,rule_applied,rule_branch,input_groups,intermediate_keys,warning_eligible
+nrd,normal_retirement_eligibility_rule + normal_retirement_start_rule,role_based,participant_role_population/resolved_plan_logic,dob/age_rule/start_rule,false
+erd,early_reduced_retirement_rule,role_based,participant_role_population/resolved_plan_logic,dob/age_rule,false
+eurd,null,all,null,retstat/role_type,true
+eprd,null,all,null,retstat/role_type,true
+rbd,required_beginning_date_method,role_based,participant_role_population/actuarial_assumption_factor_set,dob/dod/rbd_method,false
+xra,normal_retirement_eligibility_rule,all,resolved_plan_logic,age_rule,false
+xrd,retstat_based_on_dor_asd_or_nrd,role_based,participant_role_population/benefit_administration_state/resolved_dates_output,retstat/asd/dor/nrd,true
+sxra,null,all,participant_role_population,sdob,true
+term_lw_xra,normal_retirement_eligibility_rule,all,resolved_plan_logic,age_rule,false
+term_lw_anb,normal_retirement_eligibility_rule,all,resolved_plan_logic,age_rule,false

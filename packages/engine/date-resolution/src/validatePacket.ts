@@ -1,6 +1,12 @@
 import type { StructuredIssue } from "@pbgc/shared";
 import { parseIsoDate } from "./dateMath";
-import { DATE_RESOLUTION_MODULE_NAME, type DateResolutionPacket } from "./types";
+import {
+  buildMissingGroupError,
+  buildBlankStringError,
+  buildInvalidDateError,
+  buildConditionalPacketMissingError,
+} from "./errors";
+import type { DateResolutionPacket } from "./types";
 
 const REQUIRED_GROUPS: (keyof DateResolutionPacket)[] = [
   "case_plan_timeline",
@@ -12,21 +18,45 @@ const REQUIRED_GROUPS: (keyof DateResolutionPacket)[] = [
   "limitation_packet",
 ];
 
+const CONDITIONAL_PACKETS: {
+  key: keyof DateResolutionPacket;
+  triggerGroup: keyof DateResolutionPacket["limitation_packet"];
+  triggerField: string;
+}[] = [
+  { key: "qpsa_packet", triggerGroup: "qpsa_trigger", triggerField: "qpsa_trigger" },
+  { key: "death_benefit_packet", triggerGroup: "death_benefit_trigger", triggerField: "death_benefit_trigger" },
+  { key: "qdro_packet", triggerGroup: "qdro_trigger", triggerField: "qdro_trigger" },
+];
+
 export function validateDateResolutionPacket(
   packet: DateResolutionPacket,
   inputPacketId: string,
   ruleVersion: string,
 ): StructuredIssue[] {
   const errors: StructuredIssue[] = [];
+
+  // Validate required groups
   for (const group of REQUIRED_GROUPS) {
     if (packet[group] === undefined || packet[group] === null) {
-      errors.push(issue("MISSING_REQUIRED_GROUP", `Missing required input group ${String(group)}`, inputPacketId, ruleVersion, String(group)));
+      errors.push(buildMissingGroupError(String(group), inputPacketId, ruleVersion));
     }
   }
 
+  // Validate conditional packet triggers
+  const limitation = packet.limitation_packet;
+  if (limitation) {
+    for (const { key, triggerGroup, triggerField } of CONDITIONAL_PACKETS) {
+      const triggered = limitation[triggerGroup];
+      if (triggered === true && (packet[key] === undefined || packet[key] === null)) {
+        errors.push(buildConditionalPacketMissingError(String(key), triggerField, inputPacketId, ruleVersion));
+      }
+    }
+  }
+
+  // Validate no blank strings and no malformed dates
   visitValues(packet, (path, value) => {
     if (value === "") {
-      errors.push(issue("BLANK_STRING_NOT_ALLOWED", `Blank string is not allowed at ${path}`, inputPacketId, ruleVersion, undefined, path));
+      errors.push(buildBlankStringError(path, inputPacketId, ruleVersion));
     }
     const field = path.split(".").at(-1);
     if (field && DATE_FIELD_NAMES.has(field)) {
@@ -34,7 +64,7 @@ export function validateDateResolutionPacket(
         try {
           parseIsoDate(value);
         } catch {
-          errors.push(issue("INVALID_ISO_DATE", `Invalid ISO date at ${path}`, inputPacketId, ruleVersion, undefined, path));
+          errors.push(buildInvalidDateError(path, inputPacketId, ruleVersion));
         }
       }
     }
@@ -44,25 +74,6 @@ export function validateDateResolutionPacket(
 }
 
 const DATE_FIELD_NAMES = new Set(["dob", "sdob", "dote", "dod", "dopt", "dotr", "bpd", "doh", "dop", "dor", "asd", "sbcd"]);
-
-function issue(
-  code: string,
-  message: string,
-  inputPacketId: string,
-  ruleVersion: string,
-  inputGroup?: string,
-  fieldName?: string,
-): StructuredIssue {
-  return {
-    code,
-    message,
-    input_group: inputGroup,
-    field_name: fieldName,
-    input_packet_id: inputPacketId,
-    module_name: DATE_RESOLUTION_MODULE_NAME,
-    rule_version: ruleVersion,
-  };
-}
 
 function visitValues(value: unknown, callback: (path: string, value: unknown) => void, path = ""): void {
   if (value === null || typeof value !== "object") {

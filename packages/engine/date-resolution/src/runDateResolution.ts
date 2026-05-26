@@ -1,5 +1,5 @@
 import type { Database } from "sql.js";
-import { createDeterministicId, currentTimestamp, type EngineRunRecord, type ModuleTrace } from "@pbgc/shared";
+import { createDeterministicId, currentTimestamp, type EngineRunRecord } from "@pbgc/shared";
 import {
   getEngineInputPacket,
   insertEngineRun,
@@ -9,6 +9,8 @@ import {
 } from "@pbgc/db";
 import { resolveDates } from "./resolveDates";
 import { validateDateResolutionPacket } from "./validatePacket";
+import { buildInputPacketNotActiveError } from "./errors";
+import { buildDateResolutionTraces, collectWarnings, writeModuleTraceRows } from "./trace";
 import {
   DATE_RESOLUTION_MODULE_NAME,
   DATE_RESOLUTION_MODULE_VERSION,
@@ -31,13 +33,7 @@ export function runDateResolution(db: Database, request: RunDateResolutionReques
       warning_count: 0,
       error_count: 1,
       warnings: [],
-      errors: [{
-        code: "INPUT_PACKET_NOT_ACTIVE",
-        message: "Active date_resolution input packet was not found",
-        input_packet_id: request.input_packet_id,
-        module_name: DATE_RESOLUTION_MODULE_NAME,
-        rule_version: request.rule_version,
-      }],
+      errors: [buildInputPacketNotActiveError(request.input_packet_id, request.rule_version)],
       traces: [],
     };
   }
@@ -65,17 +61,25 @@ export function runDateResolution(db: Database, request: RunDateResolutionReques
     subject_key: request.subject_key,
     ...values,
   };
-  const traces = buildTraces(calculation_run_id, request.subject_key, values);
-  insertEngineRun(db, makeRun(request, calculation_run_id, started_at, "completed", 0));
+  const traceEntries = buildDateResolutionTraces(values, packet, {
+    inputPacketId: request.input_packet_id,
+    caseId: request.case_id,
+    subjectKey: request.subject_key,
+    ruleVersion: request.rule_version,
+    moduleVersion: DATE_RESOLUTION_MODULE_VERSION,
+  });
+  const traces = writeModuleTraceRows(calculation_run_id, request.subject_key, traceEntries);
+  const warnings = collectWarnings(traceEntries, request.rule_version);
+  insertEngineRun(db, makeRun(request, calculation_run_id, started_at, "completed", warnings.length));
   insertResolvedDatesOutput(db, output);
   for (const trace of traces) insertModuleTrace(db, trace);
   return {
     calculation_run_id,
     run_status: "completed",
     resolved_dates_output_id: output.resolved_dates_output_id,
-    warning_count: 0,
+    warning_count: warnings.length,
     error_count: 0,
-    warnings: [],
+    warnings,
     errors: [],
     output,
     traces,
@@ -87,7 +91,7 @@ function makeRun(
   calculation_run_id: string,
   started_at: string,
   run_status: EngineRunRecord["run_status"],
-  error_count: number,
+  error_or_warning_count: number,
 ): EngineRunRecord {
   return {
     calculation_run_id,
@@ -99,24 +103,9 @@ function makeRun(
     started_at,
     completed_at: currentTimestamp(),
     run_status,
-    warning_count: 0,
-    error_count,
+    warning_count: run_status === "completed" ? error_or_warning_count : 0,
+    error_count: run_status === "failed" ? error_or_warning_count : 0,
   };
 }
 
-function buildTraces(calculationRunId: string, subjectKey: string, values: Record<string, string | number | null>): ModuleTrace[] {
-  return Object.entries(values)
-    .filter(([, value]) => value !== null)
-    .map(([field, value]) => ({
-      module_trace_id: createDeterministicId("trace"),
-      calculation_run_id: calculationRunId,
-      module_name: DATE_RESOLUTION_MODULE_NAME,
-      subject_key: subjectKey,
-      field_name: field,
-      rule_applied: `${DATE_RESOLUTION_MODULE_NAME}@${DATE_RESOLUTION_MODULE_VERSION}:${field}`,
-      input_fields_used_json: JSON.stringify(["case_plan_timeline", "resolved_plan_logic", "participant_role_population"]),
-      intermediate_values_json: JSON.stringify({ module_version: DATE_RESOLUTION_MODULE_VERSION }),
-      output_value: String(value),
-      warning_note: null,
-    }));
-}
+

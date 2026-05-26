@@ -59,7 +59,13 @@ export type DateResolutionPacket = {
     bankruptcy_plan_indicator: boolean;
     bpd_limitation_indicator: boolean;
     annuity_starting_date_limitation_indicator: boolean;
+    qpsa_trigger?: boolean;
+    death_benefit_trigger?: boolean;
+    qdro_trigger?: boolean;
   };
+  qpsa_packet?: Record<string, unknown> | null;
+  death_benefit_packet?: Record<string, unknown> | null;
+  qdro_packet?: Record<string, unknown> | null;
 };
 
 export type DateResolutionOutput = {

@@ -88,15 +88,15 @@
 
 ### Tests for User Story 2
 
-- [ ] T033 [P] [US2] Add missing required group rejection tests in packages/tests/date-resolution-invalid-packet.test.ts
-- [ ] T034 [P] [US2] Add blank-string and malformed-date rejection tests in packages/tests/date-resolution-invalid-values.test.ts
+- [X] T033 [P] [US2] Add missing required group rejection tests in packages/tests/date-resolution-invalid-packet.test.ts
+- [X] T034 [P] [US2] Add blank-string and malformed-date rejection tests in packages/tests/date-resolution-invalid-values.test.ts
 
 ### Implementation for User Story 2
 
-- [ ] T035 [US2] Implement structured blocking error builders in packages/engine/date-resolution/src/errors.ts
-- [ ] T036 [US2] Extend packet validation for conditional qpsa_packet, death_benefit_packet, and qdro_packet triggers in packages/engine/date-resolution/src/validatePacket.ts
-- [ ] T037 [US2] Update run orchestration to persist failed engine_run records without resolved_dates_output rows in packages/engine/date-resolution/src/runDateResolution.ts
-- [ ] T038 [US2] Display failed run status and blocking errors in apps/web/src/pages/DateResolutionPage.ts
+- [X] T035 [US2] Implement structured blocking error builders in packages/engine/date-resolution/src/errors.ts
+- [X] T036 [US2] Extend packet validation for conditional qpsa_packet, death_benefit_packet, and qdro_packet triggers in packages/engine/date-resolution/src/validatePacket.ts
+- [X] T037 [US2] Update run orchestration to persist failed engine_run records without resolved_dates_output rows in packages/engine/date-resolution/src/runDateResolution.ts
+- [X] T038 [US2] Display failed run status and blocking errors in apps/web/src/pages/DateResolutionPage.ts
 
 **Checkpoint**: User Story 2 is independently functional when invalid packets fail deterministically and never write authoritative date outputs.
 
@@ -110,15 +110,15 @@
 
 ### Tests for User Story 3
 
-- [ ] T039 [P] [US3] Add module_trace coverage tests for populated resolved dates in packages/tests/date-resolution-trace.test.ts
-- [ ] T040 [P] [US3] Add repeated-run determinism tests for five identical packet executions in packages/tests/date-resolution-repeatability.test.ts
+- [X] T039 [P] [US3] Add module_trace coverage tests for populated resolved dates in packages/tests/date-resolution-trace.test.ts
+- [X] T040 [P] [US3] Add repeated-run determinism tests for five identical packet executions in packages/tests/date-resolution-repeatability.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T041 [US3] Implement trace row construction for each populated resolved date in packages/engine/date-resolution/src/trace.ts
-- [ ] T042 [US3] Persist module_trace rows from successful and warning-producing runs in packages/engine/date-resolution/src/runDateResolution.ts
-- [ ] T043 [US3] Display trace details and warning notes in apps/web/src/pages/DateResolutionPage.ts
-- [ ] T044 [US3] Add trace query helpers for completed runs in packages/db/src/repositories.ts
+- [X] T041 [US3] Implement trace row construction for each populated resolved date in packages/engine/date-resolution/src/trace.ts
+- [X] T042 [US3] Persist module_trace rows from successful and warning-producing runs in packages/engine/date-resolution/src/runDateResolution.ts
+- [X] T043 [US3] Display trace details and warning notes in apps/web/src/pages/DateResolutionPage.ts
+- [X] T044 [US3] Add trace query helpers for completed runs in packages/db/src/repositories.ts
 
 **Checkpoint**: User Story 3 is independently functional when reviewers can inspect trace rows for every populated resolved date.
 
@@ -128,13 +128,13 @@
 
 **Purpose**: Validate the full slice, update runtime artifacts, and preserve repository delivery conventions.
 
-- [ ] T045 [P] Update architecture note for the executable slice in docs/architecture/date_resolution_slice_v0.1.0.md
-- [ ] T046 [P] Update mapping notes for date-resolution outputs in docs/mappings/date_resolution_trace_map_v0.1.0.csv
-- [ ] T047 Run quickstart validation and record results in specs/001-date-resolution-slice/quickstart-results.md
-- [ ] T048 Run full test suite and fix any failures in packages/tests/date-resolution-output.test.ts
-- [ ] T049 Build the static browser app and update committed artifacts in apps/web/dist/index.html
-- [ ] T050 Verify no service-resolution, compensation-resolution, form-resolution, benefit-kernel, or output-adapter implementation files were added under packages/engine/service-resolution/
-- [ ] T051 Create email-safe .txt copies for any delivered .js or .ts artifacts that are added outside package source conventions in artifacts/samples/date_resolution_delivery_manifest_v0.1.0.txt
+- [X] T045 [P] Update architecture note for the executable slice in docs/architecture/date_resolution_slice_v0.1.0.md
+- [X] T046 [P] Update mapping notes for date-resolution outputs in docs/mappings/date_resolution_trace_map_v0.1.0.csv
+- [X] T047 Run quickstart validation and record results in specs/001-date-resolution-slice/quickstart-results.md
+- [X] T048 Run full test suite and fix any failures in packages/tests/date-resolution-output.test.ts
+- [X] T049 Build the static browser app and update committed artifacts in apps/web/dist/index.html
+- [X] T050 Verify no service-resolution, compensation-resolution, form-resolution, benefit-kernel, or output-adapter implementation files were added under packages/engine/service-resolution/
+- [X] T051 Create email-safe .txt copies for any delivered .js or .ts artifacts that are added outside package source conventions in artifacts/samples/date_resolution_delivery_manifest_v0.1.0.txt
 
 ---
 

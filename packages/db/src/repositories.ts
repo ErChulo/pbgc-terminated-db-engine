@@ -101,6 +101,30 @@ export function listResolvedDatesOutputs(db: Database): DateResolutionOutput[] {
   return queryAll(db, "SELECT * FROM resolved_dates_output ORDER BY resolved_dates_output_id") as DateResolutionOutput[];
 }
 
+export function listDateResolutionRunsWithTrace(db: Database): Array<DateResolutionOutput & { trace_count: number }> {
+  return queryAll(
+    db,
+    `SELECT rdo.*, COUNT(mt.module_trace_id) AS trace_count
+     FROM resolved_dates_output rdo
+     LEFT JOIN module_trace mt
+       ON mt.calculation_run_id = rdo.calculation_run_id
+      AND mt.module_name = 'date_resolution'
+     GROUP BY rdo.resolved_dates_output_id
+     ORDER BY rdo.resolved_dates_output_id`,
+  ) as Array<DateResolutionOutput & { trace_count: number }>;
+}
+
+export function getDateResolutionTraces(db: Database, calculationRunId: string): ModuleTrace[] {
+  return listModuleTraces(db, calculationRunId, "date_resolution");
+}
+
+export function listCompletedDateResolutionRuns(db: Database): EngineRunRecord[] {
+  return queryAll(
+    db,
+    "SELECT * FROM engine_run WHERE run_status = 'completed' ORDER BY started_at",
+  ) as EngineRunRecord[];
+}
+
 export function insertResolvedServiceOutput(db: Database, output: ServiceResolutionOutput): void {
   db.run(
     `INSERT INTO resolved_service_comp_output (

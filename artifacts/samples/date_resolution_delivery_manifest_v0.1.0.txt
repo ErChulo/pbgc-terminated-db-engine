@@ -1,0 +1,53 @@
+# Date Resolution Slice — Delivery Manifest v0.1.0
+
+**Feature**: 001-date-resolution-slice
+**Date**: 2026-05-26
+**Artifact version**: v0.1.0
+
+## Source Artifacts (TypeScript)
+
+| File | Purpose | Email-Safe Copy |
+|------|---------|-----------------|
+| packages/engine/date-resolution/src/types.ts | Packet and output types | N/A (in-package source) |
+| packages/engine/date-resolution/src/dateMath.ts | Date utility functions | N/A (in-package source) |
+| packages/engine/date-resolution/src/fixturePacketBuilder.ts | CSV-to-packet builder | N/A (in-package source) |
+| packages/engine/date-resolution/src/validatePacket.ts | Packet validation | N/A (in-package source) |
+| packages/engine/date-resolution/src/resolveDates.ts | Deterministic date logic | N/A (in-package source) |
+| packages/engine/date-resolution/src/runDateResolution.ts | Run orchestration | N/A (in-package source) |
+| packages/engine/date-resolution/src/errors.ts | Structured error builders | N/A (in-package source) |
+| packages/engine/date-resolution/src/trace.ts | Trace row construction | N/A (in-package source) |
+| packages/engine/date-resolution/src/index.ts | Public API exports | N/A (in-package source) |
+| packages/tests/date-resolution-fixtures.ts | CSV fixture parser | N/A (in-package source) |
+| packages/tests/date-resolution-output.test.ts | Deterministic output tests | N/A (in-package source) |
+| packages/tests/date-resolution-contract.test.ts | Contract validation tests | N/A (in-package source) |
+| packages/tests/date-resolution-persistence.test.ts | Persistence tests | N/A (in-package source) |
+| packages/tests/date-resolution-invalid-packet.test.ts | Invalid packet tests | N/A (in-package source) |
+| packages/tests/date-resolution-invalid-values.test.ts | Invalid values tests | N/A (in-package source) |
+| packages/tests/date-resolution-trace.test.ts | Trace coverage tests | N/A (in-package source) |
+| packages/tests/date-resolution-repeatability.test.ts | Determinism tests | N/A (in-package source) |
+| apps/web/src/pages/DateResolutionPage.ts | Browser UI page | N/A (in-package source) |
+
+## Artifact Samples (Email-Safe .txt Copies)
+
+| File | Purpose |
+|------|---------|
+| artifacts/samples/date_resolution_delivery_manifest_v0.1.0.txt | This manifest |
+
+## Test Fixtures
+
+| File | Purpose |
+|------|---------|
+| packages/tests/date_resolution_test_cases_v0.1.0.csv | Acceptance test fixtures |
+
+## Architecture Documentation
+
+| File | Purpose |
+|------|---------|
+| docs/architecture/date_resolution_slice_v0.1.0.md | Architecture note |
+| docs/mappings/date_resolution_trace_map_v0.1.0.csv | Trace field mapping |
+
+## Verification
+
+- **Test suite**: 211/211 passing (50 files)
+- **Build**: ✅ Static Vite app compiles successfully
+- **Quickstart**: All validation steps pass (see quickstart-results.md)
