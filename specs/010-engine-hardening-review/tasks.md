@@ -13,7 +13,7 @@
 **Purpose**: Establish the review/hardening scaffolding used across all existing slices
 
 - [X] T001 [P] Capture the hardening regression scope and fixture inventory in `specs/010-engine-hardening-review/quickstart.md`
-- [ ] T002 [P] Create the hardening architecture note scaffold in `docs/architecture/engine-hardening-review_v0.1.0.md`
+- [x] T002 [P] Create the hardening architecture note scaffold in `docs/architecture/engine-hardening-review_v0.1.0.md`
 - [X] T003 [P] Record the review target matrix and slice coverage in `specs/010-engine-hardening-review/research.md`
 - [X] T004 [P] Record the hardening entity map and validation rules in `specs/010-engine-hardening-review/data-model.md`
 
@@ -22,11 +22,11 @@
 **Purpose**: Shared regression helpers that every hardening check depends on
 
 - [X] T005 [P] Add repeated-run comparison helpers in `packages/tests/hardening-helpers.ts`
-- [ ] T006 [P] Add DD.csv lookup helpers in `packages/tests/hardening-dd-helpers.ts`
-- [ ] T007 [P] Add sqlite table-count helpers in `packages/tests/hardening-db-helpers.ts`
-- [ ] T008 [P] Add trace normalization helpers in `packages/tests/hardening-trace-helpers.ts`
-- [ ] T009 [P] Add adapter-exclusion helpers in `packages/tests/hardening-adapter-helpers.ts`
-- [ ] T010 [P] Add browser-only boundary scan helpers in `packages/tests/hardening-browser-boundary.ts`
+- [x] T006 [P] Add DD.csv lookup helpers in `packages/tests/hardening-dd-helpers.ts`
+- [x] T007 [P] Add sqlite table-count helpers in `packages/tests/hardening-db-helpers.ts`
+- [x] T008 [P] Add trace normalization helpers in `packages/tests/hardening-trace-helpers.ts`
+- [x] T009 [P] Add adapter-exclusion helpers in `packages/tests/hardening-adapter-helpers.ts`
+- [x] T010 [P] Add browser-only boundary scan helpers in `packages/tests/hardening-browser-boundary.ts`
 
 **Checkpoint**: Regression harness ready - user story work can begin
 
@@ -60,14 +60,14 @@
 
 ### Tests for User Story 2
 
-- [ ] T019 [P] [US2] Add DD.csv canonical-name regression for `v1_ve_output` and `valuation_listings_output` fields in `packages/tests/hardening-dd-output.test.ts`
-- [ ] T020 [P] [US2] Add DD.csv canonical-name regression and approved fallback coverage for `bsrs_configuration_output` fields in `packages/tests/hardening-dd-bsrs.test.ts`
-- [ ] T021 [P] [US2] Add adapter-exclusion regression across the existing output adapters in `packages/tests/hardening-adapter-boundaries.test.ts`
+- [x] T019 [P] [US2] Add DD.csv canonical-name regression for `v1_ve_output` and `valuation_listings_output` fields in `packages/tests/hardening-dd-output.test.ts`
+- [x] T020 [P] [US2] Add DD.csv canonical-name regression and approved fallback coverage for `bsrs_configuration_output` fields in `packages/tests/hardening-dd-bsrs.test.ts`
+- [x] T021 [P] [US2] Add adapter-exclusion regression across the existing output adapters in `packages/tests/hardening-adapter-boundaries.test.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T022 [US2] Wire the canonical DD lookup assertions into `packages/tests/hardening-dd-helpers.ts`
-- [ ] T023 [US2] Wire the unrelated-table absence assertions into `packages/tests/hardening-adapter-boundaries.test.ts`
+- [x] T022 [US2] Wire the canonical DD lookup assertions into `packages/tests/hardening-dd-helpers.ts`
+- [x] T023 [US2] Wire the unrelated-table absence assertions into `packages/tests/hardening-adapter-boundaries.test.ts`
 
 **Checkpoint**: DD-first naming and adapter isolation should be protected by regression checks
 
@@ -79,16 +79,16 @@
 
 ### Tests for User Story 3
 
-- [ ] T024 [P] [US3] Add persistence-boundary regression for `engine_run` and committed output rows in `packages/tests/hardening-persistence.test.ts`
-- [ ] T025 [P] [US3] Add traceability regression for module traces and rule versions in `packages/tests/hardening-trace.test.ts`
-- [ ] T026 [P] [US3] Add browser-only runtime boundary regression in `packages/tests/hardening-browser-boundary.test.ts`
-- [ ] T027 [P] [US3] Add BSRS template and guidance alignment regression in `packages/tests/hardening-bsrs-template.test.ts`
+- [x] T024 [P] [US3] Add persistence-boundary regression for `engine_run` and committed output rows in `packages/tests/hardening-persistence.test.ts`
+- [x] T025 [P] [US3] Add traceability regression for module traces and rule versions in `packages/tests/hardening-trace.test.ts`
+- [x] T026 [P] [US3] Add browser-only runtime boundary regression in `packages/tests/hardening-browser-boundary.test.ts`
+- [x] T027 [P] [US3] Add BSRS template and guidance alignment regression in `packages/tests/hardening-bsrs-template.test.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T028 [P] [US3] Wire sqlite table-count helpers into `packages/tests/hardening-db-helpers.ts`
-- [ ] T029 [P] [US3] Wire trace comparison helpers into `packages/tests/hardening-trace-helpers.ts`
-- [ ] T030 [US3] Wire template-alignment assertions into `packages/tests/hardening-bsrs-template.test.ts`
+- [x] T028 [P] [US3] Wire sqlite table-count helpers into `packages/tests/hardening-db-helpers.ts`
+- [x] T029 [P] [US3] Wire trace comparison helpers into `packages/tests/hardening-trace-helpers.ts`
+- [x] T030 [US3] Wire template-alignment assertions into `packages/tests/hardening-bsrs-template.test.ts`
 
 **Checkpoint**: Browser-only persistence, traceability, and template alignment should now be covered
 
@@ -98,7 +98,7 @@
 
 - [ ] T031 [P] Update hardening quickstart validation notes in `specs/010-engine-hardening-review/quickstart.md`
 - [ ] T032 [P] Update the hardening architecture note with regression invariants in `docs/architecture/engine-hardening-review_v0.1.0.md`
-- [ ] T033 [P] Run lint and full test suite validation for the hardening regressions in `packages/tests/` and `apps/web/`
+- [x] T033 [P] Run lint and full test suite validation for the hardening regressions in `packages/tests/` and `apps/web/`
 - [ ] T034 [P] Refresh the committed browser build only if hardening checks change runtime output in `apps/web/dist/`
 - [ ] T035 [P] Verify checklist completeness in `specs/010-engine-hardening-review/checklists/requirements.md`
 - [X] T036 [P] Add BSRS configuration syntax/function validation coverage against `artifacts/guidance/bsrs/statement-authoring/BSRS functions.txt` in `packages/tests/hardening-bsrs-function-set.test.ts`
