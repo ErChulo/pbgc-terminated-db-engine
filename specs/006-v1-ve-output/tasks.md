@@ -88,21 +88,21 @@
 
 ### Tests for User Story 2
 
-- [ ] T037 [P] [US2] Add invalid-packet tests for missing required V1/VE groups in packages/tests/v1-ve-output-validation.test.ts
-- [ ] T038 [P] [US2] Add invalid-packet tests for missing upstream date, service, compensation, form, and benefit groups in packages/tests/v1-ve-output-validation.test.ts
-- [ ] T039 [P] [US2] Add invalid-packet tests for blank strings and malformed numeric values in packages/tests/v1-ve-output-validation.test.ts
-- [ ] T040 [P] [US2] Add invalid-packet tests for unsupported form, limitation, and present-value controlled rules in packages/tests/v1-ve-output-validation.test.ts
-- [ ] T041 [P] [US2] Add invalid-packet tests for missing in-pay, QDRO, QPSA, and override conditional packets in packages/tests/v1-ve-output-validation.test.ts
-- [ ] T042 [P] [US2] Add failed-run no-authoritative-output persistence tests in packages/tests/v1-ve-output-validation.test.ts
+- [X] T037 [P] [US2] Add invalid-packet tests for missing required V1/VE groups in packages/tests/v1-ve-output-validation.test.ts
+- [X] T038 [P] [US2] Add invalid-packet tests for missing upstream date, service, compensation, form, and benefit groups in packages/tests/v1-ve-output-validation.test.ts
+- [X] T039 [P] [US2] Add invalid-packet tests for blank strings and malformed numeric values in packages/tests/v1-ve-output-validation.test.ts
+- [X] T040 [P] [US2] Add invalid-packet tests for unsupported form, limitation, and present-value controlled rules in packages/tests/v1-ve-output-validation.test.ts
+- [X] T041 [P] [US2] Add invalid-packet tests for missing in-pay, QDRO, QPSA, and override conditional packets in packages/tests/v1-ve-output-validation.test.ts
+- [X] T042 [P] [US2] Add failed-run no-authoritative-output persistence tests in packages/tests/v1-ve-output-validation.test.ts
 
 ### Implementation for User Story 2
 
-- [ ] T043 [US2] Add structured blocking error builders in packages/engine/v1-ve-output/src/errors.ts
-- [ ] T044 [US2] Extend V1/VE packet validation for missing groups, missing upstream outputs, blank strings, malformed numbers, and unsupported controlled values in packages/engine/v1-ve-output/src/validatePacket.ts
-- [ ] T045 [US2] Extend conditional trigger validation for in-pay, QDRO, QPSA, limitation, and override packets in packages/engine/v1-ve-output/src/validatePacket.ts
-- [ ] T046 [US2] Persist failed validation attempts as failed engine_run records without v1_ve_output_row rows in packages/engine/v1-ve-output/src/runV1VeOutput.ts
-- [ ] T047 [US2] Display V1/VE validation error summaries in apps/web/src/pages/V1VeOutputPage.ts
-- [ ] T048 [US2] Verify User Story 2 with npm test -- packages/tests/v1-ve-output-validation.test.ts
+- [X] T043 [US2] Add structured blocking error builders in packages/engine/v1-ve-output/src/errors.ts
+- [X] T044 [US2] Extend V1/VE packet validation for missing groups, missing upstream outputs, blank strings, malformed numbers, and unsupported controlled values in packages/engine/v1-ve-output/src/validatePacket.ts
+- [X] T045 [US2] Extend conditional trigger validation for in-pay, QDRO, QPSA, limitation, and override packets in packages/engine/v1-ve-output/src/validatePacket.ts
+- [X] T046 [US2] Persist failed validation attempts as failed engine_run records without v1_ve_output_row rows in packages/engine/v1-ve-output/src/runV1VeOutput.ts
+- [X] T047 [US2] Display V1/VE validation error summaries in apps/web/src/pages/V1VeOutputPage.ts
+- [X] T048 [US2] Verify User Story 2 with npm test -- packages/tests/v1-ve-output-validation.test.ts
 
 **Checkpoint**: User Stories 1 and 2 work independently with valid and invalid packet paths.
 
@@ -116,17 +116,17 @@
 
 ### Tests for User Story 3
 
-- [ ] T049 [P] [US3] Add trace completeness tests for all populated V1/VE output fields in packages/tests/v1-ve-output-trace.test.ts
-- [ ] T050 [P] [US3] Add repeated-run determinism tests that compare V1/VE values and trace decisions across five runs in packages/tests/v1-ve-output-trace.test.ts
-- [ ] T051 [P] [US3] Add unsupported branch and warning trace tests for conditional V1/VE cases in packages/tests/v1-ve-output-trace.test.ts
+- [X] T049 [P] [US3] Add trace completeness tests for all populated V1/VE output fields in packages/tests/v1-ve-output-trace.test.ts
+- [X] T050 [P] [US3] Add repeated-run determinism tests that compare V1/VE values and trace decisions across five runs in packages/tests/v1-ve-output-trace.test.ts
+- [X] T051 [P] [US3] Add unsupported branch and warning trace tests for conditional V1/VE cases in packages/tests/v1-ve-output-trace.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T052 [US3] Implement trace row construction for V1/VE outputs and warnings in packages/engine/v1-ve-output/src/trace.ts
-- [ ] T053 [US3] Persist module_trace rows for each populated V1/VE output and warning path in packages/engine/v1-ve-output/src/runV1VeOutput.ts
-- [ ] T054 [US3] Add trace and warning state selectors to apps/web/src/app/v1VeOutputSlice.ts
-- [ ] T055 [US3] Render V1/VE trace details and warning notes in apps/web/src/pages/V1VeOutputPage.ts
-- [ ] T056 [US3] Verify User Story 3 with npm test -- packages/tests/v1-ve-output-trace.test.ts
+- [X] T052 [US3] Implement trace row construction for V1/VE outputs and warnings in packages/engine/v1-ve-output/src/trace.ts
+- [X] T053 [US3] Persist module_trace rows for each populated V1/VE output and warning path in packages/engine/v1-ve-output/src/runV1VeOutput.ts
+- [X] T054 [US3] Add trace and warning state selectors to apps/web/src/app/v1VeOutputSlice.ts
+- [X] T055 [US3] Render V1/VE trace details and warning notes in apps/web/src/pages/V1VeOutputPage.ts
+- [X] T056 [US3] Verify User Story 3 with npm test -- packages/tests/v1-ve-output-trace.test.ts
 
 **Checkpoint**: All V1/VE stories are independently functional and traceable.
 

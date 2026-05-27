@@ -1,4 +1,12 @@
 import type { StructuredIssue } from "@pbgc/shared";
+import {
+  buildBlankFieldError,
+  buildMalformedNumberError,
+  buildMissingConditionalPacketError,
+  buildMissingInputFieldError,
+  buildMissingInputGroupError,
+  buildUnsupportedControlledRuleError,
+} from "./errors";
 import { V1_VE_OUTPUT_MODULE_NAME, type V1VeOutputPacket } from "./types";
 
 const REQUIRED_GROUPS = [
@@ -122,6 +130,40 @@ const REQUIRED_FIELDS: Record<(typeof REQUIRED_GROUPS)[number], string[]> = {
   ],
 };
 
+const NON_NULLABLE_FIELDS = new Set<string>([
+  "case_id",
+  "plan_id",
+  "bcv_rec_id",
+  "custid",
+  "retstat",
+  "id",
+  "fname",
+  "lname",
+  "mstat",
+  "current_pay_status",
+  "payment_status_as_of_dopt",
+  "calc_indicator",
+  "calculation_context",
+]);
+
+const NUMERIC_FIELDS = new Set<string>([
+  "xra",
+  "sxra",
+  "term_lw_xra",
+  "term_lw_anb",
+  "eligibility_service_resolved",
+  "vesting_service_resolved",
+  "benefit_service_resolved",
+  "accrual_service_resolved",
+  "compensation_resolved",
+  "average_compensation_resolved",
+  "covered_compensation_resolved",
+  "current_payment_amount",
+]);
+
+const SUPPORTED_CALC_INDICATORS = new Set(["V", "D"]);
+const SUPPORTED_CALCULATION_CONTEXTS = new Set(["termination_valuation", "benefit_determination"]);
+
 const ALLOWED_OVERRIDES = new Set([
   "term_mb_nrd_nsf",
   "xrd_mb_term",
@@ -130,8 +172,23 @@ const ALLOWED_OVERRIDES = new Set([
   "pvmb_term",
 ]);
 
+function isBlank(value: unknown): boolean {
+  if (value === null || value === undefined) return false;
+  if (typeof value === "string") return value.trim().length === 0;
+  if (typeof value === "number") return !Number.isFinite(value);
+  return false;
+}
+
+function isMalformedNumber(value: unknown, field: string): boolean {
+  if (value === null || value === undefined) return false;
+  if (!NUMERIC_FIELDS.has(field)) return false;
+  if (typeof value === "number") return value < 0;
+  return false;
+}
+
 export function validateV1VeOutputPacket(packet: V1VeOutputPacket, inputPacketId: string, ruleVersion: string): StructuredIssue[] {
   const errors: StructuredIssue[] = [];
+
   if (packet.packet_type !== "v1_ve_output") {
     errors.push(issue("INVALID_PACKET_TYPE", "Packet type must be v1_ve_output", inputPacketId, ruleVersion, "packet_type"));
   }
@@ -142,31 +199,83 @@ export function validateV1VeOutputPacket(packet: V1VeOutputPacket, inputPacketId
   for (const group of REQUIRED_GROUPS) {
     const value = packet[group];
     if (!value || typeof value !== "object") {
-      errors.push(issue("MISSING_INPUT_GROUP", `Missing required V1/VE input group ${group}`, inputPacketId, ruleVersion, undefined, group));
+      errors.push(buildMissingInputGroupError(group, inputPacketId, ruleVersion));
       continue;
     }
+
     for (const field of REQUIRED_FIELDS[group]) {
       if (!(field in value)) {
-        errors.push(issue("MISSING_INPUT_FIELD", `Missing required V1/VE input field ${group}.${field}`, inputPacketId, ruleVersion, field, group));
+        errors.push(buildMissingInputFieldError(group, field, inputPacketId, ruleVersion));
+        continue;
+      }
+      const fieldValue = (value as Record<string, unknown>)[field];
+
+      if (isBlank(fieldValue) && NON_NULLABLE_FIELDS.has(field)) {
+        errors.push(buildBlankFieldError(group, field, inputPacketId, ruleVersion));
+        continue;
+      }
+
+      if (isMalformedNumber(fieldValue, field)) {
+        errors.push(buildMalformedNumberError(group, field, inputPacketId, ruleVersion));
+        continue;
       }
     }
   }
 
-  if (packet.resolved_forms_status.annuity_status_pay === "in_pay" && packet.benefit_administration_state.current_pay_status !== "in_pay") {
-    errors.push(issue("MISSING_IN_PAY_PACKET", "In-pay output requires a reviewed pay-status path", inputPacketId, ruleVersion, "current_pay_status", "benefit_administration_state"));
+  checkControlledRules(packet, errors, inputPacketId, ruleVersion);
+  checkConditionalPackets(packet, errors, inputPacketId, ruleVersion);
+
+  return errors;
+}
+
+function checkControlledRules(
+  packet: V1VeOutputPacket,
+  errors: StructuredIssue[],
+  inputPacketId: string,
+  ruleVersion: string,
+): void {
+  const calcIndicator = packet.limitation_packet.calc_indicator;
+  if (typeof calcIndicator === "string") {
+    const normalized = calcIndicator.trim().toUpperCase();
+    if (normalized.length > 0 && !SUPPORTED_CALC_INDICATORS.has(normalized)) {
+      errors.push(buildUnsupportedControlledRuleError("calc_indicator", calcIndicator, inputPacketId, ruleVersion));
+    }
   }
-  if (packet.participant_role_population.qdro_indicator && packet.resolved_forms_status.bs_ind === null && packet.resolved_forms_status.br_ind === null) {
-    errors.push(issue("MISSING_QDRO_PACKET", "QDRO output requires reviewed QDRO branch state", inputPacketId, ruleVersion, "bs_ind", "resolved_forms_status"));
+
+  const calcContext = packet.limitation_packet.calculation_context;
+  if (typeof calcContext === "string") {
+    const normalized = calcContext.trim().toLowerCase();
+    if (normalized.length > 0 && !SUPPORTED_CALCULATION_CONTEXTS.has(normalized)) {
+      errors.push(buildUnsupportedControlledRuleError("calculation_context", calcContext, inputPacketId, ruleVersion));
+    }
   }
-  if (packet.participant_role_population.qpsa_indicator && packet.resolved_forms_status.form_code_ptp_qpsa === null && packet.resolved_forms_status.form_code_death === null) {
-    errors.push(issue("MISSING_QPSA_PACKET", "QPSA output requires reviewed QPSA branch state", inputPacketId, ruleVersion, "form_code_ptp_qpsa", "resolved_forms_status"));
+}
+
+function checkConditionalPackets(
+  packet: V1VeOutputPacket,
+  errors: StructuredIssue[],
+  inputPacketId: string,
+  ruleVersion: string,
+): void {
+  const forms = packet.resolved_forms_status;
+  const admin = packet.benefit_administration_state;
+  const pop = packet.participant_role_population;
+
+  if (forms.annuity_status_pay === "in_pay" && admin.current_pay_status !== "in_pay") {
+    errors.push(buildMissingConditionalPacketError("in_pay", "in-pay form status requires matching pay-status", inputPacketId, ruleVersion));
+  }
+
+  if (pop.qdro_indicator && forms.bs_ind === null && forms.br_ind === null) {
+    errors.push(buildMissingConditionalPacketError("qdro", "QDRO indicator requires reviewed QDRO branch state", inputPacketId, ruleVersion));
+  }
+
+  if (pop.qpsa_indicator && forms.form_code_ptp_qpsa === null && forms.form_code_death === null) {
+    errors.push(buildMissingConditionalPacketError("qpsa", "QPSA indicator requires reviewed QPSA branch state", inputPacketId, ruleVersion));
   }
 
   if (packet.technical_output_override_packet && !ALLOWED_OVERRIDES.has(packet.technical_output_override_packet.output_column_name)) {
-    errors.push(issue("UNSUPPORTED_OVERRIDE_FIELD", "Technical override field is not supported by the V1/VE MVP", inputPacketId, ruleVersion, "output_column_name", "technical_output_override_packet"));
+    errors.push(buildMissingConditionalPacketError("override", "override field is not supported by V1/VE MVP", inputPacketId, ruleVersion));
   }
-
-  return errors;
 }
 
 export function validateOverrideFieldName(fieldName: string): fieldName is keyof V1VeOutputPacket["benefit_kernel_output"] {

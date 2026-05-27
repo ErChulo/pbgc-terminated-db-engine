@@ -7,12 +7,12 @@ import {
   insertResolvedV1VeOutput,
   parsePacketJson,
 } from "@pbgc/db";
+import { buildInputPacketNotActiveError } from "./errors";
 import { resolveV1VeOutput } from "./resolveV1VeOutput";
 import { validateV1VeOutputPacket } from "./validatePacket";
 import { buildV1VeTraces } from "./trace";
 import {
   V1_VE_OUTPUT_ADAPTER_VERSION,
-  V1_VE_OUTPUT_MODULE_NAME,
   type V1VeOutputPacket,
   type V1VeOutputArtifact,
   type V1VeOutputRequest,
@@ -25,7 +25,7 @@ export function runV1VeOutput(db: Database, request: V1VeOutputRequest): V1VeOut
   const started_at = currentTimestamp();
 
   if (!record || record.status !== "active" || record.packet_type !== "v1_ve_output") {
-    const error = makeIssue("INPUT_PACKET_NOT_ACTIVE", "Active v1_ve_output input packet was not found", request.input_packet_id, request.rule_version);
+    const error = buildInputPacketNotActiveError(request.input_packet_id, request.rule_version);
     insertEngineRun(db, makeRun(request, calculation_run_id, started_at, "failed", 0, 1));
     return failedResult(calculation_run_id, [error]);
   }
@@ -113,21 +113,4 @@ function failedResult(calculationRunId: string, errors: StructuredIssue[]): V1Ve
   };
 }
 
-function makeIssue(
-  code: string,
-  message: string,
-  inputPacketId: string,
-  ruleVersion: string,
-  field_name?: string,
-  input_group?: string,
-): StructuredIssue {
-  return {
-    code,
-    message,
-    field_name,
-    input_group,
-    input_packet_id: inputPacketId,
-    module_name: V1_VE_OUTPUT_MODULE_NAME,
-    rule_version: ruleVersion,
-  };
-}
+
