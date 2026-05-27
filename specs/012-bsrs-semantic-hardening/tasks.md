@@ -78,17 +78,17 @@
 
 ### Tests for User Story 2
 
-- [ ] T019 [P] [US2] Add approved sample field-reference validation test in `packages/tests/hardening-bsrs-field-references.test.ts`
-- [ ] T020 [P] [US2] Add no-DD approved fallback field-reference regression test in `packages/tests/hardening-bsrs-field-references.test.ts`
-- [ ] T021 [P] [US2] Add unknown field-like token structured-error regression test in `packages/tests/hardening-bsrs-field-references.test.ts`
-- [ ] T022 [P] [US2] Add DD-backed field vocabulary integration test in `packages/tests/hardening-bsrs-field-references.test.ts`
+- [x] T019 [P] [US2] Add approved sample field-reference validation test in `packages/tests/hardening-bsrs-field-references.test.ts`
+- [x] T020 [P] [US2] Add no-DD approved fallback field-reference regression test in `packages/tests/hardening-bsrs-field-references.test.ts`
+- [x] T021 [P] [US2] Add unknown field-like token structured-error regression test in `packages/tests/hardening-bsrs-field-references.test.ts`
+- [x] T022 [P] [US2] Add DD-backed field vocabulary integration test in `packages/tests/hardening-bsrs-field-references.test.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T023 [P] [US2] Implement field-like token extraction in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
-- [ ] T024 [P] [US2] Implement approved sample field vocabulary builder in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
-- [ ] T025 [US2] Wire DD-backed and approved fallback field resolution into `packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts`
-- [ ] T026 [US2] Add deterministic field-reference finding metadata in `packages/engine/bsrs-configuration-output/src/semanticValidationTrace.ts`
+- [x] T023 [P] [US2] Implement field-like token extraction in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
+- [x] T024 [P] [US2] Implement approved sample field vocabulary builder in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
+- [x] T025 [US2] Wire DD-backed and approved fallback field resolution into `packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts`
+- [x] T026 [US2] Add deterministic field-reference finding metadata in `packages/engine/bsrs-configuration-output/src/semanticValidationTrace.ts`
 
 **Checkpoint**: Referenced-field semantic validation should be independently testable
 
@@ -102,18 +102,18 @@
 
 ### Tests for User Story 3
 
-- [ ] T027 [P] [US3] Add approved statement block-pattern regression test in `packages/tests/hardening-bsrs-block-patterns.test.ts`
-- [ ] T028 [P] [US3] Add approved recalculation block-pattern regression test in `packages/tests/hardening-bsrs-block-patterns.test.ts`
-- [ ] T029 [P] [US3] Add optional-form family block-pattern regression test in `packages/tests/hardening-bsrs-optional-form-patterns.test.ts`
-- [ ] T030 [P] [US3] Add missing block-marker structured-error regression test in `packages/tests/hardening-bsrs-block-patterns.test.ts`
-- [ ] T031 [P] [US3] Add existing BSRS output behavior preservation regression in `packages/tests/hardening-bsrs-semantic-behavior.test.ts`
+- [x] T027 [P] [US3] Add approved statement block-pattern regression test in `packages/tests/hardening-bsrs-block-patterns.test.ts`
+- [x] T028 [P] [US3] Add approved recalculation block-pattern regression test in `packages/tests/hardening-bsrs-block-patterns.test.ts`
+- [x] T029 [P] [US3] Add optional-form family block-pattern regression test in `packages/tests/hardening-bsrs-block-patterns.test.ts` (covered in block-patterns test)
+- [x] T030 [P] [US3] Add missing block-marker structured-error regression test in `packages/tests/hardening-bsrs-block-patterns.test.ts`
+- [x] T031 [P] [US3] Add existing BSRS output behavior preservation regression in `packages/tests/hardening-bsrs-semantic-behavior.test.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T032 [P] [US3] Implement statement and recalculation block-pattern validators in `packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts`
-- [ ] T033 [P] [US3] Implement optional-form block-pattern validators in `packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts`
-- [ ] T034 [US3] Wire block-pattern validation into `packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts`
-- [ ] T035 [US3] Add block-pattern finding metadata and deterministic ordering in `packages/engine/bsrs-configuration-output/src/semanticValidationTrace.ts`
+- [x] T032 [P] [US3] Implement statement and recalculation block-pattern validators in `packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts`
+- [x] T033 [P] [US3] Implement optional-form block-pattern validators in `packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts`
+- [x] T034 [US3] Wire block-pattern validation into `packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts`
+- [x] T035 [US3] Add block-pattern finding metadata and deterministic ordering in `packages/engine/bsrs-configuration-output/src/semanticValidationTrace.ts`
 
 **Checkpoint**: All semantic-hardening stories should now be independently functional
 
@@ -123,14 +123,14 @@
 
 **Purpose**: Validate the full semantic-hardening increment and preserve repository contracts
 
-- [ ] T036 [P] Update semantic hardening quickstart validation notes in `specs/012-bsrs-semantic-hardening/quickstart.md`
-- [ ] T037 [P] Update BSRS semantic hardening architecture notes in `docs/architecture/bsrs-semantic-hardening_v0.1.0.md`
-- [ ] T038 [P] Verify no new output adapter, migration, or persistence table was added in `packages/engine/bsrs-configuration-output/` and `packages/db/`
-- [ ] T039 [P] Run focused semantic hardening tests in `packages/tests/hardening-bsrs-semantic-*.test.ts`, `packages/tests/hardening-bsrs-printcriteria.test.ts`, `packages/tests/hardening-bsrs-field-references.test.ts`, `packages/tests/hardening-bsrs-block-patterns.test.ts`, and `packages/tests/hardening-bsrs-optional-form-patterns.test.ts`
-- [ ] T040 [P] Run full regression suite for existing BSRS behavior in `packages/tests/bsrs-configuration-output-*.test.ts`
-- [ ] T041 [P] Run lint and full test suite validation in `package.json`
-- [ ] T042 [P] Confirm no committed browser `apps/web/dist/` refresh is needed because runtime output behavior is unchanged
-- [ ] T043 [P] Verify checklist completeness in `specs/012-bsrs-semantic-hardening/checklists/requirements.md`
+- [x] T036 [P] Update semantic hardening quickstart validation notes in `specs/012-bsrs-semantic-hardening/quickstart.md`
+- [x] T037 [P] Update BSRS semantic hardening architecture notes in `docs/architecture/bsrs-semantic-hardening_v0.1.0.md`
+- [x] T038 [P] Verify no new output adapter, migration, or persistence table was added in `packages/engine/bsrs-configuration-output/` and `packages/db/`
+- [x] T039 [P] Run focused semantic hardening tests in `packages/tests/hardening-bsrs-*.test.ts`
+- [x] T040 [P] Run full regression suite for existing BSRS behavior in `packages/tests/bsrs-configuration-output-*.test.ts`
+- [x] T041 [P] Run lint and full test suite validation in `package.json`
+- [x] T042 [P] Confirm no committed browser `apps/web/dist/` refresh is needed because runtime output behavior is unchanged
+- [x] T043 [P] Verify checklist completeness in `specs/012-bsrs-semantic-hardening/checklists/requirements.md`
 
 ---
 
