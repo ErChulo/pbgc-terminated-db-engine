@@ -37,8 +37,8 @@
 - [X] T014 Add valuation-listings fixture packet parsing utilities in packages/tests/valuation-listings-output-fixtures.ts
 - [X] T015 Add reviewed valuation-listings packet fixture builders from committed contract rows in packages/engine/valuation-listings-output/src/fixturePacketBuilder.ts
 - [X] T016 Add deterministic valuation-listings field lists, row-family exports, and module version exports in packages/engine/valuation-listings-output/src/types.ts
-- [ ] T017 [P] Add valuation-listings architecture notes in docs/architecture/valuation_listings_output_slice_v0.1.0.md
-- [ ] T018 [P] Add valuation-listings trace field mapping in docs/mappings/valuation_listings_output_trace_map_v0.1.0.csv
+- [X] T017 [P] Add valuation-listings architecture notes in docs/architecture/valuation_listings_output_slice_v0.1.0.md
+- [X] T018 [P] Add valuation-listings trace field mapping in docs/mappings/valuation_listings_output_trace_map_v0.1.0.csv
 - [X] T019 [P] Add the DD.csv canonical naming helper and lookup table for valuation-listings field semantics in packages/engine/valuation-listings-output/src/ddMapping.ts
 - [X] T020 Verify no BSRS configuration or other output-adapter package is created for this slice under packages/output-adapters/
 
@@ -88,21 +88,21 @@
 
 ### Tests for User Story 2
 
-- [ ] T038 [P] [US2] Add invalid-packet tests for missing required valuation-listings groups in packages/tests/valuation-listings-output-validation.test.ts
-- [ ] T039 [P] [US2] Add invalid-packet tests for missing upstream date, service, compensation, form, benefit, and V1/VE groups in packages/tests/valuation-listings-output-validation.test.ts
-- [ ] T040 [P] [US2] Add invalid-packet tests for blank strings and malformed numeric values in packages/tests/valuation-listings-output-validation.test.ts
-- [ ] T041 [P] [US2] Add invalid-packet tests for unsupported form, template, ordering, and controlled rules in packages/tests/valuation-listings-output-validation.test.ts
-- [ ] T042 [P] [US2] Add invalid-packet tests for missing in-pay, QDRO, QPSA, asset/recovery, and override conditional packets in packages/tests/valuation-listings-output-validation.test.ts
-- [ ] T043 [P] [US2] Add failed-run no-authoritative-output persistence tests in packages/tests/valuation-listings-output-validation.test.ts
+- [X] T038 [P] [US2] Add invalid-packet tests for missing required valuation-listings groups in packages/tests/valuation-listings-output-validation.test.ts
+- [X] T039 [P] [US2] Add invalid-packet tests for missing upstream date, service, compensation, form, benefit, and V1/VE groups in packages/tests/valuation-listings-output-validation.test.ts
+- [X] T040 [P] [US2] Add invalid-packet tests for blank strings and malformed numeric values in packages/tests/valuation-listings-output-validation.test.ts
+- [X] T041 [P] [US2] Add invalid-packet tests for unsupported form, template, ordering, and controlled rules in packages/tests/valuation-listings-output-validation.test.ts
+- [X] T042 [P] [US2] Add invalid-packet tests for missing in-pay, QDRO, QPSA, asset/recovery, and override conditional packets in packages/tests/valuation-listings-output-validation.test.ts
+- [X] T043 [P] [US2] Add failed-run no-authoritative-output persistence tests in packages/tests/valuation-listings-output-validation.test.ts
 
 ### Implementation for User Story 2
 
-- [ ] T044 [US2] Add structured blocking error builders in packages/engine/valuation-listings-output/src/errors.ts
-- [ ] T045 [US2] Extend valuation-listings packet validation for missing groups, missing upstream outputs, blank strings, malformed numbers, and unsupported controlled values in packages/engine/valuation-listings-output/src/validatePacket.ts
-- [ ] T046 [US2] Extend conditional trigger validation for in-pay, QDRO, QPSA, asset/recovery, template, and override packets in packages/engine/valuation-listings-output/src/validatePacket.ts
-- [ ] T047 [US2] Persist failed validation attempts as failed engine_run records without valuation_listings_output_row rows in packages/engine/valuation-listings-output/src/runValuationListingsOutput.ts
-- [ ] T048 [US2] Display valuation-listings validation error summaries in apps/web/src/pages/ValuationListingsOutputPage.ts
-- [ ] T049 [US2] Verify User Story 2 with npm test -- packages/tests/valuation-listings-output-validation.test.ts
+- [X] T044 [US2] Add structured blocking error builders in packages/engine/valuation-listings-output/src/errors.ts
+- [X] T045 [US2] Extend valuation-listings packet validation for missing groups, missing upstream outputs, blank strings, malformed numbers, and unsupported controlled values in packages/engine/valuation-listings-output/src/validatePacket.ts
+- [X] T046 [US2] Extend conditional trigger validation for in-pay, QDRO, QPSA, asset/recovery, template, and override packets in packages/engine/valuation-listings-output/src/validatePacket.ts
+- [X] T047 [US2] Persist failed validation attempts as failed engine_run records without valuation_listings_output_row rows in packages/engine/valuation-listings-output/src/runValuationListingsOutput.ts
+- [X] T048 [US2] Display valuation-listings validation error summaries in apps/web/src/pages/ValuationListingsOutputPage.ts
+- [X] T049 [US2] Verify User Story 2 with npm test -- packages/tests/valuation-listings-output-validation.test.ts
 
 **Checkpoint**: User Stories 1 and 2 work independently with valid and invalid packet paths.
 
@@ -116,17 +116,17 @@
 
 ### Tests for User Story 3
 
-- [ ] T050 [P] [US3] Add trace completeness tests for all populated valuation-listings output fields in packages/tests/valuation-listings-output-trace.test.ts
-- [ ] T051 [P] [US3] Add repeated-run determinism tests that compare valuation-listings values and trace decisions across five runs in packages/tests/valuation-listings-output-trace.test.ts
-- [ ] T052 [P] [US3] Add unsupported branch and warning trace tests for conditional valuation-listings cases in packages/tests/valuation-listings-output-trace.test.ts
+- [X] T050 [P] [US3] Add trace completeness tests for all populated valuation-listings output fields in packages/tests/valuation-listings-output-trace.test.ts
+- [X] T051 [P] [US3] Add repeated-run determinism tests that compare valuation-listings values and trace decisions across five runs in packages/tests/valuation-listings-output-trace.test.ts
+- [X] T052 [P] [US3] Add unsupported branch and warning trace tests for conditional valuation-listings cases in packages/tests/valuation-listings-output-trace.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T053 [US3] Implement trace row construction for valuation-listings outputs and warnings in packages/engine/valuation-listings-output/src/trace.ts
-- [ ] T054 [US3] Persist module_trace rows for each populated valuation-listings output and warning path in packages/engine/valuation-listings-output/src/runValuationListingsOutput.ts
-- [ ] T055 [US3] Add trace and warning state selectors to apps/web/src/app/valuationListingsOutputSlice.ts
-- [ ] T056 [US3] Render valuation-listings trace details and warning notes in apps/web/src/pages/ValuationListingsOutputPage.ts
-- [ ] T057 [US3] Verify User Story 3 with npm test -- packages/tests/valuation-listings-output-trace.test.ts
+- [X] T053 [US3] Implement trace row construction for valuation-listings outputs and warnings in packages/engine/valuation-listings-output/src/trace.ts
+- [X] T054 [US3] Persist module_trace rows for each populated valuation-listings output and warning path in packages/engine/valuation-listings-output/src/runValuationListingsOutput.ts
+- [X] T055 [US3] Add trace and warning state selectors to apps/web/src/app/valuationListingsOutputSlice.ts
+- [X] T056 [US3] Render valuation-listings trace details and warning notes in apps/web/src/pages/ValuationListingsOutputPage.ts
+- [X] T057 [US3] Verify User Story 3 with npm test -- packages/tests/valuation-listings-output-trace.test.ts
 
 **Checkpoint**: All valuation-listings stories are independently functional and traceable.
 
@@ -136,14 +136,14 @@
 
 **Purpose**: Complete regression, static-browser verification, docs alignment, official template validation, and committed build output.
 
-- [ ] T058 [P] Add prior-slice regression guard to the valuation-listings validation command notes in specs/007-valuation-listings-output/quickstart.md
-- [ ] T059 [P] Update implementation completion notes in docs/architecture/valuation_listings_output_slice_v0.1.0.md
-- [ ] T060 Run all deterministic tests with npm test and fix issues in packages/tests/
-- [ ] T061 Run lint/type checks with npm run lint and fix issues in packages/engine/valuation-listings-output/src/
-- [ ] T062 Run the static browser build with npm run build and update committed assets under apps/web/dist/
-- [ ] T063 Start the Vite app and validate the quickstart flow in apps/web/src/pages/ValuationListingsOutputPage.ts
-- [ ] T064 Confirm browser-only/no-network execution by inspecting valuation-listings imports in packages/engine/valuation-listings-output/src/
-- [ ] T065 Confirm BSRS configuration and other output-adapter implementations remain out of scope in packages/output-adapters/
+- [X] T058 [P] Add prior-slice regression guard to the valuation-listings validation command notes in specs/007-valuation-listings-output/quickstart.md
+- [X] T059 [P] Update implementation completion notes in docs/architecture/valuation_listings_output_slice_v0.1.0.md
+- [X] T060 Run all deterministic tests with npm test and fix issues in packages/tests/
+- [X] T061 Run lint/type checks with npm run lint and fix issues in packages/engine/valuation-listings-output/src/
+- [X] T062 Run the static browser build with npm run build and update committed assets under apps/web/dist/
+- [X] T063 Start the Vite app and validate the quickstart flow in apps/web/src/pages/ValuationListingsOutputPage.ts
+- [X] T064 Confirm browser-only/no-network execution by inspecting valuation-listings imports in packages/engine/valuation-listings-output/src/
+- [X] T065 Confirm BSRS configuration and other output-adapter implementations remain out of scope in packages/output-adapters/
 
 ---
 

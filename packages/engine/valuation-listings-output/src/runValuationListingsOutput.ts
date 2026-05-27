@@ -7,12 +7,12 @@ import {
   insertResolvedValuationListingOutput,
   parsePacketJson,
 } from "@pbgc/db";
+import { buildInputPacketNotActiveError } from "./errors";
 import { resolveValuationListingsOutput } from "./resolveValuationListingsOutput";
 import { validateValuationListingsOutputPacket } from "./validatePacket";
 import { buildValuationListingTraces } from "./trace";
 import {
   VALUATION_LISTINGS_OUTPUT_ADAPTER_VERSION,
-  VALUATION_LISTINGS_OUTPUT_MODULE_NAME,
   type ValuationListingsOutputArtifact,
   type ValuationListingsOutputPacket,
   type ValuationListingsOutputRequest,
@@ -25,7 +25,7 @@ export function runValuationListingsOutput(db: Database, request: ValuationListi
   const started_at = currentTimestamp();
 
   if (!record || record.status !== "active" || record.packet_type !== "valuation_listings_output") {
-    const error = makeIssue("INPUT_PACKET_NOT_ACTIVE", "Active valuation_listings_output input packet was not found", request.input_packet_id, request.rule_version);
+    const error = buildInputPacketNotActiveError(request.input_packet_id, request.rule_version);
     insertEngineRun(db, makeRun(request, calculation_run_id, started_at, "failed", 0, 1));
     return failedResult(calculation_run_id, [error]);
   }
@@ -116,21 +116,4 @@ function failedResult(calculationRunId: string, errors: StructuredIssue[]): Valu
   };
 }
 
-function makeIssue(
-  code: string,
-  message: string,
-  inputPacketId: string,
-  ruleVersion: string,
-  field_name?: string,
-  input_group?: string,
-): StructuredIssue {
-  return {
-    code,
-    message,
-    field_name,
-    input_group,
-    input_packet_id: inputPacketId,
-    module_name: VALUATION_LISTINGS_OUTPUT_MODULE_NAME,
-    rule_version: ruleVersion,
-  };
-}
+
