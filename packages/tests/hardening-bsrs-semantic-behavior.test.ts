@@ -169,6 +169,32 @@ describe("BSRS semantic behavior preservation", () => {
     }
   });
 
+  it("proves recalculation-pattern validation does not write to unrelated output adapters (T026)", () => {
+    // Recalculation validation must stay within the BSRS configuration output boundary.
+    // It must not import or depend on any other output adapter packages.
+    const recalculationSource = readFileSync(
+      join(REPO_ROOT, "packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts"),
+      "utf8",
+    );
+
+    // Recalculation validation must not import v1_ve_output, valuation_listings_output,
+    // benefit_kernel, date_resolution, service_resolution, compensation_resolution,
+    // or form_resolution packages
+    const bannedImports = [
+      "@pbgc/v1-ve-output",
+      "@pbgc/valuation-listings-output",
+      "@pbgc/benefit-kernel",
+      "@pbgc/date-resolution",
+      "@pbgc/service-resolution",
+      "@pbgc/compensation-resolution",
+      "@pbgc/form-resolution",
+    ];
+
+    for (const banned of bannedImports) {
+      expect(recalculationSource, `must not import ${banned}`).not.toContain(banned);
+    }
+  });
+
   it("preserves BSRS semantic validation module boundaries: no adapter-scope leakage", () => {
     // Semantic validation must NOT be wired into the runtime BSRS output pipeline.
     // The runBsrsConfiguration function must not import semantic validation helpers.

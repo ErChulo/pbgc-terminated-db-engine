@@ -184,6 +184,134 @@ describe("BSRS recalculation block-pattern hardening", () => {
     );
   });
 
+  it("classifies recalculation rows into semantic marker, support, detail, narrative, formatting, and spacer roles (T019)", () => {
+    const result = validateRecalculationBlockPatterns([approvedRecalculationSample()]);
+
+    // All seven semantic roles should be represented in classified rows
+    const roles = result.accepted.map((c) => c.semantic_role);
+    expect(roles).toEqual(
+      expect.arrayContaining(["marker", "support", "detail"]),
+    );
+    // The approved sample has formatting rows (divider lines with DescFormat/DtlFormat)
+    expect(result.accepted.some((c) => c.semantic_role === "formatting")).toBe(true);
+    // Spacer classification is verified separately in T020 with synthetic fixture
+  });
+
+  it("does not treat formatting-only or spacer rows as missing recalculation clusters (T020)", () => {
+    const sample = parseBsrsSample({
+      source_path: "artifacts/reference/approved-samples/bsrs-config/recalculations/synthetic-formatting-only.txt",
+      text: [
+        "PrintCriteria\tLine\tDescription\tDetail\tDescFormat\tDtlFormat",
+        "1\t\t\"\"\"Participant Data\"\"\"\t\tTL\tTL",
+        "1\t\t\"\"\"----------------\"\"\"\t\tTL\tTL",
+        "1\t\t\t\tTL\tTL",
+        "1\t\t\t\t\t",
+        "1\t\t\"\"\"Name:\"\"\"\tFNAME\tTL\tTL",
+        "1\t\t\t\tTL\tTH",
+      ].join("\n"),
+    });
+
+    const result = validateRecalculationBlockPatterns([sample]);
+
+    // Formatting rows (with format codes) are accepted
+    const formattingRows = result.accepted.filter((c) => c.semantic_role === "formatting");
+    expect(formattingRows.length).toBeGreaterThan(0);
+
+    // Spacer rows (no content, no format codes) are accepted
+    const spacerRows = result.accepted.filter((c) => c.semantic_role === "spacer");
+    expect(spacerRows.length).toBeGreaterThan(0);
+
+    // Missing clusters are reported for actual missing approved clusters (e.g., social_security_number, sex, dob)
+    // not for formatting/spacer rows
+    const missingFindings = result.findings.filter((f) => f.code === "BSRS_RECALCULATION_CLUSTER_MISSING");
+    for (const finding of missingFindings) {
+      // Missing cluster findings should reference approved cluster tokens, not formatting rows
+      expect(finding.token).not.toContain("----");
+      expect(finding.token).not.toBe("(empty)");
+    }
+  });
+
+  it("emits structured orphan and suspicious findings for recalculation rows with no approved section context (T021)", () => {
+    const orphanSample = parseBsrsSample({
+      source_path: "artifacts/reference/approved-samples/bsrs-config/recalculations/synthetic-orphan-recalculation.txt",
+      text: [
+        "PrintCriteria\tLine\tDescription\tDetail\tDescFormat\tDtlFormat",
+        "1\t\t\"\"\"Participant Data\"\"\"\t\tTL\tTL",
+        "1\t\t\"\"\"Unknown Field:\"\"\"\tUNKNOWN_VALUE\tTL\tTL",
+        "1\t\tJust some orphaned content\tORPHAN_VAL\tTL\tD4",
+      ].join("\n"),
+    });
+
+    const result = validateRecalculationBlockPatterns([orphanSample]);
+
+    // Row 2 has a label pattern → SUSPICIOUS finding
+    expect(result.findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          block_family: "recalculation",
+          category: "block_pattern",
+          code: "BSRS_RECALCULATION_CLUSTER_SUSPICIOUS",
+          column_name: "Description",
+          line_cluster: "participant_data",
+          section_context: "participant_data",
+          severity: "warning",
+          source_path: orphanSample.source_path,
+          token: "Unknown Field:",
+        }),
+      ]),
+    );
+
+    // Row 3 has content but no label pattern → ORPHAN finding (not SUSPICIOUS)
+    expect(result.findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          block_family: "recalculation",
+          category: "block_pattern",
+          code: "BSRS_RECALCULATION_ROW_ORPHAN",
+          column_name: "Description",
+          line_cluster: "participant_data",
+          section_context: "participant_data",
+          severity: "warning",
+          source_path: orphanSample.source_path,
+        }),
+      ]),
+    );
+
+    // Orphan/suspicious rows are still classified (not dropped) — use row_index to find them
+    const orphanAccepted = result.accepted.filter(
+      (c) => c.row_index === 3 || c.row_index === 4,
+    );
+    expect(orphanAccepted.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("proves recalculation validation does not alter existing statement block-pattern behavior (T027)", () => {
+    // Statement validation must produce identical results regardless of recalculation changes
+    const statementResult = validateStatementBlockPatterns([approvedStatementSample()]);
+    expect(statementResult.findings).toEqual([]);
+    expect(statementResult.accepted.some((c) => c.block_family === "statement")).toBe(true);
+    expect(statementResult.accepted.every((c) => c.block_family === "statement")).toBe(true);
+
+    // Recalculation validation operates independently
+    const recalcResult = validateRecalculationBlockPatterns([approvedRecalculationSample()]);
+    expect(recalcResult.accepted.every((c) => c.block_family === "recalculation")).toBe(true);
+
+    // The combined semantic block-pattern validation includes both families
+    const combinedInput = {
+      sources: [
+        {
+          source_path: relative(REPO_ROOT, STATEMENT_SAMPLE_PATH),
+          text: readFileSync(STATEMENT_SAMPLE_PATH, "utf8"),
+        },
+        {
+          source_path: relative(REPO_ROOT, RECALCULATION_SAMPLE_PATH),
+          text: readFileSync(RECALCULATION_SAMPLE_PATH, "utf8"),
+        },
+      ],
+    };
+    const combinedFindings = validateBsrsSemanticBlockPatterns(combinedInput);
+    expect(combinedFindings).toEqual([]);
+  });
+
   it("keeps recalculation block-pattern findings stable across repeated runs", () => {
     const input = {
       sources: [

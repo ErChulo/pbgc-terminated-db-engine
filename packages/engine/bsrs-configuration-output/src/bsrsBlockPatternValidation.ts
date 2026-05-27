@@ -372,6 +372,7 @@ function classifyRecalculationRows(sample: BsrsParsedSample): BsrsBlockPatternCl
 
   const classifications: BsrsBlockPatternClassification[] = [];
 
+  // First pass: classify rows that match approved cluster definitions
   for (const row of sample.rows) {
     const cluster = matchingRecalculationCluster(row);
     if (!cluster) {
@@ -387,6 +388,28 @@ function classifyRecalculationRows(sample: BsrsParsedSample): BsrsBlockPatternCl
       section_context: "participant_data",
       line_cluster: cluster.cluster,
       semantic_role: cluster.role,
+    });
+  }
+
+  // Second pass: classify remaining rows with semantic roles
+  const classifiedRowIndexes = new Set(classifications.map((c) => c.row_index));
+  for (const row of sample.rows) {
+    if (classifiedRowIndexes.has(row.row_index)) {
+      continue;
+    }
+
+    const role = classifyRecalculationRowRole(row);
+    const token = role === "detail" ? normalizedCell(row, "Detail") : normalizedDescription(row) || "(empty)";
+
+    classifications.push({
+      block_family: "recalculation",
+      source_path: sample.source_path,
+      row_index: row.row_index,
+      column_name: role === "detail" ? "Detail" : "Description",
+      token,
+      section_context: "participant_data",
+      line_cluster: "participant_data",
+      semantic_role: role,
     });
   }
 
@@ -453,6 +476,61 @@ function validateRecalculationClusterSequence(sample: BsrsParsedSample): BsrsBlo
         section_context: "participant_data",
         line_cluster: locatedCluster.definition.cluster,
         message: `Recalculation line cluster ${locatedCluster.definition.cluster} appears more than once.`,
+      }));
+    }
+  }
+
+  // Detect suspicious rows: rows with label-like patterns not matching any approved cluster
+  const suspiciousRowIndexes = new Set<number>();
+  for (const row of sample.rows) {
+    const label = recalculationRowLabel(row);
+    if (!label || matchingRecalculationCluster(row)) {
+      continue;
+    }
+
+    suspiciousRowIndexes.add(row.row_index);
+    findings.push(makeBlockPatternFinding({
+      block_family: "recalculation",
+      code: "BSRS_RECALCULATION_CLUSTER_SUSPICIOUS",
+      severity: "warning",
+      source_path: sample.source_path,
+      row_index: row.row_index,
+      token: label,
+      section_context: "participant_data",
+      line_cluster: "participant_data",
+      message: `Recalculation row label "${label}" is not part of the approved cluster sequence.`,
+    }));
+  }
+
+  // Detect orphan rows: rows with semantic content that don't match any cluster
+  // and are not formatting/spacer artifacts or already flagged as suspicious
+  const matchedRowIndexes = new Set(
+    locatedClusters.flatMap((cluster) => cluster.rows.map((row) => row.row_index)),
+  );
+  for (const row of sample.rows) {
+    if (matchedRowIndexes.has(row.row_index) || suspiciousRowIndexes.has(row.row_index)) {
+      continue;
+    }
+
+    const role = classifyRecalculationRowRole(row);
+    // Skip formatting and spacer rows — they are not orphan semantic evidence
+    if (role === "formatting" || role === "spacer") {
+      continue;
+    }
+
+    const description = normalizedDescription(row);
+    const detail = normalizedCell(row, "Detail");
+    if (description || detail) {
+      findings.push(makeBlockPatternFinding({
+        block_family: "recalculation",
+        code: "BSRS_RECALCULATION_ROW_ORPHAN",
+        severity: "warning",
+        source_path: sample.source_path,
+        row_index: row.row_index,
+        token: description || detail,
+        section_context: "participant_data",
+        line_cluster: "participant_data",
+        message: `Recalculation row at index ${row.row_index} has no recognized section context or approved cluster.`,
       }));
     }
   }
@@ -619,6 +697,42 @@ function matchingStatementSection(row: BsrsSampleRow): StatementSectionDefinitio
 
 function matchingRecalculationCluster(row: BsrsSampleRow): RecalculationClusterDefinition | undefined {
   return RECALCULATION_CLUSTER_DEFINITIONS.find((definition) => definition.matches(row));
+}
+
+function classifyRecalculationRowRole(row: BsrsSampleRow): BsrsBlockSemanticRole {
+  const description = normalizedDescription(row);
+  const detail = normalizedCell(row, "Detail");
+  const descFormat = normalizedCell(row, "DescFormat");
+  const detailFormat = normalizedCell(row, "DtlFormat");
+
+  // Rows with format codes but no content are formatting artifacts
+  if (!description && !detail && (descFormat || detailFormat)) {
+    return "formatting";
+  }
+  // Completely empty rows are spacers
+  if (!description && !detail) {
+    return "spacer";
+  }
+  // Rows with detail values are detail rows
+  if (detail) {
+    return "detail";
+  }
+  // Divider lines (dashes, equals, etc.) are formatting
+  if (/^[-=*_#]{3,}$/.test(description)) {
+    return "formatting";
+  }
+  // Long descriptions are narrative
+  if (description.length > 40) {
+    return "narrative";
+  }
+  return "detail";
+}
+
+function recalculationRowLabel(row: BsrsSampleRow): string | undefined {
+  const description = normalizedDescription(row);
+  // Match label patterns like "Something:" or "Some Label:" at word boundaries
+  const match = description.match(/^[A-Z][A-Za-z ]+:$/);
+  return match?.[0] ?? undefined;
 }
 
 function matchingOptionalFormSection(row: BsrsSampleRow, family: BsrsOptionalFormFamily): OptionalFormSectionDefinition | undefined {
