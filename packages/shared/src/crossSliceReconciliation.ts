@@ -40,6 +40,129 @@ export type ValueReconciliationStatus =
 
 export type ValueReconciliationSeverity = "error" | "warning" | "info";
 
+export type DdMappingLookup = (fieldName: string) => boolean;
+
+export type DdMappingResolver = (fieldName: string) => string;
+
+export const DD_MAPPING_LOOKUPS: Record<ReconciliationSliceName, DdMappingLookup | null> = {
+  bsrs_configuration_output: null,
+  v1_ve_output: null,
+  valuation_listings_output: null,
+};
+
+export const DD_MAPPING_RESOLVERS: Record<ReconciliationSliceName, DdMappingResolver | null> = {
+  bsrs_configuration_output: null,
+  v1_ve_output: null,
+  valuation_listings_output: null,
+};
+
+export function registerDdMappingLookup(slice: ReconciliationSliceName, lookup: DdMappingLookup): void {
+  DD_MAPPING_LOOKUPS[slice] = lookup;
+}
+
+export function registerDdMappingResolver(slice: ReconciliationSliceName, resolver: DdMappingResolver): void {
+  DD_MAPPING_RESOLVERS[slice] = resolver;
+}
+
+export function validateDdMappingCoverage(args: {
+  inventory?: readonly SharedFactDefinition[];
+  evidence: readonly ReconciliationEvidence[];
+  rule_version?: string;
+}): DdMappingValidationFinding[] {
+  const inventory = args.inventory ?? SELECTED_SHARED_FACT_INVENTORY;
+  const findings: DdMappingValidationFinding[] = [];
+  const ruleVersion = args.rule_version ?? CROSS_SLICE_RECONCILIATION_RULE_VERSION;
+
+  for (const fact of inventory) {
+    if (fact.mapping_basis !== "dd" || !fact.dd_field_name) continue;
+    for (const [slice, field] of Object.entries(fact.fields_by_slice) as [ReconciliationSliceName, string][]) {
+      const lookup = DD_MAPPING_LOOKUPS[slice];
+      if (!lookup) continue;
+      if (!lookup(field)) {
+        const caseIds = [...new Set(args.evidence.filter((e) => e.slice === slice && e.field === field).map((e) => e.case_id))].sort();
+        for (const caseId of caseIds) {
+          findings.push({
+            code: "CROSS_SLICE_DD_MAPPING_MISSING",
+            severity: "error",
+            category: "cross_slice_reconciliation",
+            case_id: caseId,
+            fact_key: fact.fact_key,
+            fact_family: fact.fact_family,
+            reviewed_fact_context: fact.reviewed_fact_context,
+            canonical_semantic_name: fact.canonical_semantic_name,
+            mapping_basis: "dd",
+            dd_field_name: fact.dd_field_name,
+            affected_slice: slice,
+            affected_field: field,
+            rule_version: ruleVersion,
+            producing_module: CROSS_SLICE_RECONCILIATION_MODULE_NAME,
+            message: `DD mapping missing for ${fact.canonical_semantic_name}: slice ${slice} field ${field} has no matching DD.csv entry for DD field ${fact.dd_field_name}`,
+          });
+        }
+      }
+    }
+  }
+  return findings.sort(compareValidationFindings);
+}
+
+export function validateFallbackContracts(args: {
+  inventory?: readonly SharedFactDefinition[];
+  evidence: readonly ReconciliationEvidence[];
+  rule_version?: string;
+}): FallbackValidationFinding[] {
+  const inventory = args.inventory ?? SELECTED_SHARED_FACT_INVENTORY;
+  const findings: FallbackValidationFinding[] = [];
+  const ruleVersion = args.rule_version ?? CROSS_SLICE_RECONCILIATION_RULE_VERSION;
+
+  for (const fact of inventory) {
+    if (fact.mapping_basis !== "approved_fallback") continue;
+    if (!fact.fallback_name) {
+      for (const [slice, field] of Object.entries(fact.fields_by_slice) as [ReconciliationSliceName, string][]) {
+        const caseIds = [...new Set(args.evidence.filter((e) => e.slice === slice && e.field === field).map((e) => e.case_id))].sort();
+        for (const caseId of caseIds) {
+          findings.push({
+            code: "CROSS_SLICE_FALLBACK_UNTRACEABLE",
+            severity: "warning",
+            category: "cross_slice_reconciliation",
+            case_id: caseId,
+            fact_key: fact.fact_key,
+            fact_family: fact.fact_family,
+            reviewed_fact_context: fact.reviewed_fact_context,
+            canonical_semantic_name: fact.canonical_semantic_name,
+            mapping_basis: "approved_fallback",
+            fallback_name: "",
+            affected_slice: slice,
+            affected_field: field,
+            rule_version: ruleVersion,
+            producing_module: CROSS_SLICE_RECONCILIATION_MODULE_NAME,
+            message: `Fallback contract untraceable for ${fact.canonical_semantic_name}: slice ${slice} field ${field} has no explicit fallback_name`,
+          });
+        }
+      }
+    }
+  }
+  return findings.sort(compareValidationFindings);
+}
+
+export function resetDdMappingRegistries(): void {
+  DD_MAPPING_LOOKUPS.bsrs_configuration_output = null;
+  DD_MAPPING_LOOKUPS.v1_ve_output = null;
+  DD_MAPPING_LOOKUPS.valuation_listings_output = null;
+  DD_MAPPING_RESOLVERS.bsrs_configuration_output = null;
+  DD_MAPPING_RESOLVERS.v1_ve_output = null;
+  DD_MAPPING_RESOLVERS.valuation_listings_output = null;
+}
+
+function compareValidationFindings(left: ValidationFinding, right: ValidationFinding): number {
+  return (
+    left.case_id.localeCompare(right.case_id) ||
+    left.fact_key.localeCompare(right.fact_key) ||
+    left.affected_slice.localeCompare(right.affected_slice) ||
+    left.affected_field.localeCompare(right.affected_field) ||
+    left.code.localeCompare(right.code)
+  );
+}
+
 export type ValueReconciliationRule = {
   rule_key: string;
   fact_family: ValueFactFamily;
@@ -183,6 +306,44 @@ export type CrossSliceReconciliationResult = {
   comparisons: ReconciliationComparison[];
   findings: CrossSliceDriftFinding[];
 };
+
+export type DdMappingValidationFinding = {
+  code: "CROSS_SLICE_DD_MAPPING_MISSING";
+  severity: "error";
+  category: "cross_slice_reconciliation";
+  case_id: string;
+  fact_key: string;
+  fact_family: SharedFactFamily;
+  reviewed_fact_context: string;
+  canonical_semantic_name: string;
+  mapping_basis: "dd";
+  dd_field_name: string;
+  affected_slice: ReconciliationSliceName;
+  affected_field: string;
+  rule_version: string;
+  producing_module: typeof CROSS_SLICE_RECONCILIATION_MODULE_NAME;
+  message: string;
+};
+
+export type FallbackValidationFinding = {
+  code: "CROSS_SLICE_FALLBACK_UNTRACEABLE";
+  severity: "warning";
+  category: "cross_slice_reconciliation";
+  case_id: string;
+  fact_key: string;
+  fact_family: SharedFactFamily;
+  reviewed_fact_context: string;
+  canonical_semantic_name: string;
+  mapping_basis: "approved_fallback";
+  fallback_name: string;
+  affected_slice: ReconciliationSliceName;
+  affected_field: string;
+  rule_version: string;
+  producing_module: typeof CROSS_SLICE_RECONCILIATION_MODULE_NAME;
+  message: string;
+};
+
+export type ValidationFinding = DdMappingValidationFinding | FallbackValidationFinding;
 
 export const SELECTED_SHARED_FACT_INVENTORY: readonly SharedFactDefinition[] = [
   {

@@ -69,18 +69,18 @@
 
 ### Tests for User Story 2
 
-- [ ] T020 [US2] Add DD-first V1/VE semantic comparison tests using `artifacts/mappings/DD.csv` in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
-- [ ] T021 [US2] Add missing required DD mapping failure tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
-- [ ] T022 [US2] Add approved no-DD contract-name fallback tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
-- [ ] T023 [US2] Add tests proving fallback basis is present in every fallback comparison and finding in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [X] T020 [US2] Add DD-first V1/VE semantic comparison tests using `artifacts/mappings/DD.csv` in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [X] T021 [US2] Add missing required DD mapping failure tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [X] T022 [US2] Add approved no-DD contract-name fallback tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [X] T023 [US2] Add tests proving fallback basis is present in every fallback comparison and finding in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T024 [US2] Implement DD-first semantic resolution for reconciled V1/VE fields in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T025 [US2] Implement required DD mapping validation for DD-backed reconciled fields in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T026 [US2] Implement approved fallback mapping records for no-DD fields in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T027 [US2] Preserve existing DD helper behavior without renaming fields in `packages/engine/v1-ve-output/src/ddMapping.ts`, `packages/engine/valuation-listings-output/src/ddMapping.ts`, and `packages/engine/bsrs-configuration-output/src/ddMapping.ts`
-- [ ] T028 [US2] Run `npm test -- packages/tests/hardening-cross-slice-reconciliation.test.ts` and fix only US2 failures in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T024 [US2] Implement DD-first semantic resolution for reconciled V1/VE fields in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T025 [US2] Implement required DD mapping validation for DD-backed reconciled fields in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T026 [US2] Implement approved fallback mapping records for no-DD fields in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T027 [US2] Preserve existing DD helper behavior without renaming fields in `packages/engine/v1-ve-output/src/ddMapping.ts`, `packages/engine/valuation-listings-output/src/ddMapping.ts`, and `packages/engine/bsrs-configuration-output/src/ddMapping.ts`
+- [X] T028 [US2] Run `npm test -- packages/tests/hardening-cross-slice-reconciliation.test.ts` and fix only US2 failures in `packages/shared/src/crossSliceReconciliation.ts`
 
 **Checkpoint**: US1 and US2 should both work independently.
 
@@ -94,19 +94,19 @@
 
 ### Tests for User Story 3
 
-- [ ] T029 [US3] Add repeated-run comparison and finding stability tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
-- [ ] T030 [P] [US3] Add output-shape stability coverage for reconciliation payload keys in `packages/tests/hardening-output-shape.test.ts`
-- [ ] T031 [P] [US3] Add structured warning/error payload stability coverage for reconciliation findings in `packages/tests/hardening-warning-error-stability.test.ts`
-- [ ] T032 [US3] Add adapter-exclusion regression coverage proving reconciliation writes no unrelated output-adapter rows in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [X] T029 [US3] Add repeated-run comparison and finding stability tests in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
+- [X] T030 [P] [US3] Add output-shape stability coverage for reconciliation payload keys in `packages/tests/hardening-output-shape.test.ts`
+- [X] T031 [P] [US3] Add structured warning/error payload stability coverage for reconciliation findings in `packages/tests/hardening-warning-error-stability.test.ts`
+- [X] T032 [US3] Add adapter-exclusion regression coverage proving reconciliation writes no unrelated output-adapter rows in `packages/tests/hardening-cross-slice-reconciliation.test.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T033 [US3] Ensure reconciliation output ordering is byte-stable across repeated runs in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T034 [US3] Ensure reconciliation helper has no sql.js writes, server calls, raw source reads, or output-adapter side effects in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T035 [P] [US3] Run focused existing BSRS regression tests listed in quickstart in `packages/tests/bsrs-configuration-output-contract.test.ts`, `packages/tests/bsrs-configuration-output-output.test.ts`, `packages/tests/bsrs-configuration-output-persistence.test.ts`, and `packages/tests/bsrs-configuration-output-trace.test.ts`
-- [ ] T036 [P] [US3] Run focused existing V1/VE regression tests listed in quickstart in `packages/tests/v1-ve-output-contract.test.ts`, `packages/tests/v1-ve-output-output.test.ts`, `packages/tests/v1-ve-output-persistence.test.ts`, and `packages/tests/v1-ve-output-trace.test.ts`
-- [ ] T037 [P] [US3] Run focused existing valuation-listings regression tests listed in quickstart in `packages/tests/valuation-listings-output-contract.test.ts`, `packages/tests/valuation-listings-output-output.test.ts`, `packages/tests/valuation-listings-output-persistence.test.ts`, and `packages/tests/valuation-listings-output-trace.test.ts`
-- [ ] T038 [US3] Run `npm test -- packages/tests/hardening-cross-slice-reconciliation.test.ts packages/tests/hardening-output-shape.test.ts packages/tests/hardening-warning-error-stability.test.ts` and fix only US3 failures in `packages/shared/src/crossSliceReconciliation.ts`, `packages/tests/hardening-output-shape.test.ts`, and `packages/tests/hardening-warning-error-stability.test.ts`
+- [X] T033 [US3] Ensure reconciliation output ordering is byte-stable across repeated runs in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T034 [US3] Ensure reconciliation helper has no sql.js writes, server calls, raw source reads, or output-adapter side effects in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T035 [P] [US3] Run focused existing BSRS regression tests listed in quickstart in `packages/tests/bsrs-configuration-output-contract.test.ts`, `packages/tests/bsrs-configuration-output-output.test.ts`, `packages/tests/bsrs-configuration-output-persistence.test.ts`, and `packages/tests/bsrs-configuration-output-trace.test.ts`
+- [X] T036 [P] [US3] Run focused existing V1/VE regression tests listed in quickstart in `packages/tests/v1-ve-output-contract.test.ts`, `packages/tests/v1-ve-output-output.test.ts`, `packages/tests/v1-ve-output-persistence.test.ts`, and `packages/tests/v1-ve-output-trace.test.ts`
+- [X] T037 [P] [US3] Run focused existing valuation-listings regression tests listed in quickstart in `packages/tests/valuation-listings-output-contract.test.ts`, `packages/tests/valuation-listings-output-output.test.ts`, `packages/tests/valuation-listings-output-persistence.test.ts`, and `packages/tests/valuation-listings-output-trace.test.ts`
+- [X] T038 [US3] Run `npm test -- packages/tests/hardening-cross-slice-reconciliation.test.ts packages/tests/hardening-output-shape.test.ts packages/tests/hardening-warning-error-stability.test.ts` and fix only US3 failures in `packages/shared/src/crossSliceReconciliation.ts`, `packages/tests/hardening-output-shape.test.ts`, and `packages/tests/hardening-warning-error-stability.test.ts`
 
 **Checkpoint**: All user stories should be independently functional and existing slice behavior should be preserved.
 
@@ -116,13 +116,13 @@
 
 **Purpose**: Documentation, verification, and repository hygiene after story completion.
 
-- [ ] T039 [P] Update architecture notes for cross-slice reconciliation hardening in `docs/architecture/cross_slice_reconciliation_hardening_v0.1.0.md`
-- [ ] T040 [P] Update mapping notes for reconciled DD-backed and approved fallback fields in `docs/mappings/v1_ve_output_trace_map_v0.1.0.csv`
-- [ ] T041 Verify no new migrations, seeds, persistence tables, output adapters, raw-source readers, or network calls were added under `packages/db/`, `packages/engine/`, and `apps/web/src/`
-- [ ] T042 Run full regression suite configured in `package.json` with `npm test`
-- [ ] T043 Run type checking configured in `package.json` with `npm run lint`
-- [ ] T044 Run static browser build configured in `package.json` with `npm run build` and preserve committed `apps/web/dist/` output if it changes
-- [ ] T045 Confirm no delivered `.sql`, `.js`, `.ts`, or `.tex` artifacts were added without required email-safe `.txt` delivery copies in `artifacts/`, `docs/`, and `specs/017-cross-slice-reconciliation-hardening/`
+- [X] T039 [P] Update architecture notes for cross-slice reconciliation hardening in `docs/architecture/cross_slice_reconciliation_hardening_v0.1.0.md`
+- [X] T040 [P] Update mapping notes for reconciled DD-backed and approved fallback fields in `docs/mappings/v1_ve_output_trace_map_v0.1.0.csv`
+- [X] T041 Verify no new migrations, seeds, persistence tables, output adapters, raw-source readers, or network calls were added under `packages/db/`, `packages/engine/`, and `apps/web/src/`
+- [X] T042 Run full regression suite configured in `package.json` with `npm test`
+- [X] T043 Run type checking configured in `package.json` with `npm run lint`
+- [X] T044 Run static browser build configured in `package.json` with `npm run build` and preserve committed `apps/web/dist/` output if it changes
+- [X] T045 Confirm no delivered `.sql`, `.js`, `.ts`, or `.tex` artifacts were added without required email-safe `.txt` delivery copies in `artifacts/`, `docs/`, and `specs/017-cross-slice-reconciliation-hardening/`
 
 ---
 

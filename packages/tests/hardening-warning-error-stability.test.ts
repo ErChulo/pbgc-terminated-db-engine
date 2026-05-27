@@ -3,11 +3,20 @@ import { buildFormPacketFromFixture, resolveForms } from "@pbgc/form-resolution"
 import { buildBenefitPacketFromFixture, resolveBenefitKernel } from "@pbgc/benefit-kernel";
 import { buildV1VePacketFromFixture, runV1VeOutput } from "@pbgc/v1-ve-output";
 import { buildValuationListingsPacketFromFixture, runValuationListingsOutput } from "@pbgc/valuation-listings-output";
-import { buildBsrsConfigurationPacketFromFixture, runBsrsConfiguration } from "@pbgc/bsrs-configuration-output";
+import { buildBsrsConfigurationPacketFromFixture, resolveBsrsConfigurationOutput, runBsrsConfiguration } from "@pbgc/bsrs-configuration-output";
 import { buildPacketFromFixture, validateDateResolutionPacket } from "@pbgc/date-resolution";
 import { buildServicePacketFromFixture, validateServiceResolutionPacket } from "@pbgc/service-resolution";
 import { buildCompensationPacketFromFixture, validateCompensationResolutionPacket } from "@pbgc/compensation-resolution";
 import { buildFormPacketFromFixture as buildFormValidationPacket, validateFormResolutionPacket } from "@pbgc/form-resolution";
+import {
+  buildEvidenceForInventory,
+  reconcileSharedFacts,
+  resetDeterminismForTests,
+  registerDdMappingLookup,
+} from "@pbgc/shared";
+import { hasDdMapping as v1HasDdMapping } from "@pbgc/v1-ve-output";
+import { hasDdMapping as valuationHasDdMapping } from "@pbgc/valuation-listings-output";
+import { hasDdMapping as bsrsHasDdMapping } from "@pbgc/bsrs-configuration-output";
 import { closeHardeningDatabase, compareRepeatedRuns, createHardeningDatabase, seedReviewedInputPacket } from "./hardening-helpers";
 import { parseFormResolutionFixtures } from "./form-resolution-fixtures";
 import { parseBenefitKernelFixtures } from "./benefit-kernel-fixtures";
@@ -102,5 +111,38 @@ describe("hardening warning and error payload stability", () => {
       validateFormResolutionPacket({ ...buildFormValidationPacket(parseFormResolutionFixtures()[0]), actuarial_assumption_factor_set: {} } as any, "packet-FR001", "0.1.0"),
     );
     expect(formErrorsSecond).toEqual(formErrorsFirst);
+  });
+
+  it("keeps cross-slice reconciliation warning and error payloads stable across repeated runs (T031)", async () => {
+    registerDdMappingLookup("v1_ve_output", v1HasDdMapping);
+    registerDdMappingLookup("valuation_listings_output", valuationHasDdMapping);
+    registerDdMappingLookup("bsrs_configuration_output", bsrsHasDdMapping);
+
+    const runReconciliation = () => {
+      resetDeterminismForTests();
+      const bsrsPacket = buildBsrsConfigurationPacketFromFixture(parseBsrsConfigurationFixtures()[0]);
+      const v1Row = bsrsPacket.v1_ve_output_row;
+      const valuationRow = bsrsPacket.valuation_listings_output_row;
+      const bsrsRow = resolveBsrsConfigurationOutput(bsrsPacket, "packet-BSRS001", "0.1.0").row;
+
+      const evidence = [
+        ...buildEvidenceForInventory({ case_id: bsrsPacket.case_id, slice: "v1_ve_output", row: v1Row, source_path: "test" }),
+        ...buildEvidenceForInventory({ case_id: bsrsPacket.case_id, slice: "valuation_listings_output", row: valuationRow, source_path: "test" }),
+        ...buildEvidenceForInventory({ case_id: bsrsPacket.case_id, slice: "bsrs_configuration_output", row: bsrsRow, source_path: "test" }),
+      ];
+
+      const mismatchEvidence = evidence.map((item) =>
+        item.slice === "valuation_listings_output" && item.field === "id" ? { ...item, value: "MISMATCHED-ID" } : item,
+      );
+
+      return reconcileSharedFacts({ evidence: mismatchEvidence });
+    };
+
+    const [first, second] = await compareRepeatedRuns(runReconciliation);
+
+    expect(second).toEqual(first);
+    expect(first.findings.length).toBeGreaterThan(0);
+    expect(first.findings[0].code).toBe("CROSS_SLICE_FACT_DRIFT");
+    expect(first.findings[0].severity).toBe("error");
   });
 });

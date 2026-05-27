@@ -14,7 +14,17 @@ import {
   buildBsrsConfigurationPacketFromFixture,
   runBsrsConfiguration,
   BSRS_CONFIGURATION_OUTPUT_FIELDS,
+  resolveBsrsConfigurationOutput,
 } from "@pbgc/bsrs-configuration-output";
+import {
+  buildEvidenceForInventory,
+  reconcileSharedFacts,
+  resetDeterminismForTests,
+  registerDdMappingLookup,
+} from "@pbgc/shared";
+import { hasDdMapping as v1HasDdMapping } from "@pbgc/v1-ve-output";
+import { hasDdMapping as valuationHasDdMapping } from "@pbgc/valuation-listings-output";
+import { hasDdMapping as bsrsHasDdMapping } from "@pbgc/bsrs-configuration-output";
 import { closeHardeningDatabase, createHardeningDatabase, expectExactKeys, seedReviewedInputPacket } from "./hardening-helpers";
 import { parseDateResolutionFixtures } from "./date-resolution-fixtures";
 import { parseServiceResolutionFixtures } from "./service-resolution-fixtures";
@@ -81,6 +91,48 @@ const VALUATION_LISTINGS_ROW_KEYS = [
 
 const BSRS_CONFIGURATION_ROW_KEYS = [
   ...BSRS_CONFIGURATION_OUTPUT_FIELDS,
+] as const;
+
+const RECONCILIATION_COMPARISON_KEYS = [
+  "case_id",
+  "canonical_semantic_name",
+  "comparison_id",
+  "dd_field_name",
+  "fact_family",
+  "fact_key",
+  "fallback_name",
+  "left_field",
+  "left_slice",
+  "left_source_path",
+  "left_value",
+  "mapping_basis",
+  "producing_module",
+  "reviewed_fact_context",
+  "right_field",
+  "right_slice",
+  "right_source_path",
+  "right_value",
+  "rule_version",
+  "status",
+] as const;
+
+const RECONCILIATION_FINDING_KEYS = [
+  "canonical_semantic_name",
+  "case_id",
+  "category",
+  "code",
+  "compared_fields",
+  "compared_slices",
+  "compared_values",
+  "dd_field_name",
+  "fallback_name",
+  "mapping_basis",
+  "message",
+  "producing_module",
+  "reviewed_fact_context",
+  "rule_version",
+  "severity",
+  "source_paths",
 ] as const;
 
 describe("hardening output-shape stability", () => {
@@ -181,6 +233,35 @@ describe("hardening output-shape stability", () => {
       } finally {
         closeHardeningDatabase(db);
       }
+    }
+  });
+
+  it("keeps cross-slice reconciliation comparison and finding payload shapes stable (T030)", () => {
+    registerDdMappingLookup("v1_ve_output", v1HasDdMapping);
+    registerDdMappingLookup("valuation_listings_output", valuationHasDdMapping);
+    registerDdMappingLookup("bsrs_configuration_output", bsrsHasDdMapping);
+
+    resetDeterminismForTests();
+    const bsrsPacket = buildBsrsConfigurationPacketFromFixture(parseBsrsConfigurationFixtures()[0]);
+    const v1Row = bsrsPacket.v1_ve_output_row;
+    const valuationRow = bsrsPacket.valuation_listings_output_row;
+    const bsrsRow = resolveBsrsConfigurationOutput(bsrsPacket, "packet-BSRS001", "0.1.0").row;
+
+    const evidence = [
+      ...buildEvidenceForInventory({ case_id: bsrsPacket.case_id, slice: "v1_ve_output", row: v1Row, source_path: "test" }),
+      ...buildEvidenceForInventory({ case_id: bsrsPacket.case_id, slice: "valuation_listings_output", row: valuationRow, source_path: "test" }),
+      ...buildEvidenceForInventory({ case_id: bsrsPacket.case_id, slice: "bsrs_configuration_output", row: bsrsRow, source_path: "test" }),
+    ];
+
+    const result = reconcileSharedFacts({ evidence });
+
+    expect(result.comparisons.length).toBeGreaterThan(0);
+    for (const comparison of result.comparisons) {
+      expectExactKeys(comparison as unknown as Record<string, unknown>, RECONCILIATION_COMPARISON_KEYS);
+    }
+
+    for (const finding of result.findings) {
+      expectExactKeys(finding as unknown as Record<string, unknown>, RECONCILIATION_FINDING_KEYS);
     }
   });
 });

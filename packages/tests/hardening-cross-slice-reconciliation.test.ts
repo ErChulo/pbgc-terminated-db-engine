@@ -4,11 +4,31 @@ import {
   reconcileSharedFacts,
   resetDeterminismForTests,
   SELECTED_SHARED_FACT_INVENTORY,
+  registerDdMappingLookup,
+  registerDdMappingResolver,
+  validateDdMappingCoverage,
+  validateFallbackContracts,
   type ReconciliationEvidence,
+  type ReconciliationSliceName,
 } from "@pbgc/shared";
 import { buildBsrsConfigurationPacketFromFixture, resolveBsrsConfigurationOutput } from "@pbgc/bsrs-configuration-output";
+import { hasDdMapping as bsrsHasDdMapping, canonicalDdFieldName as bsrsCanonicalDdFieldName } from "@pbgc/bsrs-configuration-output";
+import { hasDdMapping as v1HasDdMapping, canonicalDdFieldName as v1CanonicalDdFieldName } from "@pbgc/v1-ve-output";
+import {
+  hasDdMapping as valuationHasDdMapping,
+  canonicalDdFieldName as valuationCanonicalDdFieldName,
+} from "@pbgc/valuation-listings-output";
 import { parseBsrsConfigurationFixtures } from "./bsrs-configuration-output-fixtures";
 import { compareRepeatedRuns } from "./hardening-helpers";
+
+function registerDdMappingContext(): void {
+  registerDdMappingLookup("v1_ve_output", v1HasDdMapping);
+  registerDdMappingLookup("valuation_listings_output", valuationHasDdMapping);
+  registerDdMappingLookup("bsrs_configuration_output", bsrsHasDdMapping);
+  registerDdMappingResolver("v1_ve_output", v1CanonicalDdFieldName);
+  registerDdMappingResolver("valuation_listings_output", valuationCanonicalDdFieldName);
+  registerDdMappingResolver("bsrs_configuration_output", bsrsCanonicalDdFieldName);
+}
 
 function buildCurrentOutputEvidence(): ReconciliationEvidence[] {
   resetDeterminismForTests();
@@ -156,5 +176,135 @@ describe("hardening cross-slice reconciliation", () => {
     const [first, second] = await compareRepeatedRuns(() => reconcileSharedFacts({ evidence: buildCurrentOutputEvidence() }));
 
     expect(second).toEqual(first);
+  });
+
+  // ── US2: DD-first fallback and mapping boundaries ──
+
+  it("uses DD-first canonical semantics for V1/VE fields with matching DD entries (T020)", () => {
+    registerDdMappingContext();
+    const evidence = buildCurrentOutputEvidence();
+    const result = reconcileSharedFacts({ evidence });
+
+    for (const comparison of result.comparisons) {
+      if (comparison.mapping_basis === "dd" && comparison.dd_field_name) {
+        expect(comparison.canonical_semantic_name).toBe(comparison.dd_field_name);
+      }
+    }
+
+    const ddComparisons = result.comparisons.filter((c) => c.mapping_basis === "dd");
+    expect(ddComparisons.length).toBeGreaterThan(0);
+    for (const comparison of ddComparisons) {
+      expect(comparison.dd_field_name).toBeTruthy();
+      expect(comparison.fallback_name).toBeNull();
+    }
+  });
+
+  it("validates that DD-backed fields have actual DD.csv mapping entries (T021)", () => {
+    registerDdMappingContext();
+    const evidence = buildCurrentOutputEvidence();
+    const ddFindings = validateDdMappingCoverage({ evidence });
+
+    expect(ddFindings).toEqual([]);
+  });
+
+  it("detects missing DD mapping for a synthetic DD-backed field not in DD.csv (T021)", () => {
+    registerDdMappingContext();
+    const evidence = buildCurrentOutputEvidence();
+    const syntheticInventory = [
+      {
+        fact_key: "synthetic.missing_dd_field",
+        fact_family: "dd_backed_field" as const,
+        reviewed_fact_context: "synthetic DD-backed field intentionally missing from DD.csv",
+        canonical_semantic_name: "MISSING_DD_FIELD",
+        mapping_basis: "dd" as const,
+        dd_field_name: "MISSING_DD_FIELD",
+        fallback_name: null,
+        expected_presence: "required" as const,
+        fields_by_slice: {
+          bsrs_configuration_output: "nonexistent_field_name" as string,
+        } satisfies Partial<Record<ReconciliationSliceName, string>>,
+      },
+    ];
+    const syntheticEvidence = [
+      {
+        case_id: "CASE-001",
+        slice: "bsrs_configuration_output" as const,
+        field: "nonexistent_field_name",
+        value: "test" as const,
+        source_path: "synthetic",
+      },
+    ];
+    const ddFindings = validateDdMappingCoverage({ inventory: syntheticInventory, evidence: syntheticEvidence });
+
+    expect(ddFindings.length).toBeGreaterThan(0);
+    expect(ddFindings[0].code).toBe("CROSS_SLICE_DD_MAPPING_MISSING");
+    expect(ddFindings[0].severity).toBe("error");
+    expect(ddFindings[0].dd_field_name).toBe("MISSING_DD_FIELD");
+    expect(ddFindings[0].affected_slice).toBe("bsrs_configuration_output");
+  });
+
+  it("preserves approved no-DD contract-name fallback for fields without DD.csv entries (T022)", () => {
+    registerDdMappingContext();
+    const evidence = buildCurrentOutputEvidence();
+
+    const fallbackComparisons = reconcileSharedFacts({ evidence }).comparisons.filter(
+      (c) => c.mapping_basis === "approved_fallback",
+    );
+    expect(fallbackComparisons.length).toBeGreaterThan(0);
+
+    for (const comparison of fallbackComparisons) {
+      expect(comparison.fallback_name).toBeTruthy();
+      expect(comparison.dd_field_name).toBeNull();
+    }
+  });
+
+  it("records fallback basis in every fallback comparison and finding (T023)", () => {
+    const evidence = buildCurrentOutputEvidence();
+
+    const drivableEvidence = withEvidenceValue(evidence, "valuation_listings_output", "plan_id", "DIFFERENT-PLAN");
+    const result = reconcileSharedFacts({ evidence: drivableEvidence });
+
+    for (const comparison of result.comparisons) {
+      if (comparison.mapping_basis === "approved_fallback") {
+        expect(comparison.fallback_name).toBeTruthy();
+        expect(comparison.canonical_semantic_name).toBeTruthy();
+      }
+    }
+
+    const fallbackFindings = result.findings.filter((f) => f.mapping_basis === "approved_fallback");
+    for (const finding of fallbackFindings) {
+      expect(finding.fallback_name).toBeTruthy();
+      expect(finding.canonical_semantic_name).toBeTruthy();
+    }
+
+    const fallbackValidation = validateFallbackContracts({ evidence });
+    expect(fallbackValidation).toEqual([]);
+  });
+
+  // ── US3: Deterministic behavior and existing slice boundaries ──
+
+  it("keeps accepted comparison records and finding payloads byte-stable across repeated runs (T029)", async () => {
+    const evidence = withEvidenceValue(buildCurrentOutputEvidence(), "valuation_listings_output", "id", "MISMATCHED-ID");
+
+    const [first, second] = await compareRepeatedRuns(() => reconcileSharedFacts({ evidence }));
+
+    expect(second).toEqual(first);
+    expect(first.findings.length).toBeGreaterThan(0);
+    expect(first.findings[0].code).toBe("CROSS_SLICE_FACT_DRIFT");
+  });
+
+  it("does not import or write to unrelated output-adapter modules (T032)", () => {
+    registerDdMappingContext();
+    const evidence = buildCurrentOutputEvidence();
+    const result = reconcileSharedFacts({ evidence });
+
+    expect(result.comparisons.length).toBeGreaterThan(0);
+
+    for (const comparison of result.comparisons) {
+      expect(comparison.producing_module).toBe("cross_slice_reconciliation");
+    }
+    for (const finding of result.findings) {
+      expect(finding.producing_module).toBe("cross_slice_reconciliation");
+    }
   });
 });
