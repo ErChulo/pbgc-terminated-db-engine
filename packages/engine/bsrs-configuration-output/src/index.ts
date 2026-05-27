@@ -1,4 +1,5 @@
 export * from "./bsrsBlockPatternValidation";
+export * from "./errors";
 export * from "./bsrsFieldReferenceValidation";
 export * from "./bsrsSampleLoader";
 export * from "./bsrsSampleParser";
