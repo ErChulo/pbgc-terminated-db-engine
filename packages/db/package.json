@@ -8,7 +8,7 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@pbgc/shared": "0.1.0",
+    "@pbgc/shared": "workspace:*",
     "sql.js": "^1.12.0"
   }
 }

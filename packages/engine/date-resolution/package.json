@@ -8,6 +8,6 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@pbgc/shared": "0.1.0"
+    "@pbgc/shared": "workspace:*"
   }
 }

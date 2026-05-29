@@ -8,12 +8,12 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@pbgc/benefit-kernel": "0.1.0",
-    "@pbgc/compensation-resolution": "0.1.0",
-    "@pbgc/date-resolution": "0.1.0",
-    "@pbgc/form-resolution": "0.1.0",
-    "@pbgc/service-resolution": "0.1.0",
-    "@pbgc/shared": "0.1.0",
-    "@pbgc/v1-ve-output": "0.1.0"
+    "@pbgc/benefit-kernel": "workspace:*",
+    "@pbgc/compensation-resolution": "workspace:*",
+    "@pbgc/date-resolution": "workspace:*",
+    "@pbgc/form-resolution": "workspace:*",
+    "@pbgc/service-resolution": "workspace:*",
+    "@pbgc/shared": "workspace:*",
+    "@pbgc/v1-ve-output": "workspace:*"
   }
 }
