@@ -14,6 +14,7 @@ export default defineConfig({
       "@pbgc/bsrs-configuration-output": resolve(__dirname, "../../packages/engine/bsrs-configuration-output/src/index.ts"),
     },
   },
+  base: "./",
   build: {
     outDir: "dist",
     emptyOutDir: true,
