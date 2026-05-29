@@ -80,19 +80,19 @@
 
 ### Tests for User Story 2
 
-- [ ] T025 [US2] Add a failing test that required selected value differences are classified as blocking mismatches in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
-- [ ] T026 [US2] Add a failing test that approved nullable or optional absences are classified as accepted nullable or non-blocking outcomes in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
-- [ ] T027 [US2] Add a failing test that unsupported selected branches are classified as unsupported rather than factual drift in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
-- [ ] T028 [US2] Add a failing test that numeric and categorical formatting-only variants are accepted without blocking findings in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
-- [ ] T029 [US2] Add a failing test that every classification includes comparison type, required-or-nullable basis, mapping basis, normalization basis, rule version, producing module, code, and severity in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
+- [X] T025 [US2] Add a failing test that required selected value differences are classified as blocking mismatches in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
+- [X] T026 [US2] Add a failing test that approved nullable or optional absences are classified as accepted nullable or non-blocking outcomes in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
+- [X] T027 [US2] Add a failing test that unsupported selected branches are classified as unsupported rather than factual drift in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
+- [X] T028 [US2] Add a failing test that numeric and categorical formatting-only variants are accepted without blocking findings in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
+- [X] T029 [US2] Add a failing test that every classification includes comparison type, required-or-nullable basis, mapping basis, normalization basis, rule version, producing module, code, and severity in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T030 [US2] Implement required-versus-nullable severity policy handling in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T031 [US2] Implement approved optional, nullable, unsupported, and formatting-only classification branches in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T032 [US2] Implement basis metadata population for all accepted comparisons and warning/error findings in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T033 [US2] Implement deterministic finding codes and severity values for value-level mismatch categories in `packages/shared/src/crossSliceReconciliation.ts`
-- [ ] T034 [US2] Run `npm test -- packages/tests/hardening-cross-slice-value-reconciliation.test.ts` and resolve US2 failures without broadening the selected rule inventory beyond reviewed shared meanings
+- [X] T030 [US2] Implement required-versus-nullable severity policy handling in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T031 [US2] Implement approved optional, nullable, unsupported, and formatting-only classification branches in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T032 [US2] Implement basis metadata population for all accepted comparisons and warning/error findings in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T033 [US2] Implement deterministic finding codes and severity values for value-level mismatch categories in `packages/shared/src/crossSliceReconciliation.ts`
+- [X] T034 [US2] Run `npm test -- packages/tests/hardening-cross-slice-value-reconciliation.test.ts` and resolve US2 failures without broadening the selected rule inventory beyond reviewed shared meanings
 
 **Checkpoint**: User Stories 1 and 2 can be tested independently through the focused value-reconciliation suite.
 
@@ -107,9 +107,9 @@
 ### Tests for User Story 3
 
 - [X] T035 [US3] Add a repeated-run byte-stability test for accepted value comparisons and findings in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
-- [ ] T036 [P] [US3] Add value-reconciliation output-shape preservation coverage to `packages/tests/hardening-output-shape.test.ts`
-- [ ] T037 [P] [US3] Add structured warning/error payload stability coverage for value-reconciliation findings to `packages/tests/hardening-warning-error-stability.test.ts`
-- [ ] T038 [US3] Add an adapter-exclusion regression that value reconciliation does not write unrelated output-adapter rows or tables in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
+- [X] T036 [P] [US3] Add value-reconciliation output-shape preservation coverage to `packages/tests/hardening-output-shape.test.ts`
+- [X] T037 [P] [US3] Add structured warning/error payload stability coverage for value-reconciliation findings to `packages/tests/hardening-warning-error-stability.test.ts`
+- [X] T038 [US3] Add an adapter-exclusion regression that value reconciliation does not write unrelated output-adapter rows or tables in `packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
 
 ### Implementation for User Story 3
 
@@ -128,10 +128,10 @@
 
 **Purpose**: Documentation, repository discipline, and final verification.
 
-- [ ] T045 [P] Document the selected shared value inventory and comparison basis in `docs/mappings/cross_slice_value_reconciliation_map_v0.1.0.csv`
-- [ ] T046 [P] Document value-reconciliation hardening boundaries and reviewed-input sources in `docs/architecture/cross_slice_value_reconciliation_hardening.md`
-- [ ] T047 Verify changed `.ts` test/helper files remain internal regression artifacts and do not require email-safe `.txt` delivery copies under the constitution
-- [ ] T048 Verify no delivered `.sql`, `.js`, `.ts`, or `.tex` artifact was added without the required appended `.txt` transport copy
+- [X] T045 [P] Document the selected shared value inventory and comparison basis in `docs/mappings/cross_slice_value_reconciliation_map_v0.1.0.csv`
+- [X] T046 [P] Document value-reconciliation hardening boundaries and reviewed-input sources in `docs/architecture/cross_slice_value_reconciliation_hardening.md`
+- [X] T047 Verify changed `.ts` test/helper files remain internal regression artifacts and do not require email-safe `.txt` delivery copies under the constitution
+- [X] T048 Verify no delivered `.sql`, `.js`, `.ts`, or `.tex` artifact was added without the required appended `.txt` transport copy
 - [X] T049 Run full test suite with `npm test`
 - [X] T050 Run lint verification with `npm run lint`
 - [X] T051 Run production build verification with `npm run build` and keep committed static artifacts aligned if the build output changes

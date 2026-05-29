@@ -73,19 +73,19 @@
 
 ### Tests for User Story 2
 
-- [ ] T018 [US2] Add a failing test that each output panel has a business label and business purpose in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T019 [US2] Add a failing test that workbench data includes a visible shared-facts table model with statuses, compared slices, fields, and values in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T020 [US2] Add a failing test that workbench data includes a visible shared-values table model with statuses, compared slices, fields, values, and nullable/absence classifications in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T021 [US2] Add a failing test that rendered markup includes separate Shared Facts and Shared Values sections in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T018 [US2] Add a failing test that each output panel has a business label and business purpose in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T019 [US2] Add a failing test that workbench data includes a visible shared-facts table model with statuses, compared slices, fields, and values in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T020 [US2] Add a failing test that workbench data includes a visible shared-values table model with statuses, compared slices, fields, values, and nullable/absence classifications in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T021 [US2] Add a failing test that rendered markup includes separate Shared Facts and Shared Values sections in `packages/tests/reconciliation-workbench-ui.test.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T022 [US2] Add business labels and purposes for BSRS configuration, V1/VE output, and valuation listings panels in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T023 [US2] Build shared-fact row display data from existing shared-fact reconciliation evidence in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T024 [US2] Build shared-value row display data from existing shared-value reconciliation evidence in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T025 [US2] Render business panel labels, Shared Facts table, and Shared Values table in `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
-- [ ] T026 [US2] Add readable table and status styles for business panels, shared facts, and shared values in `apps/web/src/styles.css`
-- [ ] T027 [US2] Run `npm test -- packages/tests/reconciliation-workbench-ui.test.ts` and resolve US2 failures while preserving existing reconciliation helper outputs
+- [X] T022 [US2] Add business labels and purposes for BSRS configuration, V1/VE output, and valuation listings panels in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [X] T023 [US2] Build shared-fact row display data from existing shared-fact reconciliation evidence in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [X] T024 [US2] Build shared-value row display data from existing shared-value reconciliation evidence in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [X] T025 [US2] Render business panel labels, Shared Facts table, and Shared Values table in `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
+- [X] T026 [US2] Add readable table and status styles for business panels, shared facts, and shared values in `apps/web/src/styles.css`
+- [X] T027 [US2] Run `npm test -- packages/tests/reconciliation-workbench-ui.test.ts` and resolve US2 failures while preserving existing reconciliation helper outputs
 
 **Checkpoint**: User Stories 1 and 2 can be tested independently through the focused workbench suite.
 
@@ -99,18 +99,18 @@
 
 ### Tests for User Story 3
 
-- [ ] T028 [US3] Add a failing test that each expandable shared-fact row includes trace detail fields for source artifact, rule version, producing module, mapping basis, compared slices, fields, and values in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T029 [US3] Add a failing test that each expandable shared-value row includes trace detail fields for source artifact, rule version, producing module, mapping basis, compared slices, fields, values, and normalized values when available in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T030 [US3] Add a failing rendered-markup test for clickable trace-detail expansion controls without navigation in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T031 [US3] Add a repeated-render stability test covering header, panel order, row order, statuses, and trace-detail content in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T028 [US3] Add a failing test that each expandable shared-fact row includes trace detail fields for source artifact, rule version, producing module, mapping basis, compared slices, fields, and values in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T029 [US3] Add a failing test that each expandable shared-value row includes trace detail fields for source artifact, rule version, producing module, mapping basis, compared slices, fields, values, and normalized values when available in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T030 [US3] Add a failing rendered-markup test for clickable trace-detail expansion controls without navigation in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T031 [US3] Add a repeated-render stability test covering header, panel order, row order, statuses, and trace-detail content in `packages/tests/reconciliation-workbench-ui.test.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T032 [US3] Add trace-detail projection for shared-fact and shared-value rows in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T033 [US3] Render row-level clickable trace expansion controls and expanded trace detail content in `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
-- [ ] T034 [US3] Add styles for expanded trace content, long source paths, and non-overlapping detail rows in `apps/web/src/styles.css`
-- [ ] T035 [US3] Stabilize deterministic ordering and markup generation for expanded trace details in `apps/web/src/app/reconciliationWorkbenchSlice.ts` and `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
-- [ ] T036 [US3] Run `npm test -- packages/tests/reconciliation-workbench-ui.test.ts` and resolve US3 failures without adding persistence or output-adapter behavior
+- [X] T032 [US3] Add trace-detail projection for shared-fact and shared-value rows in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [X] T033 [US3] Render row-level clickable trace expansion controls and expanded trace detail content in `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
+- [X] T034 [US3] Add styles for expanded trace content, long source paths, and non-overlapping detail rows in `apps/web/src/styles.css`
+- [X] T035 [US3] Stabilize deterministic ordering and markup generation for expanded trace details in `apps/web/src/app/reconciliationWorkbenchSlice.ts` and `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
+- [X] T036 [US3] Run `npm test -- packages/tests/reconciliation-workbench-ui.test.ts` and resolve US3 failures without adding persistence or output-adapter behavior
 
 **Checkpoint**: All usability stories are independently functional on the existing workbench page.
 
@@ -120,16 +120,16 @@
 
 **Purpose**: Documentation, browser verification, regression checks, and committed static artifact discipline.
 
-- [ ] T037 [P] Document the workbench usability display-only and no-real-person-data boundary in `docs/architecture/reconciliation_workbench_usability.md`
-- [ ] T038 [P] Document the displayed shared-fact, shared-value, and trace fields in `docs/mappings/reconciliation_workbench_usability_map_v0.1.0.csv`
-- [ ] T039 Run existing reconciliation checks with `npm test -- packages/tests/hardening-cross-slice-reconciliation.test.ts packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
-- [ ] T040 Run existing output preservation checks with `npm test -- packages/tests/bsrs-configuration-output-output.test.ts packages/tests/v1-ve-output-output.test.ts packages/tests/valuation-listings-output-output.test.ts`
-- [ ] T041 Run full test suite for `packages/tests/` with `npm test`
+- [x] T037 [P] Document the workbench usability display-only and no-real-person-data boundary in `docs/architecture/reconciliation_workbench_usability.md`
+- [x] T038 [P] Document the displayed shared-fact, shared-value, and trace fields in `docs/mappings/reconciliation_workbench_usability_map_v0.1.0.csv`
+- [x] T039 Run existing reconciliation checks with `npm test -- packages/tests/hardening-cross-slice-reconciliation.test.ts packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
+- [x] T040 Run existing output preservation checks with `npm test -- packages/tests/bsrs-configuration-output-output.test.ts packages/tests/v1-ve-output-output.test.ts packages/tests/valuation-listings-output-output.test.ts`
+- [x] T041 Run full test suite for `packages/tests/` with `npm test`
 - [X] T042 Run lint verification for `tsconfig.json` with `npm run lint`
 - [X] T043 Run production build verification for `apps/web/` with `npm run build`
 - [X] T044 Update committed static output under `apps/web/dist/` if `npm run build` changes bundle artifacts
 - [X] T045 Verify no delivered `.sql`, `.js`, `.ts`, or `.tex` artifact was added without the required appended `.txt` transport copy in `specs/020-reconciliation-workbench-usability/tasks.md`
-- [ ] T046 Start or keep the local web app on `http://127.0.0.1:5175/` with `npm --workspace @pbgc/web run dev -- --port 5175` and verify the workbench manually against `specs/020-reconciliation-workbench-usability/quickstart.md`
+- [x] T046 Start or keep the local web app on `http://127.0.0.1:5175/` with `npm --workspace @pbgc/web run dev -- --port 5175` and verify the workbench manually against `specs/020-reconciliation-workbench-usability/quickstart.md`
 
 ---
 

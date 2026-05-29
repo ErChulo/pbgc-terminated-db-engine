@@ -71,15 +71,15 @@
 
 ### Tests for User Story 2
 
-- [ ] T019 [P] [US2] Add optional-form row-role classification test for semantic marker, support, detail, unavailable-benefit, subtotal, narrative, formatting, and spacer rows in packages/tests/hardening-bsrs-block-patterns.test.ts
-- [ ] T020 [P] [US2] Add formatting-only, narrative, unavailable-benefit, and spacer row false-positive regression test in packages/tests/hardening-bsrs-block-patterns.test.ts
-- [ ] T021 [P] [US2] Add orphan optional-form semantic-row structured finding test in packages/tests/hardening-bsrs-block-patterns.test.ts
+- [x] T019 [P] [US2] Add optional-form row-role classification test for semantic marker, support, detail, unavailable-benefit, subtotal, narrative, formatting, and spacer rows in packages/tests/hardening-bsrs-block-patterns.test.ts
+- [x] T020 [P] [US2] Add formatting-only, narrative, unavailable-benefit, and spacer row false-positive regression test in packages/tests/hardening-bsrs-block-patterns.test.ts
+- [x] T021 [P] [US2] Add orphan optional-form semantic-row structured finding test in packages/tests/hardening-bsrs-block-patterns.test.ts
 
 ### Implementation for User Story 2
 
-- [ ] T022 [US2] Implement optional-form-specific semantic-versus-formatting row classification in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T023 [US2] Implement formatting-only, spacer, narrative, subtotal, unavailable-benefit, support, and detail role handling without false missing-section findings in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T024 [US2] Implement orphan optional-form row finding behavior with deterministic form-family, section-context, and line-cluster metadata in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [x] T022 [US2] Implement optional-form-specific semantic-versus-formatting row classification in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [x] T023 [US2] Implement formatting-only, spacer, narrative, subtotal, unavailable-benefit, support, and detail role handling without false missing-section findings in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [x] T024 [US2] Implement orphan optional-form row finding behavior with deterministic form-family, section-context, and line-cluster metadata in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
 
 **Checkpoint**: User Stories 1 and 2 both work independently.
 
@@ -110,7 +110,7 @@
 
 **Purpose**: Verify behavior preservation, documentation, and repository delivery rules.
 
-- [ ] T030 [P] Add architecture note for BSRS optional-form-pattern hardening scope and validation sources in docs/architecture/bsrs_optional_form_pattern_hardening_v0.1.0.md
+- [x] T030 [P] Add architecture note for BSRS optional-form-pattern hardening scope and validation sources in docs/architecture/bsrs_optional_form_pattern_hardening_v0.1.0.md
 - [X] T031 Verify focused quickstart command passes for optional-form-pattern hardening tests from specs/016-bsrs-optional-form-pattern-hardening/quickstart.md
 - [X] T032 Verify existing BSRS output contract, output, persistence, and trace tests still pass with optional-form-pattern validation in packages/tests/bsrs-configuration-output-contract.test.ts, packages/tests/bsrs-configuration-output-output.test.ts, packages/tests/bsrs-configuration-output-persistence.test.ts, and packages/tests/bsrs-configuration-output-trace.test.ts
 - [X] T033 Run full project regression with npm test

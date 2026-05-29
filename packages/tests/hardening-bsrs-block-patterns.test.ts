@@ -435,4 +435,111 @@ describe("BSRS optional-form block-pattern hardening", () => {
     expect(secondAccepted).toBe(firstAccepted);
     expect(first).toBe("[]");
   });
+
+  it("classifies optional-form rows into detail, unavailable_benefit, narrative, and formatting roles (T019)", () => {
+    const result = validateOptionalFormBlockPatterns(approvedOptionalFormSamples());
+
+    // All approved rows should be classified (not dropped) with content-driven roles
+    const roles = result.accepted.map((c) => c.semantic_role);
+    expect(roles).toEqual(
+      expect.arrayContaining(["detail", "narrative", "formatting"]),
+    );
+
+    // Approved samples contain unavailable-benefit rows ("Annuity form not available", "Joint life amounts not requested")
+    expect(result.accepted.some((c) => c.semantic_role === "unavailable_benefit")).toBe(true);
+
+    // Every classified row must belong to optional_form block family
+    expect(result.accepted.every((c) => c.block_family === "optional_form")).toBe(true);
+
+    // Section-first rows should have a known section context (not unknown)
+    const knownContexts = new Set([
+      "automatic_unmarried", "automatic_married", "straight_life",
+      "joint_50_survivor", "joint_75_survivor", "joint_100_survivor",
+      "joint_50_popup", "five_year_cc", "ten_year_cc", "fifteen_year_cc",
+    ]);
+    expect(result.accepted.some((c) => knownContexts.has(c.section_context as string))).toBe(true);
+  });
+
+  it("does not treat formatting-only, spacer, or narrative rows as missing optional-form sections (T020)", () => {
+    const sample = parseBsrsSample({
+      source_path: "artifacts/reference/approved-samples/bsrs-config/optional-forms/single-life/synthetic-formatting.txt",
+      text: [
+        "PrintCriteria\tLine\tDescription\tDetail\tDescFormat\tDtlFormat",
+        "1\t\t\"\"\"A:\"\" & @CHAR(9) & \"\"Plan's Automatic Form for Unmarried Participant:\"\"\"\t\tTL\tTH",
+        "1\t\t\"@CHAR(9) & @IF(FORM_CODE_NSF = \"\"2\"\",\"\"Straight Life Annuity\"\", ...)\"\tXRD_MB_TERM\tTL\t$2",
+        "1\t\t\t\tTL\tTH",
+        "1\t\t\"----------------\"\t\tTL\tTL",
+        "1\t\t\t\t\t",
+        "1 'HLINE\t\t\"\"\"B:\"\" & @CHAR(9) & \"\"Plan's Automatic Form for Married Participant:\"\"\"\t\"\"\"Joint life amounts not requested\"\" 'BOLD\"\tTL\tTL",
+        "1 'HLINE\t\t\"\"\"C:\"\" & @CHAR(9) & \"\"Straight Life Annuity\"\"\"\tPBGC_OPT_SLA\tTL\t$2",
+      ].join("\n"),
+    });
+
+    const result = validateOptionalFormBlockPatterns([sample]);
+
+    // Formatting rows (with format codes but no content) should be classified
+    const formattingRows = result.accepted.filter((c) => c.semantic_role === "formatting");
+    expect(formattingRows.length).toBeGreaterThan(0);
+
+    // Spacer rows (no content, no format codes) should be classified
+    const spacerRows = result.accepted.filter((c) => c.semantic_role === "spacer");
+    expect(spacerRows.length).toBeGreaterThan(0);
+
+    // Missing section findings should reference approved section definitions, not formatting/spacer rows
+    const missingFindings = result.findings.filter((f) => f.code === "BSRS_OPTIONAL_FORM_SECTION_MISSING");
+    for (const finding of missingFindings) {
+      expect(finding.token).not.toContain("----");
+      expect(finding.token).not.toBe("(empty)");
+    }
+
+    // No false orphan findings on formatting/spacer rows
+    const orphanFindings = result.findings.filter((f) => f.code === "BSRS_OPTIONAL_FORM_ROW_ORPHAN");
+    const formattingRowIndexes = new Set(
+      result.accepted
+        .filter((c) => c.semantic_role === "formatting" || c.semantic_role === "spacer")
+        .map((c) => c.row_index),
+    );
+    const orphanOnFormatting = orphanFindings.filter((f) => formattingRowIndexes.has(f.row_index));
+    expect(orphanOnFormatting.length).toBe(0);
+  });
+
+  it("emits structured orphan findings for optional-form rows with no approved section context (T021)", () => {
+    const orphanSample = parseBsrsSample({
+      source_path: "artifacts/reference/approved-samples/bsrs-config/optional-forms/single-life/synthetic-orphan.txt",
+      text: [
+        "PrintCriteria\tLine\tDescription\tDetail\tDescFormat\tDtlFormat",
+        "1\t\tJust some orphaned optional-form content\tORPHAN_VALUE\tTL\t$2",
+        "1\t\tAnother orphan with no section label\tMORE_DATA\tTL\t$2",
+        "1\t\t\"\"\"A:\"\" & @CHAR(9) & \"\"Plan's Automatic Form for Unmarried Participant:\"\"\"\t\tTL\tTH",
+        "1\t\t\"@CHAR(9) & \"\"Straight Life Annuity\"\"\"\tXRD_MB_TERM\tTL\t$2",
+      ].join("\n"),
+    });
+
+    const result = validateOptionalFormBlockPatterns([orphanSample]);
+
+    // Row 1 (index 2) and row 2 (index 3) appear before the first section marker → ORPHAN findings
+    const orphanFindings = result.findings.filter((f) => f.code === "BSRS_OPTIONAL_FORM_ROW_ORPHAN");
+    expect(orphanFindings.length).toBeGreaterThanOrEqual(2);
+
+    expect(orphanFindings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          block_family: "optional_form",
+          category: "block_pattern",
+          code: "BSRS_OPTIONAL_FORM_ROW_ORPHAN",
+          column_name: "Description",
+          form_family: "single_life",
+          line_cluster: "unknown_optional_form",
+          section_context: "unknown_optional_form",
+          severity: "warning",
+          source_path: orphanSample.source_path,
+        }),
+      ]),
+    );
+
+    // Orphan rows are still classified (not dropped) — use the actual parser row indexes
+    const orphanAccepted = result.accepted.filter((c) => c.row_index === 2 || c.row_index === 3);
+    expect(orphanAccepted.length).toBeGreaterThanOrEqual(2);
+    expect(orphanAccepted.every((c) => c.block_family === "optional_form")).toBe(true);
+  });
 });

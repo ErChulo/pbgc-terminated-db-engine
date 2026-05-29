@@ -7,7 +7,7 @@ import { sortSemanticValidationFindings } from "./semanticValidationTrace";
 
 export type BsrsBlockFamily = "statement" | "recalculation" | "optional_form";
 
-export type BsrsBlockSemanticRole = "marker" | "support" | "detail" | "subtotal" | "narrative" | "formatting" | "spacer";
+export type BsrsBlockSemanticRole = "marker" | "support" | "detail" | "subtotal" | "unavailable_benefit" | "narrative" | "formatting" | "spacer";
 
 export type BsrsStatementSectionContext =
   | "benefit_summary"
@@ -544,23 +544,59 @@ function classifyOptionalFormRows(sample: BsrsParsedSample): BsrsBlockPatternCla
     return [];
   }
 
+  const definitions = OPTIONAL_FORM_SECTION_DEFINITIONS[family];
   const classifications: BsrsBlockPatternClassification[] = [];
-  for (const row of sample.rows) {
-    const section = matchingOptionalFormSection(row, family);
-    if (!section) {
+
+  // Track rows that establish section contexts (first match per definition)
+  const sectionRowIndexes = new Set<number>();
+
+  // First pass: classify the FIRST matching row per section definition
+  for (const definition of definitions) {
+    const matchingRows = sample.rows.filter((row) => definition.matches(row));
+    if (matchingRows.length === 0) {
       continue;
     }
+
+    const firstRow = matchingRows[0];
+    sectionRowIndexes.add(firstRow.row_index);
+
+    // Use content-driven role for the first section match
+    const role = classifyOptionalFormRowRole(firstRow);
+    const isContentRole = role === "detail" || role === "unavailable_benefit" || role === "narrative";
+
+    classifications.push({
+      block_family: "optional_form",
+      form_family: family,
+      source_path: sample.source_path,
+      row_index: firstRow.row_index,
+      column_name: isContentRole ? "Detail" : "Description",
+      token: isContentRole ? normalizedCell(firstRow, "Detail") : definition.token,
+      section_context: definition.context,
+      line_cluster: definition.context,
+      semantic_role: role,
+    });
+  }
+
+  // Second pass: classify remaining rows with semantic roles
+  for (const row of sample.rows) {
+    if (sectionRowIndexes.has(row.row_index)) {
+      continue;
+    }
+
+    const role = classifyOptionalFormRowRole(row);
+    const token = role === "detail" ? normalizedCell(row, "Detail") : normalizedDescription(row) || "(empty)";
+    const context = nearestPriorOptionalFormSection(classifications, sectionRowIndexes, row.row_index) ?? "unknown_optional_form";
 
     classifications.push({
       block_family: "optional_form",
       form_family: family,
       source_path: sample.source_path,
       row_index: row.row_index,
-      column_name: "Description",
-      token: section.token,
-      section_context: section.context,
-      line_cluster: section.context,
-      semantic_role: section.role,
+      column_name: role === "detail" ? "Detail" : "Description",
+      token,
+      section_context: context,
+      line_cluster: context,
+      semantic_role: role,
     });
   }
 
@@ -656,6 +692,54 @@ function validateOptionalFormSectionSequence(sample: BsrsParsedSample): BsrsBloc
       line_cluster: "unknown_optional_form",
       message: `Optional-form label ${label} is not part of the approved section sequence for ${family}.`,
     }));
+  }
+
+  // Detect orphan rows: rows with semantic content that appear BEFORE any section
+  // marker (they have no section context) and are not formatting/spacer artifacts
+  const firstSectionRowIndex = locatedSections
+    .flatMap((section) => section.rows.map((row) => row.row_index))
+    .sort((a, b) => a - b)[0];
+
+  if (firstSectionRowIndex !== undefined) {
+    const matchedRowIndexes = new Set(
+      locatedSections.flatMap((section) => section.rows.map((row) => row.row_index)),
+    );
+    for (const row of sample.rows) {
+      // Only rows before the first section are candidates for orphan detection
+      if (row.row_index >= firstSectionRowIndex) {
+        continue;
+      }
+      if (matchedRowIndexes.has(row.row_index)) {
+        continue;
+      }
+
+      const label = optionalFormLabel(row);
+      if (label) {
+        continue;
+      }
+
+      const role = classifyOptionalFormRowRole(row);
+      if (role === "formatting" || role === "spacer") {
+        continue;
+      }
+
+      const description = normalizedDescription(row);
+      const detail = normalizedCell(row, "Detail");
+      if (description || detail) {
+        findings.push(makeBlockPatternFinding({
+          block_family: "optional_form",
+          form_family: family,
+          code: "BSRS_OPTIONAL_FORM_ROW_ORPHAN",
+          severity: "warning",
+          source_path: sample.source_path,
+          row_index: row.row_index,
+          token: description || detail,
+          section_context: "unknown_optional_form",
+          line_cluster: "unknown_optional_form",
+          message: `Optional-form row at index ${row.row_index} has no recognized section context or approved form family.`,
+        }));
+      }
+    }
   }
 
   return findings;
@@ -816,6 +900,58 @@ function optionalFormLabel(row: BsrsSampleRow): string | undefined {
   const description = normalizedDescription(row);
   const match = description.match(/([A-Z]:)/);
   return match?.[1];
+}
+
+function classifyOptionalFormRowRole(row: BsrsSampleRow): BsrsBlockSemanticRole {
+  const description = normalizedDescription(row);
+  const detail = normalizedCell(row, "Detail");
+  const descFormat = normalizedCell(row, "DescFormat");
+  const detailFormat = normalizedCell(row, "DtlFormat");
+
+  // Rows with format codes but no content are formatting artifacts
+  if (!description && !detail && (descFormat || detailFormat)) {
+    return "formatting";
+  }
+  // Completely empty rows are spacers
+  if (!description && !detail) {
+    return "spacer";
+  }
+  // Divider lines (dashes, equals, etc.) are formatting
+  if (/^[-=*_#]{3,}$/.test(description)) {
+    return "formatting";
+  }
+  // Rows with detail values
+  if (detail) {
+    // "Annuity form not available" or "Joint life amounts not requested" → unavailable_benefit
+    if (/annuity form not available|joint life amounts not requested/i.test(detail)) {
+      return "unavailable_benefit";
+    }
+    return "detail";
+  }
+  // Narrative / explanatory rows (popup notes, multi-line explanations)
+  if (description.includes("* If the beneficiary") ||
+      description.includes("increases to the amount") ||
+      description.includes("increases to $") ||
+      description.includes("Monthly Benefit for First") ||
+      description.includes("Monthly Benefit After") ||
+      description.includes("Only available for spouse")) {
+    return "narrative";
+  }
+  // Long descriptions are narrative (matching recalculation threshold)
+  if (description.length > 40) {
+    return "narrative";
+  }
+  return "detail";
+}
+
+function nearestPriorOptionalFormSection(
+  classifications: readonly BsrsBlockPatternClassification[],
+  sectionRowIndexes: Set<number>,
+  rowIndex: number,
+): BsrsOptionalFormSectionContext | undefined {
+  return classifications
+    .filter((c) => sectionRowIndexes.has(c.row_index) && c.row_index <= rowIndex)
+    .sort((a, b) => b.row_index - a.row_index)[0]?.section_context as BsrsOptionalFormSectionContext | undefined;
 }
 
 function normalizedDescription(row: BsrsSampleRow): string {

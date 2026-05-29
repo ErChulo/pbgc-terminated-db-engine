@@ -1,3 +1,7 @@
 test_case_id,description,valuation_listings_fixture_index,statement_row_type
 BSRS001,Deferred vested BSRS configuration packet,0,participant
 BSRS002,In-pay survivor BSRS configuration packet,1,survivor
+BSRS003,Suppressed statement BSRS configuration packet,0,suppressed
+BSRS004,Suppressed statement (beneficiary context) BSRS configuration packet,0,suppressed
+BSRS005,In-pay participant BSRS configuration packet,1,participant
+BSRS006,Basis-only participant (no conditional packets) BSRS configuration packet,0,participant

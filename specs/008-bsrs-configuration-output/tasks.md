@@ -24,9 +24,9 @@
 - [x] T004 [P] Add BSRS package export wiring in `packages/engine/bsrs-configuration-output/package.json`
 - [x] T005 [P] Register the BSRS slice in browser app navigation wiring in `apps/web/src/main.ts`
 - [x] T006 [P] Add the BSRS slice package alias and workspace wiring in `apps/web/vite.config.ts`
-- [ ] T007 [P] Add BSRS module name exports in `packages/shared/src/moduleNames.ts`
-- [ ] T008 Add BSRS slice architecture notes stub in `docs/architecture/bsrs-configuration-output-slice_v0.1.0.md`
-- [ ] T009 Prepare BSRS review fixture metadata in `packages/tests/bsrs-configuration-output/fixtures/README.md`
+- [x] T007 [P] Add BSRS module name exports in `packages/shared/src/moduleNames.ts`
+- [x] T008 Add BSRS slice architecture notes stub in `docs/architecture/bsrs-configuration-output-slice_v0.1.0.md`
+- [x] T009 Prepare BSRS review fixture metadata in `packages/tests/bsrs-configuration-output/fixtures/README.md`
 
 ---
 
@@ -37,7 +37,7 @@
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
 - [x] T010 [P] Define BSRS row and trace repository interfaces in `packages/db/src/repositories.ts`
-- [ ] T011 [P] Define BSRS adapter result types in `packages/engine/bsrs-configuration-output/src/resultTypes.ts`
+- [x] T011 [P] Define BSRS adapter result types in `packages/engine/bsrs-configuration-output/src/resultTypes.ts`
 - [x] T012 [P] Define BSRS packet input types in `packages/engine/bsrs-configuration-output/src/types.ts`
 - [x] T013 [P] Add reviewed-input packet builder for BSRS fixtures in `packages/engine/bsrs-configuration-output/src/fixturePacketBuilder.ts`
 - [x] T014 [P] Add BSRS trace row helper skeleton in `packages/engine/bsrs-configuration-output/src/trace.ts`
@@ -45,8 +45,8 @@
 - [x] T016 [P] Add BSRS deterministic runner entrypoint in `packages/engine/bsrs-configuration-output/src/runBsrsConfiguration.ts`
 - [x] T017 [P] Add BSRS output persistence accessors in `packages/db/src/sqlite.ts`
 - [x] T018 [P] Add BSRS browser-run state wiring in `apps/web/src/app/` for adapter invocation and run status
-- [ ] T019 [P] Add BSRS fixture packet loader support in `packages/tests/bsrs-configuration-output/fixtures/packet-loader.ts`
-- [ ] T020 Add BSRS contract reference note in `docs/architecture/bsrs-configuration-output-slice_v0.1.0.md`
+- [x] T019 [P] Add BSRS fixture packet loader support in `packages/tests/bsrs-configuration-output/fixtures/packet-loader.ts`
+- [x] T020 Add BSRS contract reference note in `docs/architecture/bsrs-configuration-output-slice_v0.1.0.md`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -70,18 +70,18 @@
 ### Implementation for User Story 1
 
 - [x] T025 [P] [US1] Implement BSRS packet projection logic in `packages/engine/bsrs-configuration-output/src/projectBsrsConfiguration.ts`
-- [ ] T026 [P] [US1] Implement BSRS input normalization against the reviewed packet contract in `packages/engine/bsrs-configuration-output/src/normalizeInputs.ts`
-- [ ] T027 [P] [US1] Implement deterministic row ordering and identity handling in `packages/engine/bsrs-configuration-output/src/sortRows.ts`
+- [x] T026 [P] [US1] Implement BSRS input normalization against the reviewed packet contract in `packages/engine/bsrs-configuration-output/src/normalizeInputs.ts`
+- [x] T027 [P] [US1] Implement deterministic row ordering and identity handling in `packages/engine/bsrs-configuration-output/src/sortRows.ts`
 - [x] T028 [US1] Implement BSRS run orchestration in `packages/engine/bsrs-configuration-output/src/runBsrsConfiguration.ts`
-- [ ] T029 [US1] Persist successful BSRS output rows in `packages/db/src/repositories.ts`
+- [x] T029 [US1] Persist successful BSRS output rows in `packages/db/src/repositories.ts`
 - [x] T030 [US1] Persist BSRS trace records in `packages/engine/bsrs-configuration-output/src/trace.ts`
 - [x] T031 [P] [US1] Add BSRS browser page output rendering in `apps/web/src/pages/BsrsConfigurationPage.ts`
 - [x] T032 [US1] Wire BSRS run status and results into the browser app state in `apps/web/src/app/`
-- [ ] T033 [P] [US1] Add BSRS fixture runner integration coverage in `packages/tests/bsrs-configuration-output-runner.test.ts`
-- [ ] T034 [P] [US1] Add official PBGC template compatibility assertions in `packages/tests/bsrs-configuration-output-template.test.ts`
-- [ ] T035 [US1] Add browser-side BSRS repository accessors for run and trace writes in `packages/db/src/repositories.ts`
-- [ ] T036 [P] [US1] Add BSRS packet summary component in `apps/web/src/components/bsrs/BsrsPacketView.tsx`
-- [ ] T037 [US1] Refresh committed browser build output for the BSRS slice in `apps/web/dist/`
+- [x] T033 [P] [US1] Add BSRS fixture runner integration coverage in `packages/tests/bsrs-configuration-output-runner.test.ts`
+- [x] T034 [P] [US1] Add official PBGC template compatibility assertions in `packages/tests/bsrs-configuration-output-template.test.ts`
+- [x] T035 [US1] Add browser-side BSRS repository accessors for run and trace writes in `packages/db/src/repositories.ts`
+- [x] T036 [P] [US1] Add BSRS packet summary component in `apps/web/src/components/bsrs/BsrsPacketView.tsx`
+- [x] T037 [US1] Refresh committed browser build output for the BSRS slice in `apps/web/dist/`
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -95,21 +95,21 @@
 
 ### Tests for User Story 2
 
-- [ ] T038 [P] [US2] Add conditional nullability test cases for BSRS branches in `packages/tests/bsrs-configuration-output-conditions.test.ts`
+- [x] T038 [P] [US2] Add conditional nullability test cases for BSRS branches in `packages/tests/bsrs-configuration-output-conditions.test.ts`
 - [x] T039 [P] [US2] Add validation test cases in `packages/tests/bsrs-configuration-output-validation.test.ts`
 - [x] T040 [P] [US2] Add repeat-run determinism test in `packages/tests/bsrs-configuration-output-validation.test.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T041 [P] [US2] Implement conditional branch resolution for in-pay and survivor paths in `packages/engine/bsrs-configuration-output/src/branchRules.ts`
+- [x] T041 [P] [US2] Implement conditional branch resolution for in-pay and survivor paths in `packages/engine/bsrs-configuration-output/src/branchRules.ts`
 - [x] T042 [P] [US2] Implement structured warning and error construction in `packages/engine/bsrs-configuration-output/src/errors.ts`
-- [ ] T043 [US2] Extend BSRS packet projection to preserve explicit nulls for conditional fields in `packages/engine/bsrs-configuration-output/src/projectBsrsPacket.ts`
+- [x] T043 [US2] Extend BSRS packet projection to preserve explicit nulls for conditional fields in `packages/engine/bsrs-configuration-output/src/projectBsrsPacket.ts`
 - [x] T044 [US2] Persist failed BSRS validation runs without authoritative output rows
 - [x] T045 [P] [US2] Add browser UI feedback for BSRS warnings and errors in `apps/web/src/pages/BsrsConfigurationPage.ts`
-- [ ] T046 [US2] Add conditional BSRS fixture cases in `packages/tests/bsrs-configuration-output/fixtures/`
-- [ ] T047 [US2] Add official BSRS template row-order checks in `packages/tests/bsrs-configuration-output-template.test.ts`
-- [ ] T048 [P] [US2] Add conditional packet preview support in `apps/web/src/components/bsrs/BsrsPacketView.tsx`
-- [ ] T049 [US2] Update BSRS quickstart validation notes for conditional runs in `specs/008-bsrs-configuration-output/quickstart.md`
+- [x] T046 [US2] Add conditional BSRS fixture cases in `packages/tests/bsrs-configuration-output/fixtures/`
+- [x] T047 [US2] Add official BSRS template row-order checks in `packages/tests/bsrs-configuration-output-template.test.ts`
+- [x] T048 [P] [US2] Add conditional packet preview support in `apps/web/src/components/bsrs/BsrsPacketView.tsx`
+- [x] T049 [US2] Update BSRS quickstart validation notes for conditional runs in `specs/008-bsrs-configuration-output/quickstart.md`
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
@@ -132,10 +132,10 @@
 - [x] T053 [P] [US3] Implement DD-first field mapping helper in `packages/engine/bsrs-configuration-output/src/ddMapping.ts`
 - [x] T054 [US3] Wire DD mapping into BSRS packet projection in `packages/engine/bsrs-configuration-output/src/projectBsrsConfiguration.ts`
 - [x] T055 [US3] Wire canonical DD names into BSRS trace generation in `packages/engine/bsrs-configuration-output/src/trace.ts`
-- [ ] T056 [P] [US3] Document BSRS DD-first mapping rules and exceptions in `docs/architecture/bsrs-configuration-output-slice_v0.1.0.md`
-- [ ] T057 [US3] Add BSRS DD mapping reference notes in `specs/008-bsrs-configuration-output/contracts/bsrs-configuration-output.md`
-- [ ] T058 [P] [US3] Add regression test proving BSRS generation does not write to unrelated output-adapter tables, including `v1_ve_output` and `valuation_listings_output`, in `packages/tests/bsrs-configuration-output-output.test.ts`
-- [ ] T059 [P] [US3] Add regression test proving approved contract-name fallback still works when a BSRS field has no matching `DD.csv` entry in `packages/tests/bsrs-configuration-output-mapping.test.ts`
+- [x] T056 [P] [US3] Document BSRS DD-first mapping rules and exceptions in `docs/architecture/bsrs-configuration-output-slice_v0.1.0.md`
+- [x] T057 [US3] Add BSRS DD mapping reference notes in `specs/008-bsrs-configuration-output/contracts/bsrs-configuration-output.md`
+- [x] T058 [P] [US3] Add regression test proving BSRS generation does not write to unrelated output-adapter tables, including `v1_ve_output` and `valuation_listings_output`, in `packages/tests/bsrs-configuration-output-output.test.ts`
+- [x] T059 [P] [US3] Add regression test proving approved contract-name fallback still works when a BSRS field has no matching `DD.csv` entry in `packages/tests/bsrs-configuration-output-mapping.test.ts`
 
 **Checkpoint**: At this point, all user stories should now be independently functional
 
@@ -146,11 +146,11 @@
 **Purpose**: Improvements that affect multiple user stories
 
 - [x] T060 [P] Update committed BSRS browser dist output
-- [ ] T061 [P] Create email-safe `.txt` copies for delivered `.sql`, `.js`, `.ts`, or `.tex` BSRS artifacts in `packages/db/migrations/` and `packages/engine/bsrs-configuration-output/`
+- [x] T061 [P] Create email-safe `.txt` copies for delivered `.sql`, `.js`, `.ts`, or `.tex` BSRS artifacts in `packages/db/migrations/` and `packages/engine/bsrs-configuration-output/`
 - [x] T062 [P] Run the BSRS regression suite
 - [x] T063 [P] Verify browser-only runtime
 - [x] T064 [P] Validate BSRS output ordering and trace completeness
-- [ ] T065 [P] Refresh BSRS quickstart and architecture notes in `specs/008-bsrs-configuration-output/quickstart.md` and `docs/architecture/bsrs-configuration-output-slice_v0.1.0.md`
+- [x] T065 [P] Refresh BSRS quickstart and architecture notes in `specs/008-bsrs-configuration-output/quickstart.md` and `docs/architecture/bsrs-configuration-output-slice_v0.1.0.md`
 - [x] T066 [P] Run lint and typecheck
 - [x] T067 [P] Confirm tasks.md checklist completeness
 

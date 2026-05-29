@@ -2,6 +2,7 @@ import type { StructuredIssue } from "@pbgc/shared";
 import { buildNullOutputFieldWarning, buildTechnicalOverrideWarning } from "./errors";
 import { projectBsrsConfigurationRow } from "./projectBsrsConfiguration";
 import { validateBsrsConfigurationPacket } from "./validatePacket";
+import { applyBranchNulls, resolveBranchContext, resolveBranchNulls } from "./branchRules";
 import type { BsrsConfigurationOutputPacket, BsrsConfigurationOutputRow } from "./types";
 
 export type ResolvedBsrsConfigurationOutput = {
@@ -13,8 +14,15 @@ export function resolveBsrsConfigurationOutput(packet: BsrsConfigurationOutputPa
   const validationErrors = validateBsrsConfigurationPacket(packet, inputPacketId, ruleVersion);
   if (validationErrors.length > 0) throw new Error("BSRS packet validation must be executed before resolveBsrsConfigurationOutput");
 
-  const row = projectBsrsConfigurationRow(packet);
+  const context = resolveBranchContext(packet);
+  const branchResolution = resolveBranchNulls(packet, context, inputPacketId, ruleVersion);
+
+  const projected = projectBsrsConfigurationRow(packet);
+  const row = applyBranchNulls(projected, branchResolution.explicitNulls);
   const warnings: StructuredIssue[] = [];
+
+  // Apply branch resolution warnings
+  warnings.push(...branchResolution.warnings);
 
   if (packet.bsrs_projection_override_packet) {
     const override = packet.bsrs_projection_override_packet;

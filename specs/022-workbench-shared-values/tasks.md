@@ -66,14 +66,14 @@
 
 ### Tests for User Story 2
 
-- [ ] T017 [P] [US2] Add failing classification preservation test for agreement, drift, warning, nullable, unsupported, and formatting-only display mapping in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T018 [P] [US2] Add failing absence-marker test for non-applicable normalized values and severities in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T017 [P] [US2] Add failing classification preservation test for agreement, drift, warning, nullable, unsupported, and formatting-only display mapping in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T018 [P] [US2] Add failing absence-marker test for non-applicable normalized values and severities in packages/tests/reconciliation-workbench-ui.test.ts
 
 ### Implementation for User Story 2
 
-- [ ] T019 [US2] Preserve existing ValueComparisonRecord status semantics in Shared Values labels in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T020 [US2] Render explicit absence markers for missing normalized values and non-applicable severities in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T021 [US2] Run value-reconciliation preservation tests in packages/tests/hardening-cross-slice-value-reconciliation.test.ts and packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T019 [US2] Preserve existing ValueComparisonRecord status semantics in Shared Values labels in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T020 [US2] Render explicit absence markers for missing normalized values and non-applicable severities in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T021 [US2] Run value-reconciliation preservation tests in packages/tests/hardening-cross-slice-value-reconciliation.test.ts and packages/tests/reconciliation-workbench-ui.test.ts
 
 **Checkpoint**: User Stories 1 and 2 preserve existing reconciliation classifications while improving display clarity.
 
@@ -87,15 +87,15 @@
 
 ### Tests for User Story 3
 
-- [ ] T022 [P] [US3] Add failing test proving Shared Values rendering preserves output panels, Shared Facts rows, and existing reconciliation rows in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T023 [P] [US3] Add failing no-real-person-data guardrail test for Shared Values state and markup in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T024 [P] [US3] Add failing adapter-exclusion regression check for BSRS, V1/VE, and valuation listings display-only behavior in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T022 [P] [US3] Add failing test proving Shared Values rendering preserves output panels, Shared Facts rows, and existing reconciliation rows in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T023 [P] [US3] Add failing no-real-person-data guardrail test for Shared Values state and markup in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T024 [P] [US3] Add failing adapter-exclusion regression check for BSRS, V1/VE, and valuation listings display-only behavior in packages/tests/reconciliation-workbench-ui.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T025 [US3] Keep Shared Values generation display-only with no persistence or adapter mutations in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T026 [US3] Keep existing output panels, Shared Facts table, and reconciliation table behavior unchanged while adding Shared Values in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T027 [US3] Run preservation tests for packages/tests/bsrs-configuration-output-output.test.ts packages/tests/v1-ve-output-output.test.ts packages/tests/valuation-listings-output-output.test.ts packages/tests/hardening-cross-slice-reconciliation.test.ts packages/tests/hardening-cross-slice-value-reconciliation.test.ts
+- [X] T025 [US3] Keep Shared Values generation display-only with no persistence or adapter mutations in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T026 [US3] Keep existing output panels, Shared Facts table, and reconciliation table behavior unchanged while adding Shared Values in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T027 [US3] Run preservation tests for packages/tests/bsrs-configuration-output-output.test.ts packages/tests/v1-ve-output-output.test.ts packages/tests/valuation-listings-output-output.test.ts packages/tests/hardening-cross-slice-reconciliation.test.ts packages/tests/hardening-cross-slice-value-reconciliation.test.ts
 
 **Checkpoint**: All user stories are independently functional while preserving browser-only and output-adapter boundaries.
 
@@ -105,8 +105,8 @@
 
 **Purpose**: Final verification, styling checks, static bundle update, and documentation consistency.
 
-- [ ] T028 [P] Verify 10-second identification coverage for Shared Values sources, fields, raw values, normalized values, status, severity, and trace cue against specs/022-workbench-shared-values/quickstart.md
-- [ ] T029 [P] Verify long field/value/trace text remains readable at desktop 1440x900 and mobile 390x844 viewports in apps/web/src/styles.css
+- [x] T028 [P] Verify 10-second identification coverage for Shared Values sources, fields, raw values, normalized values, status, severity, and trace cue against specs/022-workbench-shared-values/quickstart.md
+- [x] T029 [P] Verify long field/value/trace text remains readable at desktop 1440x900 and mobile 390x844 viewports in apps/web/src/styles.css
 - [X] T030 Run npm test -- packages/tests/reconciliation-workbench-ui.test.ts
 - [X] T031 Run npm run lint and npm run build for package.json workspaces and apps/web/dist/
 - [X] T032 Update committed static bundle output in apps/web/dist/ if npm run build changes it

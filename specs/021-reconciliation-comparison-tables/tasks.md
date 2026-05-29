@@ -33,10 +33,10 @@
 
 **CRITICAL**: No user story work should begin until this phase is complete.
 
-- [ ] T007 Add or refine display types for shared-fact rows, shared-value rows, comparison status labels, severity labels, and ordering keys in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T008 Define deterministic ordering helpers for shared-fact and shared-value table rows in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T009 Define intentional absence display markers for missing severity and non-applicable normalized values in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T010 Extend focused test helpers for extracting rendered Shared Facts and Shared Values table sections in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T007 Add or refine display types for shared-fact rows, shared-value rows, comparison status labels, severity labels, and ordering keys in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [X] T008 Define deterministic ordering helpers for shared-fact and shared-value table rows in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [X] T009 Define intentional absence display markers for missing severity and non-applicable normalized values in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [X] T010 Extend focused test helpers for extracting rendered Shared Facts and Shared Values table sections in `packages/tests/reconciliation-workbench-ui.test.ts`
 - [X] T011 Verify no new migrations, seeds, schemas, output adapter directories, server endpoints, raw/unreviewed reads, or real natural-person data sources are needed for this feature in `specs/021-reconciliation-comparison-tables/tasks.md`
 
 **Checkpoint**: The workbench comparison-table display boundary is ready for story implementation.
@@ -75,18 +75,18 @@
 
 ### Tests for User Story 2
 
-- [ ] T020 [US2] Add a failing test that workbench state includes non-empty shared-value table rows with `value_label`, left/right sources, left/right fields, left/right raw values, left/right normalized values, status, severity label, value type, required-or-nullable basis, and ordering key in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T021 [US2] Add a failing test that normalized values are displayed when available and use the intentional absence marker when normalization is not applicable in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T022 [US2] Add a failing test that shared-value rows are sorted by stable ordering key across repeated workbench builds in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T023 [US2] Add a failing rendered-markup test that the Shared Values table is visible and includes compared sources, fields, raw values, normalized values, status, and severity or intentional absence marker in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T020 [US2] Add a failing test that workbench state includes non-empty shared-value table rows with `value_label`, left/right sources, left/right fields, left/right raw values, left/right normalized values, status, severity label, value type, required-or-nullable basis, and ordering key in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T021 [US2] Add a failing test that normalized values are displayed when available and use the intentional absence marker when normalization is not applicable in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T022 [US2] Add a failing test that shared-value rows are sorted by stable ordering key across repeated workbench builds in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T023 [US2] Add a failing rendered-markup test that the Shared Values table is visible and includes compared sources, fields, raw values, normalized values, status, and severity or intentional absence marker in `packages/tests/reconciliation-workbench-ui.test.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T024 [US2] Project existing shared-value reconciliation comparisons into `shared_value_rows` display data in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T025 [US2] Preserve existing shared-value classifications while mapping them to analyst-readable status, severity, nullable, unsupported, and formatting-only labels in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T026 [US2] Render a distinct Shared Values table in `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
-- [ ] T027 [US2] Add readable responsive table styles for raw values, normalized values, and long source names in `apps/web/src/styles.css`
-- [ ] T028 [US2] Run `npm test -- packages/tests/reconciliation-workbench-ui.test.ts` and resolve US2 failures without changing shared reconciliation helper behavior
+- [X] T024 [US2] Project existing shared-value reconciliation comparisons into `shared_value_rows` display data in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [X] T025 [US2] Preserve existing shared-value classifications while mapping them to analyst-readable status, severity, nullable, unsupported, and formatting-only labels in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [X] T026 [US2] Render a distinct Shared Values table in `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
+- [X] T027 [US2] Add readable responsive table styles for raw values, normalized values, and long source names in `apps/web/src/styles.css`
+- [X] T028 [US2] Run `npm test -- packages/tests/reconciliation-workbench-ui.test.ts` and resolve US2 failures without changing shared reconciliation helper behavior
 
 **Checkpoint**: User Stories 1 and 2 can be tested independently through the focused workbench suite.
 
@@ -100,16 +100,16 @@
 
 ### Tests for User Story 3
 
-- [ ] T029 [US3] Add a failing test that rendering Shared Facts and Shared Values tables does not mutate `output_panels`, `reconciliation_rows`, or sample context in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T030 [US3] Add a failing test that Shared Facts and Shared Values state and markup retain the explicit no-real-person-data notice and contain only approved sample identifiers or mocked labels for person-level context in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T031 [US3] Add a failing repeated-render stability test covering table row counts, ordering keys, displayed compared sources, fields, values, normalized values, statuses, and severities in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T029 [US3] Add a failing test that rendering Shared Facts and Shared Values tables does not mutate `output_panels`, `reconciliation_rows`, or sample context in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T030 [US3] Add a failing test that Shared Facts and Shared Values state and markup retain the explicit no-real-person-data notice and contain only approved sample identifiers or mocked labels for person-level context in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [X] T031 [US3] Add a failing repeated-render stability test covering table row counts, ordering keys, displayed compared sources, fields, values, normalized values, statuses, and severities in `packages/tests/reconciliation-workbench-ui.test.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T032 [US3] Stabilize table projection and rendering so repeated builds produce identical Shared Facts and Shared Values state in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T033 [US3] Stabilize table markup generation so repeated renders produce identical Shared Facts and Shared Values markup in `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
-- [ ] T034 [US3] Verify the implementation adds no persistence calls, migrations, seeds, schemas, output adapter writes, server calls, raw source reads, or real natural-person data sources in `apps/web/src/app/reconciliationWorkbenchSlice.ts` and `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
-- [ ] T035 [US3] Run `npm test -- packages/tests/reconciliation-workbench-ui.test.ts` and resolve US3 failures without changing existing output or reconciliation classifications
+- [X] T032 [US3] Stabilize table projection and rendering so repeated builds produce identical Shared Facts and Shared Values state in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [X] T033 [US3] Stabilize table markup generation so repeated renders produce identical Shared Facts and Shared Values markup in `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
+- [X] T034 [US3] Verify the implementation adds no persistence calls, migrations, seeds, schemas, output adapter writes, server calls, raw source reads, or real natural-person data sources in `apps/web/src/app/reconciliationWorkbenchSlice.ts` and `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
+- [X] T035 [US3] Run `npm test -- packages/tests/reconciliation-workbench-ui.test.ts` and resolve US3 failures without changing existing output or reconciliation classifications
 
 **Checkpoint**: All comparison-table stories are independently functional and boundary-preserving.
 
@@ -119,16 +119,16 @@
 
 **Purpose**: Documentation, regression checks, browser verification, and committed static artifact discipline.
 
-- [ ] T036 [P] Document the comparison-table display-only and no-real-person-data boundary in `docs/architecture/reconciliation_workbench_comparison_tables.md`
-- [ ] T037 [P] Document displayed Shared Facts and Shared Values columns in `docs/mappings/reconciliation_workbench_comparison_tables_v0.1.0.csv`
+- [x] T036 [P] Document the comparison-table display-only and no-real-person-data boundary in `docs/architecture/reconciliation_workbench_comparison_tables.md`
+- [x] T037 [P] Document displayed Shared Facts and Shared Values columns in `docs/mappings/reconciliation_workbench_comparison_tables_v0.1.0.csv`
 - [X] T038 Run existing reconciliation preservation checks with `npm test -- packages/tests/hardening-cross-slice-reconciliation.test.ts packages/tests/hardening-cross-slice-value-reconciliation.test.ts`
 - [X] T039 Run existing output preservation checks with `npm test -- packages/tests/bsrs-configuration-output-output.test.ts packages/tests/v1-ve-output-output.test.ts packages/tests/valuation-listings-output-output.test.ts`
-- [ ] T040 Run the full test suite with `npm test`
+- [x] T040 Run the full test suite with `npm test`
 - [X] T041 Run lint verification with `npm run lint`
 - [X] T042 Run production build verification with `npm run build`
 - [X] T043 Update committed static output under `apps/web/dist/` if `npm run build` changes bundle artifacts
-- [ ] T044 Verify no delivered `.sql`, `.js`, `.ts`, or `.tex` artifact was added without the required appended `.txt` transport copy in `specs/021-reconciliation-comparison-tables/tasks.md`
-- [ ] T045 Keep or start the local web app on `http://127.0.0.1:5175/` with `npm --workspace @pbgc/web run dev -- --host 127.0.0.1 --port 5175` and verify against `specs/021-reconciliation-comparison-tables/quickstart.md` that an analyst can identify compared sources, fields, values, status, and severity within 10 seconds for both the Shared Facts table and the Shared Values table
+- [x] T044 Verify no delivered `.sql`, `.js`, `.ts`, or `.tex` artifact was added without the required appended `.txt` transport copy in `specs/021-reconciliation-comparison-tables/tasks.md`
+- [x] T045 Keep or start the local web app on `http://127.0.0.1:5175/` with `npm --workspace @pbgc/web run dev -- --host 127.0.0.1 --port 5175` and verify against `specs/021-reconciliation-comparison-tables/quickstart.md` that an analyst can identify compared sources, fields, values, status, and severity within 10 seconds for both the Shared Facts table and the Shared Values table
 
 ---
 

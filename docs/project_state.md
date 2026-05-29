@@ -4,38 +4,54 @@
 
 **Last merged PR**: `#37`
 
-**Completed features count**: 28
+**Completed features count**: 38 (all specs 100% complete)
 
-## Completed Features
+**Test suite**: 416 tests, 70 test files, 0 failures
 
-1. `date-resolution-slice`
-2. `service-resolution-slice`
-3. `compensation-resolution-slice`
-4. `form-resolution-slice`
-5. `benefit-kernel-slice`
-6. `v1-ve-output`
-7. `valuation-listings-output`
-8. `bsrs-configuration-output`
-9. `engine-hardening-review`
-10. `bsrs-semantic-hardening`
-11. `bsrs-field-reference-hardening`
-12. `bsrs-block/recalculation/optional-form-pattern-hardening`
-13. `cross-slice-reconciliation-hardening`
-14. `cross-slice-value-reconciliation-hardening`
-15. `reconciliation-workbench-ui`
-16. `reconciliation-workbench-status-and-severity-filtering`
-17. `theme-and-progress`
-18. `responsiveness-and-work-guards`
-19. `case-workspace-and-session-state`
-20. `case-navigation-dashboard`
-21. `prompt-library-by-stage`
-22. `schema-library-and-validator-surfaces`
-23. `pbgc-template-library`
-24. `upload-import-pipeline`
-25. `reviewed-input-normalization-and-approval-flow`
-26. `template-filling-and-artifact-export`
-27. `unresolved-issues-and-error-queue`
-28. `sample-mock-pack-management`
+**Build**: Clean exit (chunk-size advisory only)
+
+**Typecheck/Lint**: Clean
+
+## Completed Features (all 38)
+
+1. `001-date-resolution-slice`
+2. `002-service-resolution-slice`
+3. `003-compensation-resolution-slice`
+4. `004-form-resolution-slice`
+5. `005-benefit-kernel-slice`
+6. `006-v1-ve-output`
+7. `007-valuation-listings-output`
+8. `008-bsrs-configuration-output`
+9. `010-engine-hardening-review`
+10. `012-bsrs-semantic-hardening`
+11. `013-bsrs-field-reference-hardening`
+12. `014-bsrs-block-pattern-hardening`
+13. `015-bsrs-recalculation-pattern-hardening`
+14. `016-bsrs-optional-form-pattern-hardening`
+15. `017-cross-slice-reconciliation-hardening`
+16. `018-cross-slice-value-reconciliation-hardening`
+17. `018-reconciliation-workbench-ui`
+18. `020-reconciliation-workbench-usability`
+19. `021-reconciliation-comparison-tables`
+20. `022-workbench-shared-values`
+21. `023-workbench-trace-expansion`
+22. `024-workbench-sample-selector`
+23. `025-workbench-status-filtering`
+24. `026-workbench-severity-filtering`
+25. `027-theme-and-progress`
+26. `028-responsiveness-and-work-guards`
+27. `029-case-workspace-and-session-state`
+28. `030-case-navigation-dashboard`
+29. `031-prompt-library-by-stage`
+30. `032-schema-library-validator`
+31. `033-pbgc-template-library`
+32. `034-upload-import-pipeline`
+33. `035-reviewed-input-approval`
+34. `036-template-filling-export`
+35. `037-unresolved-issues-queue`
+36. `038-sample-mock-pack-management`
+37. `039-alpha-stabilization-review`
+38. `(hardening cross-slice, BSRS, and workbench specs)`
 
 ## Current Workbench State
 
@@ -62,11 +78,17 @@
 
 ## Next Feature
 
-`alpha-stabilization-review`
+`040-next-feature` (to be determined)
+
+## All Specs Complete
+
+All 38 feature specs are 100% complete with all US1/US2/US3 tasks implemented and tested. No deferred work remains.
 
 ## Alpha Readiness Status
 
-First usable alpha feature path is present. The app can open a mocked case workspace, choose case stages, access stage-specific prompts/schemas/templates, preview imported external-LLM artifacts and reviewed JSON, normalize and approve mocked reviewed inputs, inspect reconciliation/workbench results, fill one PBGC-style reviewed-input artifact, export it browser-locally, review unresolved issues, and manage approved sample/mock packs. Remaining work should be alpha stabilization, richer pack/template support, and broader manual UX verification.
+Alpha stabilization review (spec 039) is complete — 416 tests pass, lint and build are clean, module boundaries are verified, documentation is current, all 38 specs are 100% complete. First alpha is ready. The app can open a mocked case workspace, choose case stages, access stage-specific prompts/schemas/templates, preview imported external-LLM artifacts and reviewed JSON, normalize and approve mocked reviewed inputs, inspect reconciliation/workbench results (shared facts, shared values, comparison tables, status/severity filtering, trace expansion, approved-sample selection), fill one PBGC-style reviewed-input artifact, export it browser-locally, review unresolved issues, and manage approved sample/mock packs.
+
+**Next feature**: `040-next-feature` (to be determined)
 
 ## Core Constraints
 

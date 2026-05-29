@@ -111,3 +111,7 @@ export function resolveBsrsFieldName(ddFieldName: string): string {
 export function hasDdMapping(bsrsFieldName: string): boolean {
   return bsrsFieldName in BSRS_DD_FIELD_MAP && !BSRS_FIELDS_WITHOUT_DD_MAPPING.has(bsrsFieldName);
 }
+
+export function bsrsConfigurationFieldNamesWithoutDD(): string[] {
+  return [...BSRS_FIELDS_WITHOUT_DD_MAPPING];
+}

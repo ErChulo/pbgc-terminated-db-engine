@@ -11,6 +11,7 @@ import { buildInputPacketNotActiveError } from "./errors";
 import { buildBsrsConfigurationTraces } from "./trace";
 import { resolveBsrsConfigurationOutput } from "./resolveBsrsConfigurationOutput";
 import { validateBsrsConfigurationPacket } from "./validatePacket";
+import { normalizeBsrsInputs } from "./normalizeInputs";
 import {
   BSRS_CONFIGURATION_OUTPUT_ADAPTER_VERSION,
   BSRS_CONFIGURATION_OUTPUT_MODULE_NAME,
@@ -32,13 +33,21 @@ export function runBsrsConfiguration(db: Database, request: BsrsConfigurationOut
   }
 
   const packet = parsePacketJson<BsrsConfigurationOutputPacket>(record);
-  const validationErrors = validateBsrsConfigurationPacket(packet, request.input_packet_id, request.rule_version);
+
+  // Normalize inputs before validation and projection
+  const normalization = normalizeBsrsInputs(packet, request.input_packet_id, request.rule_version);
+  if (normalization.errors.length > 0) {
+    insertEngineRun(db, makeRun(request, calculation_run_id, started_at, "failed", 0, normalization.errors.length));
+    return failedResult(calculation_run_id, normalization.errors);
+  }
+
+  const validationErrors = validateBsrsConfigurationPacket(normalization.normalized, request.input_packet_id, request.rule_version);
   if (validationErrors.length > 0) {
     insertEngineRun(db, makeRun(request, calculation_run_id, started_at, "failed", 0, validationErrors.length));
     return failedResult(calculation_run_id, validationErrors);
   }
 
-  const resolved = resolveBsrsConfigurationOutput(packet, request.input_packet_id, request.rule_version);
+  const resolved = resolveBsrsConfigurationOutput(normalization.normalized, request.input_packet_id, request.rule_version);
   const bsrs_configuration_output_row_id = createDeterministicId("bsrs-configuration");
   resolved.row.calculation_run_id = calculation_run_id;
   resolved.row.deliverable_version = request.deliverable_version;

@@ -53,7 +53,7 @@ Any delivered .sql, .js, .ts, or .tex artifact must be stored with appended .txt
 - Preserve traceability for every computed output
 
 <!-- SPECKIT START -->
-Current feature plan: `specs/039-alpha-stabilization-review/plan.md`
+All 38 feature specs are 100% complete. Current feature plan: next feature TBD.
 <!-- SPECKIT END -->
 
 ## V1 data dictionary invariant

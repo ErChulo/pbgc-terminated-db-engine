@@ -78,17 +78,17 @@
 
 ### Tests for User Story 2
 
-- [ ] T019 [P] [US2] Add unknown field-like token structured-error regression test in `packages/tests/hardening-bsrs-field-references.test.ts`
-- [ ] T020 [P] [US2] Add quoted narrative non-field regression test in `packages/tests/hardening-bsrs-field-references.test.ts`
-- [ ] T021 [P] [US2] Add documented control-token and formatting-marker regression test in `packages/tests/hardening-bsrs-field-references.test.ts`
-- [ ] T022 [P] [US2] Add repeated-run field-reference finding stability test in `packages/tests/hardening-bsrs-field-references.test.ts`
+- [X] T019 [P] [US2] Add unknown field-like token structured-error regression test in `packages/tests/hardening-bsrs-field-references.test.ts`
+- [X] T020 [P] [US2] Add quoted narrative non-field regression test in `packages/tests/hardening-bsrs-field-references.test.ts`
+- [X] T021 [P] [US2] Add documented control-token and formatting-marker regression test in `packages/tests/hardening-bsrs-field-references.test.ts`
+- [X] T022 [P] [US2] Add repeated-run field-reference finding stability test in `packages/tests/hardening-bsrs-field-references.test.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T023 [P] [US2] Implement suspicious/orphan field finding construction in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
-- [ ] T024 [P] [US2] Implement non-field token filtering for functions, operators, literals, controls, and formatting markers in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
-- [ ] T025 [US2] Add deterministic field-reference finding metadata and sorting integration in `packages/engine/bsrs-configuration-output/src/semanticValidationTrace.ts`
-- [ ] T026 [US2] Wire suspicious/orphan field findings into `packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts`
+- [X] T023 [P] [US2] Implement suspicious/orphan field finding construction in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
+- [X] T024 [P] [US2] Implement non-field token filtering for functions, operators, literals, controls, and formatting markers in `packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts`
+- [X] T025 [US2] Add deterministic field-reference finding metadata and sorting integration in `packages/engine/bsrs-configuration-output/src/semanticValidationTrace.ts`
+- [X] T026 [US2] Wire suspicious/orphan field findings into `packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts`
 
 **Checkpoint**: Suspicious-field detection should be independently testable
 
@@ -102,16 +102,16 @@
 
 ### Tests for User Story 3
 
-- [ ] T027 [P] [US3] Add existing BSRS output behavior preservation regression in `packages/tests/hardening-bsrs-semantic-behavior.test.ts`
-- [ ] T028 [P] [US3] Add no-new-adapter scope regression for field-reference hardening in `packages/tests/hardening-bsrs-semantic-behavior.test.ts`
-- [ ] T029 [P] [US3] Add existing BSRS persistence and trace behavior regression reference in `packages/tests/bsrs-configuration-output-persistence.test.ts`
-- [ ] T030 [P] [US3] Add existing BSRS output-shape regression reference in `packages/tests/bsrs-configuration-output-output.test.ts`
+- [X] T027 [P] [US3] Add existing BSRS output behavior preservation regression in `packages/tests/hardening-bsrs-semantic-behavior.test.ts`
+- [X] T028 [P] [US3] Add no-new-adapter scope regression for field-reference hardening in `packages/tests/hardening-bsrs-semantic-behavior.test.ts`
+- [X] T029 [P] [US3] Add existing BSRS persistence and trace behavior regression reference in `packages/tests/bsrs-configuration-output-persistence.test.ts`
+- [X] T030 [P] [US3] Add existing BSRS output-shape regression reference in `packages/tests/bsrs-configuration-output-output.test.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T031 [US3] Confirm field-reference validation remains test-local or explicitly invoked and does not change successful packet projection in `packages/engine/bsrs-configuration-output/src/resolveBsrsConfigurationOutput.ts`
-- [ ] T032 [US3] Confirm no new persistence tables, migrations, or output adapter modules are introduced under `packages/db/` and `packages/engine/bsrs-configuration-output/`
-- [ ] T033 [US3] Confirm committed browser build behavior is unchanged or refresh `apps/web/dist/` only if runtime exports affect the static bundle
+- [X] T031 [US3] Confirm field-reference validation remains test-local or explicitly invoked and does not change successful packet projection in `packages/engine/bsrs-configuration-output/src/resolveBsrsConfigurationOutput.ts`
+- [X] T032 [US3] Confirm no new persistence tables, migrations, or output adapter modules are introduced under `packages/db/` and `packages/engine/bsrs-configuration-output/`
+- [X] T033 [US3] Confirm committed browser build behavior is unchanged or refresh `apps/web/dist/` only if runtime exports affect the static bundle
 
 **Checkpoint**: Field-reference hardening remains validation-only and scope-safe
 
@@ -121,13 +121,13 @@
 
 **Purpose**: Validate the full field-reference hardening increment and preserve repository contracts
 
-- [ ] T034 [P] Update BSRS field-reference hardening quickstart validation notes in `specs/013-bsrs-field-reference-hardening/quickstart.md`
-- [ ] T035 [P] Update BSRS field-reference hardening architecture notes in `docs/architecture/bsrs_field_reference_hardening_v0.1.0.md`
-- [ ] T036 [P] Run focused field-reference hardening tests in `packages/tests/hardening-bsrs-field-references.test.ts` and `packages/tests/hardening-bsrs-semantic-behavior.test.ts`
-- [ ] T037 [P] Run existing BSRS regression suite in `packages/tests/bsrs-configuration-output-*.test.ts`
-- [ ] T038 [P] Run lint and full test suite validation in `package.json`
-- [ ] T039 [P] Confirm no committed browser `apps/web/dist/` refresh is needed unless runtime output behavior changed
-- [ ] T040 [P] Verify checklist completeness in `specs/013-bsrs-field-reference-hardening/checklists/requirements.md`
+- [X] T034 [P] Update BSRS field-reference hardening quickstart validation notes in `specs/013-bsrs-field-reference-hardening/quickstart.md`
+- [X] T035 [P] Update BSRS field-reference hardening architecture notes in `docs/architecture/bsrs_field_reference_hardening_v0.1.0.md`
+- [X] T036 [P] Run focused field-reference hardening tests in `packages/tests/hardening-bsrs-field-references.test.ts` and `packages/tests/hardening-bsrs-semantic-behavior.test.ts`
+- [X] T037 [P] Run existing BSRS regression suite in `packages/tests/bsrs-configuration-output-*.test.ts`
+- [X] T038 [P] Run lint and full test suite validation in `package.json`
+- [X] T039 [P] Confirm no committed browser `apps/web/dist/` refresh is needed unless runtime output behavior changed
+- [X] T040 [P] Verify checklist completeness in `specs/013-bsrs-field-reference-hardening/checklists/requirements.md`
 
 ---
 

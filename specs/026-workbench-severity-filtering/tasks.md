@@ -73,18 +73,18 @@
 
 ### Tests for User Story 2
 
-- [ ] T024 [P] [US2] Add a failing combined status-and-severity filtering test for all row groups in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T025 [P] [US2] Add a failing clear-severity-while-status-active test that restores status-filtered ordering in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T026 [P] [US2] Add a failing clear-status-while-severity-active test that preserves severity-filtered ordering in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T027 [P] [US2] Add a failing combined-filter empty-state test in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T024 [P] [US2] Add a failing combined status-and-severity filtering test for all row groups in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T025 [P] [US2] Add a failing clear-severity-while-status-active test that restores status-filtered ordering in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T026 [P] [US2] Add a failing clear-status-while-severity-active test that preserves severity-filtered ordering in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T027 [P] [US2] Add a failing combined-filter empty-state test in packages/tests/reconciliation-workbench-ui.test.ts
 
 ### Implementation for User Story 2
 
-- [ ] T028 [US2] Update filter projection to combine active status and severity filters in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T029 [US2] Update filter summary counts and active filter labels for combined filters in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T030 [US2] Wire status and severity filter controls so browser re-renders preserve both active filters in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T031 [US2] Render combined-filter empty-state messages that identify active status and severity context in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T032 [US2] Style combined-filter controls and count summaries without disrupting existing table layout in apps/web/src/styles.css
+- [X] T028 [US2] Update filter projection to combine active status and severity filters in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T029 [US2] Update filter summary counts and active filter labels for combined filters in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T030 [US2] Wire status and severity filter controls so browser re-renders preserve both active filters in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T031 [US2] Render combined-filter empty-state messages that identify active status and severity context in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T032 [US2] Style combined-filter controls and count summaries without disrupting existing table layout in apps/web/src/styles.css
 
 **Checkpoint**: User Stories 1 and 2 are independently functional and testable.
 
@@ -98,18 +98,18 @@
 
 ### Tests for User Story 3
 
-- [ ] T033 [P] [US3] Add a failing preservation test for sample selector, sample header, three output panels, and existing status filter while severity filters are active in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T034 [P] [US3] Add a failing trace expansion preservation test for visible severity-filtered rows in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T035 [P] [US3] Add a failing repeated-run stability test for severity and combined-filter states across at least two builds in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T036 [P] [US3] Add a failing boundary test proving severity filters do not expose raw, hosted, uploaded, free-form, URL-loaded, or real-person data paths in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T037 [P] [US3] Add a failing display-only regression test proving severity filtering does not write output-adapter rows or lower source-layer records in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T033 [P] [US3] Add a failing preservation test for sample selector, sample header, three output panels, and existing status filter while severity filters are active in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T034 [P] [US3] Add a failing trace expansion preservation test for visible severity-filtered rows in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T035 [P] [US3] Add a failing repeated-run stability test for severity and combined-filter states across at least two builds in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T036 [P] [US3] Add a failing boundary test proving severity filters do not expose raw, hosted, uploaded, free-form, URL-loaded, or real-person data paths in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T037 [P] [US3] Add a failing display-only regression test proving severity filtering does not write output-adapter rows or lower source-layer records in packages/tests/reconciliation-workbench-ui.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T038 [US3] Preserve selected approved sample identity and deterministic severity/status filter behavior on sample changes in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T039 [US3] Preserve output panel rendering and sample context rendering while severity-filtered row groups change in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T040 [US3] Preserve trace-detail identifiers and content for visible severity-filtered rows in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T041 [US3] Preserve deterministic filter summaries, visible row counts, and original row ordering evidence in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T038 [US3] Preserve selected approved sample identity and deterministic severity/status filter behavior on sample changes in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T039 [US3] Preserve output panel rendering and sample context rendering while severity-filtered row groups change in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T040 [US3] Preserve trace-detail identifiers and content for visible severity-filtered rows in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T041 [US3] Preserve deterministic filter summaries, visible row counts, and original row ordering evidence in apps/web/src/app/reconciliationWorkbenchSlice.ts
 
 **Checkpoint**: All user stories are independently functional and preserve existing workbench behavior.
 

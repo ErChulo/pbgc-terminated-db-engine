@@ -70,14 +70,14 @@
 
 ### Tests for User Story 2
 
-- [ ] T021 [P] [US2] Add failing repeated-build equality test for trace-detail content in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T022 [P] [US2] Add failing ordering test proving expanded trace details do not reorder reconciliation, Shared Facts, or Shared Values rows in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T021 [P] [US2] Add failing repeated-build equality test for trace-detail content in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T022 [P] [US2] Add failing ordering test proving expanded trace details do not reorder reconciliation, Shared Facts, or Shared Values rows in packages/tests/reconciliation-workbench-ui.test.ts
 
 ### Implementation for User Story 2
 
-- [ ] T023 [US2] Preserve deterministic expansion labels and detail ordering in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T024 [US2] Ensure expansion markup uses stable row identities without render-time generated values in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T025 [US2] Run repeated-render stability tests in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T023 [US2] Preserve deterministic expansion labels and detail ordering in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T024 [US2] Ensure expansion markup uses stable row identities without render-time generated values in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T025 [US2] Run repeated-render stability tests in packages/tests/reconciliation-workbench-ui.test.ts
 
 **Checkpoint**: User Stories 1 and 2 preserve stable trace-detail behavior across repeated loads.
 
@@ -91,15 +91,15 @@
 
 ### Tests for User Story 3
 
-- [ ] T026 [P] [US3] Add failing preservation test proving output panels and existing row counts remain unchanged after trace expansion in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T027 [P] [US3] Add failing no-real-person-data guardrail test for expanded trace details in packages/tests/reconciliation-workbench-ui.test.ts
-- [ ] T028 [P] [US3] Add failing adapter-exclusion regression check for trace expansion display-only behavior in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T026 [P] [US3] Add failing preservation test proving output panels and existing row counts remain unchanged after trace expansion in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T027 [P] [US3] Add failing no-real-person-data guardrail test for expanded trace details in packages/tests/reconciliation-workbench-ui.test.ts
+- [X] T028 [P] [US3] Add failing adapter-exclusion regression check for trace expansion display-only behavior in packages/tests/reconciliation-workbench-ui.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T029 [US3] Keep trace expansion generation display-only with no persistence or adapter mutations in apps/web/src/app/reconciliationWorkbenchSlice.ts
-- [ ] T030 [US3] Keep existing output panels, Shared Facts table, Shared Values table, and reconciliation table behavior unchanged in apps/web/src/pages/ReconciliationWorkbenchPage.ts
-- [ ] T031 [US3] Run preservation tests for packages/tests/bsrs-configuration-output-output.test.ts packages/tests/v1-ve-output-output.test.ts packages/tests/valuation-listings-output-output.test.ts packages/tests/hardening-cross-slice-reconciliation.test.ts packages/tests/hardening-cross-slice-value-reconciliation.test.ts
+- [X] T029 [US3] Keep trace expansion generation display-only with no persistence or adapter mutations in apps/web/src/app/reconciliationWorkbenchSlice.ts
+- [X] T030 [US3] Keep existing output panels, Shared Facts table, Shared Values table, and reconciliation table behavior unchanged in apps/web/src/pages/ReconciliationWorkbenchPage.ts
+- [X] T031 [US3] Run preservation tests for packages/tests/bsrs-configuration-output-output.test.ts packages/tests/v1-ve-output-output.test.ts packages/tests/valuation-listings-output-output.test.ts packages/tests/hardening-cross-slice-reconciliation.test.ts packages/tests/hardening-cross-slice-value-reconciliation.test.ts
 
 **Checkpoint**: All user stories are independently functional while preserving browser-only and output-adapter boundaries.
 
@@ -109,12 +109,12 @@
 
 **Purpose**: Final verification, responsive readability checks, static bundle update, and documentation consistency.
 
-- [ ] T032 [P] Verify 10-second expansion coverage for one reconciliation row, one Shared Facts row, and one Shared Values row against specs/023-workbench-trace-expansion/quickstart.md
-- [ ] T033 [P] Verify long trace-detail text remains readable at desktop 1440x900 and mobile 390x844 viewports in apps/web/src/styles.css
+- [x] T032 [P] Verify 10-second expansion coverage for one reconciliation row, one Shared Facts row, and one Shared Values row against specs/023-workbench-trace-expansion/quickstart.md
+- [x] T033 [P] Verify long trace-detail text remains readable at desktop 1440x900 and mobile 390x844 viewports in apps/web/src/styles.css
 - [X] T034 Run npm test -- packages/tests/reconciliation-workbench-ui.test.ts
 - [X] T035 Run npm run lint and npm run build for package.json workspaces and apps/web/dist/
 - [X] T036 Update committed static bundle output in apps/web/dist/ if npm run build changes it
-- [ ] T037 Confirm no delivered .sql, .js, .ts, or .tex artifacts were added outside internal source/test files for specs/023-workbench-trace-expansion/tasks.md
+- [x] T037 Confirm no delivered .sql, .js, .ts, or .tex artifacts were added outside internal source/test files for specs/023-workbench-trace-expansion/tasks.md
 
 ---
 

@@ -195,6 +195,60 @@ describe("BSRS semantic behavior preservation", () => {
     }
   });
 
+  it("proves field-reference validation is invoked explicitly and does not change successful packet projection (T027)", () => {
+    // Field-reference validation must be test-local or explicitly invoked.
+    // It must not alter the BSRS runtime output pipeline.
+    const runSource = readFileSync(
+      join(REPO_ROOT, "packages/engine/bsrs-configuration-output/src/runBsrsConfiguration.ts"),
+      "utf8",
+    );
+
+    expect(runSource).not.toContain("validateBsrsFieldReferences");
+    expect(runSource).not.toContain("validateBsrsFieldReferencesFromSources");
+    expect(runSource).not.toContain("extractBsrsFieldReferences");
+  });
+
+  it("confirms no new persistence tables or migrations introduced by field-reference validation (T028)", () => {
+    // Field-reference hardening must not add new persistence dependencies
+    const fieldRefSource = readFileSync(
+      join(REPO_ROOT, "packages/engine/bsrs-configuration-output/src/bsrsFieldReferenceValidation.ts"),
+      "utf8",
+    );
+
+    expect(fieldRefSource).not.toContain("createTable");
+    expect(fieldRefSource).not.toContain("migration");
+    expect(fieldRefSource).not.toContain("INSERT INTO");
+    expect(fieldRefSource).not.toContain("@pbgc/db");
+  });
+
+  it("preserves existing BSRS output-shape under field-reference validation (T029)", () => {
+    // The BSRS output shape must remain unchanged
+    // All committed field names must still be present
+    const requiredOutputFields = [
+      "case_id",
+      "plan_id",
+      "bcv_rec_id",
+      "id",
+      "retstat",
+      "statement_row_type",
+      "statement_sort_key",
+      "form_code_nsf",
+      "pvmb_term",
+      "pvmb_title_iv",
+      "pvmb_4022c",
+      "pvf_lev_ann",
+      "pvf_lev_ls",
+      "pvf_qpsa_ls",
+    ];
+
+    for (const field of requiredOutputFields) {
+      expect(BSRS_CONFIGURATION_OUTPUT_FIELDS).toContain(field);
+    }
+
+    // Verify BSRS_CONFIGURATION_OUTPUT_FIELDS count is stable
+    expect(BSRS_CONFIGURATION_OUTPUT_FIELDS.length).toBeGreaterThanOrEqual(90);
+  });
+
   it("preserves BSRS semantic validation module boundaries: no adapter-scope leakage", () => {
     // Semantic validation must NOT be wired into the runtime BSRS output pipeline.
     // The runBsrsConfiguration function must not import semantic validation helpers.

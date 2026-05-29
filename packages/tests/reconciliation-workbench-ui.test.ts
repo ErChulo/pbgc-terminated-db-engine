@@ -679,7 +679,7 @@ describe("reconciliation workbench UI", () => {
     expect(state.plan_id).toBe("PLAN-PLACEHOLDER");
     expect(state.generated_at).toBe("source:packages/tests/bsrs-configuration-output-fixtures.ts#BSRS001");
     expect(state.selected_sample.sample_id).toBe("BSRS001");
-    expect(state.sample_options.map((sample) => sample.sample_id)).toEqual(["BSRS001", "BSRS002"]);
+    expect(state.sample_options.map((sample) => sample.sample_id)).toEqual(["BSRS001", "BSRS002", "BSRS003", "BSRS004", "BSRS005", "BSRS006"]);
     expect(state.sample_context).toMatchObject({
       sample_id: "BSRS001",
       sample_label: "Deferred vested BSRS configuration packet",
@@ -721,6 +721,46 @@ describe("reconciliation workbench UI", () => {
         mock_case_label: "Mock case context: simulated PBGC terminated DB case",
         mock_population_label: "Mock population context: simulated participant cohort",
         ordering_key: "000002|BSRS002",
+        is_default: false,
+      },
+      {
+        sample_id: "BSRS003",
+        sample_label: "Suppressed statement BSRS configuration packet",
+        selector_label: "BSRS003 - Suppressed statement BSRS configuration packet",
+        artifact_basis: "source:packages/tests/bsrs-configuration-output-fixtures.ts#BSRS003",
+        mock_case_label: "Mock case context: simulated PBGC terminated DB case",
+        mock_population_label: "Mock population context: simulated participant cohort",
+        ordering_key: "000003|BSRS003",
+        is_default: false,
+      },
+      {
+        sample_id: "BSRS004",
+        sample_label: "Suppressed statement (beneficiary context) BSRS configuration packet",
+        selector_label: "BSRS004 - Suppressed statement (beneficiary context) BSRS configuration packet",
+        artifact_basis: "source:packages/tests/bsrs-configuration-output-fixtures.ts#BSRS004",
+        mock_case_label: "Mock case context: simulated PBGC terminated DB case",
+        mock_population_label: "Mock population context: simulated participant cohort",
+        ordering_key: "000004|BSRS004",
+        is_default: false,
+      },
+      {
+        sample_id: "BSRS005",
+        sample_label: "In-pay participant BSRS configuration packet",
+        selector_label: "BSRS005 - In-pay participant BSRS configuration packet",
+        artifact_basis: "source:packages/tests/bsrs-configuration-output-fixtures.ts#BSRS005",
+        mock_case_label: "Mock case context: simulated PBGC terminated DB case",
+        mock_population_label: "Mock population context: simulated participant cohort",
+        ordering_key: "000005|BSRS005",
+        is_default: false,
+      },
+      {
+        sample_id: "BSRS006",
+        sample_label: "Basis-only participant (no conditional packets) BSRS configuration packet",
+        selector_label: "BSRS006 - Basis-only participant (no conditional packets) BSRS configuration packet",
+        artifact_basis: "source:packages/tests/bsrs-configuration-output-fixtures.ts#BSRS006",
+        mock_case_label: "Mock case context: simulated PBGC terminated DB case",
+        mock_population_label: "Mock population context: simulated participant cohort",
+        ordering_key: "000006|BSRS006",
         is_default: false,
       },
     ]);
@@ -1489,5 +1529,268 @@ describe("reconciliation workbench UI", () => {
     const second = buildReconciliationWorkbenchMarkup(buildApprovedSampleReconciliationWorkbench());
 
     expect(second).toBe(first);
+  });
+
+  it("applies combined status-and-severity filtering so every visible row satisfies both filters (T024 spec 025/026)", () => {
+    const state = buildApprovedSampleReconciliationWorkbench({
+      status_filter: "agreement",
+      severity_filter: "info",
+    });
+
+    expect(state.status_filter.value).toBe("agreement");
+    expect(state.severity_filter.value).toBe("info");
+
+    // Reconciliation rows: agreement + info
+    expect(state.filtered_reconciliation_rows.length).toBeGreaterThan(0);
+    expect(state.filtered_reconciliation_rows.every((row) => row.status === "agreement" && row.severity === "info")).toBe(true);
+
+    // Shared Values: agreement + info
+    expect(state.filtered_shared_value_rows.length).toBeGreaterThan(0);
+    expect(state.filtered_shared_value_rows.every((row) => row.status === "agreement" && row.severity === "info")).toBe(true);
+
+    // Shared Facts have severity_label "None" (none severity), so combined agreement+info filter yields empty
+    expect(state.filtered_shared_fact_rows).toEqual([]);
+
+    // Combined empty state references both filters
+    const emptyState = state.filtered_row_groups.shared_facts.empty_state;
+    expect(emptyState).toContain("Agreement");
+    expect(emptyState).toContain("Info");
+  });
+
+  it("clears severity while status remains active, preserving status-filtered ordering (T025 spec 026)", () => {
+    const statusOnly = buildApprovedSampleReconciliationWorkbench({ status_filter: "agreement" });
+    const combined = buildApprovedSampleReconciliationWorkbench({
+      status_filter: "agreement",
+      severity_filter: "all",
+    });
+
+    expect(combined.status_filter.value).toBe("agreement");
+    expect(combined.severity_filter.value).toBe("all");
+    expect(combined.filtered_reconciliation_rows.map((row) => row.comparison_id)).toEqual(
+      statusOnly.filtered_reconciliation_rows.map((row) => row.comparison_id),
+    );
+    expect(combined.filtered_shared_fact_rows.map((row) => row.ordering_key)).toEqual(
+      statusOnly.filtered_shared_fact_rows.map((row) => row.ordering_key),
+    );
+    expect(combined.filtered_shared_value_rows.map((row) => row.ordering_key)).toEqual(
+      statusOnly.filtered_shared_value_rows.map((row) => row.ordering_key),
+    );
+  });
+
+  it("clears status while severity remains active, preserving severity-filtered ordering (T026 spec 026)", () => {
+    const severityOnly = buildApprovedSampleReconciliationWorkbench({ severity_filter: "info" });
+    const combined = buildApprovedSampleReconciliationWorkbench({
+      status_filter: "all",
+      severity_filter: "info",
+    });
+
+    expect(combined.status_filter.value).toBe("all");
+    expect(combined.severity_filter.value).toBe("info");
+    expect(combined.filtered_reconciliation_rows.map((row) => row.comparison_id)).toEqual(
+      severityOnly.filtered_reconciliation_rows.map((row) => row.comparison_id),
+    );
+    expect(combined.filtered_shared_value_rows.map((row) => row.ordering_key)).toEqual(
+      severityOnly.filtered_shared_value_rows.map((row) => row.ordering_key),
+    );
+  });
+
+  it("preserves all existing workbench state fields while filters are active (T031 spec 025/T033 spec 026)", () => {
+    const base = buildApprovedSampleReconciliationWorkbench();
+    const filtered = buildApprovedSampleReconciliationWorkbench({
+      status_filter: "agreement",
+      severity_filter: "info",
+    });
+
+    // Sample identity, panels, and sample context must remain identical
+    expect(filtered.sample_id).toBe(base.sample_id);
+    expect(filtered.output_panels).toEqual(base.output_panels);
+    expect(filtered.sample_context).toEqual(base.sample_context);
+    expect(filtered.selected_sample).toEqual(base.selected_sample);
+
+    // Unfiltered rows must remain identical (filters are display-only)
+    expect(filtered.shared_fact_rows).toEqual(base.shared_fact_rows);
+    expect(filtered.shared_value_rows).toEqual(base.shared_value_rows);
+    expect(filtered.reconciliation_rows).toEqual(base.reconciliation_rows);
+  });
+
+  it("preserves trace detail identifiers and content for visible filtered rows (T032 spec 025/T034 spec 026)", () => {
+    const base = buildApprovedSampleReconciliationWorkbench();
+    const filtered = buildApprovedSampleReconciliationWorkbench({
+      status_filter: "agreement",
+      severity_filter: "info",
+    });
+
+    // Trace details for visible filtered reconciliation rows must match unfiltered
+    const baseReconciliationTrace = base.reconciliation_rows
+      .filter((row) => row.status === "agreement" && row.severity === "info")
+      .map((row) => row.trace_detail);
+    const filteredReconciliationTrace = filtered.filtered_reconciliation_rows.map((row) => row.trace_detail);
+    expect(filteredReconciliationTrace).toEqual(baseReconciliationTrace);
+
+    // Trace details for visible filtered shared-value rows must match
+    const baseValueTrace = base.shared_value_rows
+      .filter((row) => row.status === "agreement" && row.severity === "info")
+      .map((row) => row.trace_detail);
+    const filteredValueTrace = filtered.filtered_shared_value_rows.map((row) => row.trace_detail);
+    expect(filteredValueTrace).toEqual(baseValueTrace);
+  });
+
+  it("preserves agreement, drift, warning, nullable, unsupported, and formatting-only classification display (T017 spec 022)", () => {
+    const state = buildApprovedSampleReconciliationWorkbench();
+    const allStatuses = new Set([
+      ...state.shared_fact_rows.map((row) => row.status),
+      ...state.shared_value_rows.map((row) => row.status),
+      ...state.reconciliation_rows.map((row) => row.status),
+    ]);
+
+    // Approved sample must exhibit at least agreement and nullable statuses
+    expect(allStatuses.has("agreement")).toBe(true);
+    expect(allStatuses.has("nullable")).toBe(true);
+
+    // Every status label must be a known WorkbenchStatus
+    const knownStatuses = new Set(["agreement", "drift", "warning", "nullable", "unsupported", "formatting-only"]);
+    for (const status of allStatuses) {
+      expect(knownStatuses.has(status)).toBe(true);
+    }
+
+    // No status should map to a raw/unmapped string
+    for (const row of state.reconciliation_rows) {
+      expect(knownStatuses.has(row.status)).toBe(true);
+    }
+  });
+
+  it("uses intentional absence markers for non-applicable normalized values and severities (T018 spec 022)", () => {
+    const state = buildApprovedSampleReconciliationWorkbench();
+
+    // Shared Facts normalized values are always "Not applicable" (no normalization context)
+    for (const row of state.shared_fact_rows) {
+      expect(row.trace_detail.normalized_values).toEqual(["Not applicable", "Not applicable"]);
+    }
+
+    // Shared Values have explicit absence marker when normalization is not applicable
+    for (const row of state.shared_value_rows) {
+      expect(row.trace_detail.normalized_values.length).toBe(2);
+      // Normalized values that are "Not applicable" indicate absence marker.
+      // Every normalized value must be a non-empty string (no undefined, null, or missing).
+      expect(typeof row.left_normalized_value).toBe("string");
+      expect(row.left_normalized_value.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("proves workbench filtering and trace expansion do not write output-adapter rows or introduce persistence (T035 spec 025/T037 spec 026)", () => {
+    const markup = buildReconciliationWorkbenchMarkup(
+      buildApprovedSampleReconciliationWorkbench({
+        status_filter: "agreement",
+        severity_filter: "info",
+        work_guard_status: "running",
+        progress_status: "loading",
+        workspace_session_status: "saved",
+      }),
+    );
+
+    // Markup must contain display-only content
+    expect(markup).toContain("BSRS Configuration");
+    expect(markup).toContain("Shared Facts");
+    expect(markup).toContain("Shared Values");
+    expect(markup).toContain("Trace details for ID");
+
+    // Must not contain persistence, adapter-write, or raw-source paths
+    expect(markup).not.toMatch(/\b(insert into|sql\.js write|output-adapter write|persisted progress|migration)\b/i);
+    expect(markup).not.toMatch(/\b(type="file"|https?:\/\/|upload|raw OCR|raw source document|server call|telemetry)\b/i);
+    expect(markup).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
+  });
+
+  it("keeps filtered workbench state deterministic across repeated builds (T033 spec 025/T035 spec 026)", () => {
+    const first = buildApprovedSampleReconciliationWorkbench({
+      status_filter: "agreement",
+      severity_filter: "info",
+    });
+    const second = buildApprovedSampleReconciliationWorkbench({
+      status_filter: "agreement",
+      severity_filter: "info",
+    });
+
+    expect(second.filtered_reconciliation_rows).toEqual(first.filtered_reconciliation_rows);
+    expect(second.filtered_shared_fact_rows).toEqual(first.filtered_shared_fact_rows);
+    expect(second.filtered_shared_value_rows).toEqual(first.filtered_shared_value_rows);
+    expect(second.filtered_row_groups).toEqual(first.filtered_row_groups);
+    expect(second.filter_summary).toEqual(first.filter_summary);
+    expect(second.status_filter).toEqual(first.status_filter);
+    expect(second.severity_filter).toEqual(first.severity_filter);
+    expect(second.output_panels).toEqual(first.output_panels);
+  });
+
+  it("keeps filtered workbench markup deterministic across repeated builds", () => {
+    const first = buildReconciliationWorkbenchMarkup(
+      buildApprovedSampleReconciliationWorkbench({
+        status_filter: "agreement",
+        severity_filter: "info",
+      }),
+    );
+    const second = buildReconciliationWorkbenchMarkup(
+      buildApprovedSampleReconciliationWorkbench({
+        status_filter: "agreement",
+        severity_filter: "info",
+      }),
+    );
+
+    expect(second).toBe(first);
+    expect(first).toContain("BSRS Configuration");
+    expect(first).toContain("Active status: Agreement");
+    expect(first).toContain("Active severity: Info");
+    expect(first).not.toMatch(/\b(John|Jane|Smith|Doe)\b/);
+  });
+
+  it("proves every selector option has approved artifact or mocked-context basis (T022 spec 024)", () => {
+    const state = buildApprovedSampleReconciliationWorkbench();
+
+    for (const option of state.sample_options) {
+      expect(option.artifact_basis).toMatch(/^source:packages\/tests\/bsrs-configuration-output-fixtures\.ts#BSRS\d{3}$/);
+      expect(option.mock_case_label).toContain("Mock case context");
+      expect(option.mock_population_label).toContain("Mock population context");
+    }
+  });
+
+  it("exposes no upload, URL, hosted, raw-source, OCR, email, or free-form loading path in selector (T023 spec 024)", () => {
+    const state = buildApprovedSampleReconciliationWorkbench();
+    const markup = buildReconciliationWorkbenchMarkup(state);
+
+    const selectorMarkup = markup.slice(
+      markup.indexOf("data-workbench-sample-selector"),
+      markup.indexOf("</select>", markup.indexOf("data-workbench-sample-selector")),
+    );
+
+    expect(selectorMarkup).not.toMatch(/\b(type="file"|https?:\/\/|upload|raw OCR|raw source document|email|free-form|hosted sample|URL)\b/i);
+
+    // All options must reference approved package paths
+    for (const option of state.sample_options) {
+      expect(option.artifact_basis).toContain("packages/tests/");
+    }
+  });
+
+  it("falls back to default approved sample when given an unsupported sample id (T025 spec 024)", () => {
+    const defaultState = buildApprovedSampleReconciliationWorkbench();
+    const unsupportedState = buildApprovedSampleReconciliationWorkbench({ sample_id: "NONEXISTENT" });
+
+    expect(unsupportedState.sample_id).toBe(defaultState.sample_id);
+    expect(unsupportedState.selected_sample).toEqual(defaultState.selected_sample);
+    expect(unsupportedState.sample_context).toEqual(defaultState.sample_context);
+    expect(unsupportedState.output_panels).toEqual(defaultState.output_panels);
+  });
+
+  it("renders combined-filter empty-state messages identifying both active status and severity (T027 spec 026)", () => {
+    const state = buildApprovedSampleReconciliationWorkbench({
+      status_filter: "agreement",
+      severity_filter: "info",
+    });
+    const markup = buildReconciliationWorkbenchMarkup(state);
+
+    // Shared Facts are empty under combined agreement+info filter
+    expect(state.filtered_shared_fact_rows).toEqual([]);
+    expect(state.filtered_row_groups.shared_facts.empty_state).toContain("Agreement");
+    expect(state.filtered_row_groups.shared_facts.empty_state).toContain("Info");
+
+    // Markup shows the combined empty state
+    expect(markup).toContain("No Shared Facts rows match status Agreement and severity Info.");
   });
 });

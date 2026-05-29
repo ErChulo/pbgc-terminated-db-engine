@@ -75,16 +75,16 @@
 
 ### Tests for User Story 2
 
-- [ ] T020 [US2] Add a failing test that each displayed reconciliation row includes compared slices, fields, displayed values, normalized values, mapping basis, and status in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T021 [US2] Add a failing test that DD-backed and approved fallback basis labels are both represented when present in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T022 [US2] Add a failing test that warning or drift findings display severity, source artifact, rule version, and producing module in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [x] T020 [US2] Add a failing test that each displayed reconciliation row includes compared slices, fields, displayed values, normalized values, mapping basis, and status in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [x] T021 [US2] Add a failing test that DD-backed and approved fallback basis labels are both represented when present in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [x] T022 [US2] Add a failing test that warning or drift findings display severity, source artifact, rule version, and producing module in `packages/tests/reconciliation-workbench-ui.test.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T023 [US2] Add trace detail projection for reconciliation rows and findings in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T024 [US2] Render trace details, mapping basis labels, normalized values, and severity badges in `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
-- [ ] T025 [US2] Add status-specific styles for accepted, warning, drift, nullable, unsupported, and formatting-only rows in `apps/web/src/styles.css`
-- [ ] T026 [US2] Run `npm test -- packages/tests/reconciliation-workbench-ui.test.ts` and resolve US2 failures while preserving existing reconciliation helper outputs
+- [x] T023 [US2] Add trace detail projection for reconciliation rows and findings in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
+- [x] T024 [US2] Render trace details, mapping basis labels, normalized values, and severity badges in `apps/web/src/pages/ReconciliationWorkbenchPage.ts`
+- [x] T025 [US2] Add status-specific styles for accepted, warning, drift, nullable, unsupported, and formatting-only rows in `apps/web/src/styles.css`
+- [x] T026 [US2] Run `npm test -- packages/tests/reconciliation-workbench-ui.test.ts` and resolve US2 failures while preserving existing reconciliation helper outputs
 
 **Checkpoint**: User Stories 1 and 2 can be tested independently through the focused workbench suite.
 
@@ -100,12 +100,12 @@
 
 - [X] T027 [US3] Add a repeated-run stability test for workbench display data ordering, statuses, trace details, and deterministic `generated_at` metadata in `packages/tests/reconciliation-workbench-ui.test.ts`
 - [X] T028 [US3] Add a repeated-render markup stability test for the same approved sample, including stable `generated_at` output when displayed, in `packages/tests/reconciliation-workbench-ui.test.ts`
-- [ ] T029 [US3] Add a regression assertion that the workbench data builder does not expose mutation or persistence write outputs in `packages/tests/reconciliation-workbench-ui.test.ts`
+- [x] T029 [US3] Add a regression assertion that the workbench data builder does not expose mutation or persistence write outputs in `packages/tests/reconciliation-workbench-ui.test.ts`
 
 ### Implementation for User Story 3
 
 - [X] T030 [US3] Stabilize deterministic sorting and value formatting for output panels and reconciliation rows in `apps/web/src/app/reconciliationWorkbenchSlice.ts`
-- [ ] T031 [US3] Verify 1440x900 desktop and 390x844 mobile layout constraints for long values and trace details with a focused render/layout assertion or documented manual verification in `apps/web/src/styles.css`
+- [x] T031 [US3] Verify 1440x900 desktop and 390x844 mobile layout constraints for long values and trace details with a focused render/layout assertion or documented manual verification in `apps/web/src/styles.css`
 - [X] T032 [P] [US3] Run existing reconciliation hardening checks: `npm test -- packages/tests/hardening-cross-slice-value-reconciliation.test.ts packages/tests/hardening-cross-slice-reconciliation.test.ts`
 - [X] T033 [P] [US3] Run existing output preservation checks: `npm test -- packages/tests/bsrs-configuration-output-contract.test.ts packages/tests/bsrs-configuration-output-output.test.ts packages/tests/v1-ve-output-contract.test.ts packages/tests/v1-ve-output-output.test.ts packages/tests/valuation-listings-output-contract.test.ts packages/tests/valuation-listings-output-output.test.ts`
 - [X] T034 [US3] Run `npm test -- packages/tests/reconciliation-workbench-ui.test.ts` and resolve US3 failures without adding persistence or output-adapter behavior
@@ -118,14 +118,14 @@
 
 **Purpose**: Documentation, browser verification, and committed static artifact discipline.
 
-- [ ] T035 [P] Document the workbench display-only boundary in `docs/architecture/reconciliation_workbench_ui.md`
-- [ ] T036 [P] Document the displayed reconciliation field and trace mapping in `docs/mappings/reconciliation_workbench_ui_map_v0.1.0.csv`
-- [ ] T037 Verify no delivered `.sql`, `.js`, `.ts`, or `.tex` artifact was added without the required appended `.txt` transport copy in `specs/018-reconciliation-workbench-ui/tasks.md`
+- [x] T035 [P] Document the workbench display-only boundary in `docs/architecture/reconciliation_workbench_ui.md`
+- [x] T036 [P] Document the displayed reconciliation field and trace mapping in `docs/mappings/reconciliation_workbench_ui_map_v0.1.0.csv`
+- [x] T037 Verify no delivered `.sql`, `.js`, `.ts`, or `.tex` artifact was added without the required appended `.txt` transport copy in `specs/018-reconciliation-workbench-ui/tasks.md`
 - [X] T038 Run full test suite with `npm test`
 - [X] T039 Run lint verification with `npm run lint`
 - [X] T040 Run production build verification with `npm run build`
 - [X] T041 Update committed static output under `apps/web/dist/` if `npm run build` changes bundle artifacts
-- [ ] T042 Start the local web app with `npm --workspace @pbgc/web run dev` and verify the workbench screen manually against `specs/018-reconciliation-workbench-ui/quickstart.md`
+- [x] T042 Start the local web app with `npm --workspace @pbgc/web run dev` and verify the workbench screen manually against `specs/018-reconciliation-workbench-ui/quickstart.md`
 
 ---
 

@@ -71,16 +71,16 @@
 
 ### Tests for User Story 2
 
-- [ ] T019 [P] [US2] Add approved recalculation block-pattern acceptance test in packages/tests/hardening-bsrs-block-patterns.test.ts
-- [ ] T020 [P] [US2] Add malformed recalculation missing-cluster and unexpected-transition finding tests in packages/tests/hardening-bsrs-block-patterns.test.ts
-- [ ] T021 [P] [US2] Add adapter-exclusion regression test proving recalculation validation does not write unrelated output adapters in packages/tests/hardening-bsrs-semantic-behavior.test.ts
+- [X] T019 [P] [US2] Add approved recalculation block-pattern acceptance test in packages/tests/hardening-bsrs-block-patterns.test.ts
+- [X] T020 [P] [US2] Add malformed recalculation missing-cluster and unexpected-transition finding tests in packages/tests/hardening-bsrs-block-patterns.test.ts
+- [X] T021 [P] [US2] Add adapter-exclusion regression test proving recalculation validation does not write unrelated output adapters in packages/tests/hardening-bsrs-semantic-behavior.test.ts
 
 ### Implementation for User Story 2
 
-- [ ] T022 [US2] Implement recalculation block-family detection from approved recalculation samples in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T023 [US2] Implement recalculation section-sequence validation and support-cluster attachment checks in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T024 [US2] Implement structured recalculation block-pattern findings with stable codes and trace metadata in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T025 [US2] Integrate recalculation validation with the exported block-pattern validation helper in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
+- [X] T022 [US2] Implement recalculation block-family detection from approved recalculation samples in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T023 [US2] Implement recalculation section-sequence validation and support-cluster attachment checks in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T024 [US2] Implement structured recalculation block-pattern findings with stable codes and trace metadata in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T025 [US2] Integrate recalculation validation with the exported block-pattern validation helper in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
 
 **Checkpoint**: User Stories 1 and 2 both work independently.
 
@@ -94,16 +94,16 @@
 
 ### Tests for User Story 3
 
-- [ ] T026 [P] [US3] Add approved optional-form family acceptance tests for single-life, single-and-joint, QPSA, and QDRO samples in packages/tests/hardening-bsrs-optional-form-patterns.test.ts
-- [ ] T027 [P] [US3] Add suspicious optional-form label and orphan line-cluster finding tests in packages/tests/hardening-bsrs-optional-form-patterns.test.ts
-- [ ] T028 [P] [US3] Add approved optional-form fallback behavior regression test in packages/tests/hardening-bsrs-optional-form-patterns.test.ts
+- [X] T026 [P] [US3] Add approved optional-form family acceptance tests for single-life, single-and-joint, QPSA, and QDRO samples in packages/tests/hardening-bsrs-optional-form-patterns.test.ts
+- [X] T027 [P] [US3] Add suspicious optional-form label and orphan line-cluster finding tests in packages/tests/hardening-bsrs-optional-form-patterns.test.ts
+- [X] T028 [P] [US3] Add approved optional-form fallback behavior regression test in packages/tests/hardening-bsrs-optional-form-patterns.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T029 [US3] Implement optional-form block-family detection from approved optional-form samples in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T030 [US3] Implement optional-form section-context and line-cluster validation in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T031 [US3] Implement approved optional-form fallback classification without adding new business-domain concepts in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
-- [ ] T032 [US3] Integrate optional-form validation with the exported block-pattern validation helper in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
+- [X] T029 [US3] Implement optional-form block-family detection from approved optional-form samples in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T030 [US3] Implement optional-form section-context and line-cluster validation in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T031 [US3] Implement approved optional-form fallback classification without adding new business-domain concepts in packages/engine/bsrs-configuration-output/src/bsrsBlockPatternValidation.ts
+- [X] T032 [US3] Integrate optional-form validation with the exported block-pattern validation helper in packages/engine/bsrs-configuration-output/src/bsrsSemanticValidation.ts
 
 **Checkpoint**: All user stories are independently functional.
 
@@ -113,9 +113,9 @@
 
 **Purpose**: Verify behavior preservation, documentation, and repository delivery rules.
 
-- [ ] T033 [P] Add architecture note for BSRS block-pattern hardening scope and validation sources in docs/architecture/bsrs_block_pattern_hardening_v0.1.0.md
+- [X] T033 [P] Add architecture note for BSRS block-pattern hardening scope and validation sources in docs/architecture/bsrs_block_pattern_hardening_v0.1.0.md
 - [X] T034 Verify existing BSRS output contract, output, persistence, and trace tests still pass with block-pattern validation in packages/tests/bsrs-configuration-output-contract.test.ts, packages/tests/bsrs-configuration-output-output.test.ts, packages/tests/bsrs-configuration-output-persistence.test.ts, and packages/tests/bsrs-configuration-output-trace.test.ts
-- [ ] T035 Verify focused quickstart command passes for block-pattern hardening tests from specs/014-bsrs-block-pattern-hardening/quickstart.md
+- [X] T035 Verify focused quickstart command passes for block-pattern hardening tests from specs/014-bsrs-block-pattern-hardening/quickstart.md
 - [X] T036 Run full project regression with npm test
 - [X] T037 Run lint verification with npm run lint
 - [X] T038 Run static build verification with npm run build and keep committed apps/web/dist/ output current if runtime bundles change
