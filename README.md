@@ -1,4 +1,4 @@
-# PBGC Terminated DB Engine
+# PBGC Terminated DB Engine [WORK IN PROGRESS]
 
 A browser-only deterministic casework engine for PBGC terminated defined-benefit plans. Performs actuarial resolution across 8 engine slices and produces V1/VE outputs, valuation listings, and BSRS configuration artifacts — all in-browser with no server calls.
 
